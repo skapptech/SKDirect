@@ -1,11 +1,11 @@
-package com.webview.adapter;
+package com.skdirect.adapter;
 
 import android.graphics.Color;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import com.webview.fragment.IntroFragment;
+import com.skdirect.fragment.IntroFragment;
 
 public class IntroAdapter extends FragmentPagerAdapter {
 

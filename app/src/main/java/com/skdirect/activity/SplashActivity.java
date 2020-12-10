@@ -1,4 +1,4 @@
-package com.webview.activity;
+package com.skdirect.activity;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -11,22 +11,20 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.webview.BuildConfig;
-import com.webview.R;
-import com.webview.api.CommonClassForAPI;
-import com.webview.databinding.ActivitySplashBinding;
-import com.webview.model.AppVersionModel;
-import com.webview.utils.SharePrefs;
-import com.webview.utils.Utils;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.skdirect.BuildConfig;
+import com.skdirect.R;
+import com.skdirect.api.CommonClassForAPI;
+import com.skdirect.databinding.ActivitySplashBinding;
+import com.skdirect.model.AppVersionModel;
+import com.skdirect.utils.SharePrefs;
+import com.skdirect.utils.Utils;
 
 import io.reactivex.observers.DisposableObserver;
 

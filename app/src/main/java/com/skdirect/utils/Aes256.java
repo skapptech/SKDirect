@@ -6,7 +6,7 @@
  * @copyright Andrey Izman (c) 2018
  * @license MIT
  */
-package com.webview.utils;
+package com.skdirect.utils;
 
 import android.annotation.SuppressLint;
 import android.os.Build;

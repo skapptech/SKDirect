@@ -1,19 +1,17 @@
-package com.webview.api;
+package com.skdirect.api;
 
 import android.app.Activity;
 import android.os.Build;
-import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
 import com.google.gson.Gson;
-import com.webview.BuildConfig;
-import com.webview.utils.Aes256;
+import com.skdirect.BuildConfig;
+import com.skdirect.utils.Aes256;
 
 import org.json.JSONObject;
 
-import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;

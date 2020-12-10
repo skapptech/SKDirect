@@ -1,8 +1,7 @@
-package com.webview.activity;
+package com.skdirect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -10,11 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
 
-import com.webview.R;
-import com.webview.adapter.IntroAdapter;
-import com.webview.databinding.ActivityIntroBinding;
-import com.webview.utils.IntroPageTransformer;
-import com.webview.utils.SharePrefs;
+import com.skdirect.R;
+import com.skdirect.adapter.IntroAdapter;
+import com.skdirect.databinding.ActivityIntroBinding;
+import com.skdirect.utils.IntroPageTransformer;
+import com.skdirect.utils.SharePrefs;
 
 
 public class IntroActivity extends AppCompatActivity {

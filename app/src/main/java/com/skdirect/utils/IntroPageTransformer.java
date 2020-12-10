@@ -1,10 +1,10 @@
-package com.webview.utils;
+package com.skdirect.utils;
 
 import android.view.View;
 
 import androidx.viewpager.widget.ViewPager;
 
-import com.webview.R;
+import com.skdirect.R;
 
 public class IntroPageTransformer implements ViewPager.PageTransformer {
 

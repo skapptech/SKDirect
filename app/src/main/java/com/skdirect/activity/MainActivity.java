@@ -1,6 +1,7 @@
-package com.webview.activity;
+package com.skdirect.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.app.Notification;
@@ -12,11 +13,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -24,7 +22,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -36,27 +33,34 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 
-import com.webview.BuildConfig;
-import com.webview.R;
-import com.webview.databinding.ActivityMainBinding;
-import com.webview.utils.SharePrefs;
-import com.webview.utils.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.skdirect.BuildConfig;
+import com.skdirect.R;
+import com.skdirect.api.CommonClassForAPI;
+import com.skdirect.databinding.ActivityMainBinding;
+import com.skdirect.model.AppVersionModel;
+import com.skdirect.model.UpdateTokenModel;
+import com.skdirect.utils.SharePrefs;
+import com.skdirect.utils.Utils;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.annotation.Target;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
+
+import io.reactivex.observers.DisposableObserver;
 
 public class MainActivity extends AppCompatActivity {
     private final int PERMISSION_REQUEST = 545;
@@ -69,12 +73,25 @@ public class MainActivity extends AppCompatActivity {
     private String mCameraPhotoPath;
     private static final int INPUT_FILE_REQUEST_CODE = 1;
     private static final int FILECHOOSER_RESULTCODE = 1;
+    String firebaseToken="";
+    private CommonClassForAPI commonClassForAPI;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         activity = this;
+        commonClassForAPI = CommonClassForAPI.getInstance(this);
         initViews();
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        return;
+                    }
+                    firebaseToken = task.getResult();
+                });
+
 
     }
 
@@ -150,11 +167,9 @@ public class MainActivity extends AppCompatActivity {
                         photoFile = createImageFile();
                         takePictureIntent.putExtra("PhotoPath", mCameraPhotoPath);
                     } catch (IOException ex) {
-                        // Error occurred while creating the File
                         Log.e("Common.TAG", "Unable to create Image File", ex);
                     }
-
-                    // Continue only if the File was successfully created
+                    
                     if (photoFile != null) {
                         mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
@@ -305,6 +320,11 @@ public class MainActivity extends AppCompatActivity {
             Logout();
         }
 
+        @JavascriptInterface
+        public void updateToken(long userId) {
+            callUpdateToken(userId);
+        }
+
 
     }
 
@@ -343,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BroadcastReceiver onComplete = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(activity, "trade")
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(activity, "direct")
                     .setSmallIcon(R.drawable.logo)
                     .setContentTitle("File Downloaded")
                     .setContentText("All Download completed");
@@ -531,4 +551,33 @@ public class MainActivity extends AppCompatActivity {
         return;
     }
 
+    private void callUpdateToken(long userId) {
+        try {
+            if (Utils.isNetworkAvailable(activity)) {
+                    commonClassForAPI.getUpdateFirebaseToken(firebaseObserver,new UpdateTokenModel(firebaseToken,userId));
+            } else {
+                Utils.setToast(activity,"No Internet Connection!!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private DisposableObserver<AppVersionModel> firebaseObserver = new DisposableObserver<AppVersionModel>() {
+        @Override
+        public void onNext(AppVersionModel response) {
+            try {
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+
+            }
+        }
+        @Override
+        public void onError(Throwable e) {
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    };
 }

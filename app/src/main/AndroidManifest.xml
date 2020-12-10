@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.webview">
+    package="com.skdirect">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -20,16 +20,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WebView"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.MainActivity"></activity>
-        <activity android:name=".activity.IntroActivity"></activity>
+        <activity android:name="com.skdirect.activity.MainActivity"></activity>
+        <activity android:name="com.skdirect.activity.IntroActivity"></activity>
         <activity
-            android:name=".activity.SplashActivity">
+            android:name="com.skdirect.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".firebase.MyFirebaseMessagingService"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/logo" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
     </application>
 
 </manifest>

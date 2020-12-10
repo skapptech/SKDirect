@@ -1,4 +1,4 @@
-package com.webview.model;
+package com.skdirect.model;
 
 import com.google.gson.annotations.SerializedName;
 

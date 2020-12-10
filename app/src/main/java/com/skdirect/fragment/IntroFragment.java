@@ -1,4 +1,4 @@
-package com.webview.fragment;
+package com.skdirect.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
-import com.webview.R;
+import com.skdirect.R;
 
 public class IntroFragment extends Fragment {
     private static final String BACKGROUND_COLOR = "backgroundColor";

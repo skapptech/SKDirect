@@ -1,18 +1,19 @@
 plugins {
     id 'com.android.application'
 }
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.1"
 
     defaultConfig {
-        applicationId "com.webview"
+        applicationId "com.skdirect"
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -34,8 +35,8 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFiles 'proguard-rules.pro'
-            applicationIdSuffix ".debug"
-            resValue "string", "app_name", "SKDirect Debug"
+            //applicationIdSuffix ".debug"
+            resValue "string", "app_name", "SKDirect"
             buildConfigField("String", "buildVariant", "\"DEBUG_STORE_FILE\"")
             buildConfigField("String", "apiEndpoint", "\"http://111.118.252.170:8787\"")
         }
@@ -62,5 +63,11 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
     implementation "io.reactivex.rxjava2:rxjava:2.2.19"
+    implementation platform('com.google.firebase:firebase-bom:26.1.1')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.google.firebase:firebase-messaging:21.0.0'
+
+
 
 }

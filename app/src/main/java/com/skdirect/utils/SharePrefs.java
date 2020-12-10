@@ -1,4 +1,4 @@
-package com.webview.utils;
+package com.skdirect.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

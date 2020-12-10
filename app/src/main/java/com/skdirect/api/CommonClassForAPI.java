@@ -1,11 +1,13 @@
-package com.webview.api;
+package com.skdirect.api;
 
 import android.app.Activity;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.webview.model.AppVersionModel;
+import com.google.gson.JsonObject;
+import com.skdirect.model.AppVersionModel;
+import com.skdirect.model.UpdateTokenModel;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -56,6 +58,32 @@ public class CommonClassForAPI {
                     }
                 });
     }
+    public void getUpdateFirebaseToken(final DisposableObserver observer, UpdateTokenModel updateTokenModel) {
+        RestClient.getInstance(mActivity).getService().getUpdateToken(updateTokenModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JsonObject>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(JsonObject o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
 
 
 }
