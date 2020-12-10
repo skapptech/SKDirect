@@ -7,6 +7,7 @@ import com.skdirect.model.UpdateTokenModel;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface APIServices {
@@ -15,6 +16,6 @@ public interface APIServices {
     Observable<AppVersionModel> getAppversion();
 
     @POST("api/Notification/UpdateFcmId")
-    Observable<JsonObject> getUpdateToken(@Body UpdateTokenModel updateTokenModel);
+    Observable<JsonObject> getUpdateToken(@Body UpdateTokenModel updateTokenModel, @Header("authorization") String token);
 
 }

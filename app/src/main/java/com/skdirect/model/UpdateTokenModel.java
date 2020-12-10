@@ -8,12 +8,8 @@ public class UpdateTokenModel implements Serializable {
     @SerializedName("FcmId")
     private String FcmId;
 
-    @SerializedName("UserId")
-    private long UserId;
-
-    public UpdateTokenModel(String fcmId, long userId) {
+    public UpdateTokenModel(String fcmId) {
         FcmId = fcmId;
-        UserId = userId;
     }
 
     public String getFcmId() {
@@ -24,11 +20,5 @@ public class UpdateTokenModel implements Serializable {
         FcmId = fcmId;
     }
 
-    public long getUserId() {
-        return UserId;
-    }
 
-    public void setUserId(long userId) {
-        UserId = userId;
-    }
 }

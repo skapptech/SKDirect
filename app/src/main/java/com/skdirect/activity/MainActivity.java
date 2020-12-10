@@ -321,8 +321,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @JavascriptInterface
-        public void updateToken(long userId) {
-            callUpdateToken(userId);
+        public void updateToken(String token) {
+            callUpdateToken(token);
         }
 
 
@@ -551,10 +551,10 @@ public class MainActivity extends AppCompatActivity {
         return;
     }
 
-    private void callUpdateToken(long userId) {
+    private void callUpdateToken(String token) {
         try {
             if (Utils.isNetworkAvailable(activity)) {
-                    commonClassForAPI.getUpdateFirebaseToken(firebaseObserver,new UpdateTokenModel(firebaseToken,userId));
+                    commonClassForAPI.getUpdateFirebaseToken(firebaseObserver,new UpdateTokenModel(firebaseToken),token);
             } else {
                 Utils.setToast(activity,"No Internet Connection!!");
             }
