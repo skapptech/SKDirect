@@ -93,7 +93,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             NotificationCompat.Builder notificationBuilder;
             if (myBitmap != null) {
                 notificationBuilder = new NotificationCompat.Builder(this, getResources().getString(R.string.app_name))
-                        .setSmallIcon(R.drawable.logo)
+                        .setSmallIcon(R.mipmap.notification)
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.launcher))
                         .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(myBitmap))
                         .setContentTitle(title)
                         .setContentText(messageBody)
@@ -106,8 +107,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setContentIntent(pendingIntent);
             } else {
                 notificationBuilder = new NotificationCompat.Builder(this, getResources().getString(R.string.app_name))
-                        .setSmallIcon(R.drawable.logo)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.logo))
+                        .setSmallIcon(R.mipmap.notification)
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.launcher))
                         .setContentTitle(title)
                         .setContentText(messageBody)
                         .setContentInfo(messageBody)

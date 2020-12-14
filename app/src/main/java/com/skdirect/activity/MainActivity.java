@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -34,6 +35,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -71,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int FILECHOOSER_RESULTCODE = 1;
     String firebaseToken = "";
     private CommonClassForAPI commonClassForAPI;
-    private ViewTreeObserver.OnScrollChangedListener mOnScrollChangedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,16 +90,19 @@ public class MainActivity extends AppCompatActivity {
                     firebaseToken = task.getResult();
                 });
 
-        mBinding.refreshLayout.setOnRefreshListener(() -> mBinding.webView.reload()
+       /* mBinding.refreshLayout.setOnRefreshListener(() -> mBinding.webView.reload()
         );
-    }
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        if (intent.getExtras() != null) {
-            String url = intent.getStringExtra("url");
-            mBinding.webView.loadUrl(url);
-        }
+
+        mBinding.webView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                if (mBinding.webView.getScrollY() == 0) {
+                    mBinding.refreshLayout.setEnabled(true);
+                } else {
+                    mBinding.refreshLayout.setEnabled(false);
+                }
+            }
+        });*/
     }
 
     @Override
@@ -157,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                mBinding.refreshLayout.setRefreshing(false);
+                //.refreshLayout.setRefreshing(false);
             }
         });
         mBinding.webView.setWebChromeClient(new WebChromeClient() {
@@ -243,19 +247,20 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) {
+                == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             return;
         }
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
             requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                    android.Manifest.permission.ACCESS_BACKGROUND_LOCATION}, PERMISSION_REQUEST);
+                    android.Manifest.permission.ACCESS_BACKGROUND_LOCATION, android.Manifest.permission.CAMERA}, PERMISSION_REQUEST);
         } else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                    android.Manifest.permission.ACCESS_BACKGROUND_LOCATION}, PERMISSION_REQUEST);
+                    android.Manifest.permission.ACCESS_BACKGROUND_LOCATION, Manifest.permission.CAMERA}, PERMISSION_REQUEST);
         }
     }
 
@@ -273,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
         @JavascriptInterface
         public void showToast(String toast) {
-            Toast.makeText(context, "" + toast, Toast.LENGTH_SHORT).show();
+            showToastMessage(toast);
         }
 
         @JavascriptInterface
@@ -311,11 +316,9 @@ public class MainActivity extends AppCompatActivity {
             closeApp();
         }
 
-
         @JavascriptInterface
         public void clearCache() {
-            mBinding.webView.clearCache(true);
-            mBinding.webView.reload();
+            clearWebviewCache();
         }
 
         @JavascriptInterface
@@ -337,7 +340,6 @@ public class MainActivity extends AppCompatActivity {
         public void callLogout() {
             Logout();
         }
-
         @JavascriptInterface
         public void updateToken(String token) {
             callUpdateToken(token);
@@ -355,7 +357,10 @@ public class MainActivity extends AppCompatActivity {
         public void redirectPage(String url) {
             redirectPageview(url);
         }
-
+        @JavascriptInterface
+        public void askPermission() {
+            isPermissionAvailable();
+        }
 
     }
 
@@ -373,7 +378,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void Logout() {
-        SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SHOW_INTRO, false);
         Intent i = new Intent(activity, SplashActivity.class);
         startActivity(i);
     }
@@ -417,7 +421,8 @@ public class MainActivity extends AppCompatActivity {
             // create notification
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.logo)
+                    .setSmallIcon(R.mipmap.notification)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.launcher))
                     .setContentTitle(title)
                     .setContentText(messageBody)
                     .setContentInfo(title)
@@ -639,6 +644,15 @@ public class MainActivity extends AppCompatActivity {
     private void redirectPageview(String url) {
         mBinding.webView.loadUrl(url);
     }
+    private void clearWebviewCache() {
+        mBinding.webView.clearCache(true);
+        mBinding.webView.reload();
+    }
+    private void showToastMessage(String msg) {
+        Utils.setToast(activity,msg);
+    }
+
+
 
 
 }
