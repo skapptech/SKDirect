@@ -2,6 +2,7 @@ package com.skdirect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -40,10 +41,16 @@ public class IntroActivity extends AppCompatActivity {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
-
             @Override
             public void onPageSelected(int position) {
                 drawPageSelectionIndicators(position);
+                if (position==2){
+                    mBinding.RLBottomLayout.setVisibility(View.VISIBLE);
+                    mBinding.RLBottomLayoutNext.setVisibility(View.GONE);
+                }else {
+                    mBinding.RLBottomLayout.setVisibility(View.GONE);
+                    mBinding.RLBottomLayoutNext.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -65,6 +72,17 @@ public class IntroActivity extends AppCompatActivity {
             Intent i = new Intent(activity, MainActivity.class);
             startActivity(i);
             finish();
+        });
+        mBinding.tvNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pos = mBinding.viewpager.getCurrentItem();
+                if (pos==2){
+
+                }else {
+                    mBinding.viewpager.setCurrentItem(pos + 1);
+                }
+            }
         });
     }
 
