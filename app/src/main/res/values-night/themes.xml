@@ -14,4 +14,19 @@
         <!-- Customize your theme here. -->
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="Theme.NoActionBar" parent="Theme.WebView">
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="CustomDialog" parent="Theme.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
 </resources>
