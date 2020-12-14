@@ -20,7 +20,7 @@ public class IntroActivity extends AppCompatActivity {
     ActivityIntroBinding mBinding;
     IntroActivity activity;
 
-    private int dotsCount=5;
+    private int dotsCount=3;
     private ImageView[] dots;
 
     @Override
@@ -34,7 +34,7 @@ public class IntroActivity extends AppCompatActivity {
 
     private void initViews() {
         mBinding.viewpager.setAdapter(new IntroAdapter(getSupportFragmentManager()));
-        mBinding.viewpager.setPageTransformer(false, new IntroPageTransformer());
+       // mBinding.viewpager.setPageTransformer(false, new IntroPageTransformer());
         drawPageSelectionIndicators(0);
         mBinding.viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -57,12 +57,14 @@ public class IntroActivity extends AppCompatActivity {
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SHOW_INTRO, true);
             Intent i = new Intent(activity, MainActivity.class);
             startActivity(i);
+            finish();
         });
         mBinding.tvSeller.setOnClickListener(view -> {
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SELLER, true);
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SHOW_INTRO, true);
             Intent i = new Intent(activity, MainActivity.class);
             startActivity(i);
+            finish();
         });
     }
 

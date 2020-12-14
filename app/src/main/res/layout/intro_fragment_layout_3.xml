@@ -8,95 +8,71 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center"
-            android:padding="10dp"
-            android:weightSum="2">
+            android:layout_gravity="start"
+            android:text="Buyer"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Seller"
-                android:textColor="@color/colorAccent"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:layout_gravity="start"
+            android:textStyle="bold"
+            android:text="Browse products"
+            android:textColor="@color/colorAccent"
+            android:textSize="15sp" />
 
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/logo" />
-        </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:scaleType="fitCenter"
+            android:layout_gravity="right"
+            app:srcCompat="@drawable/b3" />
 
         <View
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="1dp"
-            android:background="@color/seller_button_color"
-            android:layout_margin="10dp" />
+            android:layout_margin="20dp"
+            android:rotation="45"
+            android:layout_gravity="center"
+            android:background="@color/seller_button_color" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:scaleType="fitCenter"
+            android:layout_gravity="left"
+            app:srcCompat="@drawable/s3" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp"
             android:gravity="center"
-            android:weightSum="2">
+            android:layout_gravity="right"
+            android:text="Buyer"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:id="@+id/imBuyer"
-                app:srcCompat="@drawable/logo" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Buyer"
-                android:id="@+id/tvBuyer"
-                android:textColor="@color/colorAccent"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical"
-            android:gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="10dp"
-                android:text="Create your"
-                android:id="@+id/title"
-                android:textColor="@color/colorAccent"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Creating online catelogue has never\nbeen this easy"
-                android:gravity="center"
-                android:id="@+id/tvDesc"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/colorAccent"
-                android:textSize="15sp" />
-
-        </LinearLayout>
-
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_gravity="right"
+            android:text="Display your Product"
+            android:textColor="@color/colorAccent"
+            android:textSize="15sp" />
     </LinearLayout>
 </FrameLayout>

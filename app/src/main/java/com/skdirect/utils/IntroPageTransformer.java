@@ -50,14 +50,14 @@ public class IntroPageTransformer implements ViewPager.PageTransformer {
             // Now the description. We also want this one to
             // fade, but the animation should also slowly move
             // down and out of the screen
-            View description = page.findViewById(R.id.tvDesc);
+            View description = page.findViewById(R.id.tvBuyer);
             description.setTranslationY(-pageWidthTimesPosition / 2f);
             description.setAlpha(1.0f - absPosition);
 
             // Now, we want the image to move to the right,
             // i.e. in the opposite direction of the rest of the
             // content while fading out
-            View computer = page.findViewById(R.id.imBuyer);
+            View computer = page.findViewById(R.id.tvBuyer);
 
             // We're attempting to create an effect for a View
             // specific to one of the pages in our ViewPager.

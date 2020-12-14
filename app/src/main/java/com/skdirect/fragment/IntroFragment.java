@@ -41,20 +41,13 @@ public class IntroFragment extends Fragment {
         int layoutResId;
         switch (mPage) {
             case 0:
-                layoutResId = R.layout.intro_fragment_layout_4;
-                break;
-            case 1:
-                layoutResId = R.layout.intro_fragment_layout_3;
-                break;
-
-            case 2:
-                layoutResId = R.layout.intro_fragment_layout_2;
-                break;
-            case 3:
                 layoutResId = R.layout.intro_fragment_layout_1;
                 break;
+            case 1:
+                layoutResId = R.layout.intro_fragment_layout_2;
+                break;
             default:
-                layoutResId = R.layout.intro_fragment_layout_5;
+                layoutResId = R.layout.intro_fragment_layout_3;
         }
         View view = getActivity().getLayoutInflater().inflate(layoutResId, container, false);
         view.setTag(mPage);

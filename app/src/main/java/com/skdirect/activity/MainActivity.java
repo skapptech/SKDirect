@@ -1,7 +1,6 @@
 package com.skdirect.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.app.Notification;
@@ -22,8 +21,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.ValueCallback;
@@ -33,20 +34,15 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityMainBinding;
@@ -73,8 +69,9 @@ public class MainActivity extends AppCompatActivity {
     private String mCameraPhotoPath;
     private static final int INPUT_FILE_REQUEST_CODE = 1;
     private static final int FILECHOOSER_RESULTCODE = 1;
-    String firebaseToken="";
+    String firebaseToken = "";
     private CommonClassForAPI commonClassForAPI;
+    private ViewTreeObserver.OnScrollChangedListener mOnScrollChangedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +89,33 @@ public class MainActivity extends AppCompatActivity {
                     firebaseToken = task.getResult();
                 });
 
-
+        mBinding.refreshLayout.setOnRefreshListener(() -> mBinding.webView.reload()
+        );
     }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getExtras() != null) {
+            String url = intent.getStringExtra("url");
+            mBinding.webView.loadUrl(url);
+        }
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        isPermissionAvailable();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mBinding.webView.canGoBack()) {
+            mBinding.webView.goBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
 
     private void initViews() {
         WebSettings webSettings = mBinding.webView.getSettings();
@@ -113,13 +135,13 @@ public class MainActivity extends AppCompatActivity {
 
         mBinding.webView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if ( url.contains(".png")||url.contains(".jpg")){
+                if (url.contains(".png") || url.contains(".jpg")) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setDataAndType(Uri.parse(url), "application/file");
-                    try{
+                    try {
                         view.getContext().startActivity(intent);
                     } catch (ActivityNotFoundException e) {
-                       e.printStackTrace();
+                        e.printStackTrace();
                     }
                 } else {
                     mBinding.webView.loadUrl(url);
@@ -135,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                mBinding.refreshLayout.setRefreshing(false);
             }
         });
         mBinding.webView.setWebChromeClient(new WebChromeClient() {
@@ -146,12 +169,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
-                if (newProgress == 100) {
+               /* if (newProgress == 100) {
                     mBinding.pBar.setVisibility(View.GONE);
                 } else {
                     mBinding.pBar.setVisibility(View.VISIBLE);
-                }
+                }*/
             }
+
             public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> filePath, WebChromeClient.FileChooserParams fileChooserParams) {
                 // Double check that we don't have any existing callbacks
                 if (mFilePathCallback != null) {
@@ -169,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                     } catch (IOException ex) {
                         Log.e("Common.TAG", "Unable to create Image File", ex);
                     }
-                    
+
                     if (photoFile != null) {
                         mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
@@ -202,29 +226,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)){
-            mBinding.webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.SELLER_URL));
-        }else {
-            mBinding.webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.BUYER_URL));
-        }
-
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        isPermissionAvailable();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mBinding.webView.canGoBack()) {
-            mBinding.webView.goBack();
+        if (getIntent().getExtras() != null) {
+            String url = getIntent().getStringExtra("url");
+            mBinding.webView.loadUrl(url);
         } else {
-            super.onBackPressed();
+            if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
+                mBinding.webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.SELLER_URL));
+            } else {
+                mBinding.webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.BUYER_URL));
+            }
         }
     }
-
 
     private void isPermissionAvailable() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -290,8 +302,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @JavascriptInterface
-        public void closeDirect() {
-                finish();
+        public void shareWhatsapp(String message, String number) {
+            shareOnWhatsapp(message, number);
+        }
+
+        @JavascriptInterface
+        public void exitApp() {
+            closeApp();
         }
 
 
@@ -315,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
         public void callNumber(String text) {
             Call(text);
         }
+
         @JavascriptInterface
         public void callLogout() {
             Logout();
@@ -323,6 +341,19 @@ public class MainActivity extends AppCompatActivity {
         @JavascriptInterface
         public void updateToken(String token) {
             callUpdateToken(token);
+        }
+
+        @JavascriptInterface
+        public boolean isOpenInApp() {
+            return true;
+        }
+        @JavascriptInterface
+        public void reloadPage() {
+            reloadPageview();
+        }
+        @JavascriptInterface
+        public void redirectPage(String url) {
+            redirectPageview(url);
         }
 
 
@@ -340,7 +371,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-    private void Logout(){
+
+    private void Logout() {
         SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SHOW_INTRO, false);
         Intent i = new Intent(activity, SplashActivity.class);
         startActivity(i);
@@ -361,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Document Downloaded in", Toast.LENGTH_SHORT).show();
     }
 
-    private BroadcastReceiver onComplete = new BroadcastReceiver() {
+    private final BroadcastReceiver onComplete = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(activity, "direct")
                     .setSmallIcon(R.drawable.logo)
@@ -404,7 +436,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 
 
     public void ringtone() {
@@ -554,14 +585,15 @@ public class MainActivity extends AppCompatActivity {
     private void callUpdateToken(String token) {
         try {
             if (Utils.isNetworkAvailable(activity)) {
-                    commonClassForAPI.getUpdateFirebaseToken(firebaseObserver,new UpdateTokenModel(firebaseToken),token);
+                commonClassForAPI.getUpdateFirebaseToken(firebaseObserver, new UpdateTokenModel(firebaseToken), token);
             } else {
-                Utils.setToast(activity,"No Internet Connection!!");
+                Utils.setToast(activity, "No Internet Connection!!");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private DisposableObserver<AppVersionModel> firebaseObserver = new DisposableObserver<AppVersionModel>() {
         @Override
         public void onNext(AppVersionModel response) {
@@ -572,6 +604,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+
         @Override
         public void onError(Throwable e) {
         }
@@ -580,4 +613,32 @@ public class MainActivity extends AppCompatActivity {
         public void onComplete() {
         }
     };
+
+    private void shareOnWhatsapp(String textMsg, String number) {
+        Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+        whatsappIntent.setType("text/plain");
+        whatsappIntent.setPackage("com.whatsapp");
+        if (number != null && !number.equals("")) {
+            whatsappIntent.putExtra("jid", PhoneNumberUtils.stripSeparators("91" + number) + "@s.whatsapp.net");
+        }
+        whatsappIntent.putExtra(Intent.EXTRA_TEXT, textMsg);
+        try {
+            activity.startActivity(whatsappIntent);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Utils.setToast(activity, "Whatsapp not installed.");
+        }
+    }
+
+    private void closeApp() {
+        finish();
+        finishAffinity();
+    }
+    private void reloadPageview() {
+        mBinding.webView.reload();
+    }
+    private void redirectPageview(String url) {
+        mBinding.webView.loadUrl(url);
+    }
+
+
 }

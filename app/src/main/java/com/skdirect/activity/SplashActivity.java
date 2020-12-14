@@ -89,9 +89,20 @@ public class SplashActivity extends AppCompatActivity {
                     if (!SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SHOW_INTRO)) {
                         Intent i = new Intent(activity, IntroActivity.class);
                         startActivity(i);
+                        finish();
                     }else {
-                        Intent i = new Intent(activity, MainActivity.class);
-                        startActivity(i);
+                        if (getIntent().getExtras() != null && getIntent().getStringExtra("url")!=null) {
+                            String url = getIntent().getStringExtra("url");
+                            Intent i = new Intent(activity, MainActivity.class);
+                            i.putExtra("url",url);
+                            startActivity(i);
+                            finish();
+                        }else {
+                            Intent i = new Intent(activity, MainActivity.class);
+                            startActivity(i);
+                            finish();
+                        }
+
                     }
                 }else {
                     @SuppressLint("RestrictedApi") AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.Base_Theme_AppCompat_Dialog));

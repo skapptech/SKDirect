@@ -20,10 +20,6 @@ public class IntroAdapter extends FragmentPagerAdapter {
                 return IntroFragment.newInstance(Color.parseColor("#ffffff"), position); // blue
             case 1:
                 return IntroFragment.newInstance(Color.parseColor("#ffffff"), position); // blue
-            case 2:
-                return IntroFragment.newInstance(Color.parseColor("#ffffff"), position); // blue
-            case 3:
-                return IntroFragment.newInstance(Color.parseColor("#ffffff"), position); // blue
             default:
                 return IntroFragment.newInstance(Color.parseColor("#ffffff"), position); // green
         }
@@ -31,6 +27,6 @@ public class IntroAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return 3;
     }
 }

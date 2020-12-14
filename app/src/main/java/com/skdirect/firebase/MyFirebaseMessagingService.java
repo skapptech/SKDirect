@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.skdirect.R;
+import com.skdirect.activity.MainActivity;
 import com.skdirect.activity.SplashActivity;
 
 import org.json.JSONObject;
@@ -48,16 +49,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
         JSONObject object = new JSONObject(remoteMessage.getData());
         try {
+            String redirectUrl = "";
+            if (object.has("redirecturl")) {
+                redirectUrl = object.getString("redirecturl");
+            }
+
             showNotification(object.getString("icon"),
                     object.getString("body"),
-                    object.getString("title"), 0);
+                    object.getString("title"), 0, redirectUrl);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
-    private void showNotification(String imageUrl, String messageBody, String title, int actionId) {
+    private void showNotification(String imageUrl, String messageBody, String title, int actionId, String link) {
         Bitmap myBitmap = null;
         try {
             if (!TextUtils.isEmpty(imageUrl)) {
@@ -65,12 +71,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     myBitmap = getBitmapFromURL(imageUrl);
                 }
             }
-
-            Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("Notification", true);
-            intent.putExtra("NotificationId", actionId);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+            Intent intent = null;
+            if (link != null && !link.equals("")) {
+                intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("url", link);
+            } else {
+                intent = new Intent(getApplicationContext(), SplashActivity.class);
+            }
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
