@@ -324,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         public void clearSession() {
             clearLocalSession();
         }
-        
+
         @JavascriptInterface
         public void openApp(String AppName, String PackageName) {
             Open(PackageName);
