@@ -68,4 +68,11 @@ public class SharePrefs {
         editor.putString(name, value);
         editor.apply();
     }
+
+    public static void clearPref(Context context){
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.clear();
+        editor.apply();
+    }
 }

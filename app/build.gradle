@@ -38,7 +38,7 @@ android {
             proguardFiles 'proguard-rules.pro'
             resValue "string", "app_name", "Direct"
             buildConfigField("String", "buildVariant", "\"release\"")
-            buildConfigField("String", "apiEndpoint", "\"http://111.118.252.170:8787\"")
+            buildConfigField("String", "apiEndpoint", "\"https://directapi.er15.xyz:4436\"")
         }
         debug {
             minifyEnabled false

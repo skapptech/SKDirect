@@ -20,10 +20,12 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.ValueCallback;
@@ -67,8 +69,11 @@ import java.security.Permission;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.observers.DisposableObserver;
+
+import static com.skdirect.utils.SharePrefs.clearPref;
 
 public class MainActivity extends AppCompatActivity implements OtpReceivedInterface {
     private final int PERMISSION_REQUEST = 545;
@@ -84,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     private String firebaseToken = "";
     private CommonClassForAPI commonClassForAPI;
     private SmsBroadcastReceiver mSmsBroadcastReceiver;
+
+    CountDownTimer cTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,9 +130,9 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        mSmsBroadcastReceiver = new SmsBroadcastReceiver();
+       /* mSmsBroadcastReceiver = new SmsBroadcastReceiver();
         mSmsBroadcastReceiver.setOnOtpListeners(MainActivity.this);
-        startSMSListener();
+        startSMSListener();*/
     }
 
     @Override
@@ -313,6 +320,11 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             clearWebviewCache();
         }
 
+        @JavascriptInterface
+        public void clearSession() {
+            clearLocalSession();
+        }
+        
         @JavascriptInterface
         public void openApp(String AppName, String PackageName) {
             Open(PackageName);
@@ -696,15 +708,25 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         mBinding.webView.reload();
     }
 
+    private void clearLocalSession() {
+        clearPref(activity);
+        Intent i = new Intent(activity, SplashActivity.class);
+        startActivity(i);
+    }
+
+
     private void showToastMessage(String msg) {
         Utils.setToast(activity, msg);
     }
 
     private void registerBroadcast(boolean value) {
+        mSmsBroadcastReceiver = new SmsBroadcastReceiver();
+        mSmsBroadcastReceiver.setOnOtpListeners(MainActivity.this);
         try {
             if (value) {
                 LocalBroadcastManager.getInstance(this).registerReceiver(mSmsBroadcastReceiver, new IntentFilter("otp"));
                 startSMSListener();
+                otpTimer();
             } else {
                 LocalBroadcastManager.getInstance(this).unregisterReceiver(mSmsBroadcastReceiver);
             }
@@ -735,20 +757,20 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mSmsBroadcastReceiver, new IntentFilter("otp"));
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mSmsBroadcastReceiver);
     }
 
     @Override
     public void onOtpReceived(String otp) {
         otpNumber = otp.replaceAll("[^0-9]", "").substring(0, 4);
         mBinding.webView.loadUrl("javascript:setOtp(" + otpNumber + ")");
-
+        if (mSmsBroadcastReceiver!=null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mSmsBroadcastReceiver);
+        }
         //mBinding.webView.loadUrl("javascript:angularFunctionCalled(" + otpNumber + ")");
         /*mBinding.webView.loadUrl("javascript: (function() {setOtp();}) ();");
         mBinding.webView.loadUrl("javascript: (function() {document.getElementById('id2').value= '123';}) ();");*/
@@ -773,5 +795,18 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
                 super.onDenied(context, deniedPermissions);
             }
         });
+    }
+
+    public void otpTimer(){
+        cTimer = new CountDownTimer(60000, 1000) {
+            public void onTick(long mills) {
+            }
+            public void onFinish() {
+                if (mSmsBroadcastReceiver!=null) {
+                    LocalBroadcastManager.getInstance(activity).unregisterReceiver(mSmsBroadcastReceiver);
+                }
+            }
+        };
+        cTimer.start();
     }
 }
