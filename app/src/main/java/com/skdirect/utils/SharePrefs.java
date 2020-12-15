@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 
 public class SharePrefs {
 
-    public static String PREFERENCE = "SkDirect";
+    public static String PREFERENCE = "Direct";
 
     public static final String IS_SHOW_INTRO = "IsShowIntro";
     public static final String BUYER_URL = "BuyerUrl";

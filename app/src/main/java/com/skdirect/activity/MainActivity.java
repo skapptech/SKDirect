@@ -45,6 +45,8 @@ import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.nabinbhandari.android.permissions.PermissionHandler;
+import com.nabinbhandari.android.permissions.Permissions;
 import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.broadcast.SmsBroadcastReceiver;
@@ -61,7 +63,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.Permission;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import io.reactivex.observers.DisposableObserver;
@@ -89,8 +93,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         commonClassForAPI = CommonClassForAPI.getInstance(this);
 
         initViews();
-        isPermissionAvailable();
-
+        callRunTimePermissions();
         Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures()+"");
 
         FirebaseMessaging.getInstance().getToken()
@@ -119,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        isPermissionAvailable();
 
         mSmsBroadcastReceiver = new SmsBroadcastReceiver();
         mSmsBroadcastReceiver.setOnOtpListeners(MainActivity.this);
@@ -257,39 +259,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
     }
 
-    private void isPermissionAvailable() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return;
-        }
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                    android.Manifest.permission.ACCESS_BACKGROUND_LOCATION, android.Manifest.permission.CAMERA}, PERMISSION_REQUEST);
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                    android.Manifest.permission.ACCESS_BACKGROUND_LOCATION, Manifest.permission.CAMERA}, PERMISSION_REQUEST);
-        }
-
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            } else {
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            }
-        }
-    }
 
 
     private class JavaScriptInterface {
@@ -327,11 +296,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         @JavascriptInterface
         public void sendNotification(String data) {
             setNotification(data, "SKDirect");
-        }
-
-        @JavascriptInterface
-        public void shareItem(String imagePath, String body, String returnPath) {
-
         }
 
         @JavascriptInterface
@@ -388,16 +352,26 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         public void redirectPage(String url) {
             redirectPageview(url);
         }
+        @JavascriptInterface
+        public void openUrlInBrowser(String url) {
+            urlOpenInBrowser(url);
+        }
 
         @JavascriptInterface
         public void askPermission() {
-            isPermissionAvailable();
+            callRunTimePermissions();
         }
 
         @JavascriptInterface
         public JSONObject getCurrentLocation() {
             return getCurrentLatLong();
         }
+
+        @JavascriptInterface
+        public void otpBroadCastReg(boolean value) {
+            registerBroadcast(value);
+        }
+
 
         @JavascriptInterface
         public String getOTP() {
@@ -421,6 +395,8 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }else {
+            gpsTracker.showSettingsAlert();
         }
         return jsonObject;
     }
@@ -709,6 +685,12 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         mBinding.webView.loadUrl(url);
     }
 
+    private void urlOpenInBrowser(String url) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
+    }
+
+
     private void clearWebviewCache() {
         mBinding.webView.clearCache(true);
         mBinding.webView.reload();
@@ -718,8 +700,27 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         Utils.setToast(activity, msg);
     }
 
+    private void registerBroadcast(boolean value) {
+        try {
+            if (value) {
+                LocalBroadcastManager.getInstance(this).registerReceiver(mSmsBroadcastReceiver, new IntentFilter("otp"));
+                startSMSListener();
+            } else {
+                LocalBroadcastManager.getInstance(this).unregisterReceiver(mSmsBroadcastReceiver);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
 
     public void startSMSListener() {
+        try {
+            getApplicationContext().unregisterReceiver(mSmsBroadcastReceiver);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
         getApplicationContext().registerReceiver(mSmsBroadcastReceiver, intentFilter);
@@ -756,5 +757,21 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     @Override
     public void onOtpTimeout() {
 
+    }
+
+    public void callRunTimePermissions() {
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION};
+
+        //Permissions.Options options = new Permissions.Options().setSettingsDialogTitle("Permissions Required").setSettingsDialogMessage("BH-Message");
+
+        Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+            }
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+            }
+        });
     }
 }
