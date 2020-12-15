@@ -24,8 +24,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewTreeObserver;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.ValueCallback;
@@ -35,23 +33,31 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
+import com.skdirect.broadcast.SmsBroadcastReceiver;
 import com.skdirect.databinding.ActivityMainBinding;
+import com.skdirect.interfacee.OtpReceivedInterface;
 import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.UpdateTokenModel;
+import com.skdirect.utils.AppSignatureHelper;
+import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,7 +66,7 @@ import java.util.Date;
 
 import io.reactivex.observers.DisposableObserver;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OtpReceivedInterface {
     private final int PERMISSION_REQUEST = 545;
     ActivityMainBinding mBinding;
     MainActivity activity;
@@ -68,11 +74,12 @@ public class MainActivity extends AppCompatActivity {
     private ValueCallback<Uri> mUploadMessage;
     private Uri mCapturedImageURI = null;
     private ValueCallback<Uri[]> mFilePathCallback;
-    private String mCameraPhotoPath;
+    private String mCameraPhotoPath, otpNumber;
     private static final int INPUT_FILE_REQUEST_CODE = 1;
     private static final int FILECHOOSER_RESULTCODE = 1;
-    String firebaseToken = "";
+    private String firebaseToken = "";
     private CommonClassForAPI commonClassForAPI;
+    private SmsBroadcastReceiver mSmsBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +87,11 @@ public class MainActivity extends AppCompatActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         activity = this;
         commonClassForAPI = CommonClassForAPI.getInstance(this);
+
         initViews();
+        isPermissionAvailable();
+
+        Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures()+"");
 
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
@@ -109,6 +120,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         isPermissionAvailable();
+
+        mSmsBroadcastReceiver = new SmsBroadcastReceiver();
+        mSmsBroadcastReceiver.setOnOtpListeners(MainActivity.this);
+        startSMSListener();
     }
 
     @Override
@@ -262,7 +277,20 @@ public class MainActivity extends AppCompatActivity {
                     android.Manifest.permission.ACCESS_COARSE_LOCATION,
                     android.Manifest.permission.ACCESS_BACKGROUND_LOCATION, Manifest.permission.CAMERA}, PERMISSION_REQUEST);
         }
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            } else {
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            }
+        }
     }
+
 
     private class JavaScriptInterface {
         private Context context;
@@ -340,6 +368,7 @@ public class MainActivity extends AppCompatActivity {
         public void callLogout() {
             Logout();
         }
+
         @JavascriptInterface
         public void updateToken(String token) {
             callUpdateToken(token);
@@ -349,20 +378,53 @@ public class MainActivity extends AppCompatActivity {
         public boolean isOpenInApp() {
             return true;
         }
+
         @JavascriptInterface
         public void reloadPage() {
             reloadPageview();
         }
+
         @JavascriptInterface
         public void redirectPage(String url) {
             redirectPageview(url);
         }
+
         @JavascriptInterface
         public void askPermission() {
             isPermissionAvailable();
         }
 
+        @JavascriptInterface
+        public JSONObject getCurrentLocation() {
+            return getCurrentLatLong();
+        }
+
+        @JavascriptInterface
+        public String getOTP() {
+            mSmsBroadcastReceiver = new SmsBroadcastReceiver();
+            mSmsBroadcastReceiver.setOnOtpListeners(MainActivity.this);
+            startSMSListener();
+
+            return otpNumber;
+        }
     }
+
+    private JSONObject getCurrentLatLong() {
+        JSONObject jsonObject = new JSONObject();
+        GPSTracker gpsTracker = new GPSTracker(MainActivity.this);
+        if (gpsTracker.canGetLocation()) {
+            double latitude = gpsTracker.getLatitude();
+            double longitude = gpsTracker.getLongitude();
+            try {
+                jsonObject.put("lat", latitude);
+                jsonObject.put("long", longitude);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return jsonObject;
+    }
+
 
     private void Open(String PackageName) {
         Intent intent = getPackageManager().getLaunchIntentForPackage(PackageName);
@@ -422,7 +484,7 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.mipmap.notification)
-                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.launcher))
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.notification))
                     .setContentTitle(title)
                     .setContentText(messageBody)
                     .setContentInfo(title)
@@ -638,21 +700,61 @@ public class MainActivity extends AppCompatActivity {
         finish();
         finishAffinity();
     }
+
     private void reloadPageview() {
         mBinding.webView.reload();
     }
+
     private void redirectPageview(String url) {
         mBinding.webView.loadUrl(url);
     }
+
     private void clearWebviewCache() {
         mBinding.webView.clearCache(true);
         mBinding.webView.reload();
     }
+
     private void showToastMessage(String msg) {
-        Utils.setToast(activity,msg);
+        Utils.setToast(activity, msg);
     }
 
 
+    public void startSMSListener() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
+        getApplicationContext().registerReceiver(mSmsBroadcastReceiver, intentFilter);
+        SmsRetrieverClient mClient = SmsRetriever.getClient(this);
+        Task<Void> mTask = mClient.startSmsRetriever();
+        mTask.addOnSuccessListener(aVoid -> {
+        });
+        mTask.addOnFailureListener(e -> {
+        });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mSmsBroadcastReceiver, new IntentFilter("otp"));
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mSmsBroadcastReceiver);
+    }
+
+    @Override
+    public void onOtpReceived(String otp) {
+        otpNumber = otp.replaceAll("[^0-9]", "").substring(0, 4);
+        mBinding.webView.loadUrl("javascript:setOtp(" + otpNumber + ")");
+
+        //mBinding.webView.loadUrl("javascript:angularFunctionCalled(" + otpNumber + ")");
+        /*mBinding.webView.loadUrl("javascript: (function() {setOtp();}) ();");
+        mBinding.webView.loadUrl("javascript: (function() {document.getElementById('id2').value= '123';}) ();");*/
+    }
+
+    @Override
+    public void onOtpTimeout() {
+
+    }
 }

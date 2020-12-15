@@ -73,7 +73,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
             Intent intent = null;
             if (link != null && !link.equals("")) {
-                intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent = new Intent(getApplicationContext(), SplashActivity.class);
                 intent.putExtra("url", link);
             } else {
                 intent = new Intent(getApplicationContext(), SplashActivity.class);
@@ -94,7 +94,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if (myBitmap != null) {
                 notificationBuilder = new NotificationCompat.Builder(this, getResources().getString(R.string.app_name))
                         .setSmallIcon(R.mipmap.notification)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.launcher))
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                         .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(myBitmap))
                         .setContentTitle(title)
                         .setContentText(messageBody)
@@ -108,7 +108,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             } else {
                 notificationBuilder = new NotificationCompat.Builder(this, getResources().getString(R.string.app_name))
                         .setSmallIcon(R.mipmap.notification)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.launcher))
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                         .setContentTitle(title)
                         .setContentText(messageBody)
                         .setContentInfo(messageBody)
