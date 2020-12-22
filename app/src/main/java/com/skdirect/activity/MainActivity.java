@@ -25,7 +25,11 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.BaseInputConnection;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.ValueCallback;
@@ -187,6 +191,18 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
                 super.onPageFinished(view, url);
                 //.refreshLayout.setRefreshing(false);
             }
+            @Override
+            public void onUnhandledKeyEvent(WebView view, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP)
+                    switch (event.getKeyCode()) {
+                        case KeyEvent.KEYCODE_ENTER:
+                            mBinding.webView.loadUrl("javascript:onEnter()");
+                            break;
+
+                    }
+                return;
+            }
+
         });
         mBinding.webView.setWebChromeClient(new WebChromeClient() {
             @Override
