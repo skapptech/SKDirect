@@ -14,6 +14,13 @@ public class SharePrefs {
     public static final String SELLER_URL = "SellerUrl";
     public static final String APP_VERSION = "AppVersion";
     public static final String IS_SELLER = "IsSeller";
+    public static final String IS_USER_EXISTS = "UserExists";
+    public static final String RESULT = "Result";
+    public static final String USER_ID = "Userid";
+    public static final String IS_LOGIN ="is_loggedIn";
+    public static final String TOKEN ="access_token";
+    public static final String USER_NAME ="user_name";
+
 
 
     private Context ctx;

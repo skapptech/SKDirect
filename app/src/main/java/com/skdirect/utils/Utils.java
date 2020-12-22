@@ -32,7 +32,7 @@ public class Utils {
 
     public static void setToast(Context _mContext, String str) {
         Toast toast = Toast.makeText(_mContext, str, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setGravity(Gravity.BOTTOM, 0, 0);
         toast.show();
     }
     public static void setLongToast(Context _mContext, String str) {

@@ -34,8 +34,8 @@ public class RestClient {
     private static Activity mActivity;
     Request request;
 
-    public static RestClient getInstance(Activity activity) {
-        mActivity = activity;
+    public static RestClient getInstance() {
+        //mActivity = activity;
         return ourInstance;
     }
 
@@ -74,6 +74,7 @@ public class RestClient {
                         e.printStackTrace();
                     }
                     return response;
+
                 })
                 .addInterceptor(chain -> {
                     request = chain.request().newBuilder()

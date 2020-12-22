@@ -12,4 +12,5 @@
     <color name="colorAccent">#343553</color>
     <color name="seller_button_color">#58ccc1</color>
     <color name="transparent">#00000000</color>
+    <color name="divider">#ececec</color>
 </resources>

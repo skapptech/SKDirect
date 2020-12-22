@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 
 import com.google.gson.JsonObject;
 import com.skdirect.model.AppVersionModel;
+import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.UpdateTokenModel;
 
 import io.reactivex.Observer;
@@ -33,42 +34,18 @@ public class CommonClassForAPI {
     }
 
 
-    public void getAppVersionApi(final DisposableObserver observer) {
-        RestClient.getInstance(mActivity).getService().getAppversion()
+
+    public void getToken(final DisposableObserver observer,String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp) {
+        RestClient.getInstance().getService().getToken(password, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<AppVersionModel>() {
+                .subscribe(new Observer<LoginWithPasswordModel>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onNext(AppVersionModel o) {
-                        observer.onNext(o);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        observer.onError(e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        observer.onComplete();
-                    }
-                });
-    }
-    public void getUpdateFirebaseToken(final DisposableObserver observer, UpdateTokenModel updateTokenModel,String token) {
-        RestClient.getInstance(mActivity).getService().getUpdateToken(updateTokenModel,"Bearer "+token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<JsonObject>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(JsonObject o) {
+                    public void onNext(LoginWithPasswordModel o) {
                         observer.onNext(o);
                     }
 
