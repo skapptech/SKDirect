@@ -48,22 +48,24 @@
 
 
                         <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_user_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="30dp"
-                            android:text="Bhagwan"
+                            android:text=""
                             android:textColor="@color/colorAccent"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
                             android:textStyle="bold" />
 
                         <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_mobile_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="30dp"
                             android:layout_marginTop="5dp"
-                            android:text="895311437"
+                            android:text=""
                             android:textColor="@color/colorAccent"
-                            android:textSize="15sp"
+                            android:textSize="13sp"
                             android:textStyle="bold" />
 
 

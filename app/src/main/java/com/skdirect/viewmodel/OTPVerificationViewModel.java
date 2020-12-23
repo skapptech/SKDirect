@@ -24,13 +24,7 @@ public class OTPVerificationViewModel extends ViewModel {
 
 
 
-    public LiveData<OtpResponceModel> getLogin(OtpVerificationModel otpVerificationModel) {
-        if(OTPVerificationViewModel==null){
-            OTPVerificationViewModel = new MutableLiveData<>();
-            OTPVerificationViewModel = loginRequest(otpVerificationModel);
-        }
-        return OTPVerificationViewModel;
-    }
+
 
     public LiveData<LoginResponseModel> getLogin(String mobileNumberString) {
         if(loginViewModel==null){
@@ -39,27 +33,6 @@ public class OTPVerificationViewModel extends ViewModel {
         }
         return loginViewModel;
     }
-
-    public MutableLiveData<OtpResponceModel> loginRequest(OtpVerificationModel otpVerificationModel) {
-        RestClient.getInstance().getService().getVerfiyOtp(otpVerificationModel).enqueue(new Callback<OtpResponceModel>() {
-            @Override
-            public void onResponse(Call<OtpResponceModel> call, Response<OtpResponceModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
-                    OTPVerificationViewModel.setValue(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<OtpResponceModel> call, Throwable t) {
-                Log.e(TAG, "onFailure Responce" + call.toString());
-                Utils.hideProgressDialog();
-            }
-        });
-
-        return OTPVerificationViewModel;
-    }
-
 
 
     public MutableLiveData<LoginResponseModel> loginRequest(String mobileNumberString) {

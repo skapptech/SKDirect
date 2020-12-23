@@ -14,6 +14,7 @@
 
 
     <application
+        android:name=".utils.MyApplication"
         android:allowBackup="true"
         android:allowClearUserData="false"
         android:fitsSystemWindows="true"

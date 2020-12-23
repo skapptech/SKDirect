@@ -118,4 +118,8 @@ public class Utils {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    public static String getToken(Context context) {
+        return SharePrefs.getInstance(context).getString(SharePrefs.TOKEN);
+    }
+
 }

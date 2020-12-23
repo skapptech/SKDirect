@@ -9,6 +9,8 @@ import androidx.annotation.RequiresApi;
 import com.google.gson.Gson;
 import com.skdirect.BuildConfig;
 import com.skdirect.utils.Aes256;
+import com.skdirect.utils.MyApplication;
+import com.skdirect.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -32,7 +34,7 @@ public class RestClient {
 
     private static final RestClient ourInstance = new RestClient();
     private static Activity mActivity;
-    Request request;
+    private Request request;
 
     public static RestClient getInstance() {
         //mActivity = activity;
@@ -78,10 +80,7 @@ public class RestClient {
                 })
                 .addInterceptor(chain -> {
                     request = chain.request().newBuilder()
-                           /* .header("username", Utils.getCustMobile(MyApplication.getInstance().activity))
-                            .header("activity", MyApplication.getInstance().activity == null ? "" : MyApplication.getInstance().activity.getClass().getSimpleName() + "")
-                            .header("section", TextUtils.isNullOrEmpty(mSectionType) ? "" : mSectionType)
-                            .addHeader("authorization", "Bearer " + Utils.getToken(MyApplication.getInstance().activity))*/
+                            .addHeader("authorization", "Bearer " + Utils.getToken(MyApplication.getInstance().appContext))
                             .build();
                     return chain.proceed(request);
                 })

@@ -8,6 +8,8 @@ import androidx.annotation.RequiresApi;
 import com.google.gson.JsonObject;
 import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.LoginWithPasswordModel;
+import com.skdirect.model.OtpResponceModel;
+import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.UpdateTokenModel;
 
 import io.reactivex.Observer;
@@ -46,6 +48,32 @@ public class CommonClassForAPI {
 
                     @Override
                     public void onNext(LoginWithPasswordModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void getLogin(final DisposableObserver observer, OtpVerificationModel otpVerificationModel) {
+        RestClient.getInstance().getService().getVerfiyOtp(otpVerificationModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<OtpResponceModel>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(OtpResponceModel o) {
                         observer.onNext(o);
                     }
 

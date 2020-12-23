@@ -1,14 +1,19 @@
 package com.skdirect.api;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.model.AppVersionModel;
+import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.LoginResponseModel;
 import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
+import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.UpdateTokenModel;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import io.reactivex.Observable;
 import retrofit2.Call;
@@ -32,10 +37,15 @@ public interface APIServices {
     Call<LoginResponseModel> GenerateOtp(@Path("GenerateOtp") String GenerateOtp);
 
     @POST("api/Buyer/Registration/VerfiyOtp")
-    Call<OtpResponceModel> getVerfiyOtp(@Body OtpVerificationModel OtpVerificationModel);
+    Observable<OtpResponceModel> getVerfiyOtp(@Body OtpVerificationModel OtpVerificationModel);
 
     @FormUrlEncoded
     @POST("/token")
     Observable<LoginWithPasswordModel> getToken(@Field("grant_type") String grant_type, @Field("username") String username, @Field("password") String password, @Field("ISOTP") boolean isOTp, @Field("ISBUYER") boolean isBuyer, @Field("LOGINTYPE") String LOGINTYPE);
 
+    @GET("api/buyer/Profile/GetUserDetail")
+    Call<CustomerDataModel> GetUserDetail();
+
+    @GET("api/buyer/SkAppHome/GetTopNearByItem")
+    Call<ArrayList<TopNearByItemModel>> GetTopNearByItem();
 }

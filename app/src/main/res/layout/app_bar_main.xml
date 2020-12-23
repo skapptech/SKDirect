@@ -21,13 +21,12 @@
                 app:layout_scrollFlags="scroll|enterAlways">
 
 
-                <RelativeLayout
+                <LinearLayout
                     android:id="@+id/titlebar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
-                    android:layout_marginRight="3dp"
-                    android:orientation="horizontal">
+                    android:layout_marginRight="3dp">
 
                     <ImageView
                         android:id="@+id/iv_menu"
@@ -39,7 +38,24 @@
                         android:src="@drawable/ic_home_drawer" />
 
 
-                </RelativeLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="10dp"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/direct_home_logo" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/direct_tittle" />
+
+
+                </LinearLayout>
 
 
             </androidx.appcompat.widget.Toolbar>
@@ -57,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/white"
+            android:background="@color/colorAccent"
             app:itemIconTint="@drawable/selector"
             app:itemTextColor="@drawable/selector"
             app:labelVisibilityMode="labeled"

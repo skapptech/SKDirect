@@ -5,7 +5,7 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
+    <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#343553</color>
@@ -13,4 +13,8 @@
     <color name="seller_button_color">#58ccc1</color>
     <color name="transparent">#00000000</color>
     <color name="divider">#ececec</color>
+    <color name="yellow">#ffeab3</color>
+    <color name="grid_divder">#707070</color>
+
+
 </resources>

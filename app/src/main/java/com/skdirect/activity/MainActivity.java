@@ -12,6 +12,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +24,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
@@ -35,10 +37,13 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 import android.widget.Toast;
+
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -52,6 +57,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.nabinbhandari.android.permissions.PermissionHandler;
@@ -60,7 +66,10 @@ import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.broadcast.SmsBroadcastReceiver;
 import com.skdirect.databinding.ActivityMainBinding;
+import com.skdirect.fragment.BasketFragment;
 import com.skdirect.fragment.HomeFragment;
+import com.skdirect.fragment.MyOrderFragment;
+import com.skdirect.fragment.ProfileFragment;
 import com.skdirect.interfacee.OtpReceivedInterface;
 import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.UpdateTokenModel;
@@ -87,7 +96,10 @@ import static com.skdirect.utils.SharePrefs.clearPref;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityMainBinding mBinding;
     private boolean doubleBackToExitPressedOnce = false;
+    private SharedPreferences sharedPreferences;
     public boolean positionChanged = false;
+    public Toolbar appBarLayout;
+    public TextView userNameTV,mobileNumberTV;
 
 
     @Override
@@ -108,7 +120,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.llLogout.setOnClickListener(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
     private void initView() {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        appBarLayout = mBinding.toolbarId.toolbar;
+        userNameTV = mBinding.tvUserName;
+        mobileNumberTV = mBinding.tvMobileName;
+
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBinding.toolbarId.bottomNavigation.getLayoutParams();
         layoutParams.setBehavior(new BottomNavigationBehavior());
 
@@ -121,24 +144,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mBinding.toolbarId.bottomNavigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.home:
+                case R.id._nav_home:
                     openFragment(new HomeFragment());
                     break;
-                case R.id.m:
+                case R.id.nav_profile:
                     positionChanged = true;
-                    openFragment(new HomeFragment());
+                    openFragment(new ProfileFragment());
                     break;
-                case R.id.n:
+                case R.id.nav_my_order:
                     positionChanged = true;
-                    openFragment(new HomeFragment());
+                    openFragment(new MyOrderFragment());
                     break;
-                case R.id.v:
+                case R.id.nav_basket:
                     positionChanged = true;
-                    openFragment(new HomeFragment());
-                    break;
-                case R.id.cart:
-                    positionChanged = true;
-                    openFragment(new HomeFragment());
+                    openFragment(new BasketFragment());
                     break;
 
             }
@@ -199,10 +218,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.ll_logout:
-                Utils.setToast(getApplicationContext(),"Logout");
+                clearSharePrefs();
+                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                finish();
                 mBinding.drawer.closeDrawers();
                 break;
         }
+    }
 
+    public void clearSharePrefs() {
+        sharedPreferences.edit().clear().apply();
     }
 }

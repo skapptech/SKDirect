@@ -1,23 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/seller_button_color"
+                android:text="Nearby Items"
+                android:padding="5dp"
+                android:textStyle="bold"
+                android:layout_alignParentLeft="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/seller_button_color"
+                android:text="View More"
+                android:background="@drawable/rounded_drawer"
+                android:padding="5dp"
+                android:textSize="10sp"
+                android:textStyle="normal"
+                android:layout_alignParentRight="true"/>
+
+
+
+        </RelativeLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_list"
+            android:id="@+id/rv_near_by_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:scrollbars="vertical" />
+            android:scrollbars="horizontal" />
 
-        <ProgressBar
-            android:id="@+id/pb_trendv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:adjustViewBounds="true"
-            android:visibility="gone" />
-    </RelativeLayout>
+    </LinearLayout>
 </layout>

@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/home"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:id="@+id/_nav_home"
+        android:icon="@drawable/tb_home_sl"
         android:title="Home" />
     <item
-        android:id="@+id/m"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="Category" />
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/tb_profile_sl"
+        android:title="Profile" />
 
     <item
-        android:id="@+id/n"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="Offer" />
+        android:id="@+id/nav_my_order"
+        android:icon="@drawable/tb_my_order_sl"
+        android:title="My Order" />
     <item
-        android:id="@+id/v"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="Direct" />
-    <item
-        android:id="@+id/cart"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="Cart" />
+        android:id="@+id/nav_basket"
+        android:icon="@drawable/tb_my_basket_sl"
+        android:title="Basket" />
+
 </menu>

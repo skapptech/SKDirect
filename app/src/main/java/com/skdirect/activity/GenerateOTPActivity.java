@@ -16,15 +16,19 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.skdirect.R;
+import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.broadcast.SmsBroadcastReceiver;
 import com.skdirect.databinding.ActivityGenerateOtpBinding;
 import com.skdirect.interfacee.OtpReceivedInterface;
 import com.skdirect.model.LoginResponseModel;
+import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.OTPVerificationViewModel;
+
+import io.reactivex.observers.DisposableObserver;
 
 public class GenerateOTPActivity extends AppCompatActivity implements OtpReceivedInterface, View.OnClickListener {
     final String TAG = getClass().getSimpleName();
@@ -33,6 +37,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     private String latsFiveNumber,otpString,mobileNumber;
     private OTPVerificationViewModel otpVerificationViewModel;
     private CountDownTimer cTimer = null;
+    private CommonClassForAPI commonClassForAPI;
 
 
     @Override
@@ -51,6 +56,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     }
 
     private void initView() {
+        commonClassForAPI = CommonClassForAPI.getInstance(this);
         Binding.btLoddingOtp.setOnClickListener(this);
         Binding.tvVerifactionText.setText("Enter Verification code which we have\n" +
                 "send to XXXXX "+latsFiveNumber);
@@ -157,32 +163,15 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
 
     private void callOTPVerfiyAPI(String otpString) {
         if (Utils.isNetworkAvailable(this)) {
-            Utils.showProgressDialog(this);
-            getOTPVerfiyData(otpString);
+            if (commonClassForAPI!=null){
+                commonClassForAPI.getLogin(OTPVerfiyData, new OtpVerificationModel(mobileNumber,otpString));
+            }
         } else {
             Utils.setToast(this, "No Internet Connection Please connect.");
         }
     }
 
-    private void getOTPVerfiyData(String otpString) {
-        otpVerificationViewModel.getLogin(new OtpVerificationModel(mobileNumber,otpString)).observe(this, new Observer<OtpResponceModel>() {
-            @Override
-            public void onChanged(OtpResponceModel otpResponceModel) {
-                Utils.hideProgressDialog();
-                if (otpResponceModel!=null){
-                    SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, otpResponceModel.getIsUserExist());
-                    SharePrefs.getInstance(GenerateOTPActivity.this).putString(SharePrefs.USER_ID, otpResponceModel.getUserid());
-                    SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_LOGIN, true);
-                    startActivity(new Intent(GenerateOTPActivity.this, MainActivity.class));
-                    finish();
 
-                }else {
-                    Utils.setToast(GenerateOTPActivity.this, "Please enter valid OTP.");
-                }
-
-            }
-        });
-    }
 
     private void callResendOTPApi(String mobileNumberString) {
         if (Utils.isNetworkAvailable(this)) {
@@ -205,12 +194,74 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                         SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.RESULT, loginResponseModel.isResult());
                         startTimer(Binding.resendOtpTimer, Binding.resendotp);
                     }
-
                 }
-               
-
             }
         });
 
     }
+
+    private DisposableObserver<OtpResponceModel> OTPVerfiyData = new DisposableObserver<OtpResponceModel>() {
+        @Override
+        public void onNext(OtpResponceModel model) {
+            Utils.hideProgressDialog();
+                if (model!=null){
+                    if (model.getIsUserExist()!=null) {
+                        SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, model.getIsUserExist());
+                        SharePrefs.getInstance(GenerateOTPActivity.this).putString(SharePrefs.USER_ID, model.getUserid());
+                        SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_LOGIN, true);
+                        commonClassForAPI.getToken(callToken, "password", mobileNumber, otpString, true, true, "BUYERAPP");
+                        startActivity(new Intent(GenerateOTPActivity.this, MainActivity.class));
+                        finish();
+
+                    }else {
+                        Binding.btLoddingOtp.setText("Next");
+                        Utils.setToast(GenerateOTPActivity.this, "Please enter valid OTP.");
+                    }
+                }else {
+                    Utils.setToast(GenerateOTPActivity.this, "Please enter valid OTP.");
+                }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+            Utils.hideProgressDialog();
+        }
+    };
+
+    private DisposableObserver<LoginWithPasswordModel> callToken = new DisposableObserver<LoginWithPasswordModel>() {
+        @Override
+        public void onNext(LoginWithPasswordModel model) {
+            try {
+                Utils.hideProgressDialog();
+                if (model != null) {
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Utils.setToast(getApplicationContext(), "Invalid Password");
+
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Utils.setToast(getApplicationContext(), "Invalid Password");
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+            Utils.hideProgressDialog();
+        }
+    };
 }
