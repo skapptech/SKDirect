@@ -80,7 +80,6 @@ import io.reactivex.observers.DisposableObserver;
 import static com.skdirect.utils.SharePrefs.clearPref;
 
 public class MainActivity extends AppCompatActivity implements OtpReceivedInterface {
-    private final int PERMISSION_REQUEST = 545;
     ActivityMainBinding mBinding;
     MainActivity activity;
     private int MY_PERMISSION_REQUEST_CODE = 123;
@@ -391,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
 
         @JavascriptInterface
-        public JSONObject getCurrentLocation() {
+        public String getCurrentLocation() {
             return getCurrentLatLong();
         }
 
@@ -411,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
     }
 
-    private JSONObject getCurrentLatLong() {
+    private String getCurrentLatLong() {
         JSONObject jsonObject = new JSONObject();
         GPSTracker gpsTracker = new GPSTracker(MainActivity.this);
         if (gpsTracker.canGetLocation()) {
@@ -426,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }else {
             gpsTracker.showSettingsAlert();
         }
-        return jsonObject;
+        return jsonObject.toString();
     }
 
 
