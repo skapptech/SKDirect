@@ -28,10 +28,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="2"
+                android:maxLines="1"
                 android:gravity="center"
                  android:padding="2dp"
-                android:text="bhagwan"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
@@ -41,10 +41,10 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:gravity="center"
-                android:maxLines="2"
+                android:maxLines="1"
                 android:padding="2dp"
-                android:layout_marginBottom="10dp"
-                android:text="100"
+                android:layout_marginBottom="5dp"
+                android:text=""
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp" />
 

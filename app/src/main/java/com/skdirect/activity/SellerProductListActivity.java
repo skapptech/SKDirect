@@ -1,0 +1,135 @@
+package com.skdirect.activity;
+
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.skdirect.R;
+import com.skdirect.adapter.NearProductListAdapter;
+import com.skdirect.adapter.NearSellerListAdapter;
+import com.skdirect.databinding.ActivityProductListBinding;
+import com.skdirect.databinding.ActivitySallerProductListBinding;
+import com.skdirect.model.NearBySallerModel;
+import com.skdirect.model.NearProductListModel;
+import com.skdirect.model.PaginationModel;
+import com.skdirect.utils.Utils;
+import com.skdirect.viewmodel.NearProductListViewMode;
+import com.skdirect.viewmodel.SellerProductListViewMode;
+
+import java.util.ArrayList;
+
+public class SellerProductListActivity extends AppCompatActivity implements View.OnClickListener {
+    private ActivitySallerProductListBinding mBinding;
+    private SellerProductListViewMode sellerProductListViewMode;
+    private final ArrayList<NearBySallerModel> nearBySallerList = new ArrayList<>();
+    private int skipCount = 0;
+    private int takeCount = 10;
+    private int pastVisiblesItems = 0;
+    private int visibleItemCount = 0;
+    private int totalItemCount = 0;
+    private boolean loading = true;
+    private NearSellerListAdapter nearSellerListAdapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_saller_product_list);
+        sellerProductListViewMode = ViewModelProviders.of(this).get(SellerProductListViewMode.class);
+        initView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (nearSellerListAdapter!=null){
+            nearSellerListAdapter = new NearSellerListAdapter(getApplicationContext(),nearBySallerList);
+            mBinding.rvSellerProduct.setAdapter(nearSellerListAdapter);
+            nearSellerListAdapter.notifyDataSetChanged();
+        }
+    }
+    private void initView() {
+        mBinding.toolbarTittle.tvTittle.setText("Seller List");
+        mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL,false);
+        mBinding.rvSellerProduct.setLayoutManager(layoutManager);
+        nearSellerListAdapter = new NearSellerListAdapter(getApplicationContext(),nearBySallerList);
+        mBinding.rvSellerProduct.setAdapter(nearSellerListAdapter);
+
+        mBinding.rvSellerProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    visibleItemCount = layoutManager.getChildCount();
+                    totalItemCount = layoutManager.getItemCount();
+                    pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+                    if (loading) {
+                        if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
+                            loading = false;
+                            skipCount++;
+                           // mBinding.progressBar.setVisibility(View.VISIBLE);
+                            callProductList();
+                        }
+                    }
+                }
+            }
+        });
+        nearBySallerList.clear();
+        callProductList();
+    }
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back_press:
+                onBackPressed();
+                break;
+        }
+    }
+
+    private void callProductList() {
+        if (Utils.isNetworkAvailable(getApplicationContext())) {
+            Utils.showProgressDialog(SellerProductListActivity.this);
+            getProductListAPI();
+        } else {
+            Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+        }
+    }
+
+
+    private void getProductListAPI() {
+        sellerProductListViewMode.getSellerProductListRequest(skipCount,takeCount,"");
+        sellerProductListViewMode.getSellerProductListVM().observe(this, new Observer<ArrayList<NearBySallerModel>>() {
+            @Override
+            public void onChanged(ArrayList<NearBySallerModel> nearBySaller) {
+                Utils.hideProgressDialog();
+                if (nearBySaller.size()>0){
+
+                    mBinding.rvSellerProduct.post(new Runnable() {
+                        public void run() {
+                            nearBySallerList.addAll(nearBySaller);
+                            nearSellerListAdapter.notifyDataSetChanged();
+                            loading = true;
+                        }
+                    });
+
+                }else
+                {
+                    loading = false;
+                }
+            }
+        });
+    }
+}

@@ -2,13 +2,18 @@ package com.skdirect.api;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.LoginResponseModel;
 import com.skdirect.model.LoginWithPasswordModel;
+import com.skdirect.model.NearBySallerModel;
+import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
+import com.skdirect.model.PaginationModel;
 import com.skdirect.model.TopNearByItemModel;
+import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.UpdateTokenModel;
 
 import org.json.JSONObject;
@@ -24,6 +29,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface APIServices {
 
@@ -48,4 +54,18 @@ public interface APIServices {
 
     @GET("api/buyer/SkAppHome/GetTopNearByItem")
     Call<ArrayList<TopNearByItemModel>> GetTopNearByItem();
+
+
+    @GET("api/buyer/SkAppHome/GetTopSeller")
+    Call<ArrayList<TopSellerModel>> GetTopSeller();
+
+    @GET("api/buyer/SkAppHome/GetTopCategory")
+    Call<ArrayList<AllCategoriesModel>> GetTopCategory();
+
+    @POST("api/Buyer/Item/GetItem")
+    Call<ArrayList<NearProductListModel>> getNearItem(@Body PaginationModel paginationModel);
+
+    @GET("api/buyer/Seller/GetSellerListForBuyer")
+    Call<ArrayList<NearBySallerModel>> GetSellerListForBuyer(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword);
+
 }

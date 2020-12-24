@@ -132,8 +132,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userNameTV = mBinding.tvUserName;
         mobileNumberTV = mBinding.tvMobileName;
 
-        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBinding.toolbarId.bottomNavigation.getLayoutParams();
-        layoutParams.setBehavior(new BottomNavigationBehavior());
+//        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBinding.toolbarId.bottomNavigation.getLayoutParams();
+//        layoutParams.setBehavior(new BottomNavigationBehavior());
 
         mBinding.toolbarId.ivMenu.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -9,9 +9,11 @@ import androidx.lifecycle.ViewModel;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
+import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.LoginResponseModel;
 import com.skdirect.model.TopNearByItemModel;
+import com.skdirect.model.TopSellerModel;
 import com.skdirect.utils.Utils;
 
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ public class HomeViewModel extends ViewModel {
     final String TAG = getClass().getSimpleName();
     private MutableLiveData<CustomerDataModel> userDetailViewModel;
     private MutableLiveData<ArrayList<TopNearByItemModel>> topNearByItem;
+    private MutableLiveData<ArrayList<TopSellerModel>> topSellerLiveData;
+    private MutableLiveData<ArrayList<AllCategoriesModel>> allCategoriesLiveData;
 
 
     public LiveData<CustomerDataModel> GetUserDetail() {
@@ -40,6 +44,23 @@ public class HomeViewModel extends ViewModel {
             topNearByItem = getGetTopNearByItemRequest();
         }
         return topNearByItem;
+    }
+
+
+    public LiveData<ArrayList<TopSellerModel>> GetTopSellerLiveData() {
+        if(topSellerLiveData==null){
+            topSellerLiveData = new MutableLiveData<>();
+            topSellerLiveData = GetTopSellerLiveRequest();
+        }
+        return topSellerLiveData;
+    }
+
+    public LiveData<ArrayList<AllCategoriesModel>> getAllCategoriesLiveData() {
+        if(allCategoriesLiveData==null){
+            allCategoriesLiveData = new MutableLiveData<>();
+            allCategoriesLiveData = getAllCategoriesRequest();
+        }
+        return allCategoriesLiveData;
     }
 
     public MutableLiveData<CustomerDataModel> getUserDetailRequest() {
@@ -80,6 +101,46 @@ public class HomeViewModel extends ViewModel {
         });
 
         return topNearByItem;
+    }
+
+    public MutableLiveData<ArrayList<TopSellerModel>> GetTopSellerLiveRequest() {
+        RestClient.getInstance().getService().GetTopSeller().enqueue(new Callback<ArrayList<TopSellerModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<TopSellerModel>> call, Response<ArrayList<TopSellerModel>> response) {
+                if (response.isSuccessful() && response.body()!=null ) {
+                    Log.e(TAG, "request response="+response.body());
+                    topSellerLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<TopSellerModel>> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + call.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return topSellerLiveData;
+    }
+
+    public MutableLiveData<ArrayList<AllCategoriesModel>> getAllCategoriesRequest() {
+        RestClient.getInstance().getService().GetTopCategory().enqueue(new Callback<ArrayList<AllCategoriesModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<AllCategoriesModel>> call, Response<ArrayList<AllCategoriesModel>> response) {
+                if (response.isSuccessful() && response.body()!=null ) {
+                    Log.e(TAG, "request response="+response.body());
+                    allCategoriesLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<AllCategoriesModel>> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + call.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return allCategoriesLiveData;
     }
 
 

@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.gson.JsonArray;
@@ -21,12 +22,18 @@ import com.skdirect.R;
 import com.skdirect.activity.GenerateOTPActivity;
 import com.skdirect.activity.LoginActivity;
 import com.skdirect.activity.MainActivity;
+import com.skdirect.activity.NearByItemProductListActivity;
+import com.skdirect.activity.SellerProductListActivity;
 import com.skdirect.activity.SplashActivity;
+import com.skdirect.adapter.AllCategoriesAdapter;
 import com.skdirect.adapter.TopNearByItemAdapter;
+import com.skdirect.adapter.TopSellerAdapter;
 import com.skdirect.databinding.FragmentHomeBinding;
+import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.LoginResponseModel;
 import com.skdirect.model.TopNearByItemModel;
+import com.skdirect.model.TopSellerModel;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.HomeViewModel;
@@ -39,8 +46,6 @@ public class HomeFragment extends Fragment {
     private MainActivity activity;
     private HomeViewModel homeViewModel;
 
-
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -48,15 +53,33 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         initViews();
         topNearByItem();
-
+        getSellerAPi();
+        getAllCategoriesAPi();
 
         return mBinding.getRoot();
+    }
+
+    private void getAllCategoriesAPi() {
+        if (Utils.isNetworkAvailable(activity)) {
+            Utils.showProgressDialog(activity);
+            getTopSeller();
+        } else {
+            Utils.setToast(activity, "No Internet Connection Please connect.");
+        }
+    }
+
+    private void getSellerAPi() {
+        if (Utils.isNetworkAvailable(activity)) {
+            Utils.showProgressDialog(activity);
+            getAllCategories();
+        } else {
+            Utils.setToast(activity, "No Internet Connection Please connect.");
+        }
     }
 
     private void topNearByItem() {
@@ -77,13 +100,56 @@ public class HomeFragment extends Fragment {
                     TopNearByItemAdapter topNearByItemAdapter = new TopNearByItemAdapter(getContext(),topNearByItemList);
                     mBinding.rvNearByItem.setAdapter(topNearByItemAdapter);
 
+                }else {
+                    mBinding.llNearByNotFound.setVisibility(View.VISIBLE);
+                    mBinding.rvNearByItem.setVisibility(View.GONE);
                 }
             }
         });
     }
 
+    private void getTopSeller() {
+        homeViewModel.GetTopSellerLiveData().observe(this, new Observer<ArrayList<TopSellerModel>>() {
+            @Override
+            public void onChanged(ArrayList<TopSellerModel> topSellerList) {
+                Utils.hideProgressDialog();
+                if (topSellerList.size()>0){
+                    TopSellerAdapter topSellerAdapter = new TopSellerAdapter(getActivity(),topSellerList);
+                    mBinding.rvTopSeller.setAdapter(topSellerAdapter);
+
+                }else {
+                    mBinding.llTopSellerNotFound.setVisibility(View.VISIBLE);
+                    mBinding.rvTopSeller.setVisibility(View.GONE);
+                }
+
+            }
+        });
+
+    }
+
+    private void getAllCategories() {
+        homeViewModel.getAllCategoriesLiveData().observe(this, new Observer<ArrayList<AllCategoriesModel>>() {
+            @Override
+            public void onChanged(ArrayList<AllCategoriesModel> allCategoriesList) {
+
+                if (allCategoriesList.size()>0){
+                    AllCategoriesAdapter allCategoriesAdapter = new AllCategoriesAdapter(getActivity(),allCategoriesList);
+                    mBinding.rvAllCetegory.setAdapter(allCategoriesAdapter);
+                }else {
+                    mBinding.llAllCetegoryNotFound.setVisibility(View.VISIBLE);
+                    mBinding.rvAllCetegory.setVisibility(View.GONE);
+                }
+
+
+            }
+        });
+
+    }
+
     private void initViews() {
         mBinding.rvNearByItem.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+        mBinding.rvTopSeller.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+        mBinding.rvAllCetegory.setLayoutManager(new GridLayoutManager(activity,3));
         activity.appBarLayout.setVisibility(View.VISIBLE);
         if (Utils.isNetworkAvailable(activity)) {
             Utils.showProgressDialog(activity);
@@ -91,6 +157,20 @@ public class HomeFragment extends Fragment {
         } else {
             Utils.setToast(activity, "No Internet Connection Please connect.");
         }
+
+        mBinding.tvNearByViewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), NearByItemProductListActivity.class));
+            }
+        });
+
+        mBinding.tvNearBySellar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), SellerProductListActivity.class));
+            }
+        });
 
     }
 

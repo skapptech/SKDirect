@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <LinearLayout
+        android:layout_width="70dp"
+        android:layout_height="100dp"
+        android:orientation="vertical"
+        android:layout_margin="5dp">
+
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_top_seller"/>
+
+        <TextView
+            android:id="@+id/tv_seller_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:layout_marginTop="10dp"
+            android:maxLines="1"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="bhagwan"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+
+    </LinearLayout>
+
+</layout>

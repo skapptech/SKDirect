@@ -58,6 +58,14 @@
             android:name=".activity.LoginWithPasswordActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.NearByItemProductListActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.SellerProductListActivity"
+            android:screenOrientation="portrait" />
+
         <service
             android:name=".firebase.MyFirebaseMessagingService"
             android:stopWithTask="false">
