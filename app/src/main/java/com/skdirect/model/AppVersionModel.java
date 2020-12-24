@@ -14,6 +14,9 @@ public class AppVersionModel implements Serializable {
     @SerializedName("BuyerUrl")
     private String BuyerUrl;
 
+    @SerializedName("IsCompulsory")
+    private boolean IsCompulsory;
+
     public String getVersion() {
         return Version;
     }
@@ -36,5 +39,13 @@ public class AppVersionModel implements Serializable {
 
     public void setBuyerUrl(String buyerUrl) {
         BuyerUrl = buyerUrl;
+    }
+
+    public boolean isCompulsory() {
+        return IsCompulsory;
+    }
+
+    public void setCompulsory(boolean compulsory) {
+        IsCompulsory = compulsory;
     }
 }

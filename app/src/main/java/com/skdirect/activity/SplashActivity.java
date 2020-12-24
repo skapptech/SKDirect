@@ -1,23 +1,21 @@
 package com.skdirect.activity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.databinding.DataBindingUtil;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-
 import com.bumptech.glide.Glide;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
@@ -71,52 +69,42 @@ public class SplashActivity extends AppCompatActivity {
                     commonClassForAPI.getAppVersionApi(versionObserver);
                 }
             } else {
-                Utils.setToast(getBaseContext(),"No Internet Connection!!");
+                Utils.setToast(getBaseContext(), "No Internet Connection!!");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private DisposableObserver<AppVersionModel> versionObserver = new DisposableObserver<AppVersionModel>() {
         @Override
         public void onNext(AppVersionModel response) {
             mBinding.pBar.setVisibility(View.GONE);
             try {
-                SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL,response.getSellerUrl());
-                SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL,response.getBuyerUrl());
+                SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL, response.getSellerUrl());
+                SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL, response.getBuyerUrl());
                 if (BuildConfig.VERSION_NAME.equalsIgnoreCase(response.getVersion())) {
                     SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.APP_VERSION, response.getVersion());
-                    if (!SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SHOW_INTRO)) {
-                        Intent i = new Intent(activity, IntroActivity.class);
-                        startActivity(i);
-                        finish();
-                    }else {
-                        if (getIntent().getExtras() != null && getIntent().getStringExtra("url")!=null) {
-                            String url = getIntent().getStringExtra("url");
-                            Intent i = new Intent(activity, MainActivity.class);
-                            i.putExtra("url",url);
-                            startActivity(i);
-                            finish();
-                        }else {
-                            Intent i = new Intent(activity, MainActivity.class);
-                            startActivity(i);
-                            finish();
-                        }
-
-                    }
-                }else {
+                    goHome();
+                } else {
                     @SuppressLint("RestrictedApi") AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.Base_Theme_AppCompat_Dialog));
                     alertDialogBuilder.setTitle("Update Available");
                     alertDialogBuilder.setMessage("Please update the latest version " + response.getVersion() + " from play store");
                     alertDialogBuilder.setCancelable(false);
                     alertDialogBuilder.setPositiveButton("Update", (dialog, id) -> {
                         dialog.cancel();
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="+activity.getPackageName())));
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + activity.getPackageName())));
                     });
-                    alertDialogBuilder.setNegativeButton("Cancel", (dialog, i) -> {
-                        dialog.cancel();
-                        finish();
-                    });
+                    if (response.isCompulsory()) {
+                        alertDialogBuilder.setNegativeButton("Cancel", (dialog, i) -> {
+                            dialog.cancel();
+                            finish();
+                        });
+                    } else {
+                        alertDialogBuilder.setNegativeButton("Skip", (dialog, i) -> {
+                            goHome();
+                        });
+                    }
                     alertDialogBuilder.show();
                 }
 
@@ -125,6 +113,7 @@ public class SplashActivity extends AppCompatActivity {
 
             }
         }
+
         @Override
         public void onError(Throwable e) {
             mBinding.pBar.setVisibility(View.GONE);
@@ -135,4 +124,25 @@ public class SplashActivity extends AppCompatActivity {
             mBinding.pBar.setVisibility(View.GONE);
         }
     };
+
+    public void goHome() {
+        if (!SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SHOW_INTRO)) {
+            Intent i2 = new Intent(activity, IntroActivity.class);
+            startActivity(i2);
+            finish();
+        } else {
+            if (getIntent().getExtras() != null && getIntent().getStringExtra("url") != null) {
+                String url = getIntent().getStringExtra("url");
+                Intent i3 = new Intent(activity, MainActivity.class);
+                i3.putExtra("url", url);
+                startActivity(i3);
+                finish();
+            } else {
+                Intent i4 = new Intent(activity, MainActivity.class);
+                startActivity(i4);
+                finish();
+            }
+
+        }
+    }
 }
