@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     private ValueCallback<Uri[]> mFilePathCallback;
     private String mCameraPhotoPath, otpNumber, firebaseToken = "";
 
-    private WebView webView;
+    private static WebView webView;
     private CommonClassForAPI commonClassForAPI;
     private SmsBroadcastReceiver mSmsBroadcastReceiver;
     private CountDownTimer cTimer;

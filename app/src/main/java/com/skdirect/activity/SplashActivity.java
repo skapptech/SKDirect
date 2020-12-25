@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -87,23 +88,6 @@ public class SplashActivity extends AppCompatActivity {
                 if (BuildConfig.VERSION_NAME.equalsIgnoreCase(response.getVersion())) {
                     SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.APP_VERSION, response.getVersion());
                     goHome();
-                    if (!SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SHOW_INTRO)) {
-                        Intent i = new Intent(activity, IntroActivity.class);
-                        startActivity(i);
-                        finish();
-                    } else {
-                        if (getIntent().getExtras() != null && getIntent().getStringExtra("url") != null) {
-                            String url = getIntent().getStringExtra("url");
-                            Intent i = new Intent(activity, MainActivity.class);
-                            i.putExtra("url", url);
-                            startActivity(i);
-                            finish();
-                        } else {
-                            Intent i = new Intent(activity, MainActivity.class);
-                            startActivity(i);
-                            finish();
-                        }
-                    }
                 } else {
                     @SuppressLint("RestrictedApi") AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.Base_Theme_AppCompat_Dialog));
                     alertDialogBuilder.setTitle("Update Available");
@@ -142,20 +126,21 @@ public class SplashActivity extends AppCompatActivity {
     };
 
     public void goHome() {
+        Intent i = null;
         if (!SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SHOW_INTRO)) {
-            Intent i2 = new Intent(activity, IntroActivity.class);
-            startActivity(i2);
+            i = new Intent(activity, IntroActivity.class);
+            startActivity(i);
             finish();
         } else {
             if (getIntent().getExtras() != null && getIntent().getStringExtra("url") != null) {
                 String url = getIntent().getStringExtra("url");
-                Intent i3 = new Intent(activity, MainActivity.class);
-                i3.putExtra("url", url);
-                startActivity(i3);
+                i = new Intent(activity, MainActivity.class);
+                i.putExtra("url", url);
+                startActivity(i);
                 finish();
             } else {
-                Intent i4 = new Intent(activity, MainActivity.class);
-                startActivity(i4);
+                i = new Intent(activity, MainActivity.class);
+                startActivity(i);
                 finish();
             }
 
