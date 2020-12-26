@@ -35,10 +35,6 @@ public class IntroActivity extends AppCompatActivity {
 
     private void initViews() {
 
-        if (getIntent().getExtras() != null) {
-            url = getIntent().getStringExtra("url");
-        }
-
         mBinding.viewpager.setAdapter(new IntroAdapter(getSupportFragmentManager()));
        // mBinding.viewpager.setPageTransformer(false, new IntroPageTransformer());
         drawPageSelectionIndicators(0);
@@ -68,7 +64,6 @@ public class IntroActivity extends AppCompatActivity {
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SELLER, false);
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SHOW_INTRO, true);
             Intent i = new Intent(activity, MainActivity.class);
-            i.putExtra("url", url);
             startActivity(i);
             finish();
         });
@@ -76,7 +71,6 @@ public class IntroActivity extends AppCompatActivity {
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SELLER, true);
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SHOW_INTRO, true);
             Intent i = new Intent(activity, MainActivity.class);
-            i.putExtra("url", url);
             startActivity(i);
             finish();
         });

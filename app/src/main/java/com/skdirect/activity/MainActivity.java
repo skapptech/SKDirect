@@ -134,6 +134,15 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getData() != null) {
+            System.out.println("onNewIntent " + intent.getData());
+            webView.loadUrl(intent.getData().toString());
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         if (webView.canGoBack()) {
             webView.goBack();
@@ -356,16 +365,17 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
 
         if (getIntent().getExtras() != null) {
             String url = getIntent().getStringExtra("url");
-            if (url.equals("")){
+            if (url.equals("")) {
                 loadUrlfromSession();
-            }else {
+            } else {
                 webView.loadUrl(url);
             }
         } else {
             loadUrlfromSession();
         }
     }
-    public void loadUrlfromSession(){
+
+    public void loadUrlfromSession() {
         if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
             webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.SELLER_URL));
         } else {
