@@ -126,23 +126,25 @@ public class SplashActivity extends AppCompatActivity {
     };
 
     public void goHome() {
-        Intent intent = null;
-        if (!SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_SHOW_INTRO)) {
-            intent = new Intent(getApplicationContext(), IntroActivity.class);
-            startActivity(intent);
+        Intent i = null;
+        if (!SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SHOW_INTRO)) {
+            i = new Intent(activity, IntroActivity.class);
+            startActivity(i);
             finish();
         } else {
             if ((getIntent().getExtras() != null && getIntent().getStringExtra("url") != null)) {
                 String url = getIntent().getStringExtra("url");
-                intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("url", url);
-                intent.setData(Uri.parse(url));
+                i = new Intent(activity, MainActivity.class);
+                i.putExtra("url", url);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+                finish();
             } else {
-                intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("url", "");
+                i = new Intent(activity, MainActivity.class);
+                i.putExtra("url", "");
+                startActivity(i);
+                finish();
             }
-            startActivity(intent);
-            finish();
         }
     }
 }
