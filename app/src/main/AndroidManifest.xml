@@ -66,6 +66,15 @@
             android:name=".activity.SellerProductListActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.CategoriesListActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.SearchActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" />
+
         <service
             android:name=".firebase.MyFirebaseMessagingService"
             android:stopWithTask="false">

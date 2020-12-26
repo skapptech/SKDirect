@@ -13,6 +13,10 @@ public class AllCategoriesModel {
     @SerializedName("ImagePath")
     private String ImagePath;
 
+    @SerializedName("Name")
+    private String Name;
+
+
     public int getId() {
         return Id;
     }
@@ -36,4 +40,13 @@ public class AllCategoriesModel {
     public void setImagePath(String imagePath) {
         ImagePath = imagePath;
     }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
 }

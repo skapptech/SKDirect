@@ -13,11 +13,7 @@ public class PaginationModel {
     @SerializedName("Id")
     private int Id;
 
-    @SerializedName("Skip")
-    private int Skip;
 
-    @SerializedName("Take")
-    private int Take;
 
     @SerializedName("Latitude")
     private double Latitude;
@@ -30,6 +26,30 @@ public class PaginationModel {
 
     @SerializedName("Keyword")
     private String  Keyword;
+
+
+    @SerializedName("Skip")
+    private int Skip;
+
+    @SerializedName("Take")
+    private int Take;
+
+    @SerializedName("ParentCategoryId")
+    private int  ParentCategoryId;
+
+    @SerializedName("CategoryName")
+    private String  CategoryName;
+
+    @SerializedName("IsParentCategory")
+    private boolean  IsParentCategory;
+
+    public PaginationModel(int skip, int take, int parentCategoryId, String categoryName, boolean isParentCategory) {
+        Skip = skip;
+        Take = take;
+        ParentCategoryId = parentCategoryId;
+        CategoryName = categoryName;
+        IsParentCategory = isParentCategory;
+    }
 
     public PaginationModel(int sellerId, int parentProductId, int id, int skip, int take, double latitude, double longitude, int tagId, String keyword) {
         SellerId = sellerId;

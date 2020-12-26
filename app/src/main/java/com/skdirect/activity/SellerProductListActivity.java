@@ -79,7 +79,7 @@ public class SellerProductListActivity extends AppCompatActivity implements View
                     if (loading) {
                         if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
                             loading = false;
-                            skipCount++;
+                            skipCount=skipCount+10;
                            // mBinding.progressBar.setVisibility(View.VISIBLE);
                             callProductList();
                         }

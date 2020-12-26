@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -19,10 +22,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.R;
+import com.skdirect.activity.CategoriesListActivity;
 import com.skdirect.activity.GenerateOTPActivity;
 import com.skdirect.activity.LoginActivity;
 import com.skdirect.activity.MainActivity;
 import com.skdirect.activity.NearByItemProductListActivity;
+import com.skdirect.activity.SearchActivity;
 import com.skdirect.activity.SellerProductListActivity;
 import com.skdirect.activity.SplashActivity;
 import com.skdirect.adapter.AllCategoriesAdapter;
@@ -171,6 +176,32 @@ public class HomeFragment extends Fragment {
                 startActivity(new Intent(getActivity(), SellerProductListActivity.class));
             }
         });
+
+        mBinding.tvCetegory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), CategoriesListActivity.class));
+            }
+        });
+
+        mBinding.etSearchSeller.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    searchData();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
+    }
+
+    private void searchData() {
+        String searchSellerName = mBinding.etSearchSeller.getText().toString().trim();
+        startActivity(new Intent(getActivity(), SearchActivity.class).putExtra("searchSellerName",searchSellerName));
+
 
     }
 

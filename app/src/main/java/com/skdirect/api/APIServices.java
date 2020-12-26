@@ -12,6 +12,8 @@ import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PaginationModel;
+import com.skdirect.model.SearchDataModel;
+import com.skdirect.model.SearchRequestModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.UpdateTokenModel;
@@ -67,5 +69,12 @@ public interface APIServices {
 
     @GET("api/buyer/Seller/GetSellerListForBuyer")
     Call<ArrayList<NearBySallerModel>> GetSellerListForBuyer(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword);
+
+
+    @POST("api/Buyer/cateogry/GetCategorybyfilter")
+    Call<ArrayList<AllCategoriesModel>> GetCategorybyfilter(@Body PaginationModel paginationModel);
+
+    @POST("api/Buyer/Item/GetSellerListWithItem")
+    Call<SearchDataModel> GetSellerListWithItem(@Body SearchRequestModel paginationModel);
 
 }

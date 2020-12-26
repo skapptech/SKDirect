@@ -42,8 +42,13 @@ public class NearSellerListAdapter extends RecyclerView.Adapter<NearSellerListAd
         holder.mBinding.tvSallerState.setText(nearBySallerModel.getState());
 
         if (nearBySallerModel.getImagePath()!=null){
-            Picasso.get().load(nearBySallerModel.getImagePath()).error(R.drawable.no_image).into(holder.mBinding.imItemImage);
-
+            Picasso.get().load(nearBySallerModel.getImagePath()).placeholder(R.drawable.ic_top_seller).into(holder.mBinding.imItemImage);
+        }else {
+            Picasso.get()
+                    .load(R.drawable.ic_top_seller)
+                    .placeholder(R.drawable.ic_top_seller)
+                    .error(R.drawable.ic_top_seller)
+                    .into(holder.mBinding.imItemImage);
         }
     }
 
