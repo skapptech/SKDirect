@@ -50,6 +50,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
+import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.broadcast.SmsBroadcastReceiver;
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     private ActivityMainBinding mBinding;
 
     private MainActivity activity;
-    private Uri mCapturedImageURI = null;
+    private final Uri mCapturedImageURI = null;
     private ValueCallback<Uri> mUploadMessage;
     private ValueCallback<Uri[]> mFilePathCallback;
     private String mCameraPhotoPath, otpNumber, firebaseToken = "";
@@ -96,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         activity = this;
-        commonClassForAPI = CommonClassForAPI.getInstance(this);
 
         initViews();
         callRunTimePermissions();
@@ -128,9 +128,21 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        if (BuildConfig.DEBUG) {
+            FirebaseMessaging.getInstance().subscribeToTopic("uat_testing");
+        }
        /* mSmsBroadcastReceiver = new SmsBroadcastReceiver();
         mSmsBroadcastReceiver.setOnOtpListeners(MainActivity.this);
         startSMSListener();*/
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getData() != null) {
+            System.out.println("onNewIntent " + intent.getData());
+            webView.loadUrl(intent.getData().toString());
+        }
     }
 
     @Override
@@ -356,16 +368,19 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
 
         if (getIntent().getExtras() != null) {
             String url = getIntent().getStringExtra("url");
-            if (url.equals("")){
+            if (url.equals("")) {
                 loadUrlfromSession();
-            }else {
+            } else {
                 webView.loadUrl(url);
             }
         } else {
             loadUrlfromSession();
         }
+
+        commonClassForAPI = CommonClassForAPI.getInstance(this);
     }
-    public void loadUrlfromSession(){
+
+    public void loadUrlfromSession() {
         if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
             webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.SELLER_URL));
         } else {
@@ -673,7 +688,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
 
 
     private class JavaScriptInterface {
-        private Context context;
+        private final Context context;
 
         JavaScriptInterface(Context context) {
             this.context = context;

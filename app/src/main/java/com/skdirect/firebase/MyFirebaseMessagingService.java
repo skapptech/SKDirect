@@ -22,7 +22,6 @@ import androidx.core.content.ContextCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.skdirect.R;
-import com.skdirect.activity.MainActivity;
 import com.skdirect.activity.SplashActivity;
 
 import org.json.JSONObject;
@@ -78,8 +77,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             } else {
                 intent = new Intent(getApplicationContext(), SplashActivity.class);
             }
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

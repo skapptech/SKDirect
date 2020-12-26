@@ -54,14 +54,14 @@ public class SplashActivity extends AppCompatActivity {
 
 
     private void initViews() {
-        Glide.with(activity).load("")
+        Glide.with(getApplicationContext()).load("")
                 .placeholder(R.drawable.splash)
                 .into(mBinding.imSplash);
     }
 
     private void callAPI() {
         try {
-            if (Utils.isNetworkAvailable(activity)) {
+            if (Utils.isNetworkAvailable(getApplicationContext())) {
                 if (commonClassForAPI != null) {
                     mBinding.pBar.setVisibility(View.VISIBLE);
                     commonClassForAPI.getAppVersionApi(versionObserver);
@@ -71,7 +71,7 @@ public class SplashActivity extends AppCompatActivity {
                     commonClassForAPI.getAppVersionApi(versionObserver);
                 }
             } else {
-                Utils.setToast(getBaseContext(), "No Internet Connection!!");
+                Utils.setToast(getApplicationContext(), "No Internet Connection!!");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,8 +83,8 @@ public class SplashActivity extends AppCompatActivity {
         public void onNext(@NotNull AppVersionModel response) {
             mBinding.pBar.setVisibility(View.GONE);
             try {
-                SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL, response.getSellerUrl());
-                SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL, response.getBuyerUrl());
+                SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.SELLER_URL, response.getSellerUrl());
+                SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUYER_URL, response.getBuyerUrl());
                 if (BuildConfig.VERSION_NAME.equalsIgnoreCase(response.getVersion())) {
                     SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.APP_VERSION, response.getVersion());
                     goHome();
@@ -95,7 +95,7 @@ public class SplashActivity extends AppCompatActivity {
                     alertDialogBuilder.setCancelable(false);
                     alertDialogBuilder.setPositiveButton("Update", (dialog, id) -> {
                         dialog.cancel();
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + activity.getPackageName())));
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
                     });
                     if (response.isCompulsory()) {
                         alertDialogBuilder.setNegativeButton("Cancel", (dialog, i) -> {
@@ -126,35 +126,23 @@ public class SplashActivity extends AppCompatActivity {
     };
 
     public void goHome() {
-        Intent i = null;
-        if (!SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SHOW_INTRO)) {
-            String url = "";
-            if (getIntent().getData()!=null){
-                url = getIntent().getData().toString();
-            }
-            i = new Intent(activity, IntroActivity.class);
-            i.putExtra("url", url);
-            startActivity(i);
+        Intent intent = null;
+        if (!SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_SHOW_INTRO)) {
+            intent = new Intent(getApplicationContext(), IntroActivity.class);
+            startActivity(intent);
             finish();
         } else {
-            if ((getIntent().getExtras() != null && getIntent().getStringExtra("url") != null)||getIntent().getData()!=null) {
-                String url = "";
-                if (getIntent().getData()!=null){
-                    url = getIntent().getData().toString();
-                }else {
-                    url = getIntent().getStringExtra("url");
-                }
-                i = new Intent(activity, MainActivity.class);
-                i.putExtra("url", url);
-                startActivity(i);
-                finish();
+            if ((getIntent().getExtras() != null && getIntent().getStringExtra("url") != null)) {
+                String url = getIntent().getStringExtra("url");
+                intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("url", url);
+                intent.setData(Uri.parse(url));
             } else {
-                i = new Intent(activity, MainActivity.class);
-                i.putExtra("url", "");
-                startActivity(i);
-                finish();
+                intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("url", "");
             }
-
+            startActivity(intent);
+            finish();
         }
     }
 }
