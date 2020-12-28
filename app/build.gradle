@@ -11,8 +11,8 @@ android {
         applicationId "com.skdirect"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.0.1"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -47,6 +47,7 @@ android {
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "Direct UAT"
             buildConfigField("String", "buildVariant", "\"DEBUG_STORE_FILE\"")
+            //buildConfigField("String", "apiEndpoint", "\"https://directapi.er15.xyz:4436\"")
             buildConfigField("String", "apiEndpoint", "\"http://111.118.252.170:8787\"")
         }
     }

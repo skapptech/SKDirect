@@ -140,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.getData() != null) {
-            System.out.println("onNewIntent " + intent.getData());
             webView.loadUrl(intent.getData().toString());
         }
     }
