@@ -366,7 +366,9 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             }
         });
 
-        if (getIntent().getExtras() != null) {
+        if (getIntent().getData() != null) {
+            webView.loadUrl(getIntent().getData().toString());
+        } else if (getIntent().getExtras() != null && getIntent().hasExtra("url")) {
             String url = getIntent().getStringExtra("url");
             if (url.equals("")) {
                 loadUrlfromSession();

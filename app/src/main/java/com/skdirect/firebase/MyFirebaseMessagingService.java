@@ -74,6 +74,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if (link != null && !link.equals("")) {
                 intent = new Intent(getApplicationContext(), SplashActivity.class);
                 intent.putExtra("url", link);
+                intent.setData(Uri.parse(link));
             } else {
                 intent = new Intent(getApplicationContext(), SplashActivity.class);
             }

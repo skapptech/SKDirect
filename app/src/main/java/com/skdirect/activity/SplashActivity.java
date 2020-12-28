@@ -78,6 +78,30 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+    public void goHome() {
+        Intent i = null;
+        if (!SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SHOW_INTRO)) {
+            i = new Intent(activity, IntroActivity.class);
+            startActivity(i);
+            finish();
+        } else {
+            if ((getIntent().getExtras() != null && getIntent().getStringExtra("url") != null)) {
+                String url = getIntent().getStringExtra("url");
+                i = new Intent(activity, MainActivity.class);
+                i.putExtra("url", url);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+                finish();
+            } else {
+                i = new Intent(activity, MainActivity.class);
+                i.putExtra("url", "");
+                startActivity(i);
+                finish();
+            }
+        }
+    }
+
+
     private final DisposableObserver<AppVersionModel> versionObserver = new DisposableObserver<AppVersionModel>() {
         @Override
         public void onNext(@NotNull AppVersionModel response) {
@@ -124,27 +148,4 @@ public class SplashActivity extends AppCompatActivity {
             mBinding.pBar.setVisibility(View.GONE);
         }
     };
-
-    public void goHome() {
-        Intent i = null;
-        if (!SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SHOW_INTRO)) {
-            i = new Intent(activity, IntroActivity.class);
-            startActivity(i);
-            finish();
-        } else {
-            if ((getIntent().getExtras() != null && getIntent().getStringExtra("url") != null)) {
-                String url = getIntent().getStringExtra("url");
-                i = new Intent(activity, MainActivity.class);
-                i.putExtra("url", url);
-                i.setData(Uri.parse(url));
-                startActivity(i);
-                finish();
-            } else {
-                i = new Intent(activity, MainActivity.class);
-                i.putExtra("url", "");
-                startActivity(i);
-                finish();
-            }
-        }
-    }
 }
