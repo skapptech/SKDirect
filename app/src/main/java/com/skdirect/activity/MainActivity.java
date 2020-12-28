@@ -277,12 +277,14 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                System.out.println("onPageStarted " + url);
                 mBinding.pBar.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                System.out.println("onPageFinished " + url);
                 //.refreshLayout.setRefreshing(false);
                 mBinding.pBar.setVisibility(View.GONE);
             }
