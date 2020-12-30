@@ -32,7 +32,7 @@ public class SearchDataModel {
         @SerializedName("row_num")
         private int row_num;
 
-        @SerializedName("Id")
+        @SerializedName("id")
         private int Id;
 
         @SerializedName("ProductName")
@@ -141,15 +141,14 @@ public class SearchDataModel {
 
         @SerializedName("PinCode")
         private String PinCode;
-
         @SerializedName("CityName")
         private String CityName;
-
         @SerializedName("StateName")
         private String StateName;
-
         @SerializedName("Rating")
         private int Rating;
+        ArrayList<TableOneModel> productList;
+
 
         public int getId() {
             return id;
@@ -229,6 +228,14 @@ public class SearchDataModel {
 
         public void setRating(int rating) {
             Rating = rating;
+        }
+
+        public ArrayList<TableOneModel> getProductList() {
+            return productList;
+        }
+
+        public void setProductList(ArrayList<TableOneModel> productList) {
+            this.productList = productList;
         }
     }
 }

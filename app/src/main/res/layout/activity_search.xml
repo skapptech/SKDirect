@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <include
             android:id="@+id/toolbar_tittle"
             layout="@layout/toolbar_arrow" />
@@ -23,10 +25,10 @@
                 android:layout_centerInParent="true"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:drawablePadding="10dp"
                 android:background="@drawable/bg_white_rounded"
-                android:hint="Search seller by name or product"
                 android:drawableLeft="@drawable/ic_search"
+                android:drawablePadding="10dp"
+                android:hint="Search seller by name or product"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:maxLines="1"
@@ -38,25 +40,23 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <Button
-                android:layout_width="100dp"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Products"
-                android:layout_margin="5dp"
-                android:background="@drawable/button_drawer"
-                android:textColor="@color/seller_button_color"/>
+                android:background="@color/colorAccent"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/seller_button_color"
+               />
 
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="Shops"
-                android:layout_margin="5dp"
-                android:background="@drawable/button_drawer"
-                android:textColor="@color/seller_button_color"/>
-
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

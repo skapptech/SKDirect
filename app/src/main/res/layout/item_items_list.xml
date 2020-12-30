@@ -107,7 +107,6 @@
                             android:layout_centerVertical="true"
                             android:background="@drawable/round_bg"
                             android:orientation="horizontal"
-
                             android:weightSum="3">
 
                             <TextView

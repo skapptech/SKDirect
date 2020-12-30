@@ -1,6 +1,7 @@
 package com.skdirect.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.R;
+import com.skdirect.activity.ProductDetailsActivity;
 import com.skdirect.databinding.ItemTopNearByBinding;
 import com.skdirect.model.TopNearByItemModel;
 import com.squareup.picasso.Picasso;
@@ -39,8 +41,16 @@ public class TopNearByItemAdapter extends RecyclerView.Adapter<TopNearByItemAdap
         holder.mBinding.tvItemName.setText(topNearByItemModel.getProductName());
         holder.mBinding.tvItemPrice.setText("MRP "+String.valueOf(topNearByItemModel.getMrp()));
         if (topNearByItemModel.getImagePath()!=null) {
-            Picasso.get().load(topNearByItemModel.getImagePath()).error(R.drawable.no_image).into(holder.mBinding.ivImage);
+            Picasso.get().load(topNearByItemModel.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.ivImage);
         }
+
+        holder.mBinding.llTopNearBySeller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID",topNearByItemModel.getId()));
+
+            }
+        });
     }
 
     @Override

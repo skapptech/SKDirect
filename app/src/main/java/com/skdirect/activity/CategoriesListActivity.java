@@ -44,6 +44,7 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_categories_list);
         categoriesViewMode = ViewModelProviders.of(this).get(CategoriesViewMode.class);
         initView();
+        callProductList();
     }
 
     @Override
@@ -89,7 +90,7 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
             }
         });
         allCategoriesList.clear();
-        callProductList();
+
     }
     @Override
     public void onClick(View view) {

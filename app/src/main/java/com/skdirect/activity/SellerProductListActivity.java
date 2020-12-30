@@ -43,6 +43,7 @@ public class SellerProductListActivity extends AppCompatActivity implements View
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_saller_product_list);
         sellerProductListViewMode = ViewModelProviders.of(this).get(SellerProductListViewMode.class);
         initView();
+        callProductList();
     }
 
     @Override
@@ -88,7 +89,7 @@ public class SellerProductListActivity extends AppCompatActivity implements View
             }
         });
         nearBySallerList.clear();
-        callProductList();
+
     }
     @Override
     public void onClick(View view) {

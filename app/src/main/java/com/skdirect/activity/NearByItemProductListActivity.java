@@ -45,6 +45,7 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_product_list);
         nearProductListViewMode = ViewModelProviders.of(this).get(NearProductListViewMode.class);
         initView();
+        callProductList();
     }
 
     @Override
@@ -90,7 +91,6 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
             }
         });
         nearProductList.clear();
-        callProductList();
     }
     @Override
     public void onClick(View view) {

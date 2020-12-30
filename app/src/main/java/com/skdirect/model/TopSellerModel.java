@@ -25,7 +25,6 @@ public class TopSellerModel {
     @SerializedName("State")
     private String State;
 
-
     @SerializedName("City")
     private String City;
 

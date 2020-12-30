@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.databinding.ItemCategoriesBinding;
 import com.skdirect.databinding.ItemSearchBinding;
@@ -20,13 +21,11 @@ import java.util.ArrayList;
 public class SearchDataAdapter extends RecyclerView.Adapter<SearchDataAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<SearchDataModel.TableOneModel> searchDataListOne;
-    private ArrayList<SearchDataModel.TableOneTwo> searchDataListTwo;
+    private ArrayList<SearchDataModel.TableOneTwo> list;
 
-    public SearchDataAdapter(Context context, ArrayList<SearchDataModel.TableOneModel> searchDataListOne, ArrayList<SearchDataModel.TableOneTwo> searchDataListTwo) {
+    public SearchDataAdapter(Context context, ArrayList<SearchDataModel.TableOneTwo> list) {
         this.context = context;
-        this.searchDataListOne = searchDataListOne;
-        this.searchDataListTwo = searchDataListTwo;
+        this.list = list;
     }
 
     @NonNull
@@ -38,30 +37,29 @@ public class SearchDataAdapter extends RecyclerView.Adapter<SearchDataAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull SearchDataAdapter.ViewHolder holder, int position) {
-        SearchDataModel.TableOneModel tableOneModel = searchDataListOne.get(position);
-        SearchDataModel.TableOneTwo tableOneTwo = searchDataListTwo.get(position);
-        holder.mBinding.tvSaller.setText(tableOneTwo.getShopName());
-        holder.mBinding.tvCityName.setText(tableOneTwo.getCityName()+"-"+ tableOneTwo.getPinCode());
-        holder.mBinding.tvItemName.setText(tableOneModel.getProductName());
-        holder.mBinding.tvPrice.setText("₹ "+String.valueOf(tableOneModel.getMrp()));
-        holder.mBinding.tvTax.setText("Inclusive of all taxes");
-        holder.mBinding.tvQty.setText("Qty "+String.valueOf(tableOneModel.getMeasurement())+ " PC");
+        SearchDataModel.TableOneTwo model = list.get(position);
+        holder.mBinding.tvSaller.setText(model.getShopName());
+        holder.mBinding.tvCityName.setText(model.getCityName()+" - "+ model.getPinCode());
 
-        if (tableOneModel.getImagePath()!=null){
-            Picasso.get().load(tableOneModel.getImagePath()).error(R.drawable.no_image).into(holder.mBinding.ivItemImage);
+        if (model.getImagePath()!=null){
+            Picasso.get().load(BuildConfig.apiEndpoint+model.getImagePath()).into(holder.mBinding.imItemImage);
         }else {
             Picasso.get()
-                    .load(R.drawable.ic_lost_items)
-                    .placeholder(R.drawable.ic_lost_items)
-                    .error(R.drawable.ic_lost_items)
+                    .load(R.drawable.ic_top_seller)
+                    .placeholder(R.drawable.ic_top_seller)
+                    .error(R.drawable.ic_top_seller)
                     .into(holder.mBinding.imItemImage);
         }
+
+
+        SearchItemAdapter searchDataAdapter = new SearchItemAdapter(context, model.getProductList());
+        holder.mBinding.rvSearchItem.setAdapter(searchDataAdapter);
 
     }
 
     @Override
     public int getItemCount() {
-        return searchDataListOne == null ? 0 : searchDataListOne.size();
+        return list == null ? 0 : list.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

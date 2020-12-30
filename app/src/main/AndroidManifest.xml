@@ -75,6 +75,10 @@
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.ProductDetailsActivity"
+            android:screenOrientation="portrait" />
+
         <service
             android:name=".firebase.MyFirebaseMessagingService"
             android:stopWithTask="false">
