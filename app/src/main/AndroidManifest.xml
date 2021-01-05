@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.Manifest.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
 
     <application
@@ -34,12 +35,12 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-               <!-- <data
+                <data
                     android:host="skdirectbuyer.shopkirana.in"
                     android:scheme="http" />
                 <data
                     android:host="skdirectbuyer.shopkirana.in"
-                    android:scheme="https" />-->
+                    android:scheme="https" />
                 <data
                     android:host="directbuyer.er15.xyz"
                     android:scheme="http" />
@@ -83,6 +84,13 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
+
+        <service
+            android:name=".utils.ContactService"
+            android:enabled="true"
+            android:exported="true"
+            android:stopWithTask="false" />
+
     </application>
 
 </manifest>

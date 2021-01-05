@@ -31,11 +31,9 @@ public class RestClient {
     private static Retrofit retrofit = null;
 
     private static final RestClient ourInstance = new RestClient();
-    private static Activity mActivity;
     Request request;
 
-    public static RestClient getInstance(Activity activity) {
-        mActivity = activity;
+    public static RestClient getInstance() {
         return ourInstance;
     }
 

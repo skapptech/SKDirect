@@ -41,7 +41,7 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
         activity = this;
-        commonClassForAPI = CommonClassForAPI.getInstance(this);
+        commonClassForAPI = CommonClassForAPI.getInstance();
         initViews();
 
     }
@@ -67,7 +67,7 @@ public class SplashActivity extends AppCompatActivity {
                     commonClassForAPI.getAppVersionApi(versionObserver);
                 } else {
                     mBinding.pBar.setVisibility(View.VISIBLE);
-                    commonClassForAPI = CommonClassForAPI.getInstance(activity);
+                    commonClassForAPI = CommonClassForAPI.getInstance();
                     commonClassForAPI.getAppVersionApi(versionObserver);
                 }
             } else {

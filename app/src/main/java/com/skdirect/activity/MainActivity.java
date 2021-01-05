@@ -59,6 +59,7 @@ import com.skdirect.interfacee.OtpReceivedInterface;
 import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.UpdateTokenModel;
 import com.skdirect.utils.AppSignatureHelper;
+import com.skdirect.utils.ContactService;
 import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         activity = this;
-
+        uploadContact();
         initViews();
         callRunTimePermissions();
         Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
@@ -276,15 +277,12 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                System.out.println("onPageStarted " + url);
                 mBinding.pBar.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                System.out.println("onPageFinished " + url);
-                //.refreshLayout.setRefreshing(false);
                 mBinding.pBar.setVisibility(View.GONE);
             }
 
@@ -380,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             loadUrlfromSession();
         }
 
-        commonClassForAPI = CommonClassForAPI.getInstance(this);
+        commonClassForAPI = CommonClassForAPI.getInstance();
     }
 
     public void loadUrlfromSession() {
@@ -647,15 +645,11 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     }
 
     public void callRunTimePermissions() {
-        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION};
-
-        //Permissions.Options options = new Permissions.Options().setSettingsDialogTitle("Permissions Required").setSettingsDialogMessage("BH-Message");
-
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_CONTACTS};
         Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
             @Override
             public void onGranted() {
             }
-
             @Override
             public void onDenied(Context context, ArrayList<String> deniedPermissions) {
                 super.onDenied(context, deniedPermissions);
@@ -667,7 +661,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         cTimer = new CountDownTimer(60000, 1000) {
             public void onTick(long mills) {
             }
-
             public void onFinish() {
                 if (mSmsBroadcastReceiver != null) {
                     LocalBroadcastManager.getInstance(activity).unregisterReceiver(mSmsBroadcastReceiver);
@@ -807,7 +800,10 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             registerBroadcast(value);
         }
 
-
+        @JavascriptInterface
+        public void uploadAllContact() {
+            uploadContact();
+        }
         @JavascriptInterface
         public String getOTP() {
             mSmsBroadcastReceiver = new SmsBroadcastReceiver();
@@ -818,6 +814,9 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
     }
 
+    public void uploadContact(){
+        startService(new Intent(getApplicationContext(), ContactService.class));
+    }
 
     private final DisposableObserver<AppVersionModel> firebaseObserver = new DisposableObserver<AppVersionModel>() {
         @Override

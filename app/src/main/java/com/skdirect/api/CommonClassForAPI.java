@@ -5,9 +5,15 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.skdirect.model.AppVersionModel;
+import com.skdirect.model.ContactUploadModel;
 import com.skdirect.model.UpdateTokenModel;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -17,24 +23,20 @@ import io.reactivex.schedulers.Schedulers;
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class CommonClassForAPI {
-    private Activity mActivity;
     private static CommonClassForAPI CommonClassForAPI;
 
-
-    public static CommonClassForAPI getInstance(Activity activity) {
+    public static CommonClassForAPI getInstance() {
         if (CommonClassForAPI == null) {
-            CommonClassForAPI = new CommonClassForAPI(activity);
+            CommonClassForAPI = new CommonClassForAPI();
         }
         return CommonClassForAPI;
     }
 
-    public CommonClassForAPI(Activity activity) {
-        mActivity = activity;
+    public CommonClassForAPI() {
     }
 
-
     public void getAppVersionApi(final DisposableObserver observer) {
-        RestClient.getInstance(mActivity).getService().getAppversion()
+        RestClient.getInstance().getService().getAppversion()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<AppVersionModel>() {
@@ -59,7 +61,7 @@ public class CommonClassForAPI {
                 });
     }
     public void getUpdateFirebaseToken(final DisposableObserver observer, UpdateTokenModel updateTokenModel,String token) {
-        RestClient.getInstance(mActivity).getService().getUpdateToken(updateTokenModel,"Bearer "+token)
+        RestClient.getInstance().getService().getUpdateToken(updateTokenModel,"Bearer "+token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JsonObject>() {
@@ -84,6 +86,31 @@ public class CommonClassForAPI {
                 });
     }
 
+    public void uploadContacts(DisposableObserver<JsonElement> observer, ArrayList<ContactUploadModel> contacts) {
+        RestClient.getInstance().getService().uploadContacts(contacts)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JsonElement>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull JsonElement o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
 
 
 }
