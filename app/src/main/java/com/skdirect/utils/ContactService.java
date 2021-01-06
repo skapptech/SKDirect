@@ -29,7 +29,7 @@ import java.util.Map;
 import io.reactivex.observers.DisposableObserver;
 
 public class ContactService extends Service {
-
+    String token = "";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -38,6 +38,11 @@ public class ContactService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if (intent.hasExtra("token")){
+            token = intent.getStringExtra("token");
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                 new FetchContact().execute();
@@ -94,7 +99,7 @@ public class ContactService extends Service {
             super.onPostExecute(s);
             try {
                 contactList = clearListFromDuplicateFirstName(contactList);
-                new CommonClassForAPI().uploadContacts(observer, contactList);
+                new CommonClassForAPI().uploadContacts(observer, contactList,token);
             } catch (Exception e) {
                 e.printStackTrace();
             }

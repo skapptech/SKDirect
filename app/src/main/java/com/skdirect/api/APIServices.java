@@ -23,5 +23,5 @@ public interface APIServices {
     Observable<JsonObject> getUpdateToken(@Body UpdateTokenModel updateTokenModel, @Header("authorization") String token);
 
     @POST("api/LoginUser/PostContactList")
-    Observable<JsonElement> uploadContacts(@Body ArrayList<ContactUploadModel> contacts);
+    Observable<JsonElement> uploadContacts(@Body ArrayList<ContactUploadModel> contacts, @Header("authorization") String token);
 }

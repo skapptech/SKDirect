@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         activity = this;
-        uploadContact();
         initViews();
         callRunTimePermissions();
         Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
@@ -801,9 +800,14 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
 
         @JavascriptInterface
-        public void uploadAllContact() {
-            uploadContact();
+        public void uploadAllContact(String token) {
+            callContactPermissions(token);
         }
+        @JavascriptInterface
+        public void uploadAllContact2(String token) {
+            uploadContact(token);
+        }
+
         @JavascriptInterface
         public String getOTP() {
             mSmsBroadcastReceiver = new SmsBroadcastReceiver();
@@ -814,8 +818,8 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
     }
 
-    public void uploadContact(){
-        startService(new Intent(getApplicationContext(), ContactService.class));
+    public void uploadContact(String token){
+        startService(new Intent(getApplicationContext(), ContactService.class).putExtra("token",token));
     }
 
     private final DisposableObserver<AppVersionModel> firebaseObserver = new DisposableObserver<AppVersionModel>() {
@@ -837,4 +841,18 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         public void onComplete() {
         }
     };
+
+    public void callContactPermissions(String token) {
+        String[] permissions = {Manifest.permission.READ_CONTACTS};
+        Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+                uploadContact(token);
+            }
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+            }
+        });
+    }
 }

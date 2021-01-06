@@ -86,8 +86,8 @@ public class CommonClassForAPI {
                 });
     }
 
-    public void uploadContacts(DisposableObserver<JsonElement> observer, ArrayList<ContactUploadModel> contacts) {
-        RestClient.getInstance().getService().uploadContacts(contacts)
+    public void uploadContacts(DisposableObserver<JsonElement> observer, ArrayList<ContactUploadModel> contacts, String token) {
+        RestClient.getInstance().getService().uploadContacts(contacts, "Bearer "+token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JsonElement>() {
