@@ -649,6 +649,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             @Override
             public void onGranted() {
             }
+
             @Override
             public void onDenied(Context context, ArrayList<String> deniedPermissions) {
                 super.onDenied(context, deniedPermissions);
@@ -660,6 +661,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         cTimer = new CountDownTimer(60000, 1000) {
             public void onTick(long mills) {
             }
+
             public void onFinish() {
                 if (mSmsBroadcastReceiver != null) {
                     LocalBroadcastManager.getInstance(activity).unregisterReceiver(mSmsBroadcastReceiver);
@@ -803,6 +805,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         public void uploadAllContact(String token) {
             callContactPermissions(token);
         }
+
         @JavascriptInterface
         public void uploadAllContact2(String token) {
             uploadContact(token);
@@ -818,8 +821,8 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
     }
 
-    public void uploadContact(String token){
-        startService(new Intent(getApplicationContext(), ContactService.class).putExtra("token",token));
+    public void uploadContact(String token) {
+        startService(new Intent(getApplicationContext(), ContactService.class).putExtra("token", token));
     }
 
     private final DisposableObserver<AppVersionModel> firebaseObserver = new DisposableObserver<AppVersionModel>() {
@@ -849,6 +852,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             public void onGranted() {
                 uploadContact(token);
             }
+
             @Override
             public void onDenied(Context context, ArrayList<String> deniedPermissions) {
                 super.onDenied(context, deniedPermissions);
