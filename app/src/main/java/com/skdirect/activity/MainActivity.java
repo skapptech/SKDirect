@@ -15,6 +15,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -34,6 +35,8 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -47,6 +50,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
@@ -562,20 +566,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
     }
 
-    private void shareOnWhatsapp(String textMsg, String number) {
-        Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
-        whatsappIntent.setType("text/plain");
-        whatsappIntent.setPackage("com.whatsapp");
-        if (number != null && !number.equals("")) {
-            whatsappIntent.putExtra("jid", PhoneNumberUtils.stripSeparators("91" + number) + "@s.whatsapp.net");
-        }
-        whatsappIntent.putExtra(Intent.EXTRA_TEXT, textMsg);
-        try {
-            activity.startActivity(whatsappIntent);
-        } catch (android.content.ActivityNotFoundException ex) {
-            Utils.setToast(activity, "Whatsapp not installed.");
-        }
-    }
 
     private void closeApp() {
         finish();
@@ -723,7 +713,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
 
         @JavascriptInterface
         public void shareWhatsapp(String message, String number) {
-            shareOnWhatsapp(message, number);
+            showShareWhatsappDialog(message, number);
         }
 
         @JavascriptInterface
@@ -859,4 +849,58 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             }
         });
     }
+
+    private boolean appInstalledOrNot(String packageManager) {
+        PackageManager pm = getPackageManager();
+        try {
+            pm.getPackageInfo(packageManager, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private void showShareWhatsappDialog(String textMsg, String number) {
+        BottomSheetDialog dialog = new BottomSheetDialog(activity, R.style.BottomTheme);
+        dialog.setContentView(R.layout.dialog_whatsapp_share);
+        dialog.setCanceledOnTouchOutside(true);
+        LinearLayout llWhatsapp = dialog.findViewById(R.id.llWhatsapp);
+        LinearLayout llWhatsappBusiness = dialog.findViewById(R.id.llWhatsappBusiness);
+        if (appInstalledOrNot("com.whatsapp") && appInstalledOrNot("com.whatsapp.w4b")) {
+            dialog.show();
+        } else if (appInstalledOrNot("com.whatsapp")) {
+            shareOnWhatsapp(textMsg, number, false);
+        } else {
+            shareOnWhatsapp(textMsg, number, true);
+        }
+        llWhatsapp.setOnClickListener(view -> {
+            shareOnWhatsapp(textMsg, number, false);
+            dialog.dismiss();
+        });
+        llWhatsappBusiness.setOnClickListener(view -> {
+            shareOnWhatsapp(textMsg, number, true);
+            dialog.dismiss();
+        });
+    }
+
+    private void shareOnWhatsapp(String textMsg, String number, boolean isWB) {
+        Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+        whatsappIntent.setType("text/plain");
+        if (isWB) {
+            whatsappIntent.setPackage("com.whatsapp.w4b");
+        } else {
+            whatsappIntent.setPackage("com.whatsapp");
+        }
+        if (number != null && !number.equals("")) {
+            whatsappIntent.putExtra("jid", PhoneNumberUtils.stripSeparators("91" + number) + "@s.whatsapp.net");
+        }
+        whatsappIntent.putExtra(Intent.EXTRA_TEXT, textMsg);
+        try {
+            activity.startActivity(whatsappIntent);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Utils.setToast(activity, "Whatsapp not installed.");
+        }
+    }
+
 }
