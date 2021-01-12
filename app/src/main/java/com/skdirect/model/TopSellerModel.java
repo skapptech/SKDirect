@@ -2,7 +2,9 @@ package com.skdirect.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class TopSellerModel {
+import java.io.Serializable;
+
+public class TopSellerModel implements Serializable {
 
     @SerializedName("Id")
     private int Id;

@@ -24,6 +24,18 @@ public class TopNearByItemModel implements Serializable {
     @SerializedName("SellerName")
     private String SellerName;
 
+
+    public String getMeasurement() {
+        return Measurement;
+    }
+
+    public void setMeasurement(String measurement) {
+        Measurement = measurement;
+    }
+
+    @SerializedName("Measurement")
+    private String Measurement;
+
     public int getId() {
         return Id;
     }

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.databinding.ItemAllCategoriesBinding;
 import com.skdirect.databinding.ItemNearProductListBinding;
@@ -42,9 +43,10 @@ public class NearProductListAdapter extends RecyclerView.Adapter<NearProductList
         holder.mBinding.tvMpr.setText("₹ "+String.valueOf(nearProductListModel.getMrp()));
         holder.mBinding.tvTax.setText("Inclusive of all taxes");
 
-        if (nearProductListModel.getImagePath()!=null){
-            Picasso.get().load(nearProductListModel.getImagePath()).error(R.drawable.no_image).into(holder.mBinding.imItemImage);
-
+        if (nearProductListModel.getImagePath()!=null && !nearProductListModel.getImagePath().contains("http")) {
+            Picasso.get().load(BuildConfig.apiEndpoint+nearProductListModel.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.imItemImage);
+        }else {
+            Picasso.get().load(nearProductListModel.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.imItemImage);
         }
 
 

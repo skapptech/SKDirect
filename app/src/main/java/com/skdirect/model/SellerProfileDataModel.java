@@ -2,10 +2,10 @@ package com.skdirect.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class PaginationModel {
+public class SellerProfileDataModel {
 
     @SerializedName("SellerId")
-    private int SellerId;
+    private String SellerId;
 
     @SerializedName("ParentProductId")
     private int ParentProductId;
@@ -44,7 +44,7 @@ public class PaginationModel {
     private boolean  IsParentCategory;
 
     @SerializedName("ProductId")
-    private int  ProductId;
+    private String  ProductId;
 
     @SerializedName("BrandId")
     private int  BrandId;
@@ -53,22 +53,12 @@ public class PaginationModel {
     @SerializedName("ProductName")
     private String  ProductName;
 
-
-    public PaginationModel(int productId) {
+    public SellerProfileDataModel(String productId) {
         ProductId = productId;
     }
 
 
-
-    public PaginationModel(int skip, int take, int parentCategoryId, String categoryName, boolean isParentCategory) {
-        Skip = skip;
-        Take = take;
-        ParentCategoryId = parentCategoryId;
-        CategoryName = categoryName;
-        IsParentCategory = isParentCategory;
-    }
-
-    public PaginationModel(int sellerId, int cateogryId, int brandId,String productName, int skip, int take, int parentProductId, String keyword) {
+    public SellerProfileDataModel(String sellerId, int cateogryId, int brandId,String productName, int skip, int take, int parentProductId, String keyword) {
         SellerId = sellerId;
         CateogryId = cateogryId;
         BrandId = brandId;
@@ -78,17 +68,5 @@ public class PaginationModel {
         ParentProductId = parentProductId;
         Keyword = keyword;
 
-    }
-
-    public PaginationModel(int sellerId, int parentProductId, int id, int skip, int take, double latitude, double longitude, int tagId, String keyword) {
-        SellerId = sellerId;
-        ParentProductId = parentProductId;
-        Id = id;
-        Skip = skip;
-        Take = take;
-        Latitude = latitude;
-        Longitude = longitude;
-        TagId = tagId;
-        Keyword = keyword;
     }
 }

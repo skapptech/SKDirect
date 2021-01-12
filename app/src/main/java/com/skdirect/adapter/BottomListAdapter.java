@@ -14,6 +14,7 @@ import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.activity.ProductDetailsActivity;
 import com.skdirect.databinding.ItemVariationListBinding;
+import com.skdirect.interfacee.BottomBarInterface;
 import com.skdirect.model.VariationListModel;
 import com.skdirect.utils.Utils;
 import com.squareup.picasso.Picasso;
@@ -24,10 +25,12 @@ public class BottomListAdapter extends RecyclerView.Adapter<BottomListAdapter.Vi
 
     private final Context context;
     private final ArrayList<VariationListModel> variationList;
+    private BottomBarInterface bottomBarInterface;
 
-    public BottomListAdapter(Context context, ArrayList<VariationListModel> variationListModels) {
+    public BottomListAdapter(Context context, ArrayList<VariationListModel> variationListModels, BottomBarInterface bottomBarInter) {
         this.context = context;
         this.variationList = variationListModels;
+        bottomBarInterface = bottomBarInter;
     }
 
     @NonNull
@@ -56,7 +59,13 @@ public class BottomListAdapter extends RecyclerView.Adapter<BottomListAdapter.Vi
         holder.mBinding.llTopNearBySeller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID",variationListModel.getId()));
+                bottomBarInterface.onOnClick(variationListModel);
+
+               /* Intent menuIntent = new Intent(context, ProductDetailsActivity.class);
+                menuIntent.putExtra("ID",variationListModel.getId());
+                menuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.startActivity(menuIntent);*/
+
 
             }
         });

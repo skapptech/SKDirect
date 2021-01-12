@@ -21,7 +21,7 @@
                 app:layout_scrollFlags="scroll|enterAlways">
 
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/titlebar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -39,9 +39,11 @@
 
 
                     <ImageView
+                        android:id="@+id/iv_logo"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:layout_marginStart="10dp"
+                        android:layout_toRightOf="@+id/iv_menu"
                         android:contentDescription="@string/app_name"
                         android:scaleType="fitCenter"
                         android:src="@drawable/direct_home_logo" />
@@ -49,13 +51,45 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
-
+                        android:layout_toRightOf="@+id/iv_logo"
                         android:contentDescription="@string/app_name"
                         android:scaleType="fitCenter"
                         android:src="@drawable/direct_tittle" />
 
+                    <FrameLayout
+                        android:id="@+id/notifiction_count"
+                        style="?attr/actionButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:clipToPadding="false"
+                        android:focusable="true">
 
-                </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_my_order_un"/>
+
+                        <TextView
+                            android:id="@+id/cart_badge"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="right|end|top"
+                            android:layout_marginEnd="-5dp"
+                            android:layout_marginRight="-5dp"
+                            android:layout_marginTop="3dp"
+                            android:background="@drawable/badge_background"
+                            android:gravity="center"
+                            android:padding="3dp"
+                            android:textColor="@android:color/black"
+                            android:text="0"
+                            android:textSize="10sp"/>
+
+                    </FrameLayout>
+
+
+                </RelativeLayout>
 
 
             </androidx.appcompat.widget.Toolbar>

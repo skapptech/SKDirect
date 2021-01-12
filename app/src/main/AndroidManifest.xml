@@ -79,6 +79,12 @@
             android:name=".activity.ProductDetailsActivity"
             android:screenOrientation="portrait" />
 
+
+        <activity
+            android:name=".activity.SellerProfileActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
         <service
             android:name=".firebase.MyFirebaseMessagingService"
             android:stopWithTask="false">

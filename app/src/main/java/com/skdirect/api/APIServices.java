@@ -1,10 +1,13 @@
 package com.skdirect.api;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.skdirect.model.AddViewModel;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.AppVersionModel;
+import com.skdirect.model.AddCartItemModel;
+import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CustomerDataModel;
+import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.LoginResponseModel;
 import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.NearBySallerModel;
@@ -15,11 +18,12 @@ import com.skdirect.model.PaginationModel;
 import com.skdirect.model.ProductDataModel;
 import com.skdirect.model.SearchDataModel;
 import com.skdirect.model.SearchRequestModel;
+import com.skdirect.model.SellerDetailsModel;
+import com.skdirect.model.SellerProductModel;
+import com.skdirect.model.SellerProfileDataModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.UpdateTokenModel;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -82,9 +86,40 @@ public interface APIServices {
     @GET("api/buyer/Seller/GetTopSeller")
     Call<ArrayList<TopSellerModel>> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword);
 
-
-
     @GET("api/buyer/SellerProductDetail/GetSellerProductById/{GetSellerProductById}")
     Call<ProductDataModel> GetSellerProductById(@Path("GetSellerProductById") int GetSellerProductById);
+
+    @GET("api/buyer/SellerProductDetail/GetTopSimilarproduct/{GetSellerProductById}")
+    Call<ArrayList<TopNearByItemModel>> GetTopSimilarproduct(@Path("GetSellerProductById") int GetSellerProductById);
+
+
+    @GET("api/buyer/SellerProductDetail/GetSimilarProductTopSeller/{GetSimilarProductTopSeller}")
+    Call<ArrayList<TopSellerModel>> GetSimilarProductTopSeller(@Path("GetSimilarProductTopSeller") int GetSellerProductById);
+
+    @GET("api/buyer/SellerProductDetail/GetMoreSimilarSellerProduct/{GetMoreSimilarSellerProduct}")
+    Call<ArrayList<TopNearByItemModel>> GetMoreSimilarSellerProduct(@Path("GetMoreSimilarSellerProduct") int GetSellerProductById);
+
+    @GET("api/Buyer/CartOverview/GetCartItems/{GetCartItems}")
+    Call<JsonObject> GetCartItems(@Path("GetCartItems") String GetSellerProductById);
+
+    @POST("api/Buyer/SellerProfile/AddProductView")
+    Call<Boolean> AddProductView(@Body PaginationModel paginationModel);
+
+    @GET("api/Buyer/SellerProfile/GetSellerDetail/{GetSellerDetail}")
+    Call<SellerDetailsModel> GetSellerDetail(@Path("GetSellerDetail") String GetSellerDetail);
+
+
+    @POST("api/Buyer/SellerProfile/GetSellerProduct")
+    Call<SellerProductModel> GetSellerProduct(@Body SellerProfileDataModel paginationModel);
+
+    @POST("api/Buyer/SellerProfile/AddStoreView")
+    Call<Boolean> AddStoreView(@Body AddViewModel paginationModel);
+
+    @POST("api/Buyer/SellerProfile/AddCart")
+    Call<AddCartItemModel> AddCart(@Body ItemAddModel itemAddModel);
+
+    @GET("api/Buyer/SellerProfile/GetCartItems")
+    Call<CartItemModel> GetCartItem(@Query("CookieValue") String CookieValue);
+
 
 }

@@ -35,6 +35,7 @@ import com.skdirect.adapter.TopNearByItemAdapter;
 import com.skdirect.adapter.TopSellerAdapter;
 import com.skdirect.databinding.FragmentHomeBinding;
 import com.skdirect.model.AllCategoriesModel;
+import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.LoginResponseModel;
 import com.skdirect.model.TopNearByItemModel;
@@ -66,7 +67,14 @@ public class HomeFragment extends Fragment {
         getSellerAPi();
         getAllCategoriesAPi();
 
+
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mBinding.etSearchSeller.setText("");
     }
 
     private void getAllCategoriesAPi() {
@@ -102,7 +110,7 @@ public class HomeFragment extends Fragment {
             public void onChanged(ArrayList<TopNearByItemModel> topNearByItemList) {
                 Utils.hideProgressDialog();
                 if (topNearByItemList.size()>0){
-                    TopNearByItemAdapter topNearByItemAdapter = new TopNearByItemAdapter(getContext(),topNearByItemList);
+                    TopNearByItemAdapter topNearByItemAdapter = new TopNearByItemAdapter(getActivity(),topNearByItemList);
                     mBinding.rvNearByItem.setAdapter(topNearByItemAdapter);
 
                 }else {
@@ -129,8 +137,10 @@ public class HomeFragment extends Fragment {
 
             }
         });
-
     }
+
+
+
 
     private void getAllCategories() {
         homeViewModel.getAllCategoriesLiveData().observe(this, new Observer<ArrayList<AllCategoriesModel>>() {

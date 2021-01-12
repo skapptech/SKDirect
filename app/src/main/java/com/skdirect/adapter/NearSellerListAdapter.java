@@ -1,14 +1,18 @@
 package com.skdirect.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.skdirect.BuildConfig;
 import com.skdirect.R;
+import com.skdirect.activity.SellerProfileActivity;
 import com.skdirect.databinding.ItemNearProductListBinding;
 import com.skdirect.databinding.ItemNearSallerListBinding;
 import com.skdirect.model.NearBySallerModel;
@@ -41,15 +45,21 @@ public class NearSellerListAdapter extends RecyclerView.Adapter<NearSellerListAd
         holder.mBinding.tvSallerCity.setText(nearBySallerModel.getCity());
         holder.mBinding.tvSallerState.setText(nearBySallerModel.getState());
 
-        if (nearBySallerModel.getImagePath()!=null){
-            Picasso.get().load(nearBySallerModel.getImagePath()).placeholder(R.drawable.ic_top_seller).into(holder.mBinding.imItemImage);
+
+        if (nearBySallerModel.getImagePath()!=null && !nearBySallerModel.getImagePath().contains("http")) {
+            Picasso.get().load(BuildConfig.apiEndpoint+nearBySallerModel.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.imItemImage);
         }else {
-            Picasso.get()
-                    .load(R.drawable.ic_top_seller)
-                    .placeholder(R.drawable.ic_top_seller)
-                    .error(R.drawable.ic_top_seller)
-                    .into(holder.mBinding.imItemImage);
+            Picasso.get().load(nearBySallerModel.getImagePath()).placeholder(R.drawable.ic_top_seller).into(holder.mBinding.imItemImage);
         }
+
+        holder.mBinding.LLMainCat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent menuIntent = new Intent(context, SellerProfileActivity.class);
+                menuIntent.putExtra("ID",nearBySallerModel.getEncryptedId());
+                context.startActivity(menuIntent);
+            }
+        });
     }
 
     @Override

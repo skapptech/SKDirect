@@ -20,6 +20,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
                 android:layout_gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 android:layout_marginTop="5dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/app_name" />

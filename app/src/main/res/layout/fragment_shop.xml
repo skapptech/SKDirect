@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -12,5 +12,18 @@
 
             />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/tv_not_data_found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="No Recorded Found"
+            android:visibility="gone"
+            android:textSize="18dp"
+            android:textColor="@color/seller_button_color"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
 </layout>

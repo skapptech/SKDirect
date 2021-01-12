@@ -150,6 +150,9 @@ public class ProductFragment extends Fragment {
 
                             }
                         });*/
+                    }else {
+                        mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
+                        mBinding.rvSearch.setVisibility(View.GONE);
                     }
                 }
             }

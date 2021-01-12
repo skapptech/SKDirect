@@ -92,8 +92,8 @@
                         android:layout_height="30dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/rounded_drawer"
-                        android:text="ADD"
+                        android:background="@drawable/rounded_drawer_green"
+                        android:text="Detail"
                         android:textColor="@color/seller_button_color"
                         android:textSize="10sp"
                         android:textStyle="normal" />

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.activity.ProductDetailsActivity;
 import com.skdirect.databinding.ItemTopNearByBinding;
@@ -40,15 +41,18 @@ public class TopNearByItemAdapter extends RecyclerView.Adapter<TopNearByItemAdap
         TopNearByItemModel topNearByItemModel = topNearByItemList.get(position);
         holder.mBinding.tvItemName.setText(topNearByItemModel.getProductName());
         holder.mBinding.tvItemPrice.setText("MRP "+String.valueOf(topNearByItemModel.getMrp()));
-        if (topNearByItemModel.getImagePath()!=null) {
+        if (topNearByItemModel.getImagePath()!=null && !topNearByItemModel.getImagePath().contains("http")) {
+            Picasso.get().load(BuildConfig.apiEndpoint+topNearByItemModel.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.ivImage);
+        }else {
             Picasso.get().load(topNearByItemModel.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.ivImage);
         }
 
         holder.mBinding.llTopNearBySeller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID",topNearByItemModel.getId()));
-
+                Intent menuIntent = new Intent(context, ProductDetailsActivity.class);
+                menuIntent.putExtra("ID",topNearByItemModel.getId());
+                context.startActivity(menuIntent);
             }
         });
     }

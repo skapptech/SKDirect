@@ -13,30 +13,35 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.adapter.BottomListAdapter;
-import com.skdirect.adapter.NearProductListAdapter;
 import com.skdirect.adapter.ShowImagesAdapter;
+import com.skdirect.adapter.TopNearByItemAdapter;
+import com.skdirect.adapter.TopSellerAdapter;
 import com.skdirect.databinding.ActivityProductDetailsBinding;
+import com.skdirect.interfacee.BottomBarInterface;
 import com.skdirect.model.ImageListModel;
+import com.skdirect.model.PaginationModel;
 import com.skdirect.model.ProductDataModel;
 import com.skdirect.model.ProductVariantAttributeDCModel;
+import com.skdirect.model.TopNearByItemModel;
+import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.VariationListModel;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.ProductDetailsViewMode;
 
 import java.util.ArrayList;
 
-public class ProductDetailsActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProductDetailsActivity extends AppCompatActivity implements View.OnClickListener, BottomBarInterface {
     ActivityProductDetailsBinding mBinding;
     private ProductDetailsViewMode productDetailsViewMode;
     private int productID;
     private ArrayList<ImageListModel> imageListModels = new ArrayList<>();
     private ArrayList<VariationListModel> variationList = new ArrayList<>();
     private ArrayList<ProductVariantAttributeDCModel> variantAttributeDCModels = new ArrayList<>();
-    private TextView[] dot;
-    private ShowImagesAdapter showImagesAdapter;
-
+    private BottomSheetDialog bottomSheetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +51,64 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         getIntentData();
         initView();
         ClickListener();
+        apiCalling();
+    }
+    private void apiCalling() {
         callProductData();
-
-
+        GetTopSimilarProduct();
+        GetTopSellar();
+        GetSellarOtherProducts();
+        GetCartItems();
+        addProductAPI();
     }
 
+    private void addProductAPI() {
+        if (Utils.isNetworkAvailable(this)) {
+            Utils.showProgressDialog(this);
+            addProduct();
+        } else {
+            Utils.setToast(this, "No Internet Connection Please connect.");
+        }
+    }
+
+
+
+    private void GetCartItems() {
+        if (Utils.isNetworkAvailable(this)) {
+            Utils.showProgressDialog(this);
+            cartItemsAPI();
+        } else {
+            Utils.setToast(this, "No Internet Connection Please connect.");
+        }
+    }
+
+    private void GetTopSimilarProduct() {
+        if (Utils.isNetworkAvailable(this)) {
+            Utils.showProgressDialog(this);
+            topSimilarProductAPI();
+        } else {
+            Utils.setToast(this, "No Internet Connection Please connect.");
+        }
+    }
+    private void GetSellarOtherProducts() {
+        if (Utils.isNetworkAvailable(this)) {
+            Utils.showProgressDialog(this);
+            SellarOtherProductsAPI();
+        } else {
+            Utils.setToast(this, "No Internet Connection Please connect.");
+        }
+    }
+    private void GetTopSellar() {
+        if (Utils.isNetworkAvailable(this)) {
+            Utils.showProgressDialog(this);
+            getTopSeller();
+        } else {
+            Utils.setToast(this, "No Internet Connection Please connect.");
+        }
+    }
     private void getIntentData() {
         productID = getIntent().getIntExtra("ID", 0);
     }
-
     private void callProductData() {
         if (Utils.isNetworkAvailable(this)) {
             Utils.showProgressDialog(this);
@@ -62,10 +116,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         } else {
             Utils.setToast(this, "No Internet Connection Please connect.");
         }
-
     }
-
     private void initView() {
+        mBinding.rvNearByItem.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+        mBinding.rvOtherSellars.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+        mBinding.rvSellarsOthersItems.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         mBinding.toolbarTittle.tvTittle.setText("");
         float density = getResources().getDisplayMetrics().density;
         mBinding.indicator.setRadius(3 * density);
@@ -88,7 +143,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         mBinding.tvQtyMinus.setOnClickListener(this);
         mBinding.tvVarientButton.setOnClickListener(this);
     }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -113,20 +167,18 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 break;
         }
     }
-
     private void openBottomSheetDialog() {
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
+        bottomSheetDialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
         View view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_lay, null);
         RecyclerView recyclerView = view.findViewById(R.id.rv_bottom_sheet);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.HORIZONTAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
-        BottomListAdapter bottomListAdapter = new BottomListAdapter(getApplicationContext(),variationList);
+        BottomListAdapter bottomListAdapter = new BottomListAdapter(getApplicationContext(), variationList, this);
         recyclerView.setAdapter(bottomListAdapter);
         bottomSheetDialog.setContentView(view);
         bottomSheetDialog.show();
 
     }
-
     private void increaseQTY() {
         int increaseCount = Integer.parseInt(mBinding.tvSelectedQty.getText().toString().trim());
         increaseCount++;
@@ -134,7 +186,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
 
     }
-
     private void decreaseQTY() {
         int decreaseCount = Integer.parseInt(mBinding.tvSelectedQty.getText().toString().trim());
         decreaseCount--;
@@ -146,13 +197,92 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             mBinding.LLPlusMinus.setVisibility(View.GONE);
         }
     }
-
     private void addToCart() {
         mBinding.btAddToCart.setVisibility(View.GONE);
         mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
 
     }
+    private void addProduct() {
+        productDetailsViewMode.getAddProductVMRequest(new PaginationModel(productID));
+        productDetailsViewMode.getAddProductVM().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                Utils.hideProgressDialog();
 
+            }
+
+        });
+    }
+
+    private void SellarOtherProductsAPI() {
+        productDetailsViewMode.getSellarOtherVMRequest(productID);
+        productDetailsViewMode.getSallerOtherProducsVM().observe(this, new Observer<ArrayList<TopNearByItemModel>>() {
+            @Override
+            public void onChanged(ArrayList<TopNearByItemModel> topNearSimilarProduct) {
+                Utils.hideProgressDialog();
+                if (topNearSimilarProduct.size()>0){
+                    mBinding.llSellarsOtherProducs.setVisibility(View.VISIBLE);
+                    TopNearByItemAdapter topNearByItemAdapter = new TopNearByItemAdapter(ProductDetailsActivity.this,topNearSimilarProduct);
+                    mBinding.rvSellarsOthersItems.setAdapter(topNearByItemAdapter);
+
+                }else {
+                    mBinding.llSellarsOtherProducs.setVisibility(View.GONE);
+                }
+
+            }
+
+        });
+    }
+    private void topSimilarProductAPI() {
+        productDetailsViewMode.getSimilarProductVMRequest(productID);
+        productDetailsViewMode.getSimilarProductVM().observe(this, new Observer<ArrayList<TopNearByItemModel>>() {
+            @Override
+            public void onChanged(ArrayList<TopNearByItemModel> topNearSimilarProduct) {
+                Utils.hideProgressDialog();
+                if (topNearSimilarProduct.size()>0){
+                    mBinding.llSimilarProduct.setVisibility(View.VISIBLE);
+                    TopNearByItemAdapter topNearByItemAdapter = new TopNearByItemAdapter(ProductDetailsActivity.this,topNearSimilarProduct);
+                    mBinding.rvNearByItem.setAdapter(topNearByItemAdapter);
+
+                }else {
+
+                    mBinding.llSimilarProduct.setVisibility(View.GONE);
+                }
+
+            }
+
+        });
+
+    }
+    private void getTopSeller() {
+        productDetailsViewMode.GetTopSellerLiveRequest(productID);
+        productDetailsViewMode.GetTopSellerLiveData().observe(this, new Observer<ArrayList<TopSellerModel>>() {
+            @Override
+            public void onChanged(ArrayList<TopSellerModel> topSellerList) {
+                Utils.hideProgressDialog();
+                if (topSellerList.size()>0){
+                    mBinding.llOtherSellar.setVisibility(View.VISIBLE);
+                    TopSellerAdapter topSellerAdapter = new TopSellerAdapter(ProductDetailsActivity.this,topSellerList);
+                    mBinding.rvOtherSellars.setAdapter(topSellerAdapter);
+
+                }else {
+                    mBinding.llOtherSellar.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+    private void cartItemsAPI() {
+        productDetailsViewMode.getCartItemsVMRequest("123");
+        productDetailsViewMode.getCartItemsVM().observe(this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject topSellerList) {
+                Utils.hideProgressDialog();
+
+
+            }
+        });
+
+    }
     private void getProductListAPI() {
         productDetailsViewMode.getCategoriesViewModelRequest(productID);
         productDetailsViewMode.getProductDetailsVM().observe(this, new Observer<ProductDataModel>() {
@@ -189,7 +319,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                                 mBinding.tvDiscripction.setText(productDataModel.getResultItem().getVariationModelList().get(0).getProductVariantSpecification().get(0).getAttributeValue());
                             }
                         }
-                        mBinding.pager.setAdapter(new ShowImagesAdapter(getApplicationContext(), imageListModels));
+                        mBinding.pager.setAdapter(new ShowImagesAdapter(ProductDetailsActivity.this, imageListModels));
                         mBinding.indicator.setViewPager(mBinding.pager);
 
                     } else {
@@ -200,7 +330,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         mBinding.tvItemName.setText(productDataModel.getResultItem().getProductName());
                         mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getSellingPrice());
                         mBinding.tvItemMrpOff.setText(String.valueOf(productDataModel.getResultItem().getMrp()));
-                        mBinding.tvItemMrpPercent.setText("( " + productDataModel.getResultItem().getOffPercentage() + ")" + "%  Off");
+                        if (productDataModel.getResultItem().getOffPercentage() != 0.0) {
+                            mBinding.tvItemMrpPercent.setText("( " + productDataModel.getResultItem().getOffPercentage() + ")" + "%  Off");
+                        } else {
+                            mBinding.tvItemMrpPercent.setVisibility(View.GONE);
+                        }
                         mBinding.tvTax.setText("Inclusive of all taxes");
                         mBinding.tvDeatils.setText("Features & details");
 
@@ -210,8 +344,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                                 mBinding.tvDiscripction.setText(productDataModel.getResultItem().getProductVariantSpecification().get(i).getAttributeValue());
                             }
                         }
-
-                        mBinding.pager.setAdapter(new ShowImagesAdapter(getApplicationContext(), imageListModels));
+                        mBinding.pager.setAdapter(new ShowImagesAdapter(ProductDetailsActivity.this, imageListModels));
                         mBinding.indicator.setViewPager(mBinding.pager);
 
                     }
@@ -219,5 +352,15 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 }
             }
         });
+    }
+
+    @Override
+    public void onOnClick(VariationListModel variationListModel) {
+        if (bottomSheetDialog != null) {
+            bottomSheetDialog.dismiss();
+        }
+        productID = variationListModel.getId();
+        callProductData();
+
     }
 }

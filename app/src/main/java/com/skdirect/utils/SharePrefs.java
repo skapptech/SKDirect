@@ -27,6 +27,7 @@ public class SharePrefs {
     public static final String STATE ="state";
     public static final String CITY ="city";
     public static final String IS_REGISTRACTION ="is";
+    public static final String COUNT ="count";
 
 
 

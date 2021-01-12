@@ -50,7 +50,7 @@ public class SellerProductListActivity extends AppCompatActivity implements View
     protected void onResume() {
         super.onResume();
         if (nearSellerListAdapter!=null){
-            nearSellerListAdapter = new NearSellerListAdapter(getApplicationContext(),nearBySallerList);
+            nearSellerListAdapter = new NearSellerListAdapter(this,nearBySallerList);
             mBinding.rvSellerProduct.setAdapter(nearSellerListAdapter);
             nearSellerListAdapter.notifyDataSetChanged();
         }

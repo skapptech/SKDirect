@@ -10,6 +10,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AllCategoriesModel;
+import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.LoginResponseModel;
 import com.skdirect.model.TopNearByItemModel;
@@ -28,6 +29,7 @@ public class HomeViewModel extends ViewModel {
     private MutableLiveData<ArrayList<TopNearByItemModel>> topNearByItem;
     private MutableLiveData<ArrayList<TopSellerModel>> topSellerLiveData;
     private MutableLiveData<ArrayList<AllCategoriesModel>> allCategoriesLiveData;
+
 
 
     public LiveData<CustomerDataModel> GetUserDetail() {
@@ -62,6 +64,8 @@ public class HomeViewModel extends ViewModel {
         }
         return allCategoriesLiveData;
     }
+
+
 
     public MutableLiveData<CustomerDataModel> getUserDetailRequest() {
         RestClient.getInstance().getService().GetUserDetail().enqueue(new Callback<CustomerDataModel>() {

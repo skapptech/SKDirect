@@ -3,6 +3,7 @@
 
 
     <LinearLayout
+        android:id="@+id/ll_top_sellar"
         android:layout_width="70dp"
         android:layout_height="100dp"
         android:orientation="vertical"
@@ -10,6 +11,7 @@
 
 
         <ImageView
+            android:id="@+id/iv_image"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
