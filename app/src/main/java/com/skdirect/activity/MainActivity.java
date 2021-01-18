@@ -287,18 +287,19 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 mBinding.pBar.setVisibility(View.GONE);
+                if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
+                    SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL, url);
+                } else {
+                    SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL, url);
+                }
             }
 
             @Override
             public void onUnhandledKeyEvent(WebView view, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP)
-                    switch (event.getKeyCode()) {
-                        case KeyEvent.KEYCODE_ENTER:
-                            webView.loadUrl("javascript:onEnter()");
-                            break;
-
+                    if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                        webView.loadUrl("javascript:onEnter()");
                     }
-                return;
             }
 
         });
