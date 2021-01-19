@@ -189,23 +189,15 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
                 super.onActivityResult(requestCode, resultCode, data);
                 return;
             }
-
             if (requestCode == FILECHOOSER_RESULTCODE) {
-
                 if (null == this.mUploadMessage) {
                     return;
-
                 }
-
                 Uri result = null;
-
                 try {
                     if (resultCode != RESULT_OK) {
-
                         result = null;
-
                     } else {
-
                         // retrieve from the private variable if the intent is null
                         result = data == null ? mCapturedImageURI : data.getData();
                     }
@@ -213,10 +205,8 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
                     Toast.makeText(getApplicationContext(), "activity :" + e,
                             Toast.LENGTH_LONG).show();
                 }
-
                 mUploadMessage.onReceiveValue(result);
                 mUploadMessage = null;
-
             }
         }
     }
