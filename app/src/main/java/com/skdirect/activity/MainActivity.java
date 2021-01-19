@@ -15,7 +15,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -35,7 +34,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -258,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         webSettings.setAllowUniversalAccessFromFileURLs(true);
         webSettings.setUserAgentString("Android Mozilla/5.0 AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30");
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         webView.addJavascriptInterface(new JavaScriptInterface(this), "Android");
 
         webView.setWebViewClient(new WebViewClient() {
@@ -870,11 +868,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         LinearLayout llWhatsappBusiness = dialog.findViewById(R.id.llWhatsappBusiness);
         if (appInstalledOrNot("com.whatsapp") && appInstalledOrNot("com.whatsapp.w4b")) {
             dialog.show();
-        } else if (appInstalledOrNot("com.whatsapp")) {
-            shareOnWhatsapp(textMsg, number, false);
-        } else {
-            shareOnWhatsapp(textMsg, number, true);
-        }
+        } else shareOnWhatsapp(textMsg, number, !appInstalledOrNot("com.whatsapp"));
         llWhatsapp.setOnClickListener(view -> {
             shareOnWhatsapp(textMsg, number, false);
             dialog.dismiss();
