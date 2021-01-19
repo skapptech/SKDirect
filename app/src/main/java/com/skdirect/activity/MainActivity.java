@@ -219,8 +219,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
 
             }
         }
-
-        return;
     }
 
 
