@@ -14,6 +14,7 @@ public class SharePrefs {
     public static final String SELLER_URL = "SellerUrl";
     public static final String APP_VERSION = "AppVersion";
     public static final String IS_SELLER = "IsSeller";
+    public static final String LAST_VISITED_PAGE = "LastVisitedPage";
 
 
     private Context ctx;

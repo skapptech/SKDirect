@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         if (BuildConfig.DEBUG) {
             FirebaseMessaging.getInstance().subscribeToTopic("uat_testing");
         }
+        FirebaseMessaging.getInstance().subscribeToTopic("global");
        /* mSmsBroadcastReceiver = new SmsBroadcastReceiver();
         mSmsBroadcastReceiver.setOnOtpListeners(MainActivity.this);
         startSMSListener();*/
@@ -270,14 +271,26 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             }
 
             @Override
+            public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+                super.doUpdateVisitedHistory(view, url, isReload);
+                Log.e("PAGE HISTORY: ", view.getUrl());
+                if (view.getUrl().equalsIgnoreCase("https://skdirectbuyer.shopkirana.in/ui/app-home/1")){
+                    SharePrefs.getInstance(activity).putString(SharePrefs.LAST_VISITED_PAGE, "");
+                }else {
+                    SharePrefs.getInstance(activity).putString(SharePrefs.LAST_VISITED_PAGE, view.getUrl());
+                }
+
+            }
+
+            @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 mBinding.pBar.setVisibility(View.GONE);
-                if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
+               /* if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
                     SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL, url);
                 } else {
                     SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL, url);
-                }
+                }*/
             }
 
             @Override
@@ -372,10 +385,14 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     }
 
     public void loadUrlfromSession() {
-        if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
-            webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.SELLER_URL));
-        } else {
-            webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.BUYER_URL));
+        if (SharePrefs.getInstance(activity).getString(SharePrefs.LAST_VISITED_PAGE).equalsIgnoreCase("")) {
+            if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
+                webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.SELLER_URL));
+            } else {
+                webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.BUYER_URL));
+            }
+        }else {
+            webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.LAST_VISITED_PAGE));
         }
     }
 
