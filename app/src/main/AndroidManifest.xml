@@ -13,7 +13,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-
     <application
         android:allowBackup="true"
         android:allowClearUserData="false"
@@ -27,37 +26,40 @@
         android:theme="@style/Theme.WebView"
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="adjustPan">
+        <activity android:name=".activity.ImageEditorActivity"></activity>
         <activity
-            android:name="com.skdirect.activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:host="skdirectbuyer.shopkirana.in"
-                    android:scheme="http" />
-                <data
-                    android:host="skdirectbuyer.shopkirana.in"
-                    android:scheme="https" />
-                <data
-                    android:host="directbuyer.er15.xyz"
-                    android:scheme="http" />
-                <data
-                    android:host="directbuyer.er15.xyz"
-                    android:scheme="https" />
 
+                <data
+                    android:host="skdirectbuyer.shopkirana.in"
+                    android:scheme="http" />
+                <data
+                    android:host="skdirectbuyer.shopkirana.in"
+                    android:scheme="https" />
+                <data
+                    android:host="directbuyer.er15.xyz"
+                    android:scheme="http" />
+                <data
+                    android:host="directbuyer.er15.xyz"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.skdirect.activity.IntroActivity"
+            android:name=".activity.IntroActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.skdirect.activity.SplashActivity"
+            android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -91,6 +93,17 @@
             android:exported="true"
             android:stopWithTask="false" />
 
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_path" />
+        </provider>
     </application>
 
 </manifest>

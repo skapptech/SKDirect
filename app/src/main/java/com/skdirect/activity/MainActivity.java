@@ -65,10 +65,13 @@ import com.skdirect.utils.ContactService;
 import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -89,11 +92,10 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     private ValueCallback<Uri[]> mFilePathCallback;
     private String mCameraPhotoPath, otpNumber, firebaseToken = "";
 
-    private static WebView webView;
+    public static WebView webView;
     private CommonClassForAPI commonClassForAPI;
     private SmsBroadcastReceiver mSmsBroadcastReceiver;
     private CountDownTimer cTimer;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         activity = this;
         initViews();
+        //initiateImageCropping();
         callRunTimePermissions();
         Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
 
@@ -127,110 +130,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         });*/
     }
 
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        if (BuildConfig.DEBUG) {
-            FirebaseMessaging.getInstance().subscribeToTopic("uat_testing");
-        }
-        FirebaseMessaging.getInstance().subscribeToTopic("global");
-       /* mSmsBroadcastReceiver = new SmsBroadcastReceiver();
-        mSmsBroadcastReceiver.setOnOtpListeners(MainActivity.this);
-        startSMSListener();*/
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        if (intent.getData() != null) {
-            webView.loadUrl(intent.getData().toString());
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-            if (requestCode != INPUT_FILE_REQUEST_CODE || mFilePathCallback == null) {
-                super.onActivityResult(requestCode, resultCode, data);
-                return;
-            }
-
-            Uri[] results = null;
-
-            // Check that the response is a good one
-            if (resultCode == Activity.RESULT_OK) {
-                if (data == null) {
-                    // If there is not data, then we may have taken a photo
-                    if (mCameraPhotoPath != null) {
-                        results = new Uri[]{Uri.parse(mCameraPhotoPath)};
-                    }
-                } else {
-                    String dataString = data.getDataString();
-                    if (dataString != null) {
-                        results = new Uri[]{Uri.parse(dataString)};
-                    }
-                }
-            }
-
-            mFilePathCallback.onReceiveValue(results);
-            mFilePathCallback = null;
-
-        } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            if (requestCode != FILECHOOSER_RESULTCODE || mUploadMessage == null) {
-                super.onActivityResult(requestCode, resultCode, data);
-                return;
-            }
-            if (requestCode == FILECHOOSER_RESULTCODE) {
-                if (null == this.mUploadMessage) {
-                    return;
-                }
-                Uri result = null;
-                try {
-                    if (resultCode != RESULT_OK) {
-                        result = null;
-                    } else {
-                        // retrieve from the private variable if the intent is null
-                        result = data == null ? mCapturedImageURI : data.getData();
-                    }
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "activity :" + e,
-                            Toast.LENGTH_LONG).show();
-                }
-                mUploadMessage.onReceiveValue(result);
-                mUploadMessage = null;
-            }
-        }
-    }
-
-
-    @Override
-    public void onOtpReceived(String otp) {
-        otpNumber = otp.replaceAll("[^0-9]", "").substring(0, 4);
-        webView.loadUrl("javascript:setOtp(" + otpNumber + ")");
-        if (mSmsBroadcastReceiver != null) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(mSmsBroadcastReceiver);
-        }
-        //webView.loadUrl("javascript:angularFunctionCalled(" + otpNumber + ")");
-        /*webView.loadUrl("javascript: (function() {setOtp();}) ();");
-        webView.loadUrl("javascript: (function() {document.getElementById('id2').value= '123';}) ();");*/
-    }
-
-    @Override
-    public void onOtpTimeout() {
-
-    }
-
-
     private void initViews() {
         webView = mBinding.webView;
         WebSettings webSettings = webView.getSettings();
@@ -245,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         webSettings.setAllowUniversalAccessFromFileURLs(true);
         webSettings.setUserAgentString("Android Mozilla/5.0 AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30");
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
         webView.addJavascriptInterface(new JavaScriptInterface(this), "Android");
 
         webView.setWebViewClient(new WebViewClient() {
@@ -384,16 +283,181 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         commonClassForAPI = CommonClassForAPI.getInstance();
     }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (BuildConfig.DEBUG) {
+            FirebaseMessaging.getInstance().subscribeToTopic("uat_testing");
+        }
+        FirebaseMessaging.getInstance().subscribeToTopic("global");
+       /* mSmsBroadcastReceiver = new SmsBroadcastReceiver();
+        mSmsBroadcastReceiver.setOnOtpListeners(MainActivity.this);
+        startSMSListener();*/
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getData() != null) {
+            webView.loadUrl(intent.getData().toString());
+        }
+    }
+
+    private class JavaScriptInterface {
+        private final Context context;
+
+        JavaScriptInterface(Context context) {
+            this.context = context;
+        }
+
+        @JavascriptInterface
+        public void setHeader(String title) {
+            setTitle(title);
+        }
+
+        @JavascriptInterface
+        public void showToast(String toast) {
+            showToastMessage(toast);
+        }
+
+        @JavascriptInterface
+        public void downloadPath(String url) {
+            downloadFileFromUrl(url);
+        }
+
+        @JavascriptInterface
+        public void toneSoundPath() {
+            ringtone();
+        }
+
+        @JavascriptInterface
+        public void openSellerBuyerSelectActivity(String data) {
+            startActivity(new Intent(context, IntroActivity.class));
+        }
+
+        @JavascriptInterface
+        public void sendNotification(String data) {
+            setNotification(data, "SKDirect");
+        }
+
+        @JavascriptInterface
+        public void shareWhatsapp(String message, String number) {
+            showShareWhatsappDialog(message, number);
+        }
+
+        @JavascriptInterface
+        public void exitApp() {
+            closeApp();
+        }
+
+        @JavascriptInterface
+        public void clearCache() {
+            clearWebviewCache();
+        }
+
+        @JavascriptInterface
+        public void clearSession() {
+            clearLocalSession();
+        }
+
+        @JavascriptInterface
+        public void openApp(String AppName, String PackageName) {
+            Open(PackageName);
+        }
+
+        @JavascriptInterface
+        public void shareText(String text) {
+            ShareText(text);
+        }
+
+        @JavascriptInterface
+        public void callNumber(String text) {
+            Call(text);
+        }
+
+        @JavascriptInterface
+        public void callLogout() {
+            Logout();
+        }
+
+        @JavascriptInterface
+        public void updateToken(String token) {
+            callUpdateToken(token);
+        }
+
+        @JavascriptInterface
+        public boolean isOpenInApp() {
+            return true;
+        }
+
+        @JavascriptInterface
+        public void reloadPage() {
+            reloadPageview();
+        }
+
+        @JavascriptInterface
+        public void redirectPage(String url) {
+            redirectPageview(url);
+        }
+
+        @JavascriptInterface
+        public void openUrlInBrowser(String url) {
+            urlOpenInBrowser(url);
+        }
+
+        @JavascriptInterface
+        public void askPermission() {
+            callRunTimePermissions();
+        }
+
+        @JavascriptInterface
+        public String getCurrentLocation() {
+            return getCurrentLatLong();
+        }
+
+        @JavascriptInterface
+        public void otpBroadCastReg(boolean value) {
+            registerBroadcast(value);
+        }
+
+        @JavascriptInterface
+        public void uploadAllContact(String token) {
+            callContactPermissions(token);
+        }
+
+        @JavascriptInterface
+        public void uploadAllContact2(String token) {
+            uploadContact(token);
+        }
+
+        @JavascriptInterface
+        public void openImageSelector() {
+            initiateImageCropping();
+        }
+
+
+        @JavascriptInterface
+        public String getOTP() {
+            mSmsBroadcastReceiver = new SmsBroadcastReceiver();
+            mSmsBroadcastReceiver.setOnOtpListeners(MainActivity.this);
+            startSMSListener();
+
+            return otpNumber;
+        }
+    }
+
+    //Start JS Function's Method
+
     public void loadUrlfromSession() {
-        if (SharePrefs.getInstance(activity).getString(SharePrefs.LAST_VISITED_PAGE).equalsIgnoreCase("")) {
+        //if (SharePrefs.getInstance(activity).getString(SharePrefs.LAST_VISITED_PAGE).equalsIgnoreCase("")) {
             if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
                 webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.SELLER_URL));
             } else {
                 webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.BUYER_URL));
             }
-        }else {
+        /*}else {
             webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.LAST_VISITED_PAGE));
-        }
+        }*/
     }
 
     private String getCurrentLatLong() {
@@ -557,7 +621,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         return imageFile;
     }
 
-
     private void callUpdateToken(String token) {
         try {
             if (Utils.isNetworkAvailable(activity)) {
@@ -569,7 +632,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             e.printStackTrace();
         }
     }
-
 
     private void closeApp() {
         finish();
@@ -665,195 +727,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         cTimer.start();
     }
 
-
-    private final BroadcastReceiver onComplete = new BroadcastReceiver() {
-        public void onReceive(Context ctxt, Intent intent) {
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(activity, "direct")
-                    .setSmallIcon(R.drawable.logo)
-                    .setContentTitle("File Downloaded")
-                    .setContentText("All Download completed");
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(455, mBuilder.build());
-        }
-    };
-
-
-    private class JavaScriptInterface {
-        private final Context context;
-
-        JavaScriptInterface(Context context) {
-            this.context = context;
-        }
-
-        @JavascriptInterface
-        public void setHeader(String title) {
-            setTitle(title);
-        }
-
-        @JavascriptInterface
-        public void showToast(String toast) {
-            showToastMessage(toast);
-        }
-
-        @JavascriptInterface
-        public void downloadPath(String url) {
-            downloadFileFromUrl(url);
-        }
-
-        @JavascriptInterface
-        public void toneSoundPath() {
-            ringtone();
-        }
-
-        @JavascriptInterface
-        public void openSellerBuyerSelectActivity(String data) {
-            startActivity(new Intent(context, IntroActivity.class));
-        }
-
-        @JavascriptInterface
-        public void sendNotification(String data) {
-            setNotification(data, "SKDirect");
-        }
-
-        @JavascriptInterface
-        public void shareWhatsapp(String message, String number) {
-            showShareWhatsappDialog(message, number);
-        }
-
-        @JavascriptInterface
-        public void exitApp() {
-            closeApp();
-        }
-
-        @JavascriptInterface
-        public void clearCache() {
-            clearWebviewCache();
-        }
-
-        @JavascriptInterface
-        public void clearSession() {
-            clearLocalSession();
-        }
-
-        @JavascriptInterface
-        public void openApp(String AppName, String PackageName) {
-            Open(PackageName);
-        }
-
-        @JavascriptInterface
-        public void shareText(String text) {
-            ShareText(text);
-        }
-
-        @JavascriptInterface
-        public void callNumber(String text) {
-            Call(text);
-        }
-
-        @JavascriptInterface
-        public void callLogout() {
-            Logout();
-        }
-
-        @JavascriptInterface
-        public void updateToken(String token) {
-            callUpdateToken(token);
-        }
-
-        @JavascriptInterface
-        public boolean isOpenInApp() {
-            return true;
-        }
-
-        @JavascriptInterface
-        public void reloadPage() {
-            reloadPageview();
-        }
-
-        @JavascriptInterface
-        public void redirectPage(String url) {
-            redirectPageview(url);
-        }
-
-        @JavascriptInterface
-        public void openUrlInBrowser(String url) {
-            urlOpenInBrowser(url);
-        }
-
-        @JavascriptInterface
-        public void askPermission() {
-            callRunTimePermissions();
-        }
-
-        @JavascriptInterface
-        public String getCurrentLocation() {
-            return getCurrentLatLong();
-        }
-
-        @JavascriptInterface
-        public void otpBroadCastReg(boolean value) {
-            registerBroadcast(value);
-        }
-
-        @JavascriptInterface
-        public void uploadAllContact(String token) {
-            callContactPermissions(token);
-        }
-
-        @JavascriptInterface
-        public void uploadAllContact2(String token) {
-            uploadContact(token);
-        }
-
-        @JavascriptInterface
-        public String getOTP() {
-            mSmsBroadcastReceiver = new SmsBroadcastReceiver();
-            mSmsBroadcastReceiver.setOnOtpListeners(MainActivity.this);
-            startSMSListener();
-
-            return otpNumber;
-        }
-    }
-
-    public void uploadContact(String token) {
-        startService(new Intent(getApplicationContext(), ContactService.class).putExtra("token", token));
-    }
-
-    private final DisposableObserver<AppVersionModel> firebaseObserver = new DisposableObserver<AppVersionModel>() {
-        @Override
-        public void onNext(AppVersionModel response) {
-            try {
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-
-            }
-        }
-
-        @Override
-        public void onError(Throwable e) {
-        }
-
-        @Override
-        public void onComplete() {
-        }
-    };
-
-    public void callContactPermissions(String token) {
-        String[] permissions = {Manifest.permission.READ_CONTACTS};
-        Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
-            @Override
-            public void onGranted() {
-                uploadContact(token);
-            }
-
-            @Override
-            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
-                super.onDenied(context, deniedPermissions);
-            }
-        });
-    }
-
     private boolean appInstalledOrNot(String packageManager) {
         PackageManager pm = getPackageManager();
         try {
@@ -903,4 +776,167 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
     }
 
+    public void uploadContact(String token) {
+        startService(new Intent(getApplicationContext(), ContactService.class).putExtra("token", token));
+    }
+
+    public void callContactPermissions(String token) {
+        String[] permissions = {Manifest.permission.READ_CONTACTS};
+        Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+                uploadContact(token);
+            }
+
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+            }
+        });
+    }
+
+    public void initiateImageCropping(){
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(1,1)
+                .start(activity);
+    }
+
+    //End JS Function's Method
+
+
+    //Otp Fetch Methods
+    private final BroadcastReceiver onComplete = new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(activity, "direct")
+                    .setSmallIcon(R.drawable.logo)
+                    .setContentTitle("File Downloaded")
+                    .setContentText("All Download completed");
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(455, mBuilder.build());
+        }
+    };
+
+    @Override
+    public void onOtpReceived(String otp) {
+        otpNumber = otp.replaceAll("[^0-9]", "").substring(0, 4);
+        webView.loadUrl("javascript:setOtp(" + otpNumber + ")");
+        if (mSmsBroadcastReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mSmsBroadcastReceiver);
+        }
+        //webView.loadUrl("javascript:angularFunctionCalled(" + otpNumber + ")");
+        /*webView.loadUrl("javascript: (function() {setOtp();}) ();");
+        webView.loadUrl("javascript: (function() {document.getElementById('id2').value= '123';}) ();");*/
+    }
+
+    @Override
+    public void onOtpTimeout() {
+
+    }
+
+
+
+    private final DisposableObserver<AppVersionModel> firebaseObserver = new DisposableObserver<AppVersionModel>() {
+        @Override
+        public void onNext(AppVersionModel response) {
+            try {
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    };
+
+    @Override
+    public void onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            super.onActivityResult(requestCode, resultCode, data);
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                Intent i = new Intent(activity, ImageEditorActivity.class);
+                i.putExtra("ImageUri", resultUri.toString());
+                startActivityForResult(i,1000);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }else if (requestCode==1000){
+            super.onActivityResult(requestCode, resultCode, data);
+            /*byte[] byteArray = getIntent().getByteArrayExtra("image");
+            Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);*/
+            //webView.loadUrl("javascript:getImageFile(\"abc\")");
+            String path = data.getStringExtra("image");
+            webView.loadUrl("javascript:getImageFile(\""+path+"\")");
+
+            System.out.println("abc = "+path);
+
+        }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (requestCode != INPUT_FILE_REQUEST_CODE || mFilePathCallback == null) {
+                super.onActivityResult(requestCode, resultCode, data);
+                return;
+            }
+
+            Uri[] results = null;
+
+            // Check that the response is a good one
+            if (resultCode == Activity.RESULT_OK) {
+                if (data == null) {
+                    // If there is not data, then we may have taken a photo
+                    if (mCameraPhotoPath != null) {
+                        results = new Uri[]{Uri.parse(mCameraPhotoPath)};
+                    }
+                } else {
+                    String dataString = data.getDataString();
+                    if (dataString != null) {
+                        results = new Uri[]{Uri.parse(dataString)};
+                    }
+                }
+            }
+
+            mFilePathCallback.onReceiveValue(results);
+            mFilePathCallback = null;
+
+        } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            if (requestCode != FILECHOOSER_RESULTCODE || mUploadMessage == null) {
+                super.onActivityResult(requestCode, resultCode, data);
+                return;
+            }
+            if (requestCode == FILECHOOSER_RESULTCODE) {
+                if (null == this.mUploadMessage) {
+                    return;
+                }
+                Uri result = null;
+                try {
+                    if (resultCode != RESULT_OK) {
+                        result = null;
+                    } else {
+                        // retrieve from the private variable if the intent is null
+                        result = data == null ? mCapturedImageURI : data.getData();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "activity :" + e,
+                            Toast.LENGTH_LONG).show();
+                }
+                mUploadMessage.onReceiveValue(result);
+                mUploadMessage = null;
+            }
+        }
+    }
 }

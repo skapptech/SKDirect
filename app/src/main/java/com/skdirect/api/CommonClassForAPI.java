@@ -17,9 +17,11 @@ import java.util.ArrayList;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MultipartBody;
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class CommonClassForAPI {
@@ -112,5 +114,32 @@ public class CommonClassForAPI {
                 });
     }
 
+    // upload profile image
+    public void uploadImage(DisposableObserver<String> observer, MultipartBody.Part body) {
+        RestClient.getInstance().getService().imageUpload(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull String s) {
+                        observer.onNext(s);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
 
 }

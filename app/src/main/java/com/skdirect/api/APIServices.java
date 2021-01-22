@@ -9,10 +9,13 @@ import com.skdirect.model.UpdateTokenModel;
 import java.util.ArrayList;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 public interface APIServices {
 
@@ -24,4 +27,8 @@ public interface APIServices {
 
     @POST("api/LoginUser/PostContactList")
     Observable<JsonElement> uploadContacts(@Body ArrayList<ContactUploadModel> contacts, @Header("authorization") String token);
+
+    @Multipart
+    @POST("Image/PostImage")
+    Observable<String> imageUpload(@Part MultipartBody.Part body);
 }

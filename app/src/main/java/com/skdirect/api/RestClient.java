@@ -51,7 +51,7 @@ public class RestClient {
                         request = chain.request();
                         response = chain.proceed(request);
                         if (response.code() == 200) {
-                            if (!request.url().toString().contains("/token") && !request.url().toString().contains("/appVersion") && !request.url().toString().contains("/imageupload")) {
+                            if (!request.url().toString().contains("/token") && !request.url().toString().contains("/appVersion") && !request.url().toString().contains("/PostImage")) {
                                 try {
                                     JSONObject jsonObject = new JSONObject();
                                     jsonObject.put("message", new JSONObject(response.body().string()));

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/image_preview"
+            android:layout_width="match_parent"
+            android:layout_height="360dp"
+            android:scaleType="fitCenter" />
+
+        <com.skdirect.filter.NonSwipeableViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_above="@+id/tabs"
+            android:layout_below="@+id/image_preview"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tvSaveImage"
+            app:tabGravity="fill"
+            app:tabMode="fixed" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvSaveImage"
+            android:text="Save Image"
+            android:textColor="@color/white"
+            android:background="@drawable/tab_selector"
+            android:layout_margin="5dp"
+            android:padding="15dp"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+</layout>
