@@ -877,7 +877,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
-        }else if (requestCode==1000){
+        }else if (resultCode==RESULT_OK && requestCode==1000){
             super.onActivityResult(requestCode, resultCode, data);
             /*byte[] byteArray = getIntent().getByteArrayExtra("image");
             Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);*/

@@ -1,42 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imBack"
+            android:src="@drawable/ic_back"
+            android:padding="5dp"
+            android:layout_margin="5dp"/>
+        <ImageView
             android:id="@+id/image_preview"
-            android:layout_width="match_parent"
-            android:layout_height="360dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_below="@+id/imBack"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
             android:scaleType="fitCenter" />
 
-        <com.skdirect.filter.NonSwipeableViewPager
-            android:id="@+id/viewpager"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewFilter"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_above="@+id/tabs"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/image_preview"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:layout_gravity="center_vertical"
+            android:clipChildren="false"
+            android:padding="4dp"
+            android:scrollbars="none" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/tvSaveImage"
-            app:tabGravity="fill"
-            app:tabMode="fixed" />
+            android:layout_below="@+id/recyclerViewFilter"
+            android:layout_above="@+id/tvSaveImage"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="Brightness" />
+
+                <SeekBar
+                    android:id="@+id/seekbar_brightness"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="Contrast" />
+
+                <SeekBar
+                    android:id="@+id/seekbar_contrast"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="Saturation" />
+
+                <SeekBar
+                    android:id="@+id/seekbar_saturation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </LinearLayout>
+
         <TextView
+            android:id="@+id/tvSaveImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tvSaveImage"
-            android:text="Save Image"
-            android:textColor="@color/white"
-            android:background="@drawable/tab_selector"
+            android:layout_alignParentBottom="true"
             android:layout_margin="5dp"
-            android:padding="15dp"
+            android:background="@drawable/tab_selector"
             android:gravity="center"
-            android:layout_alignParentBottom="true"/>
+            android:padding="15dp"
+            android:text="Save Image"
+            android:textColor="@color/white" />
     </RelativeLayout>
 </layout>

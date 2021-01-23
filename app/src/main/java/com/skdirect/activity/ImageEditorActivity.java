@@ -8,28 +8,32 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityImageEditorBinding;
 import com.skdirect.filter.BitmapUtils;
-import com.skdirect.filter.EditImageFragment;
-import com.skdirect.filter.FiltersListFragment;
+import com.skdirect.filter.SpacesItemDecoration;
+import com.skdirect.filter.ThumbnailsAdapter;
 import com.skdirect.utils.Utils;
+import com.zomato.photofilters.FilterPack;
 import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
+import com.zomato.photofilters.utils.ThumbnailItem;
+import com.zomato.photofilters.utils.ThumbnailsManager;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,7 +51,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class ImageEditorActivity extends AppCompatActivity implements FiltersListFragment.FiltersListFragmentListener, EditImageFragment.EditImageFragmentListener {
+public class ImageEditorActivity extends AppCompatActivity implements ThumbnailsAdapter.ThumbnailsAdapterListener, SeekBar.OnSeekBarChangeListener {
     com.skdirect.activity.ImageEditorActivity activity;
     ActivityImageEditorBinding mBinding;
     Uri ImageUri;
@@ -58,14 +62,12 @@ public class ImageEditorActivity extends AppCompatActivity implements FiltersLis
     Bitmap filteredImage;
     Bitmap finalImage;
 
-    FiltersListFragment filtersListFragment;
-    EditImageFragment editImageFragment;
-
     int brightnessFinal = 0;
     float saturationFinal = 1.0f;
     float contrastFinal = 1.0f;
-    Bitmap bitmap;
     private CommonClassForAPI commonClassForAPI;
+    ThumbnailsAdapter mAdapter;
+    List<ThumbnailItem> thumbnailItemList;
 
     static {
         System.loadLibrary("NativeImageProcessor");
@@ -85,37 +87,49 @@ public class ImageEditorActivity extends AppCompatActivity implements FiltersLis
         Intent i = getIntent();
         if (i != null) {
             ImageUri = Uri.parse(i.getStringExtra("ImageUri"));
-            //mBinding.imagePreview.setImageURI(ImageUri);
         }
 
-       /* try {
-            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), ImageUri);
-        }catch (Exception e){
-            e.printStackTrace();
-        }*/
+
+        thumbnailItemList = new ArrayList<>();
+        mAdapter = new ThumbnailsAdapter(activity, thumbnailItemList, this);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+        mBinding.recyclerViewFilter.setLayoutManager(mLayoutManager);
+        mBinding.recyclerViewFilter.setItemAnimator(new DefaultItemAnimator());
+        int space = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8,
+                getResources().getDisplayMetrics());
+        mBinding.recyclerViewFilter.addItemDecoration(new SpacesItemDecoration(space));
+        mBinding.recyclerViewFilter.setAdapter(mAdapter);
 
         originalImage = BitmapUtils.getBitmapFromAssets(this, IMAGE_NAME, 300, 300);
         filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         finalImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         mBinding.imagePreview.setImageBitmap(originalImage);
-        setupViewPager(mBinding.viewpager);
-        mBinding.tabs.setupWithViewPager(mBinding.viewpager);
+        openImageFromGallery(ImageUri);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                openImageFromGallery(ImageUri);
-            }
-        }, 3000);
 
+        mBinding.seekbarBrightness.setMax(200);
+        mBinding.seekbarBrightness.setProgress(100);
+
+        // keeping contrast value b/w 1.0 - 3.0
+        mBinding.seekbarContrast.setMax(20);
+        mBinding.seekbarContrast.setProgress(0);
+
+        // keeping saturation value b/w 0.0 - 3.0
+        mBinding.seekbarSaturation.setMax(30);
+        mBinding.seekbarSaturation.setProgress(10);
+
+        mBinding.seekbarBrightness.setOnSeekBarChangeListener(this);
+        mBinding.seekbarContrast.setOnSeekBarChangeListener(this);
+        mBinding.seekbarSaturation.setOnSeekBarChangeListener(this);
+
+        mBinding.imBack.setOnClickListener(view -> {
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_CANCELED, returnIntent);
+            finish();
+        });
         mBinding.tvSaveImage.setOnClickListener(view -> {
-            //final String path = BitmapUtils.insertImage(getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
-            /*ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            finalImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-            String a = new String(byteArray, StandardCharsets.UTF_8);
-            webView.loadUrl("javascript:getImageFile(\"" + a + "\")");*/
-            finalImage = Bitmap.createScaledBitmap(finalImage,500, 500, true);
+            finalImage = Bitmap.createScaledBitmap(finalImage, 500, 500, true);
             uploadMultipart(SavedImages(finalImage));
         });
     }
@@ -139,119 +153,21 @@ public class ImageEditorActivity extends AppCompatActivity implements FiltersLis
         return root + "/Direct/" + fileName;
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
-        // adding filter list fragment
-        filtersListFragment = new FiltersListFragment();
-        filtersListFragment.setListener(this);
-
-        // adding edit image fragment
-        editImageFragment = new EditImageFragment();
-        editImageFragment.setListener(this);
-
-        adapter.addFragment(filtersListFragment, "Tab Filter");
-        adapter.addFragment(editImageFragment, "Edit");
-
-        viewPager.setAdapter(adapter);
-    }
 
     @Override
     public void onFilterSelected(Filter filter) {
-        // reset image controls
         resetControls();
-
-        // applying the selected filter
         filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
-        // preview filtered image
         mBinding.imagePreview.setImageBitmap(filter.processFilter(filteredImage));
-
         finalImage = filteredImage.copy(Bitmap.Config.ARGB_8888, true);
     }
 
-    @Override
-    public void onBrightnessChanged(final int brightness) {
-        brightnessFinal = brightness;
-        Filter myFilter = new Filter();
-        myFilter.addSubFilter(new BrightnessSubFilter(brightness));
-        mBinding.imagePreview.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
-    }
-
-    @Override
-    public void onSaturationChanged(final float saturation) {
-        saturationFinal = saturation;
-        Filter myFilter = new Filter();
-        myFilter.addSubFilter(new SaturationSubfilter(saturation));
-        mBinding.imagePreview.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
-    }
-
-    @Override
-    public void onContrastChanged(final float contrast) {
-        contrastFinal = contrast;
-        Filter myFilter = new Filter();
-        myFilter.addSubFilter(new ContrastSubFilter(contrast));
-        mBinding.imagePreview.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
-    }
-
-    @Override
-    public void onEditStarted() {
-
-    }
-
-    @Override
-    public void onEditCompleted() {
-        // once the editing is done i.e seekbar is drag is completed,
-        // apply the values on to filtered image
-        final Bitmap bitmap = filteredImage.copy(Bitmap.Config.ARGB_8888, true);
-
-        Filter myFilter = new Filter();
-        myFilter.addSubFilter(new BrightnessSubFilter(brightnessFinal));
-        myFilter.addSubFilter(new ContrastSubFilter(contrastFinal));
-        myFilter.addSubFilter(new SaturationSubfilter(saturationFinal));
-        finalImage = myFilter.processFilter(bitmap);
-    }
-
-    /**
-     * Resets image edit controls to normal when new filter
-     * is selected
-     */
     private void resetControls() {
-        if (editImageFragment != null) {
-            editImageFragment.resetControls();
-        }
         brightnessFinal = 0;
         saturationFinal = 1.0f;
         contrastFinal = 1.0f;
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -270,7 +186,7 @@ public class ImageEditorActivity extends AppCompatActivity implements FiltersLis
             mBinding.imagePreview.setImageBitmap(originalImage);
             bitmap.recycle();
             // render selected image thumbnails
-            filtersListFragment.prepareThumbnail(originalImage);
+            prepareThumbnail(originalImage);
         }
     }
 
@@ -292,7 +208,7 @@ public class ImageEditorActivity extends AppCompatActivity implements FiltersLis
             mBinding.imagePreview.setImageBitmap(originalImage);
             bitmap.recycle();
             // render selected image thumbnails
-            filtersListFragment.prepareThumbnail(originalImage);
+            prepareThumbnail(originalImage);
         /*Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, SELECT_GALLERY_IMAGE);*/
@@ -360,4 +276,85 @@ public class ImageEditorActivity extends AppCompatActivity implements FiltersLis
         }
     };
 
+    public void prepareThumbnail(final Bitmap bitmap) {
+        Runnable r = new Runnable() {
+            public void run() {
+                Bitmap thumbImage;
+                if (bitmap == null) {
+                    thumbImage = BitmapUtils.getBitmapFromAssets(activity, ImageEditorActivity.IMAGE_NAME, 300, 300);
+                } else {
+                    thumbImage = Bitmap.createScaledBitmap(bitmap, 300, 300, false);
+                }
+                if (thumbImage == null)
+                    return;
+                ThumbnailsManager.clearThumbs();
+                thumbnailItemList.clear();
+                // add normal bitmap first
+                ThumbnailItem thumbnailItem = new ThumbnailItem();
+                thumbnailItem.image = thumbImage;
+                thumbnailItem.filterName = "Filter Normal";
+                ThumbnailsManager.addThumb(thumbnailItem);
+                List<Filter> filters = FilterPack.getFilterPack(activity);
+                for (Filter filter : filters) {
+                    ThumbnailItem tI = new ThumbnailItem();
+                    tI.image = thumbImage;
+                    tI.filter = filter;
+                    tI.filterName = filter.getName();
+                    ThumbnailsManager.addThumb(tI);
+                }
+
+                thumbnailItemList.addAll(ThumbnailsManager.processThumbs(activity));
+
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        };
+
+        new Thread(r).start();
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+        if (seekBar.getId() == R.id.seekbar_brightness) {
+            brightnessFinal = progress - 100;
+            Filter myFilter = new Filter();
+            myFilter.addSubFilter(new BrightnessSubFilter(progress - 100));
+            mBinding.imagePreview.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
+        }
+        if (seekBar.getId() == R.id.seekbar_contrast) {
+            progress += 10;
+            float floatVal = .10f * progress;
+            contrastFinal = floatVal;
+            Filter myFilter = new Filter();
+            myFilter.addSubFilter(new ContrastSubFilter(floatVal));
+            mBinding.imagePreview.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
+        }
+        if (seekBar.getId() == R.id.seekbar_saturation) {
+            float floatVal = .10f * progress;
+            saturationFinal = floatVal;
+            Filter myFilter = new Filter();
+            myFilter.addSubFilter(new SaturationSubfilter(floatVal));
+            mBinding.imagePreview.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        final Bitmap bitmap = filteredImage.copy(Bitmap.Config.ARGB_8888, true);
+
+        Filter myFilter = new Filter();
+        myFilter.addSubFilter(new BrightnessSubFilter(brightnessFinal));
+        myFilter.addSubFilter(new ContrastSubFilter(contrastFinal));
+        myFilter.addSubFilter(new SaturationSubfilter(saturationFinal));
+        finalImage = myFilter.processFilter(bitmap);
+    }
 }
