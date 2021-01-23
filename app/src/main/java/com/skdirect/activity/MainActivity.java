@@ -994,10 +994,16 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             String newFilePath = data.getStringExtra(ImageEditorIntentBuilder.OUTPUT_PATH);
             boolean isImageEdit = data.getBooleanExtra(EditImageActivity.IS_IMAGE_EDITED, false);
             if (isImageEdit) {
-                uploadMultipart(newFilePath);
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                Bitmap bitmap = BitmapFactory.decodeFile(newFilePath,bmOptions);
+                bitmap = Bitmap.createScaledBitmap(bitmap,700,700,true);
+                uploadMultipart(SavedImages(bitmap));
             } else {
                 newFilePath = data.getStringExtra(ImageEditorIntentBuilder.SOURCE_PATH);
-                uploadMultipart(newFilePath);
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                Bitmap bitmap = BitmapFactory.decodeFile(newFilePath,bmOptions);
+                bitmap = Bitmap.createScaledBitmap(bitmap,700,700,true);
+                uploadMultipart(SavedImages(bitmap));
             }
         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
@@ -1015,9 +1021,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             //webView.loadUrl("javascript:getImageFile(\"abc\")");
             String path = data.getStringExtra("image");
             webView.loadUrl("javascript:getImageFile(\"" + path + "\")");
-
-            System.out.println("abc = " + path);
-
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (requestCode != INPUT_FILE_REQUEST_CODE || mFilePathCallback == null) {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -1069,6 +1072,25 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
                 mUploadMessage = null;
             }
         }
+    }
+
+    private String SavedImages(Bitmap bm) {
+        String fileName = System.currentTimeMillis() + "_profile.jpg";
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Direct");
+        myDir.mkdirs();
+        File file = new File(myDir, fileName);
+        if (file.exists())
+            file.delete();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return root + "/Direct/" + fileName;
     }
 
     @SuppressLint("CheckResult")
