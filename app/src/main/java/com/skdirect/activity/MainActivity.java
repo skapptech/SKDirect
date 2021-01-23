@@ -1,6 +1,7 @@
 package com.skdirect.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.app.Notification;
@@ -42,6 +43,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -57,6 +59,7 @@ import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.broadcast.SmsBroadcastReceiver;
 import com.skdirect.databinding.ActivityMainBinding;
+import com.skdirect.filter.FileUtils;
 import com.skdirect.interfacee.OtpReceivedInterface;
 import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.UpdateTokenModel;
@@ -68,17 +71,28 @@ import com.skdirect.utils.Utils;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import iamutkarshtiwari.github.io.ananas.editimage.EditImageActivity;
+import iamutkarshtiwari.github.io.ananas.editimage.ImageEditorIntentBuilder;
+import iamutkarshtiwari.github.io.ananas.picchooser.SelectPictureActivity;
+import id.zelory.compressor.Compressor;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static com.skdirect.utils.SharePrefs.clearPref;
 
@@ -96,6 +110,12 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     private CommonClassForAPI commonClassForAPI;
     private SmsBroadcastReceiver mSmsBroadcastReceiver;
     private CountDownTimer cTimer;
+    private final int PHOTO_EDITOR_REQUEST_CODE = 231;
+    public static final int SELECT_GALLERY_IMAGE_CODE = 7;
+    public static final int TAKE_PHOTO_CODE = 8;
+    public static final int ACTION_REQUEST_EDITIMAGE = 9;
+    private String uploadFilePath;
+    private File photoFile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,9 +193,9 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
                 super.doUpdateVisitedHistory(view, url, isReload);
                 Log.e("PAGE HISTORY: ", view.getUrl());
-                if (view.getUrl().equalsIgnoreCase("https://skdirectbuyer.shopkirana.in/ui/app-home/1")){
+                if (view.getUrl().equalsIgnoreCase("https://skdirectbuyer.shopkirana.in/ui/app-home/1")) {
                     SharePrefs.getInstance(activity).putString(SharePrefs.LAST_VISITED_PAGE, "");
-                }else {
+                } else {
                     SharePrefs.getInstance(activity).putString(SharePrefs.LAST_VISITED_PAGE, view.getUrl());
                 }
 
@@ -432,7 +452,8 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
 
         @JavascriptInterface
         public void openImageSelector() {
-            initiateImageCropping();
+            //initiateImageCropping();
+            showImageSelectDialog();
         }
 
 
@@ -450,11 +471,11 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
 
     public void loadUrlfromSession() {
         //if (SharePrefs.getInstance(activity).getString(SharePrefs.LAST_VISITED_PAGE).equalsIgnoreCase("")) {
-            if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
-                webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.SELLER_URL));
-            } else {
-                webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.BUYER_URL));
-            }
+        if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
+            webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.SELLER_URL));
+        } else {
+            webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.BUYER_URL));
+        }
         /*}else {
             webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.LAST_VISITED_PAGE));
         }*/
@@ -795,9 +816,9 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         });
     }
 
-    public void initiateImageCropping(){
+    public void initiateImageCropping() {
         CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(1,1)
+                .setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(1, 1)
                 .start(activity);
     }
 
@@ -834,7 +855,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     }
 
 
-
     private final DisposableObserver<AppVersionModel> firebaseObserver = new DisposableObserver<AppVersionModel>() {
         @Override
         public void onNext(AppVersionModel response) {
@@ -855,6 +875,93 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
     };
 
+
+    private void showImageSelectDialog() {
+        BottomSheetDialog dialog = new BottomSheetDialog(activity, R.style.BottomTheme);
+        dialog.setContentView(R.layout.dialog_image_select);
+        dialog.setCanceledOnTouchOutside(true);
+        LinearLayout llCamera = dialog.findViewById(R.id.llCamera);
+        LinearLayout llGallery = dialog.findViewById(R.id.llGallery);
+        llCamera.setOnClickListener(view -> {
+            cameraPermission();
+            dialog.dismiss();
+        });
+        llGallery.setOnClickListener(view -> {
+            internalStoragePermission();
+            dialog.dismiss();
+        });
+        dialog.show();
+    }
+
+    public void internalStoragePermission() {
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+        Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+                activity.startActivityForResult(new Intent(
+                                MainActivity.this, SelectPictureActivity.class),
+                        SELECT_GALLERY_IMAGE_CODE);
+            }
+
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+            }
+        });
+    }
+
+    public void cameraPermission() {
+        String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+        Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                    photoFile = FileUtils.genEditFile();
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                } else {
+                    photoFile = FileUtils.genEditFile();
+                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider", photoFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                }
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                if (intent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
+                    startActivityForResult(intent, TAKE_PHOTO_CODE);
+                }
+            }
+
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+            }
+        });
+    }
+
+
+    private void initiateNewImageEditor(String path) {
+        File outputFile = FileUtils.genEditFile();
+        try {
+            Intent intent = new ImageEditorIntentBuilder(this, path, outputFile.getAbsolutePath())
+                    .withAddText()
+                    //.withPaintFeature()
+                    .withFilterFeature()
+                    .withRotateFeature()
+                    .withCropFeature()
+                    .withBrightnessFeature()
+                    .withSaturationFeature()
+                    //.withBeautyFeature()
+                    //.withStickerFeature()
+                    //.withEditorTitle("Photo Editor")
+                    .forcePortrait(true)
+                    .setSupportActionBarVisibility(false)
+                    .build();
+            EditImageActivity.start(this, intent, ACTION_REQUEST_EDITIMAGE);
+        } catch (Exception e) {
+            Toast.makeText(this, R.string.iamutkarshtiwari_github_io_ananas_not_selected, Toast.LENGTH_SHORT).show();
+            Log.e("Demo App", e.getMessage());
+        }
+    }
+
     @Override
     public void onBackPressed() {
         if (webView.canGoBack()) {
@@ -866,28 +973,52 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT_GALLERY_IMAGE_CODE && resultCode == RESULT_OK && null != data) {
+            try {
+                String path = data.getStringExtra("imgPath");
+                initiateNewImageEditor(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == TAKE_PHOTO_CODE && resultCode == RESULT_OK) {
+            try {
+                if (photoFile != null) {
+                    String path = photoFile.getPath();
+                    initiateNewImageEditor(path);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == ACTION_REQUEST_EDITIMAGE && resultCode == RESULT_OK) {
+            String newFilePath = data.getStringExtra(ImageEditorIntentBuilder.OUTPUT_PATH);
+            boolean isImageEdit = data.getBooleanExtra(EditImageActivity.IS_IMAGE_EDITED, false);
+            if (isImageEdit) {
+                uploadMultipart(newFilePath);
+            } else {
+                newFilePath = data.getStringExtra(ImageEditorIntentBuilder.SOURCE_PATH);
+                uploadMultipart(newFilePath);
+            }
+        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
                 Intent i = new Intent(activity, ImageEditorActivity.class);
                 i.putExtra("ImageUri", resultUri.toString());
-                startActivityForResult(i,1000);
+                startActivityForResult(i, 1000);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
-        }else if (resultCode==RESULT_OK && requestCode==1000){
-            super.onActivityResult(requestCode, resultCode, data);
+        } else if (resultCode == RESULT_OK && requestCode == 1000) {
             /*byte[] byteArray = getIntent().getByteArrayExtra("image");
             Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);*/
             //webView.loadUrl("javascript:getImageFile(\"abc\")");
             String path = data.getStringExtra("image");
-            webView.loadUrl("javascript:getImageFile(\""+path+"\")");
+            webView.loadUrl("javascript:getImageFile(\"" + path + "\")");
 
-            System.out.println("abc = "+path);
+            System.out.println("abc = " + path);
 
-        }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (requestCode != INPUT_FILE_REQUEST_CODE || mFilePathCallback == null) {
                 super.onActivityResult(requestCode, resultCode, data);
                 return;
@@ -939,4 +1070,60 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             }
         }
     }
+
+    @SuppressLint("CheckResult")
+    private void uploadMultipart(String path) {
+        final File fileToUpload = new File(path);
+        new Compressor(this)
+                .compressToFileAsFlowable(fileToUpload)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::uploadImagePath, throwable -> {
+                    throwable.printStackTrace();
+                    showError(throwable.getMessage());
+                });
+    }
+
+    private void showError(String errorMessage) {
+        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    private void uploadImagePath(File file) {
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("image/jpeg"), file);
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("Image", file.getName(), requestFile);
+        Utils.showProgressDialog(this);
+        commonClassForAPI.uploadImage(imageObserver, body);
+    }
+
+    // upload image
+    private final DisposableObserver<String> imageObserver = new DisposableObserver<String>() {
+        @Override
+        public void onNext(@NotNull String response) {
+            try {
+                Utils.hideProgressDialog();
+                if (response == null) {
+                    Log.e("Failed", "Failed ####  " + response);
+                    Utils.setToast(getApplicationContext(), "Image Not Uploaded");
+                } else {
+                    Log.e("Uploaded - ", "" + response);
+                    webView.loadUrl("javascript:getImageFile(\"" + response + "\")");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+            Utils.hideProgressDialog();
+        }
+
+        @Override
+        public void onComplete() {
+            Utils.hideProgressDialog();
+        }
+    };
 }

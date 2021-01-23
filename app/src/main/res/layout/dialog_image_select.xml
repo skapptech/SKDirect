@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Share with"
+        android:text="Select Image from"
         android:layout_margin="10dp"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -24,7 +24,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/llWhatsapp"
+            android:id="@+id/llCamera"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_weight="1"
@@ -35,21 +35,21 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:id="@+id/imWhatsapp"
-                android:src="@drawable/whatsapp"
+                android:src="@drawable/ic_camera"
+                android:id="@+id/imCamera"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Whatsapp"
+                android:text="Camera"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/llWhatsappBusiness"
+            android:id="@+id/llGallery"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_weight="1"
@@ -60,15 +60,15 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/whatsappbusiness"
-                android:id="@+id/imWhatsappBusiness"
+                android:src="@drawable/ic_image"
+                android:id="@+id/imGallery"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:text="Whatsapp Business"
+                android:text="Gallery"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
