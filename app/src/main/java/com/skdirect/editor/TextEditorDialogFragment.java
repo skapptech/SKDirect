@@ -92,7 +92,7 @@ public class TextEditorDialogFragment extends DialogFragment {
         tvFontTwo = view.findViewById(R.id.tvFontTwo);
         tvFontThree = view.findViewById(R.id.tvFontThree);
 
-        typeFace = Typeface.createFromAsset(getActivity().getAssets(),"fonts/debrosee.ttf");
+        typeFace = Typeface.createFromAsset(getActivity().getAssets(),"fonts/beyond_wonderland.ttf");
         mAddTextEditText.setTypeface(typeFace);
 
         tvFontOne.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),"fonts/beyond_wonderland.ttf"));

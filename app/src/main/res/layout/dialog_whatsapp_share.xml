@@ -36,6 +36,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/imWhatsapp"
+                android:src="@drawable/whatsapp"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -60,6 +61,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/imWhatsappBusiness"
+                android:src="@drawable/whatsappbusiness"
                 />
             <TextView
                 android:layout_width="wrap_content"
