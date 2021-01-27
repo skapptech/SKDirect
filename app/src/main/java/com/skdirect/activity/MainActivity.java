@@ -57,6 +57,7 @@ import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.broadcast.SmsBroadcastReceiver;
 import com.skdirect.databinding.ActivityMainBinding;
+import com.skdirect.editor.EditImageActivity;
 import com.skdirect.interfacee.OtpReceivedInterface;
 import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.UpdateTokenModel;
@@ -871,7 +872,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
-                Intent i = new Intent(activity, ImageEditorActivity.class);
+                Intent i = new Intent(activity, EditImageActivity.class);
                 i.putExtra("ImageUri", resultUri.toString());
                 startActivityForResult(i,1000);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {

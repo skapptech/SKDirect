@@ -52,7 +52,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class ImageEditorActivity extends AppCompatActivity implements ThumbnailsAdapter.ThumbnailsAdapterListener, SeekBar.OnSeekBarChangeListener {
-    com.skdirect.activity.ImageEditorActivity activity;
+    ImageEditorActivity activity;
     ActivityImageEditorBinding mBinding;
     Uri ImageUri;
     private static final String TAG = MainActivity.class.getSimpleName();
