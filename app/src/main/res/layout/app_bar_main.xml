@@ -38,7 +38,23 @@
                         android:src="@drawable/ic_home_drawer" />
 
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/tv_loction"
+                        android:layout_width="90dp"
+                        android:layout_height="30dp"
+                        android:layout_toRightOf="@+id/iv_menu"
+                        android:background="@drawable/rounded_drawer_loction"
+                        android:gravity="center"
+                        android:layout_marginStart="10dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:text="Location"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+
+                   <!-- <ImageView
                         android:id="@+id/iv_logo"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
@@ -54,7 +70,7 @@
                         android:layout_toRightOf="@+id/iv_logo"
                         android:contentDescription="@string/app_name"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/direct_tittle" />
+                        android:src="@drawable/direct_tittle" />-->
 
                     <FrameLayout
                         android:id="@+id/notifiction_count"

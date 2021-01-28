@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.CartItemModel;
@@ -22,6 +23,7 @@ public class MainActivityViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
 
     private MutableLiveData<CartItemModel> CardItemVM;
+    private MutableLiveData<JsonObject> mapViewModel;
 
     public LiveData<CartItemModel> getCartItemsVM() {
         CardItemVM=null;
@@ -29,6 +31,12 @@ public class MainActivityViewMode extends ViewModel {
         return CardItemVM;
     }
 
+
+    public LiveData<JsonObject> getMapViewModel() {
+        mapViewModel=null;
+        mapViewModel = new MutableLiveData<>();
+        return mapViewModel;
+    }
 
     public MutableLiveData<CartItemModel> getCartItemsRequest(String CooKiValue) {
         RestClient.getInstance().getService().GetCartItem(CooKiValue).enqueue(new Callback<CartItemModel>() {
@@ -49,4 +57,27 @@ public class MainActivityViewMode extends ViewModel {
 
         return CardItemVM;
     }
+
+    public MutableLiveData<JsonObject> getMapViewModelRequest(double lat,double log) {
+           RestClient.getInstance().getService().GetLocation(lat,log).enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            if (response.isSuccessful() && response.body()!=null ) {
+                                Log.e(TAG, "request response="+response.body());
+                    mapViewModel.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + call.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return mapViewModel;
+    }
+
+
+
 }

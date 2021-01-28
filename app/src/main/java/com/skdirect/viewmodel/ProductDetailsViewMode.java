@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModel;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
+import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.AllCategoriesModel;
+import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.ProductDataModel;
 import com.skdirect.model.TopNearByItemModel;
@@ -31,6 +33,7 @@ public class ProductDetailsViewMode extends ViewModel {
     private MutableLiveData<ArrayList<TopNearByItemModel>> sallerOtherProducsVM;
     private MutableLiveData<JsonObject> cartItemsVM;
     private MutableLiveData<Boolean> addProductVM;
+    private MutableLiveData<AddCartItemModel> addItemsInCardVM;
 
     public LiveData<ProductDataModel> getProductDetailsVM() {
         productDetailsVM=null;
@@ -67,6 +70,12 @@ public class ProductDetailsViewMode extends ViewModel {
         addProductVM=null;
         addProductVM = new MutableLiveData<>();
         return addProductVM;
+    }
+
+    public LiveData<AddCartItemModel> getAddItemsInCardVM() {
+        addItemsInCardVM=null;
+        addItemsInCardVM = new MutableLiveData<>();
+        return addItemsInCardVM;
     }
 
     public MutableLiveData<ProductDataModel> getCategoriesViewModelRequest(int productID) {
@@ -189,5 +198,25 @@ public class ProductDetailsViewMode extends ViewModel {
         });
 
         return addProductVM;
+    }
+
+    public MutableLiveData<AddCartItemModel> getAddItemsInCardVMRequest(ItemAddModel paginationModel) {
+        RestClient.getInstance().getService().AddCart(paginationModel).enqueue(new Callback<AddCartItemModel>() {
+            @Override
+            public void onResponse(Call<AddCartItemModel> call, Response<AddCartItemModel> response) {
+                if (response.isSuccessful() && response.body()!=null ) {
+                    Log.e(TAG, "request response="+response.body());
+                    addItemsInCardVM.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddCartItemModel> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + t.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return addItemsInCardVM;
     }
 }

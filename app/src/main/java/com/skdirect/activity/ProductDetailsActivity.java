@@ -22,7 +22,10 @@ import com.skdirect.adapter.TopNearByItemAdapter;
 import com.skdirect.adapter.TopSellerAdapter;
 import com.skdirect.databinding.ActivityProductDetailsBinding;
 import com.skdirect.interfacee.BottomBarInterface;
+import com.skdirect.model.AddCartItemModel;
+import com.skdirect.model.CartItemModel;
 import com.skdirect.model.ImageListModel;
+import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.ProductDataModel;
 import com.skdirect.model.ProductVariantAttributeDCModel;
@@ -55,9 +58,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     }
     private void apiCalling() {
         callProductData();
-        GetTopSimilarProduct();
+      /*  GetTopSimilarProduct();
         GetTopSellar();
-        GetSellarOtherProducts();
+        GetSellarOtherProducts();*/
         GetCartItems();
         addProductAPI();
     }
@@ -183,6 +186,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         int increaseCount = Integer.parseInt(mBinding.tvSelectedQty.getText().toString().trim());
         increaseCount++;
         mBinding.tvSelectedQty.setText("" + increaseCount);
+       // addItemInCart(increaseCount, cartModel);
+
 
 
     }
@@ -362,5 +367,19 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         productID = variationListModel.getId();
         callProductData();
 
+    }
+
+    private void addItemInCart(int QTY, CartItemModel.CartModel sellerProductModel) {
+        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(), 0, 0);
+        productDetailsViewMode.getAddItemsInCardVMRequest(paginationModel);
+        productDetailsViewMode.getAddItemsInCardVM().observe(this, new Observer<AddCartItemModel>() {
+            @Override
+            public void onChanged(AddCartItemModel sellerProdList) {
+                Utils.hideProgressDialog();
+                if (sellerProdList != null) {
+
+                }
+            }
+        });
     }
 }

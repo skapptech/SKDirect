@@ -30,7 +30,7 @@ import java.util.ArrayList;
 public class NearByItemProductListActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityProductListBinding mBinding;
     private NearProductListViewMode nearProductListViewMode;
-    private final ArrayList<NearProductListModel> nearProductList = new ArrayList<>();
+    private  ArrayList<NearProductListModel> nearProductList = new ArrayList<>();
     private int skipCount = 0;
     private int takeCount = 10;
     private int pastVisiblesItems = 0;

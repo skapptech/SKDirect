@@ -1,21 +1,27 @@
 package com.skdirect.api;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.skdirect.model.AddViewModel;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CustomerDataModel;
+import com.skdirect.model.DeliveryOptionModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.LoginResponseModel;
 import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.NearProductListModel;
+import com.skdirect.model.OrderPlaceModel;
+import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.ProductDataModel;
+import com.skdirect.model.RemoveItemRequestModel;
 import com.skdirect.model.SearchDataModel;
 import com.skdirect.model.SearchRequestModel;
 import com.skdirect.model.SellerDetailsModel;
@@ -24,6 +30,9 @@ import com.skdirect.model.SellerProfileDataModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.UpdateTokenModel;
+import com.skdirect.model.UserLocationModel;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -120,6 +129,38 @@ public interface APIServices {
 
     @GET("api/Buyer/SellerProfile/GetCartItems")
     Call<CartItemModel> GetCartItem(@Query("CookieValue") String CookieValue);
+
+    @POST("api/Buyer/SellerProfile/ClearCart")
+    Call<Object> ClearCart(@Query("Id") String id);
+
+    @GET("api/Buyer/CartOverview/GetCartItems/{GetCartItems}")
+    Call<CartItemModel> CartItems(@Path("GetCartItems") String GetCartItems);
+
+    @POST("api/Buyer/SellerProfile/DeleteCartItems")
+    Call<JsonObject> deleteCartItems(@Body RemoveItemRequestModel itemRequestModel);
+
+    @GET("api/buyer/Profile/GetLocation")
+    Call<JsonObject> GetLocation(@Query("lat") double lat,@Query("lng") double log );
+
+    @GET("api/Buyer/Order/GetUserLocation")
+    Call<ArrayList<UserLocationModel>> GetUserLocation();
+
+    @GET("api/Buyer/Order/GetDeliveryOption")
+    Call<ArrayList<DeliveryOptionModel>> GetDeliveryOption(@Query("SellerId") String SellerId);
+
+    @GET("api/Buyer/Order/GetCheckOutItem")
+    Call<JsonObject> GetCheckOutItem(@Query("CookieValue") String CookieValue);
+
+    @POST("api/Buyer/Order/PlaceOrder")
+    Call<OrderPlaceModel> PlaceOrder(@Body OrderPlaceRequestModel placeRequestModel);
+
+    @POST("api/buyer/Profile/AddLocation")
+    Call<Boolean> AddLocation(@Body JsonArray jsonArray);
+
+    @POST("api/Buyer/SellerProfile/AddCartItem")
+    Call<AddCartItemModel> AddCartItem(@Body ItemAddModel itemAddModel);
+
+
 
 
 }

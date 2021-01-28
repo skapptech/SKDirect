@@ -223,13 +223,18 @@ public class HomeFragment extends Fragment {
                 if (customerDataModel!=null){
                     activity.userNameTV.setText(customerDataModel.getFirstName());
                     activity.mobileNumberTV.setText(customerDataModel.getMobileNo());
+
                     SharePrefs.getInstance(activity).putString(SharePrefs.FIRST_NAME, customerDataModel.getFirstName());
+                    SharePrefs.getInstance(activity).putInt(SharePrefs.ID, customerDataModel.getId());
                     SharePrefs.getInstance(activity).putString(SharePrefs.MOBILE_NUMBER, customerDataModel.getMobileNo());
                     SharePrefs.getInstance(activity).putString(SharePrefs.SHOP_NAME, customerDataModel.getShopName());
                     SharePrefs.getInstance(activity).putString(SharePrefs.EMAIL_ID, customerDataModel.getEmail());
                     SharePrefs.getInstance(activity).putString(SharePrefs.STATE, customerDataModel.getState());
-                    SharePrefs.getInstance(activity).putString(SharePrefs.CITY, customerDataModel.getCity());
-                    SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_REGISTRACTION, customerDataModel.isRegistrationComplete());
+                    SharePrefs.getInstance(activity).putString(SharePrefs.CITYNAME, customerDataModel.getCity());
+                    SharePrefs.getInstance(activity).putString(SharePrefs.PIN_CODE, customerDataModel.getPincode());
+                    SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_ACTIVE, customerDataModel.isActive());
+                    SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_DELETE, customerDataModel.isDelete());
+                    SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE, customerDataModel.isRegistrationComplete());
                 }
 
             }

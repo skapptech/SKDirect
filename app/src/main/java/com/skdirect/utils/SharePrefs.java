@@ -25,9 +25,15 @@ public class SharePrefs {
     public static final String SHOP_NAME ="shop_name";
     public static final String EMAIL_ID ="email";
     public static final String STATE ="state";
-    public static final String CITY ="city";
-    public static final String IS_REGISTRACTION ="is";
     public static final String COUNT ="count";
+    public static final String CART_ITEM_ID ="cart_item_id";
+    public static final String CITYNAME ="city_name";
+    public static final String IS_ACTIVE ="IsActive";
+    public static final String IS_DELETE ="IsDelete";
+    public static final String PIN_CODE ="Pincode";
+    public static final String IS_REGISTRATIONCOMPLETE ="IsRegistrationcomplete";
+    public static final String IS_CONTACTREAD ="IscontactRead";
+    public static final String ID ="id";
 
 
 

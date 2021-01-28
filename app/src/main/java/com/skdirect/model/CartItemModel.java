@@ -2,10 +2,11 @@ package com.skdirect.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartItemModel {
+public class CartItemModel implements Serializable {
 
     @SerializedName("Cart")
     private ArrayList<CartModel> Cart;
@@ -138,61 +139,119 @@ public class CartItemModel {
         Id = id;
     }
 
-    public static class CartModel {
+    public static class CartModel implements Serializable {
         @SerializedName("ShoppingCartVariantAtrribute")
         private ArrayList<String> ShoppingCartVariantAtrribute;
+
         @SerializedName("TotalMrp")
         private int TotalMrp;
+
         @SerializedName("ShopName")
         private String ShopName;
+
         @SerializedName("IsActive")
         private boolean IsActive;
+
         @SerializedName("IsStockRequired")
         private boolean IsStockRequired;
+
         @SerializedName("Stock")
         private int Stock;
+
         @SerializedName("Measurement")
         private int Measurement;
+
         @SerializedName("Uom")
-        private int Uom;
+        private String Uom;
+
         @SerializedName("ImagePath")
         private String ImagePath;
+
         @SerializedName("TotalDiscountAmount")
         private int TotalDiscountAmount;
+
         @SerializedName("ProductName")
         private String ProductName;
+
         @SerializedName("TotalDiscount")
         private int TotalDiscount;
+
         @SerializedName("TotalSaving")
         private int TotalSaving;
+
         @SerializedName("IsDelete")
         private boolean IsDelete;
+
         @SerializedName("OffPercentage")
-        private int OffPercentage;
+        private double OffPercentage;
+
         @SerializedName("TotalPrice")
         private int TotalPrice;
+
         @SerializedName("price")
         private int price;
+
         @SerializedName("Quantity")
         private int Quantity;
+
         @SerializedName("CreatedBy")
         private int CreatedBy;
+
         @SerializedName("CreatedDate")
         private String CreatedDate;
+
         @SerializedName("SellerId")
         private int SellerId;
+
         @SerializedName("BuyerId")
         private int BuyerId;
+
         @SerializedName("ProductMasterId")
         private int ProductMasterId;
+
         @SerializedName("Margin")
-        private int Margin;
+        private double Margin;
+
         @SerializedName("Mrp")
-        private int Mrp;
+        private double Mrp;
+
         @SerializedName("MOQ")
         private int MOQ;
+
         @SerializedName("Id")
         private int Id;
+
+        public CartModel(ArrayList<String> shoppingCartVariantAtrribute, int totalMrp, String shopName, boolean isActive, boolean isStockRequired, int stock, int measurement, String uom, String imagePath, int totalDiscountAmount, String productName, int totalDiscount, int totalSaving, boolean isDelete, int offPercentage, int totalPrice, int price, int quantity, int createdBy, String createdDate, int sellerId, int buyerId, int productMasterId, double margin, double mrp, int MOQ, int id) {
+            ShoppingCartVariantAtrribute = shoppingCartVariantAtrribute;
+            TotalMrp = totalMrp;
+            ShopName = shopName;
+            IsActive = isActive;
+            IsStockRequired = isStockRequired;
+            Stock = stock;
+            Measurement = measurement;
+            Uom = uom;
+            ImagePath = imagePath;
+            TotalDiscountAmount = totalDiscountAmount;
+            ProductName = productName;
+            TotalDiscount = totalDiscount;
+            TotalSaving = totalSaving;
+            IsDelete = isDelete;
+            OffPercentage = offPercentage;
+            TotalPrice = totalPrice;
+            this.price = price;
+            Quantity = quantity;
+            CreatedBy = createdBy;
+            CreatedDate = createdDate;
+            SellerId = sellerId;
+            BuyerId = buyerId;
+            ProductMasterId = productMasterId;
+            Margin = margin;
+            Mrp = mrp;
+            this.MOQ = MOQ;
+            Id = id;
+        }
+
+
 
         public ArrayList<String> getShoppingCartVariantAtrribute() {
             return ShoppingCartVariantAtrribute;
@@ -250,11 +309,11 @@ public class CartItemModel {
             Measurement = measurement;
         }
 
-        public int getUom() {
+        public String getUom() {
             return Uom;
         }
 
-        public void setUom(int uom) {
+        public void setUom(String uom) {
             Uom = uom;
         }
 
@@ -306,11 +365,11 @@ public class CartItemModel {
             IsDelete = delete;
         }
 
-        public int getOffPercentage() {
+        public double getOffPercentage() {
             return OffPercentage;
         }
 
-        public void setOffPercentage(int offPercentage) {
+        public void setOffPercentage(double offPercentage) {
             OffPercentage = offPercentage;
         }
 
@@ -378,7 +437,7 @@ public class CartItemModel {
             ProductMasterId = productMasterId;
         }
 
-        public int getMargin() {
+        public double getMargin() {
             return Margin;
         }
 
@@ -386,7 +445,7 @@ public class CartItemModel {
             Margin = margin;
         }
 
-        public int getMrp() {
+        public double getMrp() {
             return Mrp;
         }
 

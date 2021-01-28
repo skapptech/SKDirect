@@ -61,13 +61,7 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
             Picasso.get().load(sellerProductModel.getImagePath()).into(holder.mBinding.imItemImage);
         }
 
-        holder.mBinding.tvAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                holder.mBinding.tvAdd.setVisibility(View.GONE);
-                holder.mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
-            }
-        });
+
         holder.mBinding.tvQtyPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

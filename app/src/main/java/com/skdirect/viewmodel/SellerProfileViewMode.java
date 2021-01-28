@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AddViewModel;
 import com.skdirect.model.AddCartItemModel;
@@ -27,6 +28,7 @@ public class SellerProfileViewMode extends ViewModel {
     private MutableLiveData<SellerProductModel> sellerProductVM;
     private MutableLiveData<Boolean> addProductVM;
     private MutableLiveData<AddCartItemModel> addItemsInCardVM;
+    private MutableLiveData<Object> clearCartItemVM;
 
 
     public LiveData<SellerDetailsModel> getSellerDetailsVM() {
@@ -52,6 +54,13 @@ public class SellerProfileViewMode extends ViewModel {
         addItemsInCardVM=null;
         addItemsInCardVM = new MutableLiveData<>();
         return addItemsInCardVM;
+    }
+
+
+    public LiveData<Object> getClearCartItemVM() {
+        clearCartItemVM=null;
+        clearCartItemVM = new MutableLiveData<>();
+        return clearCartItemVM;
     }
 
 
@@ -133,6 +142,26 @@ public class SellerProfileViewMode extends ViewModel {
         });
 
         return addItemsInCardVM;
+    }
+
+    public MutableLiveData<Object> getClearCartItemVMRequest(String id) {
+        RestClient.getInstance().getService().ClearCart(id).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if (response.isSuccessful() && response.body()!=null ) {
+                    Log.e(TAG, "request response="+response.body());
+                    clearCartItemVM.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + t.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return clearCartItemVM;
     }
 
 

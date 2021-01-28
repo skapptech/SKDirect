@@ -1,7 +1,11 @@
 package com.skdirect.activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -20,6 +24,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.JsonObject;
+import com.nabinbhandari.android.permissions.PermissionHandler;
+import com.nabinbhandari.android.permissions.Permissions;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityMainBinding;
 import com.skdirect.fragment.BasketFragment;
@@ -28,12 +35,20 @@ import com.skdirect.fragment.MyOrderFragment;
 import com.skdirect.fragment.ProfileFragment;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.utils.AppSignatureHelper;
+import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.MainActivityViewMode;
 import com.skdirect.viewmodel.ProductDetailsViewMode;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityMainBinding mBinding;
@@ -41,9 +56,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SharedPreferences sharedPreferences;
     public boolean positionChanged = false;
     public Toolbar appBarLayout;
-    public TextView userNameTV, mobileNumberTV;
+    public TextView userNameTV, mobileNumberTV,setLocationTV;
     private MainActivityViewMode mainActivityViewMode;
     public static CartItemModel cartItemModel;
+    private int  itemQuatntiy;
 
 
     @Override
@@ -56,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         clickListener();
         setupBadge();
+        callRunTimePermissions();
 
     }
 
@@ -65,7 +82,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.llChnagePassword.setOnClickListener(this);
         mBinding.llChet.setOnClickListener(this);
         mBinding.llLogout.setOnClickListener(this);
+        mBinding.llLogout.setOnClickListener(this);
+
     }
+
 
     @Override
     protected void onResume() {
@@ -79,6 +99,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         appBarLayout = mBinding.toolbarId.toolbar;
         userNameTV = mBinding.tvUserName;
         mobileNumberTV = mBinding.tvMobileName;
+        setLocationTV = mBinding.toolbarId.tvLoction;
+
 
 //        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBinding.toolbarId.bottomNavigation.getLayoutParams();
 //        layoutParams.setBehavior(new BottomNavigationBehavior());
@@ -110,6 +132,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
             return true;
+        });
+
+        mBinding.toolbarId.notifictionCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,CartActivity.class));
+            }
+        });
+
+        setLocationTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(MainActivity.this,MapsActivity.class),2);
+            }
         });
     }
 
@@ -180,13 +216,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setupBadge() {
-        int CartItemCount = SharePrefs.getInstance(MainActivity.this).getInt(SharePrefs.COUNT);
-        if (CartItemCount == 0) {
+       // int CartItemCount = SharePrefs.getInstance(MainActivity.this).getInt(SharePrefs.COUNT);
+        if (itemQuatntiy == 0) {
             if (mBinding.toolbarId.cartBadge.getVisibility() != View.GONE) {
                 mBinding.toolbarId.cartBadge.setVisibility(View.GONE);
             }
         } else {
-            mBinding.toolbarId.cartBadge.setText(String.valueOf(Math.min(CartItemCount, 99)));
+            mBinding.toolbarId.cartBadge.setText(String.valueOf(Math.min(itemQuatntiy, 99)));
             if (mBinding.toolbarId.cartBadge.getVisibility() != View.VISIBLE) {
                 mBinding.toolbarId.cartBadge.setVisibility(View.VISIBLE);
             }
@@ -200,13 +236,99 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainActivityViewMode.getCartItemsVM().observe(this, new Observer<CartItemModel>() {
             @Override
             public void onChanged(CartItemModel model) {
+                itemQuatntiy =0;
                 Utils.hideProgressDialog();
-                if (model != null) {
+                if (model != null && model.getCart()!=null) {
                     cartItemModel = model;
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CART_ITEM_ID, model.getId());
+                    for (int i = 0; i < model.getCart().size(); i++) {
+                        itemQuatntiy += model.getCart().get(i).getQuantity();
+                    }
+                    setupBadge();
                 }
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode==2)
+        {
+            if (requestCode == 2 && resultCode == RESULT_OK) {
+                Address address=data.getParcelableExtra("address");
+                double lat = address.getLatitude();
+                double log = address.getLongitude();
+                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                List<Address> addresses = null;
+                try {
+                    addresses = geocoder.getFromLocation(lat, log, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String cityName = addresses.get(0).getLocality();
+                setLocationTV.setText(cityName);
+            }
+
+        }
+    }
+
+    private void callLocationAPI(double latitude, double longitude) {
+        mainActivityViewMode.getMapViewModelRequest(latitude, longitude);
+        mainActivityViewMode.getMapViewModel().observe(this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject data) {
+                Utils.hideProgressDialog();
+                JSONObject jsonResponse = null;
+                try {
+                    jsonResponse = new JSONObject(data.toString());
+                    JSONObject components = jsonResponse.getJSONObject("geometry");
+                    JSONObject location = components.getJSONObject("location");
+                    double lat = location.getDouble("lat");
+                    double lng = location.getDouble("lng");
+                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                    List<Address> addresses = null;
+                    try {
+                        addresses = geocoder.getFromLocation(lat, lng, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    String cityName = addresses.get(0).getLocality();
+                    Log.e("cityName", "cityName  "+cityName);
+                   setLocationTV.setText(cityName);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+    }
+
+
+    public void callRunTimePermissions() {
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+        Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+                Log.e("onDenied", "onGranted");
+                GPSTracker  gpsTracker = new GPSTracker(getApplicationContext());
+                if (gpsTracker!=null){
+                    callLocationAPI(gpsTracker.getLatitude(),gpsTracker.getLongitude());
+                }
+            }
+
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+                Log.e("onDenied", "onDenied" + deniedPermissions);
+
+            }
+        });
     }
 
 }

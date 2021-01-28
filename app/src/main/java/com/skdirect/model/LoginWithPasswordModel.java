@@ -24,6 +24,59 @@ public class LoginWithPasswordModel {
     @SerializedName("error_description")
     private String error_description;
 
+    @Expose
+    @SerializedName("IsRegistrationComplete")
+    private boolean IsRegistrationComplete;
+
+    @Expose
+    @SerializedName("IscontactRead")
+    private boolean IscontactRead;
+
+    @Expose
+    @SerializedName("IsSuperAdmin")
+    private boolean IsSuperAdmin;
+
+
+    @Expose
+    @SerializedName("Latitiute")
+    private double Latitiute;
+
+    @Expose
+    @SerializedName("Longitude")
+    private double Longitude;
+
+    public boolean isIscontactRead() {
+        return IscontactRead;
+    }
+
+    public void setIscontactRead(boolean iscontactRead) {
+        IscontactRead = iscontactRead;
+    }
+
+    public boolean isSuperAdmin() {
+        return IsSuperAdmin;
+    }
+
+    public void setSuperAdmin(boolean superAdmin) {
+        IsSuperAdmin = superAdmin;
+    }
+
+    public double getLatitiute() {
+        return Latitiute;
+    }
+
+    public void setLatitiute(double latitiute) {
+        Latitiute = latitiute;
+    }
+
+    public double getLongitude() {
+        return Longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        Longitude = longitude;
+    }
+
     public String getError() {
         return error;
     }
@@ -39,10 +92,6 @@ public class LoginWithPasswordModel {
     public void setError_description(String error_description) {
         this.error_description = error_description;
     }
-
-    @Expose
-    @SerializedName("IsRegistrationComplete")
-    private boolean IsRegistrationComplete;
 
     public String getAccess_token() {
         return access_token;

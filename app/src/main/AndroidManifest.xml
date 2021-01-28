@@ -79,9 +79,37 @@
             android:name=".activity.ProductDetailsActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.PrimaryAddressActivity"
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name=".activity.NewAddressActivity"
+            android:screenOrientation="portrait" />
+
+
+
 
         <activity
             android:name=".activity.SellerProfileActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CartActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.PaymentActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+
+
+        <activity
+            android:name=".activity.MapsActivity"
+            android:hardwareAccelerated="false"
             android:label=""
             android:screenOrientation="portrait" />
 
@@ -100,6 +128,10 @@
                 <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVE" />
             </intent-filter>
         </receiver>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"

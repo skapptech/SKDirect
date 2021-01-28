@@ -47,7 +47,7 @@ android {
             //applicationIdSuffix ".debug"
             resValue "string", "app_name", "Direct"
             buildConfigField("String", "buildVariant", "\"DEBUG_STORE_FILE\"")
-            buildConfigField("String", "apiEndpoint", "\"http://111.118.252.170:8787\"")
+            buildConfigField("String", "apiEndpoint", "\"https://virtualstockuat.shopkirana.in\"")
         }
     }
     compileOptions {
@@ -67,6 +67,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -88,5 +90,7 @@ dependencies {
     implementation 'android.arch.lifecycle:extensions:1.1.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.mcxiaoke.viewpagerindicator:library:2.4.1'
+    implementation 'com.nabinbhandari.android:permissions:3.8'
+
 
 }

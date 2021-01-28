@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -62,7 +61,6 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         initView();
         callSellerDetails();
     }
-
 
 
     private void callSellerDetails() {
@@ -143,7 +141,6 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     }
 
 
-
     private void getSellerDetailsAPI() {
         sellerProfileViewMode.getSellerDetailsRequest(sellerID);
         sellerProfileViewMode.getSellerDetailsVM().observe(this, new Observer<SellerDetailsModel>() {
@@ -167,7 +164,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                     mBinding.rvCategories.post(new Runnable() {
                         public void run() {
                             sellerProductModels.addAll(sellerProdList.getSellerProductLists());
-                            if (MainActivity.cartItemModel!=null && MainActivity.cartItemModel.getCart().size() > 0) {
+                            if (MainActivity.cartItemModel != null && MainActivity.cartItemModel.getCart().size() > 0) {
                                 for (int i = 0; i < sellerProductModels.size(); i++) {
                                     for (int j = 0; j < MainActivity.cartItemModel.getCart().size(); j++) {
                                         if (sellerProductModels.get(i).getId() == MainActivity.cartItemModel.getCart().get(j).getId()) {
@@ -193,7 +190,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         sellerProfileViewMode.getAddProductVM().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                Utils.hideProgressDialog();
+                 Utils.hideProgressDialog();
             }
         });
     }
@@ -205,8 +202,13 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         tvSelectedQty.setText("" + increaseCount);
         SharePrefs.getInstance(SellerProfileActivity.this).putInt(SharePrefs.COUNT, increaseCount);
         addItemInCart(increaseCount, sellerProductModel);
-
-
+        if (MainActivity.cartItemModel != null) {
+            for (int i = 0; i < MainActivity.cartItemModel.getCart().size(); i++) {
+                if (sellerProductModel.getId() == MainActivity.cartItemModel.getCart().get(i).getId()) {
+                    MainActivity.cartItemModel.getCart().get(i).setQuantity(increaseCount);
+                }
+            }
+        }
     }
 
     @Override
@@ -221,21 +223,32 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             btAddToCart.setVisibility(View.VISIBLE);
             LLPlusMinus.setVisibility(View.GONE);
         }
+
+        if (MainActivity.cartItemModel != null) {
+            for (int i = 0; i < MainActivity.cartItemModel.getCart().size(); i++) {
+                if (sellerProductModel.getId() == MainActivity.cartItemModel.getCart().get(i).getId()) {
+                    MainActivity.cartItemModel.getCart().get(i).setQuantity(decreaseCount);
+                }
+            }
+        }
     }
 
     @Override
     public void addButtonOnClick(SellerProductList sellerProductModel, TextView selectedQty, TextView btAddToCart, LinearLayout LLPlusMinus) {
-
-        if (MainActivity.cartItemModel.getEncryptSellerId() != null) {
+        if (MainActivity.cartItemModel != null && MainActivity.cartItemModel.getEncryptSellerId() != null) {
             if (MainActivity.cartItemModel.getEncryptSellerId().equals(sellerID)) {
                 btAddToCart.setVisibility(View.GONE);
                 LLPlusMinus.setVisibility(View.VISIBLE);
+                CartItemModel.CartModel cartModel = new CartItemModel.CartModel(null,0,null,false,sellerProductModel.isStockRequired(),sellerProductModel.getStock(),sellerProductModel.getMeasurement(),sellerProductModel.getUom(),sellerProductModel.getImagePath(),0,sellerProductModel.getProductName(),0,0,false,0,0,0,sellerProductModel.getQty(),sellerProductModel.getCreatedBy(),null,sellerProductModel.getSellerId(),0,0, sellerProductModel.getMargin(),sellerProductModel.getMrp(),sellerProductModel.getMOQ(),sellerProductModel.getId());
+                MainActivity.cartItemModel.getCart().add(cartModel);
+                SellerProfileActivity.this.plusButtonOnClick(sellerProductModel, selectedQty);
             } else {
-                checkCustomerAlertDialog();
+                checkCustomerAlertDialog(MainActivity.cartItemModel.getId(), sellerProductModel,btAddToCart,LLPlusMinus);
             }
         } else {
             btAddToCart.setVisibility(View.GONE);
             LLPlusMinus.setVisibility(View.VISIBLE);
+            SellerProfileActivity.this.plusButtonOnClick(sellerProductModel, selectedQty);
         }
 
     }
@@ -248,33 +261,60 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             public void onChanged(AddCartItemModel sellerProdList) {
                 Utils.hideProgressDialog();
                 if (sellerProdList != null) {
-                    //sellerProdList.getShoppingCartItem();
+                   // sellerShopListAdapter.notifyDataSetChanged();
                 }
             }
         });
     }
 
-    public void checkCustomerAlertDialog() {
+
+    public void checkCustomerAlertDialog(String id, SellerProductList sellerProductModel, TextView btAddToCart, LinearLayout LLPlusMinus) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Alert");
         builder.setMessage("Your Cart has existing items from Another Seller.Do You Want to clear it and add items from this Seller?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                clearCartItem(id);
+                CartItemModel cartModel = new CartItemModel();
+                cartModel.setEncryptSellerId(sellerID);
+                CartItemModel.CartModel cartItemModel = new CartItemModel.CartModel(null,0,null,false,sellerProductModel.isStockRequired(),sellerProductModel.getStock(),sellerProductModel.getMeasurement(),sellerProductModel.getUom(),sellerProductModel.getImagePath(),0,sellerProductModel.getProductName(),0,0,false,0,0,0,sellerProductModel.getQty(),sellerProductModel.getCreatedBy(),null,sellerProductModel.getSellerId(),0,0, sellerProductModel.getMargin(),sellerProductModel.getMrp(),sellerProductModel.getMOQ(),sellerProductModel.getId());
+                cartModel.setCart(new ArrayList<>());
+                cartModel.getCart().add(cartItemModel);
+                MainActivity.cartItemModel = cartModel;
+                sellerShopListAdapter.notifyDataSetChanged();
+                btAddToCart.setVisibility(View.GONE);
+                LLPlusMinus.setVisibility(View.VISIBLE);
+                addItemInCart(1, sellerProductModel);
             }
         });
 
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getApplicationContext(),
-                        "No Button Clicked", Toast.LENGTH_SHORT).show();
+
             }
+
         });
 
         AlertDialog dialog = builder.create();
         dialog.show();
 
+    }
+
+    private void clearCartItem(String id) {
+        sellerProfileViewMode.getClearCartItemVMRequest(id);
+        sellerProfileViewMode.getClearCartItemVM().observe(this, new Observer<Object>() {
+            @Override
+            public void onChanged(Object object) {
+                Utils.hideProgressDialog();
+//                if (object != null) {
+//                    if (object.equals(true)) {
+//                        MainActivity.cartItemModel.getCart().clear();
+//                    }
+//                }
+            }
+        });
     }
 }
