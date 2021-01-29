@@ -94,7 +94,7 @@ public class EditImageActivity extends AppCompatActivity implements OnPhotoEdito
     }
 
     private void initViews() {
-        mBinding.imgSave.setOnClickListener(this);
+        mBinding.tvSave.setOnClickListener(this);
         mBinding.imgClose.setOnClickListener(this);
         mBinding.txtAddText.setOnClickListener(this);
     }
@@ -139,7 +139,7 @@ public class EditImageActivity extends AppCompatActivity implements OnPhotoEdito
     public void onClick(View view) {
         switch (view.getId()) {
 
-            case R.id.imgSave:
+            case R.id.tvSave:
                 saveImage();
                 break;
 

@@ -174,9 +174,9 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
                 super.doUpdateVisitedHistory(view, url, isReload);
                 Log.e("PAGE HISTORY: ", view.getUrl());
-                if (view.getUrl().equalsIgnoreCase("https://skdirectbuyer.shopkirana.in/ui/app-home/1")){
+                if (view.getUrl().equalsIgnoreCase("https://skdirectbuyer.shopkirana.in/ui/app-home/1")) {
                     SharePrefs.getInstance(activity).putString(SharePrefs.LAST_VISITED_PAGE, "");
-                }else {
+                } else {
                     SharePrefs.getInstance(activity).putString(SharePrefs.LAST_VISITED_PAGE, view.getUrl());
                 }
 
@@ -436,6 +436,11 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             initiateImageCropping();
         }
 
+        @JavascriptInterface
+        public void setIsSeller(boolean isSeller) {
+            updateIsSeller(isSeller);
+        }
+
 
         @JavascriptInterface
         public String getOTP() {
@@ -451,11 +456,11 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
 
     public void loadUrlfromSession() {
         //if (SharePrefs.getInstance(activity).getString(SharePrefs.LAST_VISITED_PAGE).equalsIgnoreCase("")) {
-            if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
-                webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.SELLER_URL));
-            } else {
-                webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.BUYER_URL));
-            }
+        if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
+            webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.SELLER_URL));
+        } else {
+            webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.BUYER_URL));
+        }
         /*}else {
             webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.LAST_VISITED_PAGE));
         }*/
@@ -796,11 +801,26 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         });
     }
 
-    public void initiateImageCropping(){
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(1,1)
-                .start(activity);
+    public void initiateImageCropping() {
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+        Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(1, 1)
+                        .start(activity);
+            }
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+            }
+        });
     }
+
+    public void updateIsSeller(boolean isSeller) {
+        SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SELLER, isSeller);
+    }
+
 
     //End JS Function's Method
 
@@ -833,7 +853,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     public void onOtpTimeout() {
 
     }
-
 
 
     private final DisposableObserver<AppVersionModel> firebaseObserver = new DisposableObserver<AppVersionModel>() {
@@ -874,21 +893,21 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
                 Uri resultUri = result.getUri();
                 Intent i = new Intent(activity, EditImageActivity.class);
                 i.putExtra("ImageUri", resultUri.toString());
-                startActivityForResult(i,1000);
+                startActivityForResult(i, 1000);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
-        }else if (resultCode==RESULT_OK && requestCode==1000){
+        } else if (resultCode == RESULT_OK && requestCode == 1000) {
             super.onActivityResult(requestCode, resultCode, data);
             /*byte[] byteArray = getIntent().getByteArrayExtra("image");
             Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);*/
             //webView.loadUrl("javascript:getImageFile(\"abc\")");
             String path = data.getStringExtra("image");
-            webView.loadUrl("javascript:getImageFile(\""+path+"\")");
+            webView.loadUrl("javascript:getImageFile(\"" + path + "\")");
 
-            System.out.println("abc = "+path);
+            System.out.println("abc = " + path);
 
-        }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (requestCode != INPUT_FILE_REQUEST_CODE || mFilePathCallback == null) {
                 super.onActivityResult(requestCode, resultCode, data);
                 return;
