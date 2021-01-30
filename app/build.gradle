@@ -11,8 +11,8 @@ android {
         applicationId "com.skdirect"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 5
-        versionName "1.0.3"
+        versionCode 6
+        versionName "1.0.4"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -38,7 +38,7 @@ android {
             proguardFiles 'proguard-rules.pro'
             resValue "string", "app_name", "Direct"
             buildConfigField("String", "buildVariant", "\"release\"")
-            buildConfigField("String", "apiEndpoint", "\"https://directapi.er15.xyz:4436\"")
+            buildConfigField("String", "apiEndpoint", "\"https://awstestdirectbuyer.er15.xyz/\"")
         }
         debug {
             minifyEnabled false
@@ -48,7 +48,7 @@ android {
             resValue "string", "app_name", "Direct UAT"
             buildConfigField("String", "buildVariant", "\"DEBUG_STORE_FILE\"")
             //buildConfigField("String", "apiEndpoint", "\"https://directapi.er15.xyz:4436\"")
-            //buildConfigField("String", "apiEndpoint", "\"http://111.118.252.170:8787\"")
+            //buildConfigField("String", "apiEndpoint", "\"https://awstestdirectbuyer.er15.xyz/\"")
             buildConfigField("String", "apiEndpoint", "\"https://virtualstockuat.shopkirana.in\"")
         }
     }
