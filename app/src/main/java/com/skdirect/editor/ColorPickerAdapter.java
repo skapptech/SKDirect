@@ -20,9 +20,6 @@ import com.skdirect.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Ahmed Adel on 5/8/17.
- */
 
 public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.ViewHolder> {
 

@@ -24,9 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.R;
 
-/**
- * Created by Burhanuddin Rashid on 1/16/2018.
- */
 
 public class TextEditorDialogFragment extends DialogFragment {
 
@@ -92,12 +89,12 @@ public class TextEditorDialogFragment extends DialogFragment {
         tvFontTwo = view.findViewById(R.id.tvFontTwo);
         tvFontThree = view.findViewById(R.id.tvFontThree);
 
-        typeFace = Typeface.createFromAsset(getActivity().getAssets(),"fonts/beyond_wonderland.ttf");
+        typeFace = Typeface.createFromAsset(getActivity().getAssets(),"fonts/lato_regular.ttf");
         mAddTextEditText.setTypeface(typeFace);
 
-        tvFontOne.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),"fonts/beyond_wonderland.ttf"));
-        tvFontTwo.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),"fonts/debrosee.ttf"));
-        tvFontThree.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),"fonts/leadcoat.ttf"));
+        tvFontOne.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),"fonts/lato_regular.ttf"));
+        tvFontTwo.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),"fonts/lato_italic.ttf"));
+        tvFontThree.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),"fonts/lato_bold.ttf"));
 
         //Setup the color picker for text color
         RecyclerView addTextColorPickerRecyclerView = view.findViewById(R.id.add_text_color_picker_recycler_view);
@@ -120,15 +117,15 @@ public class TextEditorDialogFragment extends DialogFragment {
         mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
         tvFontOne.setOnClickListener(v -> {
-            typeFace = Typeface.createFromAsset(getActivity().getAssets(),"fonts/beyond_wonderland.ttf");
+            typeFace = Typeface.createFromAsset(getActivity().getAssets(),"fonts/lato_regular.ttf");
             mAddTextEditText.setTypeface(typeFace);
         });
         tvFontTwo.setOnClickListener(v -> {
-            typeFace = Typeface.createFromAsset(getActivity().getAssets(),"fonts/debrosee.ttf");
+            typeFace = Typeface.createFromAsset(getActivity().getAssets(),"fonts/lato_italic.ttf");
             mAddTextEditText.setTypeface(typeFace);
         });
         tvFontThree.setOnClickListener(v -> {
-            typeFace = Typeface.createFromAsset(getActivity().getAssets(),"fonts/leadcoat.ttf");
+            typeFace = Typeface.createFromAsset(getActivity().getAssets(),"fonts/lato_bold.ttf");
             mAddTextEditText.setTypeface(typeFace);
         });
 

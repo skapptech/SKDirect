@@ -172,7 +172,7 @@ public class EditImageActivity extends AppCompatActivity implements OnPhotoEdito
             @Override
             public void onBitmapReady(Bitmap saveBitmap) {
                 showSnackbar("Image Saved Successfully");
-                Bitmap finalImage = Bitmap.createScaledBitmap(saveBitmap, 700, 700, true);
+                Bitmap finalImage = Bitmap.createScaledBitmap(saveBitmap, 600, 600, true);
                 uploadMultipart(SavedImages(finalImage));
             }
 

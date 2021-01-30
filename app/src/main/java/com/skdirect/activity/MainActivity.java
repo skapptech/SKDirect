@@ -63,6 +63,7 @@ import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.UpdateTokenModel;
 import com.skdirect.utils.AppSignatureHelper;
 import com.skdirect.utils.ContactService;
+import com.skdirect.utils.CreateContact;
 import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
@@ -104,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         activity = this;
         initViews();
-        //initiateImageCropping();
         callRunTimePermissions();
         Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
 
@@ -173,13 +173,12 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             @Override
             public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
                 super.doUpdateVisitedHistory(view, url, isReload);
-                Log.e("PAGE HISTORY: ", view.getUrl());
-                if (view.getUrl().equalsIgnoreCase("https://skdirectbuyer.shopkirana.in/ui/app-home/1")) {
+                //Log.e("PAGE HISTORY: ", view.getUrl());
+               /* if (view.getUrl().equalsIgnoreCase("https://skdirectbuyer.shopkirana.in/ui/app-home/1")) {
                     SharePrefs.getInstance(activity).putString(SharePrefs.LAST_VISITED_PAGE, "");
                 } else {
                     SharePrefs.getInstance(activity).putString(SharePrefs.LAST_VISITED_PAGE, view.getUrl());
-                }
-
+                }*/
             }
 
             @Override
@@ -441,6 +440,10 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             updateIsSeller(isSeller);
         }
 
+        @JavascriptInterface
+        public void saveSupportContact(String name, String number) {
+            saveContact(name, number);
+        }
 
         @JavascriptInterface
         public String getOTP() {
@@ -455,15 +458,11 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     //Start JS Function's Method
 
     public void loadUrlfromSession() {
-        //if (SharePrefs.getInstance(activity).getString(SharePrefs.LAST_VISITED_PAGE).equalsIgnoreCase("")) {
         if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
             webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.SELLER_URL));
         } else {
             webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.BUYER_URL));
         }
-        /*}else {
-            webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.LAST_VISITED_PAGE));
-        }*/
     }
 
     private String getCurrentLatLong() {
@@ -821,6 +820,14 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SELLER, isSeller);
     }
 
+    public void saveContact(String name, String number){
+        try {
+            new CreateContact(activity, number, name);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     //End JS Function's Method
 
@@ -904,9 +911,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             //webView.loadUrl("javascript:getImageFile(\"abc\")");
             String path = data.getStringExtra("image");
             webView.loadUrl("javascript:getImageFile(\"" + path + "\")");
-
-            System.out.println("abc = " + path);
-
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (requestCode != INPUT_FILE_REQUEST_CODE || mFilePathCallback == null) {
                 super.onActivityResult(requestCode, resultCode, data);
