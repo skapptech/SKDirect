@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.AllCategoriesModel;
+import com.skdirect.model.CartItemModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.ProductDataModel;
@@ -31,9 +32,10 @@ public class ProductDetailsViewMode extends ViewModel {
     private MutableLiveData<ArrayList<TopNearByItemModel>> similarProductVM;
     private MutableLiveData<ArrayList<TopSellerModel>> topSellerLiveData;
     private MutableLiveData<ArrayList<TopNearByItemModel>> sallerOtherProducsVM;
-    private MutableLiveData<JsonObject> cartItemsVM;
+    private MutableLiveData<CartItemModel> cartItemsVM;
     private MutableLiveData<Boolean> addProductVM;
     private MutableLiveData<AddCartItemModel> addItemsInCardVM;
+    private MutableLiveData<Object> clearCartItemVM;
 
     public LiveData<ProductDataModel> getProductDetailsVM() {
         productDetailsVM=null;
@@ -60,7 +62,7 @@ public class ProductDetailsViewMode extends ViewModel {
         return sallerOtherProducsVM;
     }
 
-    public LiveData<JsonObject> getCartItemsVM() {
+    public LiveData<CartItemModel> getCartItemsVM() {
         cartItemsVM=null;
         cartItemsVM = new MutableLiveData<>();
         return cartItemsVM;
@@ -76,6 +78,12 @@ public class ProductDetailsViewMode extends ViewModel {
         addItemsInCardVM=null;
         addItemsInCardVM = new MutableLiveData<>();
         return addItemsInCardVM;
+    }
+
+    public LiveData<Object> getClearCartItemVM() {
+        clearCartItemVM=null;
+        clearCartItemVM = new MutableLiveData<>();
+        return clearCartItemVM;
     }
 
     public MutableLiveData<ProductDataModel> getCategoriesViewModelRequest(int productID) {
@@ -160,10 +168,10 @@ public class ProductDetailsViewMode extends ViewModel {
     }
 
 
-    public MutableLiveData<JsonObject> getCartItemsVMRequest(String productID) {
-        RestClient.getInstance().getService().GetCartItems(productID).enqueue(new Callback<JsonObject>() {
+    public MutableLiveData<CartItemModel> getCartItemsVMRequest(String productID) {
+        RestClient.getInstance().getService().GetCartItems(productID).enqueue(new Callback<CartItemModel>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(Call<CartItemModel> call, Response<CartItemModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     cartItemsVM.setValue(response.body());
@@ -171,7 +179,7 @@ public class ProductDetailsViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(Call<CartItemModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + t.toString());
                 Utils.hideProgressDialog();
             }
@@ -201,7 +209,7 @@ public class ProductDetailsViewMode extends ViewModel {
     }
 
     public MutableLiveData<AddCartItemModel> getAddItemsInCardVMRequest(ItemAddModel paginationModel) {
-        RestClient.getInstance().getService().AddCart(paginationModel).enqueue(new Callback<AddCartItemModel>() {
+        RestClient.getInstance().getService().AddCartItem(paginationModel).enqueue(new Callback<AddCartItemModel>() {
             @Override
             public void onResponse(Call<AddCartItemModel> call, Response<AddCartItemModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
@@ -218,5 +226,25 @@ public class ProductDetailsViewMode extends ViewModel {
         });
 
         return addItemsInCardVM;
+    }
+
+    public MutableLiveData<Object> getClearCartItemVMRequest(String id) {
+        RestClient.getInstance().getService().ClearCart(id).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if (response.isSuccessful() && response.body()!=null ) {
+                    Log.e(TAG, "request response="+response.body());
+                    clearCartItemVM.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + t.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return clearCartItemVM;
     }
 }

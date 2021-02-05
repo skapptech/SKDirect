@@ -147,7 +147,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onChanged(SellerDetailsModel sellerDetailsModel) {
                 Utils.hideProgressDialog();
-                mBinding.tvSellerName.setText(sellerDetailsModel.getFirstName());
+                mBinding.tvSellerName.setText(sellerDetailsModel.getShopName());
                 mBinding.tvMobileNumber.setText(sellerDetailsModel.getSellerMobileNumber());
             }
         });

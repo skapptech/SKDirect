@@ -37,12 +37,13 @@ import java.util.ArrayList;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityPaymentBinding mBinding;
-    private int itemSize, totalAmount;
+    private int itemSize;
     private PaymentViewMode paymentViewMode;
     private CartItemModel cartItemModel;
     private final ArrayList<DeliveryOptionModel> deliveryOptionList = new ArrayList<>();
     private DeliveryOptionAdapter deliveryOptionAdapter;
     private int deliveryOption, UserLocationId;
+    private double totalAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     private void getSharedData() {
         cartItemModel = (CartItemModel) getIntent().getSerializableExtra("cartItemSize");
-        totalAmount = getIntent().getIntExtra("totalAmount", 0);
+        totalAmount = getIntent().getDoubleExtra("totalAmount", 0);
+
+        Log.e("Total Amount ","##### "+cartItemModel.getTotalAmount());
 
         mBinding.tvItemPrice.setText("Price Details ( " + (itemSize = cartItemModel.getCart().size()) + " items)");
         mBinding.tvOrderValue.setText("₹ " + totalAmount);

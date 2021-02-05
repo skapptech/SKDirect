@@ -33,7 +33,6 @@ public class CustomerDataModel {
     @SerializedName("Email")
     private String Email;
 
-
     @SerializedName("Pincode")
     private String Pincode;
 
@@ -52,12 +51,47 @@ public class CustomerDataModel {
     @SerializedName("City")
     private String City;
 
+    @SerializedName("UserName")
+    private String UserName;
+
+    @SerializedName("EncryptedId")
+    private String EncryptedId;
+
     @SerializedName("IsRegistrationComplete")
     private boolean IsRegistrationComplete;
 
     @SerializedName("UserDeliveryDC")
     private ArrayList<UserDeliveryModel> UserDeliveryDC;
 
+    public CustomerDataModel(int id, boolean isActive, boolean isDelete, String firstName, String middleName, String mobileNo, String userId, String lastName, String email, String pincode, int pinCodeMasterId, String shopName, String imagePath, String state, String city, String userName, String encryptedId, boolean isRegistrationComplete, ArrayList<UserDeliveryModel> userDeliveryDC) {
+        Id = id;
+        IsActive = isActive;
+        IsDelete = isDelete;
+        FirstName = firstName;
+        MiddleName = middleName;
+        MobileNo = mobileNo;
+        UserId = userId;
+        LastName = lastName;
+        Email = email;
+        Pincode = pincode;
+        PinCodeMasterId = pinCodeMasterId;
+        ShopName = shopName;
+        ImagePath = imagePath;
+        State = state;
+        City = city;
+        UserName = userName;
+        EncryptedId = encryptedId;
+        IsRegistrationComplete = isRegistrationComplete;
+        UserDeliveryDC = userDeliveryDC;
+    }
+
+    public String getUserName() {
+        return UserName;
+    }
+
+    public void setUserName(String userName) {
+        UserName = userName;
+    }
 
     public int getId() {
         return Id;
@@ -195,8 +229,16 @@ public class CustomerDataModel {
         UserDeliveryDC = userDeliveryDC;
     }
 
+    public String getEncryptedId() {
+        return EncryptedId;
+    }
 
-    private class UserDeliveryModel {
+    public void setEncryptedId(String encryptedId) {
+        EncryptedId = encryptedId;
+    }
+
+
+    public class UserDeliveryModel {
 
         @SerializedName("Id")
         private int Id;

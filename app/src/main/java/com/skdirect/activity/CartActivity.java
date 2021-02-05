@@ -43,7 +43,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     private int totalItemCount = 0;
     private boolean loading = true;
     private CartListAdapter cartListAdapter;
-    private int totalAmount;
+    private double totalAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

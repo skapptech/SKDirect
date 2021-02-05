@@ -14,6 +14,12 @@ import android.widget.Toast;
 import com.google.android.material.snackbar.Snackbar;
 import com.skdirect.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -120,6 +126,32 @@ public class Utils {
 
     public static String getToken(Context context) {
         return SharePrefs.getInstance(context).getString(SharePrefs.TOKEN);
+    }
+
+    public static String getDateFormate(String ServerDate) {
+        // 2018-12-24T15:48:15.707+05:30
+        if (!ServerDate.equalsIgnoreCase("") && !ServerDate.equalsIgnoreCase(null)) {
+            DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());//These format come to server
+            originalFormat.setTimeZone(TimeZone.getDefault());
+            DateFormat targetFormat = new SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault());  //change to new format here  //dd-MM-yyyy HH:mm:ss
+
+            Date date = null;
+            String formattedDate = "";
+            try {
+                date = originalFormat.parse(ServerDate);
+
+                formattedDate = targetFormat.format(date);  //result
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return formattedDate;
+
+
+        } else {
+            return "null";
+        }
+
     }
 
 }

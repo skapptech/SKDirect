@@ -22,11 +22,25 @@ public class PrimaryAddressViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
 
     private MutableLiveData<ArrayList<UserLocationModel>> userLocationVM;
+    private MutableLiveData<Boolean> makeDefaultLocationVM;
+    private MutableLiveData<Boolean> deleteLocationVM;
 
     public LiveData<ArrayList<UserLocationModel>> getUserLocationVM() {
         userLocationVM=null;
         userLocationVM = new MutableLiveData<>();
         return userLocationVM;
+    }
+
+    public LiveData<Boolean> getMakeDefaultLocationVM() {
+        makeDefaultLocationVM=null;
+        makeDefaultLocationVM = new MutableLiveData<>();
+        return makeDefaultLocationVM;
+    }
+
+    public LiveData<Boolean> getDeleteLocationVM() {
+        deleteLocationVM=null;
+        deleteLocationVM = new MutableLiveData<>();
+        return deleteLocationVM;
     }
     public MutableLiveData<ArrayList<UserLocationModel>> getUserLocationVMRequest() {
         RestClient.getInstance().getService().GetUserLocation().enqueue(new Callback<ArrayList<UserLocationModel>>() {
@@ -46,5 +60,45 @@ public class PrimaryAddressViewMode extends ViewModel {
         });
 
         return userLocationVM;
+    }
+
+    public MutableLiveData<Boolean> getMakeDefaultLocationVMRequest(int id) {
+        RestClient.getInstance().getService().MakeDefaultAddress(id).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (response.isSuccessful() && response.body()!=null ) {
+                    Log.e(TAG, "request response="+response.body());
+                    makeDefaultLocationVM.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + call.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return makeDefaultLocationVM;
+    }
+
+    public MutableLiveData<Boolean> getDeleteLocationVMRequest( ArrayList<UserLocationModel> locationModelsl) {
+        RestClient.getInstance().getService().UpdateUserLocation(locationModelsl).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (response.isSuccessful() && response.body()!=null ) {
+                    Log.e(TAG, "request response="+response.body());
+                    deleteLocationVM.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + call.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return deleteLocationVM;
     }
 }

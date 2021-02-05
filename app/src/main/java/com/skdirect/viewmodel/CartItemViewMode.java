@@ -68,7 +68,7 @@ public class CartItemViewMode extends ViewModel {
 
             @Override
             public void onFailure(Call<CartItemModel> call, Throwable t) {
-                Log.e(TAG, "onFailure Responce" + call.toString());
+                Log.e(TAG, "onFailure Responce" + t.toString());
                 rvCartItem.setVisibility(View.GONE);
                 blankBasket.setVisibility(View.VISIBLE);
                 Utils.hideProgressDialog();

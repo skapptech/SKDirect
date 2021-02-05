@@ -8,11 +8,14 @@ import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.CartItemModel;
+import com.skdirect.model.ChangePasswordRequestModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.DeliveryOptionModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.LoginResponseModel;
 import com.skdirect.model.LoginWithPasswordModel;
+import com.skdirect.model.MyOrderModel;
+import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.OrderPlaceModel;
@@ -93,7 +96,7 @@ public interface APIServices {
 
 
     @GET("api/buyer/Seller/GetTopSeller")
-    Call<ArrayList<TopSellerModel>> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword);
+    Call<ArrayList<TopSellerModel>> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword,@Query("categoryId") int categoryId);
 
     @GET("api/buyer/SellerProductDetail/GetSellerProductById/{GetSellerProductById}")
     Call<ProductDataModel> GetSellerProductById(@Path("GetSellerProductById") int GetSellerProductById);
@@ -109,7 +112,7 @@ public interface APIServices {
     Call<ArrayList<TopNearByItemModel>> GetMoreSimilarSellerProduct(@Path("GetMoreSimilarSellerProduct") int GetSellerProductById);
 
     @GET("api/Buyer/CartOverview/GetCartItems/{GetCartItems}")
-    Call<JsonObject> GetCartItems(@Path("GetCartItems") String GetSellerProductById);
+    Call<CartItemModel> GetCartItems(@Path("GetCartItems") String GetSellerProductById);
 
     @POST("api/Buyer/SellerProfile/AddProductView")
     Call<Boolean> AddProductView(@Body PaginationModel paginationModel);
@@ -157,8 +160,25 @@ public interface APIServices {
     @POST("api/buyer/Profile/AddLocation")
     Call<Boolean> AddLocation(@Body JsonArray jsonArray);
 
-    @POST("api/Buyer/SellerProfile/AddCartItem")
+    @POST("api/Buyer/SellerProductDetail/AddCartItem/")
     Call<AddCartItemModel> AddCartItem(@Body ItemAddModel itemAddModel);
+
+
+    @POST("api/buyer/Profile/UpdateUserDetail")
+    Call<Boolean> UpdateUserDetail(@Body JsonObject jsonObject );
+
+    @GET("api/buyer/Profile/MakeDefaultAddress/{MakeDefaultAddress}")
+    Call<Boolean> MakeDefaultAddress(@Path("MakeDefaultAddress") int UserDetailId);
+
+
+    @POST("api/buyer/Profile/UpdateUserLocation")
+    Call<Boolean> UpdateUserLocation(@Body ArrayList<UserLocationModel> locationModels);
+
+    @POST("api/buyer/Profile/ChangePassword")
+    Call<Boolean> ChangePassword(@Body ChangePasswordRequestModel passwordRequestModel);
+
+    @POST("api/buyer/MyOrder/GetOrderMaster")
+    Call<ArrayList<MyOrderModel>> GetOrderMaster(@Body MyOrderRequestModel myOrderRequestModel);
 
 
 

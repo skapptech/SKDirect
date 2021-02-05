@@ -39,6 +39,27 @@ public class UserLocationModel implements Serializable {
     @SerializedName("UserDetailId")
     private int UserDetailId;
 
+    boolean isSelected = false;
+
+    public UserLocationModel(boolean isRegistrationComplete, String city, String state, String pincode, double longitude, double latitiute, boolean isDelete, boolean isActive, int id, boolean isPrimaryAddress, String locationType, int pinCodeMasterId, String addressThree, String addressTwo, String addressOne, int userDetailId) {
+        IsRegistrationComplete = isRegistrationComplete;
+        City = city;
+        State = state;
+        Pincode = pincode;
+        Longitude = longitude;
+        Latitiute = latitiute;
+        IsDelete = isDelete;
+        IsActive = isActive;
+        Id = id;
+        IsPrimaryAddress = isPrimaryAddress;
+        LocationType = locationType;
+        PinCodeMasterId = pinCodeMasterId;
+        AddressThree = addressThree;
+        AddressTwo = addressTwo;
+        AddressOne = addressOne;
+        UserDetailId = userDetailId;
+    }
+
     public boolean isRegistrationComplete() {
         return IsRegistrationComplete;
     }
@@ -165,5 +186,13 @@ public class UserLocationModel implements Serializable {
 
     public void setUserDetailId(int userDetailId) {
         UserDetailId = userDetailId;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

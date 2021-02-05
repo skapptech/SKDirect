@@ -63,6 +63,7 @@
                         android:layout_weight="1"
                         android:padding="2dp"
                         android:text=""
+                        android:visibility="gone"
                         android:textColor="@color/grid_divder"
                         android:textSize="15dp"
                         android:textStyle="bold" />
@@ -73,6 +74,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="2dp"
+                        android:visibility="gone"
                         android:text=""
                         android:textColor="@color/seller_button_color"
                         android:textSize="15dp"
@@ -114,6 +116,7 @@
                             android:layout_toLeftOf="@+id/RLAddCartLayout"
                             android:padding="2dp"
                             android:text=""
+                            android:visibility="gone"
                             android:textColor="@color/black"
                             android:textSize="15dp" />
 
@@ -128,6 +131,7 @@
                         android:layout_centerVertical="true"
                         android:background="@drawable/rounded_drawer"
                         android:text="ADD"
+                        android:visibility="gone"
                         android:textColor="@color/seller_button_color"
                         android:textSize="10sp"
                         android:textStyle="normal" />

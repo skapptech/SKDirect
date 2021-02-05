@@ -1,7 +1,9 @@
 package com.skdirect.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
+import com.skdirect.activity.SearchActivity;
+import com.skdirect.activity.SellerProfileActivity;
 import com.skdirect.databinding.ItemCategoriesBinding;
 import com.skdirect.databinding.ItemSearchBinding;
 import com.skdirect.model.AllCategoriesModel;
@@ -41,15 +45,25 @@ public class SearchDataAdapter extends RecyclerView.Adapter<SearchDataAdapter.Vi
         holder.mBinding.tvSaller.setText(model.getShopName());
         holder.mBinding.tvCityName.setText(model.getCityName()+" - "+ model.getPinCode());
 
-        if (model.getImagePath()!=null){
-            Picasso.get().load(BuildConfig.apiEndpoint+model.getImagePath()).into(holder.mBinding.imItemImage);
+        if (model.getDistance()!=0.0) {
+            holder.mBinding.tvLocatin.setText(String.format("%.2f", model.getDistance()) + " " + "Km");
         }else {
-            Picasso.get()
-                    .load(R.drawable.ic_top_seller)
-                    .placeholder(R.drawable.ic_top_seller)
-                    .error(R.drawable.ic_top_seller)
-                    .into(holder.mBinding.imItemImage);
+            holder.mBinding.tvLocatin.setText("");
         }
+
+        if (model.getImagePath()!=null && !model.getImagePath().contains("http")) {
+            Picasso.get().load(BuildConfig.apiEndpoint+model.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.imItemImage);
+        }else {
+            Picasso.get().load(model.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.imItemImage);
+        }
+
+
+       /* holder.mBinding.tvViewMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(context, SellerProfileActivity.class).putExtra("ID",String.valueOf(model.getProductList().get(0).getSellerId())));
+            }
+        });*/
 
 
         SearchItemAdapter searchDataAdapter = new SearchItemAdapter(context, model.getProductList());

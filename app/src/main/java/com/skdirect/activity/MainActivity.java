@@ -32,16 +32,13 @@ import com.skdirect.databinding.ActivityMainBinding;
 import com.skdirect.fragment.BasketFragment;
 import com.skdirect.fragment.HomeFragment;
 import com.skdirect.fragment.MyOrderFragment;
-import com.skdirect.fragment.ProfileFragment;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.utils.AppSignatureHelper;
 import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.MainActivityViewMode;
-import com.skdirect.viewmodel.ProductDetailsViewMode;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -119,11 +116,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case R.id.nav_profile:
                     positionChanged = true;
-                    openFragment(new ProfileFragment());
+                    startActivity(new Intent(MainActivity.this,ProfileActivity.class));
                     break;
                 case R.id.nav_my_order:
                     positionChanged = true;
-                    openFragment(new MyOrderFragment());
+                    startActivity(new Intent(MainActivity.this,MyOrderActivity.class));
                     break;
                 case R.id.nav_basket:
                     positionChanged = true;
@@ -188,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_profile:
-                Utils.setToast(getApplicationContext(), "Profile");
+                startActivity(new Intent(MainActivity.this,ProfileActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
 

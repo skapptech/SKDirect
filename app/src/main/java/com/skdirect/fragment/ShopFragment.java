@@ -40,6 +40,7 @@ public class ShopFragment extends Fragment {
     private String searchSellerName;
     private SellerShopListAdapter sellerShopListAdapter;
     private final ArrayList<TopSellerModel> sallerShopList = new ArrayList<>();
+    private int cateogryId;
 
 
     @Override
@@ -49,8 +50,9 @@ public class ShopFragment extends Fragment {
 
     }
     @SuppressLint("ValidFragment")
-    public ShopFragment(String searchSellName) {
+    public ShopFragment(String searchSellName, int allCategoriesID) {
         searchSellerName = searchSellName;
+        cateogryId = allCategoriesID;
     }
 
     @Override
@@ -113,12 +115,12 @@ public class ShopFragment extends Fragment {
     }
 
     private void getShopData() {
-        searchViewMode.getShopDataViewModelRequest(skipCount, takeCount, searchSellerName);
+        searchViewMode.getShopDataViewModelRequest(skipCount, takeCount, searchSellerName,cateogryId);
         searchViewMode.getShopDataViewModel().observe(this, new Observer<ArrayList<TopSellerModel>>() {
             @Override
             public void onChanged(ArrayList<TopSellerModel> topSellerModels) {
                 Utils.hideProgressDialog();
-                if (topSellerModels.size() > 0) {
+                if (topSellerModels!=null && topSellerModels.size() > 0) {
                     mBinding.rvSearch.post(new Runnable() {
                         public void run() {
                             sallerShopList.addAll(topSellerModels);
@@ -126,7 +128,6 @@ public class ShopFragment extends Fragment {
                             loading = true;
                         }
                     });
-
                 } else {
                     loading = false;
                     mBinding.rvSearch.setVisibility(View.GONE);

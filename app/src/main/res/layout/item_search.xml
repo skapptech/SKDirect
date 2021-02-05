@@ -55,6 +55,18 @@
                     android:textSize="14dp"
                     android:textStyle="normal" />
 
+                <TextView
+                    android:id="@+id/tv_locatin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:maxLines="3"
+                    android:padding="2dp"
+                    android:text="bhagwan"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal" />
+
             </LinearLayout>
 
 
@@ -76,6 +88,7 @@
 
 
         <TextView
+            android:id="@+id/tv_view_more"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"

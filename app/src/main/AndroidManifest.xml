@@ -18,6 +18,7 @@
         android:allowBackup="true"
         android:allowClearUserData="false"
         android:fitsSystemWindows="true"
+        android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
@@ -77,6 +78,28 @@
 
         <activity
             android:name=".activity.ProductDetailsActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ProfilePrimaryAddressActivity"
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name=".activity.ChangePasswordActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.MyOrderActivity"
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.UpdateProfileActivity"
             android:screenOrientation="portrait" />
 
         <activity

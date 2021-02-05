@@ -41,7 +41,8 @@ public class TopNearByItemAdapter extends RecyclerView.Adapter<TopNearByItemAdap
         TopNearByItemModel topNearByItemModel = topNearByItemList.get(position);
         holder.mBinding.tvItemName.setText(topNearByItemModel.getProductName());
         holder.mBinding.tvItemPrice.setText("MRP "+String.valueOf(topNearByItemModel.getMrp()));
-        if (topNearByItemModel.getImagePath()!=null && !topNearByItemModel.getImagePath().contains("http")) {
+
+        if(topNearByItemModel.getImagePath()!=null && !topNearByItemModel.getImagePath().contains("http")) {
             Picasso.get().load(BuildConfig.apiEndpoint+topNearByItemModel.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.ivImage);
         }else {
             Picasso.get().load(topNearByItemModel.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.ivImage);

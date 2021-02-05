@@ -1,7 +1,9 @@
 package com.skdirect.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -9,6 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.R;
+import com.skdirect.activity.SearchActivity;
 import com.skdirect.databinding.ItemAllCategoriesBinding;
 import com.skdirect.databinding.ItemCategoriesBinding;
 import com.skdirect.model.AllCategoriesModel;
@@ -46,6 +49,14 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
                     .error(R.drawable.ic_lost_items)
                     .into(holder.mBinding.imItemImage);
         }
+        holder.mBinding.LLMainCat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(context, SearchActivity.class).putExtra("CateogryId",allCategoriesModel.getId()).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
+
+
     }
 
     @Override

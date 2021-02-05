@@ -220,23 +220,40 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(CustomerDataModel customerDataModel) {
                 Utils.hideProgressDialog();
-                if (customerDataModel!=null){
+                if (customerDataModel!=null) {
                     activity.userNameTV.setText(customerDataModel.getFirstName());
                     activity.mobileNumberTV.setText(customerDataModel.getMobileNo());
 
                     SharePrefs.getInstance(activity).putString(SharePrefs.FIRST_NAME, customerDataModel.getFirstName());
+                    SharePrefs.getInstance(activity).putString(SharePrefs.MIDDLE_NAME, customerDataModel.getMiddleName());
+                    SharePrefs.getInstance(activity).putString(SharePrefs.USER_NAME, customerDataModel.getUserName());
+                    SharePrefs.getInstance(activity).putString(SharePrefs.LAST_NAME, customerDataModel.getLastName());
+                    SharePrefs.getInstance(activity).putString(SharePrefs.USER_ID, customerDataModel.getUserId());
                     SharePrefs.getInstance(activity).putInt(SharePrefs.ID, customerDataModel.getId());
+                    SharePrefs.getInstance(activity).putString(SharePrefs.ENCRIPTED_ID, customerDataModel.getEncryptedId());
                     SharePrefs.getInstance(activity).putString(SharePrefs.MOBILE_NUMBER, customerDataModel.getMobileNo());
                     SharePrefs.getInstance(activity).putString(SharePrefs.SHOP_NAME, customerDataModel.getShopName());
                     SharePrefs.getInstance(activity).putString(SharePrefs.EMAIL_ID, customerDataModel.getEmail());
                     SharePrefs.getInstance(activity).putString(SharePrefs.STATE, customerDataModel.getState());
                     SharePrefs.getInstance(activity).putString(SharePrefs.CITYNAME, customerDataModel.getCity());
                     SharePrefs.getInstance(activity).putString(SharePrefs.PIN_CODE, customerDataModel.getPincode());
+                    SharePrefs.getInstance(activity).putString(SharePrefs.IMAGE_PATH, customerDataModel.getImagePath());
+                    SharePrefs.getInstance(activity).putInt(SharePrefs.PIN_CODE_master, customerDataModel.getPinCodeMasterId());
                     SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_ACTIVE, customerDataModel.isActive());
                     SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_DELETE, customerDataModel.isDelete());
                     SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE, customerDataModel.isRegistrationComplete());
-                }
 
+                    if (customerDataModel.getUserDeliveryDC() != null && customerDataModel.getUserDeliveryDC().size() > 0) {
+                        for (int i = 0; i < customerDataModel.getUserDeliveryDC().size(); i++) {
+                            SharePrefs.getInstance(activity).putBoolean(SharePrefs.USER_IS_DELETE, customerDataModel.getUserDeliveryDC().get(i).isDelete());
+                            SharePrefs.getInstance(activity).putBoolean(SharePrefs.USER_IS_ACTIVE, customerDataModel.getUserDeliveryDC().get(i).isActive());
+                            SharePrefs.getInstance(activity).putInt(SharePrefs.USER_DC_ID, customerDataModel.getUserDeliveryDC().get(i).getId());
+                            SharePrefs.getInstance(activity).putInt(SharePrefs.USER_DC_USER_ID, customerDataModel.getUserDeliveryDC().get(i).getUserId());
+                            SharePrefs.getInstance(activity).putString(SharePrefs.DELIVERY, customerDataModel.getUserDeliveryDC().get(i).getDelivery());
+
+                        }
+                    }
+                }
             }
         });
 

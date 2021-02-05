@@ -51,9 +51,10 @@ public class PrimaryAddressActivity extends AppCompatActivity implements View.On
 
     private void initView() {
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
+        mBinding.toolbarTittle.tvTittle.setText("Address");
         mBinding.btSelectedProcess.setOnClickListener(this);
         mBinding.btAddNewAddresh.setOnClickListener(this);
-        mBinding.toolbarTittle.tvTittle.setText("Address");
+
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         mBinding.rvUserLocation.setLayoutManager(layoutManager);
@@ -99,7 +100,7 @@ public class PrimaryAddressActivity extends AppCompatActivity implements View.On
                         locationModelArrayList.addAll(locationModel);
                         int position = 0;
                         for (int i = 0; i < locationModelArrayList.size(); i++) {
-                            if (locationModelArrayList.get(i).getId() == userLocationId) {
+                            if (locationModelArrayList.get(i).isPrimaryAddress()) {
                                 position = i;
                                 break;
                             }

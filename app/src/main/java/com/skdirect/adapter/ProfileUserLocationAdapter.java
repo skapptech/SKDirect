@@ -1,0 +1,128 @@
+package com.skdirect.adapter;
+
+import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.PopupMenu;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.skdirect.R;
+import com.skdirect.activity.NewAddressActivity;
+import com.skdirect.databinding.ItemProfileUserLocationBinding;
+import com.skdirect.interfacee.MakeDefaultInterface;
+import com.skdirect.model.UserLocationModel;
+
+import java.util.ArrayList;
+
+public class ProfileUserLocationAdapter extends RecyclerView.Adapter<ProfileUserLocationAdapter.ViewHolder> {
+
+    private final Context context;
+    private final ArrayList<UserLocationModel> locationModelList;
+    public int selectedPosition = 0;
+    private MakeDefaultInterface makeDefaultInterface;
+
+    public ProfileUserLocationAdapter(Context context, ArrayList<UserLocationModel> locationModels, int position, MakeDefaultInterface defaultInterface) {
+        this.context = context;
+        this.locationModelList = locationModels;
+        selectedPosition = position;
+        makeDefaultInterface = defaultInterface;
+    }
+
+    @NonNull
+    @Override
+    public ProfileUserLocationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.item_profile_user_location, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ProfileUserLocationAdapter.ViewHolder holder, int position) {
+        UserLocationModel userLocationModel = locationModelList.get(position);
+        holder.mBinding.imgVerified.setChecked(selectedPosition == position);
+
+        if (selectedPosition == position) {
+            holder.mBinding.imgVerified.setVisibility(View.VISIBLE);
+            holder.mBinding.imgVerified.setBackground(context.getResources().getDrawable(R.drawable.correct));
+        } else {
+            holder.mBinding.imgVerified.setVisibility(View.INVISIBLE);
+            holder.mBinding.imgVerified.setBackground(context.getResources().getDrawable(R.drawable.ic_right));
+        }
+
+        holder.mBinding.tvShopName.setText(userLocationModel.getAddressOne());
+        holder.mBinding.tvAddresh.setText(userLocationModel.getAddressTwo());
+        holder.mBinding.tvAddreshTree.setText(userLocationModel.getAddressThree());
+        holder.mBinding.tvCityName.setText(userLocationModel.getCity() + " - " + userLocationModel.getPincode() + " (" + userLocationModel.getState() + ")");
+
+
+        holder.mBinding.ivOpcationValue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenuView(holder,userLocationModel,position);
+            }
+        });
+
+
+    }
+
+    private void PopupMenuView(ViewHolder holder, UserLocationModel userLocationModel, int position) {
+        PopupMenu popup = new PopupMenu(context,holder.mBinding.ivOpcationValue);
+        popup.inflate(R.menu.options_menu);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_make_defult:
+                        makeDefaultInterface.defaultOnClick(userLocationModel,position);
+                        return true;
+                    case R.id.menu_edit:
+                        editAdddressView();
+                        return true;
+                    case R.id.menu_delet:
+                        makeDefaultInterface.deleteLocationClick(userLocationModel);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+
+        popup.show();
+    }
+
+    private void editAdddressView() {
+        context.startActivity(new Intent(context, NewAddressActivity.class));
+    }
+
+
+    @Override
+    public int getItemCount() {
+        return locationModelList == null ? 0 : locationModelList.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        ItemProfileUserLocationBinding mBinding;
+
+        public ViewHolder(ItemProfileUserLocationBinding Binding) {
+            super(Binding.getRoot());
+            this.mBinding = Binding;
+
+            mBinding.imgVerified.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int copyOfLastCheckedPosition = selectedPosition;
+                    selectedPosition = getAdapterPosition();
+                    notifyItemChanged(copyOfLastCheckedPosition);
+                    notifyItemChanged(selectedPosition);
+
+                }
+            });
+        }
+    }
+}

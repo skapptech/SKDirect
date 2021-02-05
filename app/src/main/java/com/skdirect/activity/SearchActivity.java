@@ -22,6 +22,7 @@ import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ON
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivitySearchBinding mBinding;
     private String searchSellerName;
+    private int allCategoriesID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     public void getIntentData() {
         searchSellerName = getIntent().getStringExtra("searchSellerName");
+        allCategoriesID = getIntent().getIntExtra("CateogryId",0);
         mBinding.etSearchSeller.setText(searchSellerName);
         mBinding.tabs.setupWithViewPager(mBinding.viewpager);
     }
@@ -42,15 +44,11 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        adapter.addFragment(new ProductFragment(searchSellerName), "Product");
-        adapter.addFragment(new ShopFragment(searchSellerName), "Shop");
+        adapter.addFragment(new ProductFragment(searchSellerName,allCategoriesID), "Product");
+        adapter.addFragment(new ShopFragment(searchSellerName,allCategoriesID), "Shop");
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(2);
-
     }
-
-
-
 
     private void initView() {
         mBinding.toolbarTittle.tvTittle.setText("Product List");

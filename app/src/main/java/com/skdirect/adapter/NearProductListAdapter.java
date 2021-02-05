@@ -1,7 +1,9 @@
 package com.skdirect.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
+import com.skdirect.activity.ProductDetailsActivity;
+import com.skdirect.activity.SellerProfileActivity;
 import com.skdirect.databinding.ItemAllCategoriesBinding;
 import com.skdirect.databinding.ItemNearProductListBinding;
 import com.skdirect.model.AllCategoriesModel;
@@ -48,6 +52,17 @@ public class NearProductListAdapter extends RecyclerView.Adapter<NearProductList
         }else {
             Picasso.get().load(nearProductListModel.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.imItemImage);
         }
+
+        holder.mBinding.tvNearByViewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent menuIntent = new Intent(context, ProductDetailsActivity.class);
+                menuIntent.putExtra("ID",nearProductListModel.getId());
+                menuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(menuIntent);
+
+            }
+        });
 
 
 

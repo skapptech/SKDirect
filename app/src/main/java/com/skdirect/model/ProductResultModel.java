@@ -37,7 +37,7 @@ public class ProductResultModel {
     @SerializedName("UomValue")
     public String UomValue;
     @SerializedName("Uom")
-    public int Uom;
+    public String Uom;
     @SerializedName("Tax")
     public double Tax;
     @SerializedName("TaxGroupId")
@@ -66,6 +66,17 @@ public class ProductResultModel {
     public int ProductMasterId;
     @SerializedName("Id")
     public int Id;
+
+    @SerializedName("ShopName")
+    public String ShopName;
+
+    public String getShopName() {
+        return ShopName;
+    }
+
+    public void setShopName(String shopName) {
+        ShopName = shopName;
+    }
 
     public ArrayList<ImageListModel> getImageList() {
         return ImageList;
@@ -187,11 +198,11 @@ public class ProductResultModel {
         UomValue = uomValue;
     }
 
-    public int getUom() {
+    public String getUom() {
         return Uom;
     }
 
-    public void setUom(int uom) {
+    public void setUom(String uom) {
         Uom = uom;
     }
 

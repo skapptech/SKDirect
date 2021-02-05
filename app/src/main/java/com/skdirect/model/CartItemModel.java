@@ -144,7 +144,7 @@ public class CartItemModel implements Serializable {
         private ArrayList<String> ShoppingCartVariantAtrribute;
 
         @SerializedName("TotalMrp")
-        private int TotalMrp;
+        private double TotalMrp;
 
         @SerializedName("ShopName")
         private String ShopName;
@@ -177,7 +177,7 @@ public class CartItemModel implements Serializable {
         private int TotalDiscount;
 
         @SerializedName("TotalSaving")
-        private int TotalSaving;
+        private double TotalSaving;
 
         @SerializedName("IsDelete")
         private boolean IsDelete;
@@ -186,10 +186,10 @@ public class CartItemModel implements Serializable {
         private double OffPercentage;
 
         @SerializedName("TotalPrice")
-        private int TotalPrice;
+        private double TotalPrice;
 
         @SerializedName("price")
-        private int price;
+        private double price;
 
         @SerializedName("Quantity")
         private int Quantity;
@@ -221,7 +221,7 @@ public class CartItemModel implements Serializable {
         @SerializedName("Id")
         private int Id;
 
-        public CartModel(ArrayList<String> shoppingCartVariantAtrribute, int totalMrp, String shopName, boolean isActive, boolean isStockRequired, int stock, int measurement, String uom, String imagePath, int totalDiscountAmount, String productName, int totalDiscount, int totalSaving, boolean isDelete, int offPercentage, int totalPrice, int price, int quantity, int createdBy, String createdDate, int sellerId, int buyerId, int productMasterId, double margin, double mrp, int MOQ, int id) {
+        public CartModel(ArrayList<String> shoppingCartVariantAtrribute, double totalMrp, String shopName, boolean isActive, boolean isStockRequired, int stock, int measurement, String uom, String imagePath, int totalDiscountAmount, String productName, int totalDiscount, int totalSaving, boolean isDelete, double offPercentage, int totalPrice, int price, int quantity, int createdBy, String createdDate, int sellerId, int buyerId, int productMasterId, double margin, double mrp, int MOQ, int id) {
             ShoppingCartVariantAtrribute = shoppingCartVariantAtrribute;
             TotalMrp = totalMrp;
             ShopName = shopName;
@@ -261,7 +261,7 @@ public class CartItemModel implements Serializable {
             ShoppingCartVariantAtrribute = shoppingCartVariantAtrribute;
         }
 
-        public int getTotalMrp() {
+        public double getTotalMrp() {
             return TotalMrp;
         }
 
@@ -349,11 +349,11 @@ public class CartItemModel implements Serializable {
             TotalDiscount = totalDiscount;
         }
 
-        public int getTotalSaving() {
+        public double getTotalSaving() {
             return TotalSaving;
         }
 
-        public void setTotalSaving(int totalSaving) {
+        public void setTotalSaving(double totalSaving) {
             TotalSaving = totalSaving;
         }
 
@@ -373,19 +373,19 @@ public class CartItemModel implements Serializable {
             OffPercentage = offPercentage;
         }
 
-        public int getTotalPrice() {
+        public double getTotalPrice() {
             return TotalPrice;
         }
 
-        public void setTotalPrice(int totalPrice) {
+        public void setTotalPrice(double totalPrice) {
             TotalPrice = totalPrice;
         }
 
-        public int getPrice() {
+        public double getPrice() {
             return price;
         }
 
-        public void setPrice(int price) {
+        public void setPrice(double price) {
             this.price = price;
         }
 

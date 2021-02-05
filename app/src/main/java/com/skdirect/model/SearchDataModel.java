@@ -147,6 +147,12 @@ public class SearchDataModel {
         private String StateName;
         @SerializedName("Rating")
         private int Rating;
+
+        @SerializedName("Distance")
+        private double Distance;
+
+
+
         ArrayList<TableOneModel> productList;
 
 
@@ -232,6 +238,13 @@ public class SearchDataModel {
 
         public ArrayList<TableOneModel> getProductList() {
             return productList;
+        }
+        public double getDistance() {
+            return Distance;
+        }
+
+        public void setDistance(double distance) {
+            Distance = distance;
         }
 
         public void setProductList(ArrayList<TableOneModel> productList) {

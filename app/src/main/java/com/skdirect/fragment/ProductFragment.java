@@ -40,11 +40,13 @@ public class ProductFragment extends Fragment {
     private boolean loading = true;
     private SearchDataAdapter searchDataAdapter;
     private String searchSellerName;
+    private int cateogryId;
 
 
     @SuppressLint("ValidFragment")
-    public ProductFragment(String searchSellName) {
+    public ProductFragment(String searchSellName, int allCategoriesID) {
         searchSellerName = searchSellName;
+        cateogryId = allCategoriesID;
     }
 
 
@@ -122,13 +124,13 @@ public class ProductFragment extends Fragment {
     }
 
     private void getSearchData(String searchSellerNam) {
-        SearchRequestModel searchRequestModel = new SearchRequestModel(0, 0, 0, skipCount, takeCount, 0.0, 0.0, "", "", "", 0, searchSellerNam);
+        SearchRequestModel searchRequestModel = new SearchRequestModel(0, 0, 0, skipCount, takeCount, 0.0, 0.0, "", "", "", 0, searchSellerNam,cateogryId);
         searchViewMode.getSearchRequest(searchRequestModel);
         searchViewMode.getSearchViewModel().observe(this, new Observer<SearchDataModel>() {
             @Override
             public void onChanged(SearchDataModel searchDataList) {
                 Utils.hideProgressDialog();
-                if (searchDataList != null) {
+                if (searchDataList != null &&searchDataList.getTableOneModels()!=null &&searchDataList.getTableTwoModels()!=null) {
                     if (searchDataList.getTableOneModels().size() > 0) {
                         ArrayList<SearchDataModel.TableOneTwo> itemList = searchDataList.getTableTwoModels();
                         for (int i = 0; i < itemList.size(); i++) {
@@ -154,6 +156,9 @@ public class ProductFragment extends Fragment {
                         mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
                         mBinding.rvSearch.setVisibility(View.GONE);
                     }
+                }else {
+                    mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
+                    mBinding.rvSearch.setVisibility(View.GONE);
                 }
             }
         });

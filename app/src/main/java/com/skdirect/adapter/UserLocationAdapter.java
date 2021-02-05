@@ -40,12 +40,11 @@ public class UserLocationAdapter extends RecyclerView.Adapter<UserLocationAdapte
         holder.mBinding.imgVerified.setChecked(selectedPosition == position);
 
         if (selectedPosition == position) {
-            holder.itemView.setSelected(true); //using selector drawable
             holder.mBinding.imgVerified.setBackground(context.getResources().getDrawable(R.drawable.correct));
         } else {
-            holder.itemView.setSelected(false);
             holder.mBinding.imgVerified.setBackground(context.getResources().getDrawable(R.drawable.ic_right));
         }
+
 
        /* if (userLocationModel.isPrimaryAddress()){
             holder.mBinding.imgVerified.setBackground(context.getResources().getDrawable(R.drawable.correct));
@@ -65,7 +64,6 @@ public class UserLocationAdapter extends RecyclerView.Adapter<UserLocationAdapte
 
 
     public UserLocationModel getSelectedData() {
-
         return locationModelList.get(selectedPosition);
     }
 

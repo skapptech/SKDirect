@@ -2,6 +2,7 @@ package com.skdirect.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ public class DeliveryOptionAdapter extends RecyclerView.Adapter<DeliveryOptionAd
 
     private Context context;
     private ArrayList<DeliveryOptionModel>deliveryOptionList;
+    public int selectedPosition = 0;
 
     public DeliveryOptionAdapter(Context context, ArrayList<DeliveryOptionModel>deliveryOptionList) {
         this.context = context;
@@ -38,6 +40,14 @@ public class DeliveryOptionAdapter extends RecyclerView.Adapter<DeliveryOptionAd
     public void onBindViewHolder(@NonNull DeliveryOptionAdapter.ViewHolder holder, int position) {
         DeliveryOptionModel deliveryOptionModel = deliveryOptionList.get(position);
         holder.mBinding.tvDeliveryOption.setText(deliveryOptionModel.getDelivery());
+        holder.mBinding.ivSelectOpction.setChecked(position == selectedPosition);
+
+        if (selectedPosition == position) {
+            holder.mBinding.ivSelectOpction.setBackground(context.getResources().getDrawable(R.drawable.correct));
+        } else {
+            holder.mBinding.ivSelectOpction.setBackground(context.getResources().getDrawable(R.drawable.ic_right));
+        }
+
     }
 
     @Override
@@ -51,6 +61,17 @@ public class DeliveryOptionAdapter extends RecyclerView.Adapter<DeliveryOptionAd
         public ViewHolder(ItemDeliveryOptionBinding Binding) {
             super(Binding.getRoot());
             this.mBinding = Binding;
+
+            mBinding.ivSelectOpction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int copyOfLastCheckedPosition = selectedPosition;
+                    selectedPosition = getAdapterPosition();
+                    notifyItemChanged(copyOfLastCheckedPosition);
+                    notifyItemChanged(selectedPosition);
+
+                }
+            });
         }
     }
 }

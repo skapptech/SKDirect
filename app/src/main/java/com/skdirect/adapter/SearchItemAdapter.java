@@ -53,21 +53,17 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         DecimalFormat precision = new DecimalFormat("0.00");
         holder.mBinding.tvPriceOff.setText(precision.format(offPersentagePrice*100));
 
-
-        if (model.getImagePath()!=null){
-            Picasso.get().load(BuildConfig.apiEndpoint+model.getImagePath()).into(holder.mBinding.ivItemImage);
+        if (model.getImagePath()!=null && !model.getImagePath().contains("http")) {
+            Picasso.get().load(BuildConfig.apiEndpoint+model.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.ivItemImage);
         }else {
-            Picasso.get()
-                    .load(R.drawable.ic_top_seller)
-                    .placeholder(R.drawable.ic_top_seller)
-                    .error(R.drawable.ic_top_seller)
-                    .into(holder.mBinding.ivItemImage);
+            Picasso.get().load(model.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.ivItemImage);
         }
+
 
         holder.mBinding.btAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID",model.getId()));
+                context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID",model.getId()).putExtra("SellerId",model.getSellerId()));
 
             }
         });
