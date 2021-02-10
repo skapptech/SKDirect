@@ -115,20 +115,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
                     }
                     firebaseToken = task.getResult();
                 });
-
-       /* mBinding.refreshLayout.setOnRefreshListener(() -> webView.reload()
-        );
-
-        webView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged() {
-                if (webView.getScrollY() == 0) {
-                    mBinding.refreshLayout.setEnabled(true);
-                } else {
-                    mBinding.refreshLayout.setEnabled(false);
-                }
-            }
-        });*/
     }
 
     private void initViews() {
@@ -173,23 +159,12 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             @Override
             public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
                 super.doUpdateVisitedHistory(view, url, isReload);
-                //Log.e("PAGE HISTORY: ", view.getUrl());
-               /* if (view.getUrl().equalsIgnoreCase("https://skdirectbuyer.shopkirana.in/ui/app-home/1")) {
-                    SharePrefs.getInstance(activity).putString(SharePrefs.LAST_VISITED_PAGE, "");
-                } else {
-                    SharePrefs.getInstance(activity).putString(SharePrefs.LAST_VISITED_PAGE, view.getUrl());
-                }*/
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 mBinding.pBar.setVisibility(View.GONE);
-               /* if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
-                    SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL, url);
-                } else {
-                    SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL, url);
-                }*/
             }
 
             @Override
@@ -210,11 +185,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
-               /* if (newProgress == 100) {
-                    mBinding.pBar.setVisibility(View.GONE);
-                } else {
-                    mBinding.pBar.setVisibility(View.VISIBLE);
-                }*/
             }
 
             public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> filePath, WebChromeClient.FileChooserParams fileChooserParams) {
