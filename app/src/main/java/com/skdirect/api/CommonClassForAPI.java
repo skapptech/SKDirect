@@ -63,8 +63,8 @@ public class CommonClassForAPI {
                 });
     }
 
-    public void getUpdateToken(final DisposableObserver observer,UpdateTokenModel updateTokenModel,String token) {
-        RestClient.getInstance().getService().getUpdateToken(updateTokenModel,token)
+    public void getUpdateToken(final DisposableObserver observer,UpdateTokenModel updateTokenModel) {
+        RestClient.getInstance().getService().getUpdateToken(updateTokenModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JsonObject>() {

@@ -60,7 +60,7 @@ public interface APIServices {
     Call<AppVersionModel> getAppversion();
 
     @POST("api/Notification/UpdateFcmId")
-    Observable<JsonObject> getUpdateToken(@Body UpdateTokenModel updateTokenModel, @Header("authorization") String token);
+    Observable<JsonObject> getUpdateToken(@Body UpdateTokenModel updateTokenModel);
 
     @GET("api/Buyer/Registration/GenerateOtp/{GenerateOtp}")
     Call<LoginResponseModel> GenerateOtp(@Path("GenerateOtp") String GenerateOtp);
