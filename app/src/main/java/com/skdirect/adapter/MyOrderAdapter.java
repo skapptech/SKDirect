@@ -1,6 +1,7 @@
 package com.skdirect.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
+import com.skdirect.activity.OrderDetailActivity;
+import com.skdirect.activity.ReviewActivity;
 import com.skdirect.databinding.ItemMyOrderBinding;
 import com.skdirect.model.MyOrderModel;
 import com.skdirect.utils.Utils;
@@ -51,13 +54,43 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
             Picasso.get().load(myOrderModel.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.imItemImage);
         }
 
-        if (myOrderModel.getOrderStatus().equals("Delivered")&&myOrderModel.getRating()==0) {
+
+        if (myOrderModel.getOrderStatus().equals("Pending")) {
+            holder.mBinding.tvAddReview.setVisibility(View.GONE);
+            holder.mBinding.ratingbar.setVisibility(View.GONE);
+
+        } else if (myOrderModel.getOrderStatus().equals("Cancelled")) {
+            holder.mBinding.tvAddReview.setVisibility(View.GONE);
+            holder.mBinding.ratingbar.setVisibility(View.GONE);
+
+        } else if (myOrderModel.getOrderStatus().equals("Accepted")) {
+            holder.mBinding.tvAddReview.setVisibility(View.GONE);
+            holder.mBinding.ratingbar.setVisibility(View.GONE);
+
+        } else if (myOrderModel.getOrderStatus().equals("Shipped")) {
+            holder.mBinding.tvAddReview.setVisibility(View.GONE);
+            holder.mBinding.ratingbar.setVisibility(View.GONE);
+
+        } else if (myOrderModel.getOrderStatus().equals("Delivered") && myOrderModel.getRating() == 0) {
             holder.mBinding.tvAddReview.setVisibility(View.VISIBLE);
         } else {
             holder.mBinding.ratingbar.setVisibility(View.VISIBLE);
             holder.mBinding.ratingbar.setRating(myOrderModel.getRating());
             holder.mBinding.tvAddReview.setVisibility(View.GONE);
         }
+
+        holder.mBinding.tvAddReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(context, ReviewActivity.class).putExtra("OrderID",myOrderModel.getId()));
+            }
+        });
+        holder.mBinding.LLMainCat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(context, OrderDetailActivity.class).putExtra("myOrderModel",myOrderModel));
+            }
+        });
 
     }
 

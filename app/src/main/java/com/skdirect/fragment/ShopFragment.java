@@ -66,6 +66,8 @@ public class ShopFragment extends Fragment {
         return mBinding.getRoot();
     }
 
+
+
     private void initViews() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         mBinding.rvSearch.setLayoutManager(layoutManager);

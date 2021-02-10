@@ -12,7 +12,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0.2"
+        versionName "1.0.4"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -92,6 +92,7 @@ dependencies {
     implementation 'com.mcxiaoke.viewpagerindicator:library:2.4.1'
     implementation 'com.nabinbhandari.android:permissions:3.8'
     implementation 'com.facebook.shimmer:shimmer:0.5.0@aar'
+
 
 
 }

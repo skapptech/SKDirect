@@ -63,6 +63,32 @@ public class CommonClassForAPI {
                 });
     }
 
+    public void getUpdateToken(final DisposableObserver observer,UpdateTokenModel updateTokenModel,String token) {
+        RestClient.getInstance().getService().getUpdateToken(updateTokenModel,token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JsonObject>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(JsonObject o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
     public void getLogin(final DisposableObserver observer, OtpVerificationModel otpVerificationModel) {
         RestClient.getInstance().getService().getVerfiyOtp(otpVerificationModel)
                 .subscribeOn(Schedulers.io())

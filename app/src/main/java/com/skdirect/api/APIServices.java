@@ -3,6 +3,7 @@ package com.skdirect.api;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.skdirect.model.AddReviewModel;
 import com.skdirect.model.AddViewModel;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.AppVersionModel;
@@ -18,6 +19,8 @@ import com.skdirect.model.MyOrderModel;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.NearProductListModel;
+import com.skdirect.model.OrderDetailsModel;
+import com.skdirect.model.OrderItemModel;
 import com.skdirect.model.OrderPlaceModel;
 import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.OtpResponceModel;
@@ -34,6 +37,7 @@ import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.UpdateTokenModel;
 import com.skdirect.model.UserLocationModel;
+import com.skdirect.viewmodel.ReViewViewMode;
 
 import org.json.JSONArray;
 
@@ -56,7 +60,7 @@ public interface APIServices {
     Call<AppVersionModel> getAppversion();
 
     @POST("api/Notification/UpdateFcmId")
-    Call<JsonObject> getUpdateToken(@Body UpdateTokenModel updateTokenModel, @Header("authorization") String token);
+    Observable<JsonObject> getUpdateToken(@Body UpdateTokenModel updateTokenModel, @Header("authorization") String token);
 
     @GET("api/Buyer/Registration/GenerateOtp/{GenerateOtp}")
     Call<LoginResponseModel> GenerateOtp(@Path("GenerateOtp") String GenerateOtp);
@@ -179,6 +183,20 @@ public interface APIServices {
 
     @POST("api/buyer/MyOrder/GetOrderMaster")
     Call<ArrayList<MyOrderModel>> GetOrderMaster(@Body MyOrderRequestModel myOrderRequestModel);
+
+    @POST("api/buyer/OrderReview/Rating")
+    Call<Boolean> getRating(@Body AddReviewModel reViewViewMode);
+
+    @GET("api/buyer/MyOrder/GetOrderDetailProcess")
+    Call<OrderDetailsModel> GetOrderDetailProcess(@Query("OrderId") int OrderId);
+
+    @GET("api/buyer/MyOrder/GetOrderDetails/{OrderId}")
+    Call<ArrayList<OrderItemModel>> GetOrderDetails(@Query("OrderId") int OrderId);
+
+    @POST("api/buyer/MyOrder/CancelOrder")
+    Call<Boolean> CancelOrder(@Query("OrderId") int OrderId);
+
+
 
 
 

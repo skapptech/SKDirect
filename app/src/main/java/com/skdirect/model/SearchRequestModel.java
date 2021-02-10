@@ -41,9 +41,9 @@ public class SearchRequestModel {
     private String Keyword;
 
     @SerializedName("CateogryId")
-    private int CateogryId;
+    private String CateogryId;
 
-    public SearchRequestModel(int sellerId, int parentProductId, int id, int skip, int take, double latitude, double longitude, String productName, String cateogryName, String brandName, int tagId, String keyword, int cateogryId) {
+    public SearchRequestModel(int sellerId, int parentProductId, int id, int skip, int take, double latitude, double longitude, String productName, String cateogryName, String brandName, int tagId, String keyword, String cateogryId) {
         SellerId = sellerId;
         ParentProductId = parentProductId;
         Id = id;

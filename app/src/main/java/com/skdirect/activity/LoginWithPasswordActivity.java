@@ -6,12 +6,14 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityLoginWithPasswordBinding;
 import com.skdirect.model.LoginWithPasswordModel;
+import com.skdirect.model.UpdateTokenModel;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 
@@ -22,6 +24,7 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
     private String passwordString, mobileNumber;
 
     private CommonClassForAPI commonClassForAPI;
+    private String fcmToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
     }
 
     private void initView() {
+        fcmToken = FirebaseInstanceId.getInstance().getToken();
         commonClassForAPI = CommonClassForAPI.getInstance(this);
         mBinding.btLoddingOtp.setOnClickListener(this);
 
@@ -46,7 +50,7 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_lodding_otp:
-                Utils.hideKeyboard(this,view);
+                Utils.hideKeyboard(this, view);
                 loginWithPassword();
                 break;
         }
@@ -74,39 +78,70 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
         }
     }
 
-        private DisposableObserver<LoginWithPasswordModel> callToken = new DisposableObserver<LoginWithPasswordModel>() {
-            @Override
-            public void onNext(LoginWithPasswordModel model) {
-                try {
-                    Utils.hideProgressDialog();
-                    if (model != null) {
-                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
-                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
-                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE, model.isRegistrationComplete());
-                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.isIscontactRead());
-                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        finish();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Utils.setToast(getApplicationContext(), "Invalid Password");
+    private final DisposableObserver<LoginWithPasswordModel> callToken = new DisposableObserver<LoginWithPasswordModel>() {
+        @Override
+        public void onNext(LoginWithPasswordModel model) {
+            try {
+                Utils.hideProgressDialog();
+                if (model != null) {
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE, model.isRegistrationComplete());
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.isIscontactRead());
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
+                    commonClassForAPI.getUpdateToken(updatecallToken, new UpdateTokenModel(fcmToken), SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.TOKEN));
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Utils.setToast(getApplicationContext(), "Invalid Password");
+
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Utils.setToast(getApplicationContext(), "Invalid Password");
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+            Utils.hideProgressDialog();
+        }
+    };
+
+    private final DisposableObserver<JsonObject> updatecallToken = new DisposableObserver<JsonObject>() {
+        @Override
+        public void onNext(JsonObject model) {
+            try {
+                Utils.hideProgressDialog();
+                if (model != null) {
 
                 }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Utils.setToast(getApplicationContext(), "Invalid Password");
-                Utils.hideProgressDialog();
+            } catch (Exception e) {
                 e.printStackTrace();
+
+
             }
+        }
 
-            @Override
-            public void onComplete() {
-                Utils.hideProgressDialog();
-            }
-        };
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+            Utils.hideProgressDialog();
+        }
+    };
+
+}
 
 
-    }
+
+

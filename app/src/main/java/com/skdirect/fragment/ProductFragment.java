@@ -124,7 +124,7 @@ public class ProductFragment extends Fragment {
     }
 
     private void getSearchData(String searchSellerNam) {
-        SearchRequestModel searchRequestModel = new SearchRequestModel(0, 0, 0, skipCount, takeCount, 0.0, 0.0, "", "", "", 0, searchSellerNam,cateogryId);
+        SearchRequestModel searchRequestModel = new SearchRequestModel(0, 0, 0, skipCount, takeCount, 0.0, 0.0, "", "", "", 0, searchSellerNam,(String.valueOf(cateogryId).equals("0")) ? null : String.valueOf(cateogryId));
         searchViewMode.getSearchRequest(searchRequestModel);
         searchViewMode.getSearchViewModel().observe(this, new Observer<SearchDataModel>() {
             @Override

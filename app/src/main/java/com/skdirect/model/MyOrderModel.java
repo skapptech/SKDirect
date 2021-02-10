@@ -2,7 +2,9 @@ package com.skdirect.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class MyOrderModel {
+import java.io.Serializable;
+
+public class MyOrderModel implements Serializable {
 
 
     @SerializedName("ShopName")

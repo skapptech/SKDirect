@@ -15,6 +15,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.broadcast.SmsBroadcastReceiver;
@@ -24,6 +26,7 @@ import com.skdirect.model.LoginResponseModel;
 import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
+import com.skdirect.model.UpdateTokenModel;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.OTPVerificationViewModel;
@@ -38,7 +41,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     private OTPVerificationViewModel otpVerificationViewModel;
     private CountDownTimer cTimer = null;
     private CommonClassForAPI commonClassForAPI;
-
+    private String fcmToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     private void getIntentData() {
         mobileNumber = getIntent().getStringExtra("MobileNumber");
         latsFiveNumber = mobileNumber.substring(mobileNumber.length()-5);
+        fcmToken = FirebaseInstanceId.getInstance().getToken();
     }
 
     private void initView() {
@@ -244,6 +248,8 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
+                    commonClassForAPI.getUpdateToken(updatecallToken,new UpdateTokenModel(fcmToken),SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.TOKEN));
+
 
                 }
             } catch (Exception e) {
@@ -256,6 +262,34 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
         @Override
         public void onError(Throwable e) {
             Utils.setToast(getApplicationContext(), "Invalid Password");
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+            Utils.hideProgressDialog();
+        }
+    };
+
+
+    private DisposableObserver<JsonObject> updatecallToken = new DisposableObserver<JsonObject>() {
+        @Override
+        public void onNext(JsonObject model) {
+            try {
+                Utils.hideProgressDialog();
+                if (model != null) {
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+
+
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
             Utils.hideProgressDialog();
             e.printStackTrace();
         }

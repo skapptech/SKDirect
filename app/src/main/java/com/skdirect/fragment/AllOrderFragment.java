@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.gson.JsonArray;
 import com.skdirect.R;
@@ -32,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class AllOrderFragment extends Fragment {
+public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
     private MyOrderActivity activity;
     private FragmentAllOrderBinding mBinding;
     private MyOrderViewMode myOrderViewMode;
@@ -80,7 +81,16 @@ public class AllOrderFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onRefresh() {
+        orderModelArrayList.clear();
+        myOrderAdapter = new MyOrderAdapter(activity, orderModelArrayList);
+        mBinding.rMyOrder.setAdapter(myOrderAdapter);
+        callMyOrder();
+    }
+
     private void initialization() {
+        mBinding.swiperefresh.setOnRefreshListener(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, RecyclerView.VERTICAL,false);
         mBinding.rMyOrder.setLayoutManager(layoutManager);
         myOrderAdapter = new MyOrderAdapter(activity, orderModelArrayList);
@@ -129,6 +139,7 @@ public class AllOrderFragment extends Fragment {
         myOrderViewMode.getCategoriesViewModel().observe(this, new Observer<ArrayList<MyOrderModel>>() {
             @Override
             public void onChanged(ArrayList<MyOrderModel> myOrderModels) {
+                mBinding.swiperefresh.setRefreshing(false);
                 mBinding.shimmerViewContainer.stopShimmer();
                 mBinding.shimmerViewContainer.setVisibility(View.GONE);
                 if (myOrderModels!=null && myOrderModels.size()>0){
@@ -143,7 +154,10 @@ public class AllOrderFragment extends Fragment {
                 }else {
                     loading = false;
                 }
+
             }
         });
     }
+
+
 }

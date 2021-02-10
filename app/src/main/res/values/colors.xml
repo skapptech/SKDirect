@@ -16,6 +16,9 @@
     <color name="yellow">#ffeab3</color>
     <color name="grid_divder">#707070</color>
     <color name="red">#ff4433</color>
+    <color name="dark_white">#f8f8f8</color>
+    <color name="vertical_stepper_view_black_38">#343553</color>
+    <color name="vertical_stepper_view_black_87">#343553</color>
 
 
 </resources>
