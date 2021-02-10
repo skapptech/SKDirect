@@ -16,6 +16,7 @@ import com.skdirect.databinding.ActivityOrderDeatilsBinding;
 import com.skdirect.model.MyOrderModel;
 import com.skdirect.model.OrderDetailsModel;
 import com.skdirect.model.OrderItemModel;
+import com.skdirect.model.OrderStatusDC;
 import com.skdirect.stepform.MainStepperAdapter;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.OrderDetailsViewMode;
@@ -28,7 +29,7 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
     private ActivityOrderDeatilsBinding mBinding;
     private MyOrderModel myOrderModel;
     private OrderDetailsViewMode orderDetailsViewMode;
-    private List<OrderDetailsModel.OrderStatusDC> OrderStatusDC = new ArrayList<>();
+    private List<OrderStatusDC> OrderStatusDCList = new ArrayList<>();
     private MainStepperAdapter mainStepperAdapter;
 
 
@@ -93,8 +94,9 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
             public void onChanged(OrderDetailsModel orderDetailsModel) {
                 Utils.hideProgressDialog();
                 if (orderDetailsModel != null) {
-                    OrderStatusDC = orderDetailsModel.getOrderStatusDC();
-                  //  OrderStatusDC.add(OrderStatusDC.get(0).setCreatedDate(orderDetailsModel.getOrderDate()));
+
+                    OrderStatusDCList.add(new OrderStatusDC(orderDetailsModel.getOrderDate(), "Ordered"));
+                    OrderStatusDCList.addAll(orderDetailsModel.getOrderStatusDC());
                     mBinding.tvOrderNumber.setText("Order No :" + orderDetailsModel.getId());
                     mBinding.tvCreatedOrder.setText("Order on " + Utils.getDateFormate(orderDetailsModel.getOrderDate()));
                     mBinding.tvSellerName.setText("Seller: " + orderDetailsModel.getSellerName());
@@ -140,7 +142,7 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
                             mBinding.tvCancleOrder.setVisibility(View.GONE);
                         }
                     }
-                    mainStepperAdapter = new MainStepperAdapter(OrderDetailActivity.this, OrderStatusDC);
+                    mainStepperAdapter = new MainStepperAdapter(OrderDetailActivity.this, OrderStatusDCList);
                     mBinding.stepperList.setAdapter(mainStepperAdapter);
                     setFullHeight();
                 } else {

@@ -53,11 +53,11 @@ public  class OrderDetailsModel {
     @SerializedName("Id")
     private int Id;
 
-    public List<OrderDetailsModel.OrderStatusDC> getOrderStatusDC() {
+    public List<OrderStatusDC> getOrderStatusDC() {
         return OrderStatusDC;
     }
 
-    public void setOrderStatusDC(List<OrderDetailsModel.OrderStatusDC> orderStatusDC) {
+    public void setOrderStatusDC(List<OrderStatusDC> orderStatusDC) {
         OrderStatusDC = orderStatusDC;
     }
 
@@ -237,26 +237,4 @@ public  class OrderDetailsModel {
         Id = id;
     }
 
-    public  class OrderStatusDC {
-        @SerializedName("CreatedDate")
-        private String CreatedDate;
-        @SerializedName("Status")
-        private String Status;
-
-        public String getCreatedDate() {
-            return CreatedDate;
-        }
-
-        public void setCreatedDate(String createdDate) {
-            CreatedDate = createdDate;
-        }
-
-        public String getStatus() {
-            return Status;
-        }
-
-        public void setStatus(String status) {
-            Status = status;
-        }
-    }
 }
