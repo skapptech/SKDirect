@@ -38,6 +38,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="3"
                     android:padding="5dp"
+                    style="@style/font_normal"
                     android:textColor="@color/black"
                     android:textSize="13dp"
                     android:textStyle="bold" />
@@ -48,6 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text=""
+                    style="@style/font_normal_sami_bold"
                     android:padding="3dp"
                     android:textSize="12dp"
                     android:textColor="@color/black"
@@ -58,6 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text=""
+                    style="@style/font_normal_sami_bold"
                     android:textColor="@color/black"
                     android:padding="3dp"
                     android:textSize="12dp"

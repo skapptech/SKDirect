@@ -45,6 +45,7 @@
                         android:layout_toRightOf="@+id/iv_menu"
                         android:background="@drawable/rounded_drawer_loction"
                         android:gravity="center"
+                        style="@style/font_normal"
                         android:layout_marginStart="10dp"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="10dp"

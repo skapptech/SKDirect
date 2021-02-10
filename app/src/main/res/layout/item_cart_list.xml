@@ -38,9 +38,10 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:ellipsize="end"
+                    style="@style/font_normal_sami_bold"
                     android:textColor="@color/black"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    />
 
 
                 <TextView
@@ -50,6 +51,7 @@
                     android:layout_marginTop="5dp"
                     android:padding="2dp"
                     android:text=""
+                    style="@style/font_normal"
                     android:textColor="@color/grid_divder"
                     android:textSize="13dp"
                     android:textStyle="normal" />
@@ -62,6 +64,7 @@
                     android:layout_marginTop="5dp"
                     android:text=""
                     android:padding="2dp"
+                    style="@style/font_normal"
                     android:textColor="@color/black"
                     android:textSize="13dp"
                     android:textStyle="bold" />
@@ -152,6 +155,7 @@
                 android:drawablePadding="5dp"
                 android:layout_centerHorizontal="true"
                 android:text="Remove"
+                style="@style/font_normal_sami_lite"
                 android:textColor="@color/seller_button_color"
                 android:textSize="15dp"
                 android:textStyle="normal" />

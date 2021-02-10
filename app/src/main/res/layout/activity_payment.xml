@@ -18,9 +18,10 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:text="Price Details"
+            style="@style/font_normal"
             android:textColor="@color/black"
             android:textSize="17dp"
-            android:textStyle="bold" />
+           />
 
 
         <RelativeLayout
@@ -40,8 +41,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="Total order Value"
+                    style="@style/font_normal"
                     android:textColor="@color/grid_divder"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:textStyle="normal" />
 
                 <TextView
@@ -49,10 +51,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
+                    style="@style/font_normal"
                     android:text="Total Amount"
                     android:textColor="@color/black"
                     android:textSize="16dp"
-                    android:textStyle="bold" />
+                    />
 
 
             </LinearLayout>
@@ -69,6 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
+                    style="@style/font_normal"
                     android:textColor="@color/grid_divder"
                     android:textSize="16dp"
                     android:textStyle="normal" />
@@ -79,6 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text=""
+                    style="@style/font_normal"
                     android:textColor="@color/black"
                     android:textSize="16dp"
                     android:textStyle="bold" />
@@ -101,6 +106,7 @@
                 android:layout_marginStart="10dp"
                 android:padding="10dp"
                 android:text="Address"
+                style="@style/font_normal"
                 android:textColor="@color/seller_button_color"
                 android:textSize="16dp"
                 android:textStyle="normal" />
@@ -125,7 +131,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text=""
-                    android:textColor="@color/grid_divder"
+                    style="@style/font_normal"
+                    android:textColor="@color/black"
                     android:textSize="16dp"
                     android:textStyle="normal" />
 
@@ -136,6 +143,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:text=""
+                    style="@style/font_normal"
                     android:textColor="@color/grid_divder"
                     android:textSize="16dp"
                     android:textStyle="normal" />
@@ -147,6 +155,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:text=""
+                    style="@style/font_normal"
                     android:textColor="@color/grid_divder"
                     android:textSize="16dp"
                     android:textStyle="normal" />
@@ -158,6 +167,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:text=""
+                    style="@style/font_normal"
                     android:textColor="@color/grid_divder"
                     android:textSize="16dp"
                     android:textStyle="normal" />
@@ -184,6 +194,7 @@
                 android:background="@drawable/rounded_drawer"
                 android:gravity="center"
                 android:text="Change"
+                style="@style/font_normal_sami_bold"
                 android:textColor="@color/seller_button_color"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -204,6 +215,7 @@
                 android:layout_marginStart="10dp"
                 android:padding="10dp"
                 android:text="Payment"
+                style="@style/font_normal"
                 android:textColor="@color/seller_button_color"
                 android:textSize="16dp"
                 android:textStyle="normal" />
@@ -222,10 +234,11 @@
                 android:drawableLeft="@drawable/ic_basket_un"
                 android:drawablePadding="10dp"
                 android:gravity="center"
+                style="@style/font_normal_sami_bold"
                 android:text="Cash on delivery"
                 android:textColor="@color/grid_divder"
                 android:textSize="16dp"
-                android:textStyle="bold" />
+               />
 
             <ImageView
                 android:layout_width="20dp"
@@ -249,6 +262,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:padding="10dp"
+                style="@style/font_normal"
                 android:text="Delivery Option"
                 android:textColor="@color/seller_button_color"
                 android:textSize="16dp"
@@ -301,6 +315,7 @@
                     android:background="@drawable/rounded_drawer"
                     android:gravity="center"
                     android:text="Place Order"
+                    style="@style/font_normal_sami_bold"
                     android:textColor="@color/seller_button_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />

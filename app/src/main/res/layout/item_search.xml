@@ -39,6 +39,7 @@
                     android:maxLines="1"
                     android:padding="5dp"
                     android:text=""
+                    style="@style/font_normal"
                     android:textColor="@color/black"
                     android:textSize="16dp"
                     android:textStyle="bold" />
@@ -51,6 +52,7 @@
                     android:maxLines="3"
                     android:padding="2dp"
                     android:text="bhagwan"
+                    style="@style/font_normal"
                     android:textColor="@color/black"
                     android:textSize="14dp"
                     android:textStyle="normal" />
@@ -63,6 +65,7 @@
                     android:maxLines="3"
                     android:padding="2dp"
                     android:text="bhagwan"
+                    style="@style/font_normal"
                     android:textColor="@color/black"
                     android:textSize="14dp"
                     android:textStyle="normal" />
@@ -92,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:textStyle="bold"
+            style="@style/font_normal_sami_bold"
             android:textSize="15dp"
             android:textColor="@color/seller_button_color"
             android:text="View More"/>

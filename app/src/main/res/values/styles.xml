@@ -26,5 +26,31 @@
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background"> @android:color/transparent</item>
     </style>
+    <style name="Text">Text</style>
+
+    <style name="font_normal" parent="@style/Text">
+        <item name="android:fontFamily">@font/segoeui</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="font_Bold" parent="@style/Text">
+        <item name="android:fontFamily">@font/segoeuib</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="font_normal_lite" parent="@style/Text">
+        <item name="android:fontFamily">@font/segoeuil</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="font_normal_sami_lite" parent="@style/Text">
+        <item name="android:fontFamily">@font/segoeuisl</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="font_normal_sami_bold" parent="@style/Text">
+        <item name="android:fontFamily">@font/seguisb</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
 
 </resources>

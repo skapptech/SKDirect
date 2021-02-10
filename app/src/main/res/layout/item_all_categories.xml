@@ -26,10 +26,11 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
+            style="@style/font_normal_sami_bold"
             android:padding="2dp"
             android:text="bhagwan"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="11sp" />
 
 
     </LinearLayout>

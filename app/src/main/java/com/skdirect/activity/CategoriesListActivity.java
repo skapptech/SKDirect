@@ -59,6 +59,7 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
     private void initView() {
         mBinding.toolbarTittle.tvTittle.setText("Categories List");
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
+        mBinding.shimmerViewContainer.startShimmer();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL,false);
         mBinding.rvCategories.setLayoutManager(layoutManager);
@@ -103,7 +104,6 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
 
     private void callProductList() {
         if (Utils.isNetworkAvailable(getApplicationContext())) {
-            Utils.showProgressDialog(CategoriesListActivity.this);
             getProductListAPI();
         } else {
             Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
@@ -117,7 +117,8 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
         categoriesViewMode.getCategoriesViewModel().observe(this, new Observer<ArrayList<AllCategoriesModel>>() {
             @Override
             public void onChanged(ArrayList<AllCategoriesModel> CategoriesList) {
-                Utils.hideProgressDialog();
+                mBinding.shimmerViewContainer.stopShimmer();
+                mBinding.shimmerViewContainer.setVisibility(View.GONE);
                 if (CategoriesList.size()>0){
 
                     mBinding.rvCategories.post(new Runnable() {

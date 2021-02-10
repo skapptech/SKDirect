@@ -16,6 +16,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
@@ -35,6 +36,7 @@
                         android:drawablePadding="10dp"
                         android:hint="Search seller by name or product"
                         android:imeOptions="actionSearch"
+                        style="@style/font_normal"
                         android:inputType="text"
                         android:maxLines="1"
                         android:padding="8dp"
@@ -55,6 +57,7 @@
                         android:layout_alignParentLeft="true"
                         android:padding="5dp"
                         android:text="Nearby Items"
+                        style="@style/font_normal"
                         android:textColor="@color/seller_button_color"
                         android:textStyle="bold" />
 
@@ -65,6 +68,7 @@
                         android:layout_alignParentRight="true"
                         android:background="@drawable/rounded_drawer"
                         android:padding="5dp"
+                        style="@style/font_normal_sami_bold"
                         android:text="View More"
                         android:textColor="@color/seller_button_color"
                         android:textSize="10sp"
@@ -132,6 +136,7 @@
                         android:layout_alignParentLeft="true"
                         android:padding="5dp"
                         android:text="Nearby Seller"
+                        style="@style/font_normal"
                         android:textColor="@color/seller_button_color"
                         android:textStyle="bold" />
 
@@ -142,6 +147,7 @@
                         android:layout_alignParentRight="true"
                         android:background="@drawable/rounded_drawer"
                         android:padding="5dp"
+                        style="@style/font_normal_sami_bold"
                         android:text="View More"
                         android:textColor="@color/seller_button_color"
                         android:textSize="10sp"
@@ -206,6 +212,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:padding="5dp"
+                        style="@style/font_normal"
                         android:text="All Categories"
                         android:textColor="@color/seller_button_color"
                         android:textStyle="bold" />
@@ -220,6 +227,7 @@
                         android:text="View More"
                         android:textColor="@color/seller_button_color"
                         android:textSize="10sp"
+                        style="@style/font_normal_sami_bold"
                         android:textStyle="normal" />
 
                 </RelativeLayout>
@@ -271,9 +279,6 @@
 
 
             </LinearLayout>
-
-
         </androidx.core.widget.NestedScrollView>
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

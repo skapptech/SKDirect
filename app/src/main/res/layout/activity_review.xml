@@ -24,10 +24,11 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:padding="5dp"
+                style="@style/font_normal_sami_bold"
                 android:text="Rate Your Experience"
                 android:textColor="@color/black"
                 android:textSize="15dp"
-                android:textStyle="bold" />
+                 />
 
             <TextView
                 android:layout_width="match_parent"
@@ -35,6 +36,7 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:maxLines="1"
+                style="@style/font_normal"
                 android:padding="5dp"
                 android:text="How would you rate the seller?"
                 android:textColor="@color/black"
@@ -62,6 +64,7 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:padding="5dp"
+                style="@style/font_normal"
                 android:text="Comments"
                 android:textColor="@color/black"
                 android:textSize="13dp"
@@ -82,6 +85,7 @@
                     android:layout_height="100dp"
                     android:background="@null"
                     android:hint="Enter Comments"
+                    style="@style/font_normal"
                     android:inputType="textMultiLine"
                     android:maxLines="3"
                     android:padding="10dp"

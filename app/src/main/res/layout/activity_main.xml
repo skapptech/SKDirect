@@ -37,8 +37,8 @@
                     <ImageView
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:scaleType="centerCrop"
                         android:padding="5dp"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/circle_image" />
 
 
@@ -76,9 +76,10 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/divider"/>
+                    android:background="@color/divider" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/font_normal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -99,11 +100,12 @@
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/ic_users"
-                        android:scaleType="centerInside"/>
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_users" />
 
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/font_normal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
@@ -118,7 +120,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/divider"/>
+                    android:background="@color/divider" />
 
                 <LinearLayout
                     android:id="@+id/ll_chnage_password"
@@ -130,11 +132,12 @@
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/ic_key"
-                        android:scaleType="centerInside"/>
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_key" />
 
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/font_normal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
@@ -149,7 +152,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/divider"/>
+                    android:background="@color/divider" />
 
                 <LinearLayout
                     android:id="@+id/ll_chet"
@@ -161,11 +164,12 @@
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/ic_notification"
-                        android:scaleType="centerInside"/>
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_notification" />
 
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/font_normal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
@@ -178,6 +182,7 @@
                 </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/font_normal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -186,6 +191,99 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/ll_rate_this_app"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_logout" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/font_normal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Rate the App"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="18sp"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider" />
+
+                <LinearLayout
+                    android:id="@+id/ll_private_polcy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_logout" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/font_normal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Privacy Policy"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="18sp"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider" />
+
+                <LinearLayout
+                    android:id="@+id/ll_about_app"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_logout" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/font_normal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:text="About Direct"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="18sp"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider" />
 
                 <LinearLayout
                     android:id="@+id/ll_logout"
@@ -197,11 +295,12 @@
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/ic_logout"
-                        android:scaleType="centerInside"/>
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_logout" />
 
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/font_normal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
@@ -212,10 +311,6 @@
                         android:textStyle="normal" />
 
                 </LinearLayout>
-
-
-
-
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </com.google.android.material.navigation.NavigationView>

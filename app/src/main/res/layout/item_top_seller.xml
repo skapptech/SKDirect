@@ -24,11 +24,12 @@
             android:ellipsize="end"
             android:layout_marginTop="10dp"
             android:maxLines="1"
+            style="@style/font_normal_sami_bold"
             android:gravity="center"
             android:padding="2dp"
             android:text="bhagwan"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="11sp" />
 
 
     </LinearLayout>

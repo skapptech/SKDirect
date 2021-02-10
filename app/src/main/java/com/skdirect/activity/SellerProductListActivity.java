@@ -56,6 +56,7 @@ public class SellerProductListActivity extends AppCompatActivity implements View
         }
     }
     private void initView() {
+        mBinding.shimmerViewContainer.startShimmer();
         mBinding.toolbarTittle.tvTittle.setText("Seller List");
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
 
@@ -102,7 +103,6 @@ public class SellerProductListActivity extends AppCompatActivity implements View
 
     private void callProductList() {
         if (Utils.isNetworkAvailable(getApplicationContext())) {
-            Utils.showProgressDialog(SellerProductListActivity.this);
             getProductListAPI();
         } else {
             Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
@@ -115,7 +115,8 @@ public class SellerProductListActivity extends AppCompatActivity implements View
         sellerProductListViewMode.getSellerProductListVM().observe(this, new Observer<ArrayList<NearBySallerModel>>() {
             @Override
             public void onChanged(ArrayList<NearBySallerModel> nearBySaller) {
-                Utils.hideProgressDialog();
+                mBinding.shimmerViewContainer.stopShimmer();
+                mBinding.shimmerViewContainer.setVisibility(View.GONE);
                 if (nearBySaller.size()>0){
 
                     mBinding.rvSellerProduct.post(new Runnable() {

@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.ll_chnage_password:
-                Utils.setToast(getApplicationContext(), "Change Password");
+                startActivity(new Intent(MainActivity.this,ChangePasswordActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
 

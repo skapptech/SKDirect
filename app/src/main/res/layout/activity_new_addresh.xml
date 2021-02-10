@@ -25,6 +25,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_full_name"
+                    style="@style/font_normal"
                     android:layout_width="match_parent"
                     android:layout_height="57dp"
                     android:layout_marginStart="10dp"
@@ -44,6 +45,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_street_addresh"
+                    style="@style/font_normal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -63,6 +65,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_landmark"
+                    style="@style/font_normal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -83,6 +86,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_pin_code"
+                    style="@style/font_normal"
                     android:layout_width="match_parent"
                     android:layout_height="57dp"
                     android:layout_marginStart="10dp"
@@ -99,6 +103,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_pin_city"
+                style="@style/font_normal"
                 android:layout_width="match_parent"
                 android:layout_height="57dp"
                 android:layout_marginStart="10dp"
@@ -116,6 +121,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_pin_state"
+                    style="@style/font_normal"
                     android:layout_width="match_parent"
                     android:layout_height="57dp"
                     android:layout_marginStart="10dp"
@@ -131,18 +137,18 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-
         </LinearLayout>
 
         <Button
             android:id="@+id/bt_save_addresh"
+            style="@style/font_normal_sami_bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
-            android:background="@drawable/db_button_save"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
-            android:layout_alignParentBottom="true"
+            android:background="@drawable/db_button_save"
             android:text="Save"
             android:textColor="@color/seller_button_color"
             android:textStyle="normal" />

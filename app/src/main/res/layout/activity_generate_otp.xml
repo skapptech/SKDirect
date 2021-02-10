@@ -26,6 +26,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="30dp"
                 android:text="Verification"
+                style="@style/font_normal"
                 android:textColor="@color/colorAccent"
                 android:textSize="25sp"
                 android:textStyle="bold" />
@@ -38,6 +39,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="15dp"
                 android:text=""
+                style="@style/font_normal_sami_bold"
                 android:textColor="@color/colorAccent"
                 android:textSize="20sp"
                 android:textStyle="normal" />
@@ -102,6 +104,7 @@
                 android:drawableRight="@drawable/ic_left_arrow__1_"
                 android:drawablePadding="10dp"
                 android:padding="5dp"
+                style="@style/font_normal_sami_bold"
                 android:paddingEnd="10dp"
                 android:text=" Next"
                 android:textAllCaps="false"

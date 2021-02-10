@@ -17,7 +17,8 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
             android:text=""
-            android:textColor="@color/grid_divder"
+            style="@style/font_normal"
+            android:textColor="@color/black"
             android:textSize="16dp"
             android:textStyle="normal" />
 
@@ -27,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
+            style="@style/font_normal"
             android:text=""
             android:textColor="@color/grid_divder"
             android:textSize="16dp"
@@ -38,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginStart="5dp"
+            style="@style/font_normal"
             android:text=""
             android:textColor="@color/grid_divder"
             android:textSize="16dp"
@@ -56,6 +59,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                style="@style/font_normal"
                 android:layout_alignParentLeft="true"
                 android:text=""
                 android:textColor="@color/grid_divder"

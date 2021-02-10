@@ -41,7 +41,7 @@ public class TopSellerAdapter extends RecyclerView.Adapter<TopSellerAdapter.View
     @Override
     public void onBindViewHolder(@NonNull TopSellerAdapter.ViewHolder holder, int position) {
         TopSellerModel topSellerModel = topSellerList.get(position);
-        holder.mBinding.tvSellerName.setText(topSellerModel.getFirstName());
+        holder.mBinding.tvSellerName.setText(topSellerModel.getShopName());
 
         if (topSellerModel.getImagePath()!=null && !topSellerModel.getImagePath().contains("http")) {
             Picasso.get().load(BuildConfig.apiEndpoint+topSellerModel.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.ivImage);

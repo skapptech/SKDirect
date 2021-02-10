@@ -60,6 +60,7 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
     private void initView() {
         mBinding.toolbarTittle.tvTittle.setText("Product List");
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
+        mBinding.shimmerViewContainer.startShimmer();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL,false);
         mBinding.rvNearByProduct.setLayoutManager(layoutManager);
@@ -103,7 +104,6 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
 
     private void callProductList() {
         if (Utils.isNetworkAvailable(getApplicationContext())) {
-            Utils.showProgressDialog(NearByItemProductListActivity.this);
             getProductListAPI();
         } else {
             Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
@@ -117,7 +117,8 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
         nearProductListViewMode.getNearProductList().observe(this, new Observer<ArrayList<NearProductListModel>>() {
             @Override
             public void onChanged(ArrayList<NearProductListModel> nearProductListList) {
-                Utils.hideProgressDialog();
+                mBinding.shimmerViewContainer.stopShimmer();
+                mBinding.shimmerViewContainer.setVisibility(View.GONE);
                 if (nearProductListList.size()>0){
                     mBinding.rvNearByProduct.post(new Runnable() {
                         public void run() {
