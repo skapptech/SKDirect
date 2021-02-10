@@ -237,7 +237,7 @@ public  class OrderDetailsModel {
         Id = id;
     }
 
-    public static class OrderStatusDC {
+    public  class OrderStatusDC {
         @SerializedName("CreatedDate")
         private String CreatedDate;
         @SerializedName("Status")
