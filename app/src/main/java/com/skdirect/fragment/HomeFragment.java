@@ -18,6 +18,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -47,7 +48,7 @@ import com.skdirect.viewmodel.LoginViewModel;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private FragmentHomeBinding mBinding;
     private MainActivity activity;
     private HomeViewModel homeViewModel;
@@ -75,6 +76,12 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mBinding.etSearchSeller.setText("");
+    }
+    @Override
+    public void onRefresh() {
+        topNearByItem();
+        getSellerAPi();
+        getAllCategoriesAPi();
     }
 
     private void getAllCategoriesAPi() {
@@ -109,6 +116,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<TopNearByItemModel> topNearByItemList) {
                 Utils.hideProgressDialog();
+                mBinding.swiperefresh.setRefreshing(false);
                 if (topNearByItemList.size()>0){
                     TopNearByItemAdapter topNearByItemAdapter = new TopNearByItemAdapter(getActivity(),topNearByItemList);
                     mBinding.rvNearByItem.setAdapter(topNearByItemAdapter);
@@ -125,6 +133,7 @@ public class HomeFragment extends Fragment {
         homeViewModel.GetTopSellerLiveData().observe(this, new Observer<ArrayList<TopSellerModel>>() {
             @Override
             public void onChanged(ArrayList<TopSellerModel> topSellerList) {
+                mBinding.swiperefresh.setRefreshing(false);
                 Utils.hideProgressDialog();
                 if (topSellerList.size()>0){
                     TopSellerAdapter topSellerAdapter = new TopSellerAdapter(getActivity(),topSellerList);
@@ -146,7 +155,7 @@ public class HomeFragment extends Fragment {
         homeViewModel.getAllCategoriesLiveData().observe(this, new Observer<ArrayList<AllCategoriesModel>>() {
             @Override
             public void onChanged(ArrayList<AllCategoriesModel> allCategoriesList) {
-
+                mBinding.swiperefresh.setRefreshing(false);
                 if (allCategoriesList.size()>0){
                     AllCategoriesAdapter allCategoriesAdapter = new AllCategoriesAdapter(getActivity(),allCategoriesList);
                     mBinding.rvAllCetegory.setAdapter(allCategoriesAdapter);
@@ -162,6 +171,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void initViews() {
+        mBinding.swiperefresh.setOnRefreshListener(this);
         mBinding.rvNearByItem.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         mBinding.rvTopSeller.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         mBinding.rvAllCetegory.setLayoutManager(new GridLayoutManager(activity,3));
@@ -258,6 +268,7 @@ public class HomeFragment extends Fragment {
         });
 
     }
+
 
 
 }
