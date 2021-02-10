@@ -94,6 +94,7 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
                 Utils.hideProgressDialog();
                 if (orderDetailsModel != null) {
                     OrderStatusDC = orderDetailsModel.getOrderStatusDC();
+                  //  OrderStatusDC.add(OrderStatusDC.get(0).setCreatedDate(orderDetailsModel.getOrderDate()));
                     mBinding.tvOrderNumber.setText("Order No :" + orderDetailsModel.getId());
                     mBinding.tvCreatedOrder.setText("Order on " + Utils.getDateFormate(orderDetailsModel.getOrderDate()));
                     mBinding.tvSellerName.setText("Seller: " + orderDetailsModel.getSellerName());
