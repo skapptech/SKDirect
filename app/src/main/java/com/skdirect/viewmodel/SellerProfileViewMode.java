@@ -68,7 +68,7 @@ public class SellerProfileViewMode extends ViewModel {
         RestClient.getInstance().getService().GetSellerDetail(id).enqueue(new Callback<SellerDetailsModel>() {
             @Override
             public void onResponse(Call<SellerDetailsModel> call, Response<SellerDetailsModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
+                if (response.isSuccessful()) {
                     Log.e(TAG, "request response="+response.body());
                     sellerDetailsVM.setValue(response.body());
                 }

@@ -1,6 +1,7 @@
 package com.skdirect.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
+import com.skdirect.activity.ProductDetailsActivity;
+import com.skdirect.activity.SellerProfileActivity;
 import com.skdirect.databinding.ItemSellerProductListBinding;
 import com.skdirect.interfacee.AddItemInterface;
 import com.skdirect.model.SellerProductList;
@@ -80,6 +83,13 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
             @Override
             public void onClick(View view) {
                 addItemInterface.addButtonOnClick(sellerProductModel,holder.mBinding.tvSelectedQty,holder.mBinding.tvAdd,holder.mBinding.LLPlusMinus);
+            }
+        });
+
+        holder.mBinding.LLMainCat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID",sellerProductModel.getSellerProductId()));
             }
         });
 

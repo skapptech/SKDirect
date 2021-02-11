@@ -203,7 +203,7 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:scaleType="centerInside"
-                        android:src="@drawable/ic_logout" />
+                        android:src="@drawable/ic_star" />
 
 
                     <androidx.appcompat.widget.AppCompatTextView

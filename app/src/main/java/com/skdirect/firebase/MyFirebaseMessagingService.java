@@ -23,6 +23,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.skdirect.R;
 import com.skdirect.activity.MainActivity;
+import com.skdirect.activity.MyOrderActivity;
 import com.skdirect.activity.SplashActivity;
 
 import org.json.JSONObject;
@@ -73,7 +74,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
             Intent intent = null;
             if (link != null && !link.equals("")) {
-                intent = new Intent(getApplicationContext(), SplashActivity.class);
+                intent = new Intent(getApplicationContext(), MyOrderActivity.class);
                 intent.putExtra("url", link);
             } else {
                 intent = new Intent(getApplicationContext(), SplashActivity.class);

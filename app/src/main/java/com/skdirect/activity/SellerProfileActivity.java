@@ -84,7 +84,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         mBinding.rvCategories.setLayoutManager(layoutManager);
 
-        sellerShopListAdapter = new SellerProductAdapter(getApplicationContext(), sellerProductModels, this);
+        sellerShopListAdapter = new SellerProductAdapter(SellerProfileActivity.this, sellerProductModels, this);
         mBinding.rvCategories.setAdapter(sellerShopListAdapter);
 
 

@@ -54,19 +54,12 @@ public class BottomListAdapter extends RecyclerView.Adapter<BottomListAdapter.Vi
         }
         holder.mBinding.tvItemName.setText(varientName);
         if (variationListModel.getImageList() != null && variationListModel.getImageList().size() > 0) {
-            Picasso.get().load(BuildConfig.apiEndpoint + variationListModel.getImageList().get(1).getImagePath()).into(holder.mBinding.ivImage);
+            Picasso.get().load(""+variationListModel.getImageList()).into(holder.mBinding.ivImage);
         }
         holder.mBinding.llTopNearBySeller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 bottomBarInterface.onOnClick(variationListModel);
-
-               /* Intent menuIntent = new Intent(context, ProductDetailsActivity.class);
-                menuIntent.putExtra("ID",variationListModel.getId());
-                menuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                context.startActivity(menuIntent);*/
-
-
             }
         });
     }
