@@ -2,19 +2,31 @@ package com.skdirect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
 
+import com.appsflyer.AFInAppEventParameterName;
+import com.appsflyer.AFInAppEventType;
+import com.appsflyer.AppsFlyerLib;
+import com.appsflyer.attribution.AppsFlyerRequestListener;
 import com.skdirect.R;
 import com.skdirect.adapter.IntroAdapter;
 import com.skdirect.databinding.ActivityIntroBinding;
 import com.skdirect.utils.IntroPageTransformer;
 import com.skdirect.utils.SharePrefs;
+import com.skdirect.utils.Utils;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.appsflyer.AppsFlyerLibCore.LOG_TAG;
 
 
 public class IntroActivity extends AppCompatActivity {
@@ -38,6 +50,9 @@ public class IntroActivity extends AppCompatActivity {
         mBinding.viewpager.setAdapter(new IntroAdapter(getSupportFragmentManager()));
        // mBinding.viewpager.setPageTransformer(false, new IntroPageTransformer());
         drawPageSelectionIndicators(0);
+
+        Utils.logAppsFlayerEventApp(getApplicationContext(),"IntroScreen", "Introduction Screen 1");
+
         mBinding.viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -52,6 +67,7 @@ public class IntroActivity extends AppCompatActivity {
                     mBinding.RLBottomLayout.setVisibility(View.GONE);
                     mBinding.RLBottomLayoutNext.setVisibility(View.VISIBLE);
                 }
+                Utils.logAppsFlayerEventApp(getApplicationContext(),"IntroScreen", "Introduction Screen "+(position+1));
             }
 
             @Override
@@ -61,6 +77,7 @@ public class IntroActivity extends AppCompatActivity {
 
 
         mBinding.tvBuyer.setOnClickListener(view -> {
+            Utils.logAppsFlayerEventApp(getApplicationContext(),"IntroScreen", "Introduction Screen Buyer Button Click");
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SELLER, false);
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SHOW_INTRO, true);
             Intent i = new Intent(activity, MainActivity.class);
@@ -68,6 +85,7 @@ public class IntroActivity extends AppCompatActivity {
             finish();
         });
         mBinding.tvSeller.setOnClickListener(view -> {
+            Utils.logAppsFlayerEventApp(getApplicationContext(),"IntroScreen", "Introduction Screen Seller Button Click");
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SELLER, true);
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SHOW_INTRO, true);
             Intent i = new Intent(activity, MainActivity.class);

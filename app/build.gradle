@@ -11,8 +11,8 @@ android {
         applicationId "com.skdirect"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 6
-        versionName "1.0.4"
+        versionCode 7
+        versionName "1.0.5"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -85,4 +85,7 @@ dependencies {
     implementation 'info.androidhive:imagefilters:1.0.7'
     implementation 'id.zelory:compressor:2.1.0'
     implementation 'ja.burhanrashid52:photoeditor:1.1.0'
+    implementation 'com.appsflyer:af-android-sdk:6.2.0'
+    implementation 'com.android.installreferrer:installreferrer:2.2'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }

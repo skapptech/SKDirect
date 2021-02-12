@@ -5,15 +5,25 @@ import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.appsflyer.AFInAppEventParameterName;
+import com.appsflyer.AppsFlyerLib;
+import com.appsflyer.attribution.AppsFlyerRequestListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.skdirect.R;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,11 +45,13 @@ public class Utils {
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
+
     public static void setLongToast(Context _mContext, String str) {
         Toast toast = Toast.makeText(_mContext, str, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
+
     public static boolean isValidMobile(String mobile) {
         Pattern pattern = Pattern.compile(MOBILE_NO_PATTERN);
         Matcher matcher = pattern.matcher(mobile);
@@ -117,5 +129,42 @@ public class Utils {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+    public static void logAppsFlayerEventApp(Context context, String keyword, String value) {
+        if (context != null) {
+            Map<String, Object> eventValue = new HashMap<String, Object>();
+            eventValue.put(AFInAppEventParameterName.PARAM_1, value);
+            AppsFlyerLib.getInstance().logEvent(context, keyword, eventValue, new AppsFlyerRequestListener() {
+                @Override
+                public void onSuccess() {
+                    //Log.d("LOG_TAG", "Event sent successfully" + keyword + " - " + value);
+                }
+                @Override
+                public void onError(int i, @NonNull String s) {
+                    /*Log.d("LOG_TAG", "Event failed to be sent:\n" +
+                            "Error code: " + i + "\n"
+                            + "Error description: " + s);*/
+                }
+            });
+        }
+    }
+    public static void logAppsFlayerJSONEventApp(Context context, String keyword, String value) {
+        if (context != null) {
+            HashMap<String,Object> eventValue = new Gson().fromJson(value, new TypeToken<HashMap<String, Object>>(){}.getType());
+            AppsFlyerLib.getInstance().logEvent(context, keyword, eventValue, new AppsFlyerRequestListener() {
+                @Override
+                public void onSuccess() {
+                    //Log.d("LOG_TAG", "Event sent successfully" + keyword + " - " + value);
+                }
+                @Override
+                public void onError(int i, @NonNull String s) {
+                    /*Log.d("LOG_TAG", "Event failed to be sent:\n" +
+                            "Error code: " + i + "\n"
+                            + "Error description: " + s);*/
+                }
+            });
+        }
+    }
+
 
 }

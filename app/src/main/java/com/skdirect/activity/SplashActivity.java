@@ -57,6 +57,7 @@ public class SplashActivity extends AppCompatActivity {
         Glide.with(getApplicationContext()).load("")
                 .placeholder(R.drawable.splash)
                 .into(mBinding.imSplash);
+        Utils.logAppsFlayerEventApp(getApplicationContext(),"SplashScreen", "Splash Screen Open");
     }
 
     private void callAPI() {

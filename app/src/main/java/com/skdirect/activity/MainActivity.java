@@ -15,6 +15,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -37,14 +38,19 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.appsflyer.AFInAppEventParameterName;
+import com.appsflyer.AppsFlyerLib;
+import com.appsflyer.attribution.AppsFlyerRequestListener;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.tasks.Task;
@@ -67,6 +73,8 @@ import com.skdirect.utils.CreateContact;
 import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -78,7 +86,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
 import io.reactivex.observers.DisposableObserver;
 
@@ -422,6 +433,20 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             startSMSListener();
 
             return otpNumber;
+        }
+        @JavascriptInterface
+        public void addAppsFlayersEvent(String eventName, String value) {
+            Utils.logAppsFlayerEventApp(getApplicationContext(),eventName, value);
+        }
+
+        @JavascriptInterface
+        public void addAppsFlayersJsonEvent(String eventName, String value) {
+            Utils.logAppsFlayerJSONEventApp(getApplicationContext(),eventName, value);
+        }
+
+        @JavascriptInterface
+        public void shareItemWithImage(String imagePath, String msg) {
+            shareProductwithImage(imagePath, msg);
         }
     }
 
@@ -798,6 +823,50 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
     }
 
+    private void shareProductwithImage(String imagePath, String body) {
+        runOnUiThread(() -> {
+            try {
+                Picasso.get().load(imagePath).into(target);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/*");
+        share.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()),
+                BuildConfig.APPLICATION_ID + ".provider", new File(Environment.getExternalStorageDirectory()
+                        + "/Download/image.png")));
+        share.putExtra(Intent.EXTRA_TEXT, body);
+        startActivity(Intent.createChooser(share, "Share Product"));
+    }
+
+    private final Target target = new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            try {
+                String filename = "/Download/";
+                File sd = Environment.getExternalStorageDirectory();
+                File dest = new File(sd, filename);
+                if (!dest.exists()) {
+                    dest.mkdirs();
+                }
+                FileOutputStream out = new FileOutputStream(dest + "/image.png");
+                bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+        }
+    };
 
     //End JS Function's Method
 

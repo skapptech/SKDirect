@@ -39,7 +39,7 @@ public class ContactService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if (intent.hasExtra("token")){
+        if (intent.getExtras()!=null && intent.hasExtra("token")){
             token = intent.getStringExtra("token");
         }
 
