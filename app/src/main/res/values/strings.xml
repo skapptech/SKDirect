@@ -12,5 +12,7 @@
     <string name="msg_save_image">Are you want to exit without saving image ?</string>
     <string name="app_intent_name">PhotoEditor</string>
     <string name="msg_save_image_to_share">Please save image to share</string>
-    <string name="msg_share_image">Share Image</string>>
+    <string name="msg_share_image">Share Image</string>
+    <string name="onesignal_app_id">eda68699-028d-403f-8ef8-cd7306db0a09</string>
+
 </resources>

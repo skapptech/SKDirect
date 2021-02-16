@@ -52,10 +52,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if (object.has("redirecturl")) {
                 redirectUrl = object.getString("redirecturl");
             }
+            if (!object.has("custom")){
+                showNotification(object.getString("icon"),
+                        object.getString("body"),
+                        object.getString("title"), 0, redirectUrl);
+            }
 
-            showNotification(object.getString("icon"),
-                    object.getString("body"),
-                    object.getString("title"), 0, redirectUrl);
         } catch (Exception e) {
             e.printStackTrace();
         }
