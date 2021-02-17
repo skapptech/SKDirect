@@ -9,6 +9,7 @@ import com.appsflyer.AppsFlyerLib;
 import com.onesignal.OSNotification;
 import com.onesignal.OSNotificationOpenedResult;
 import com.onesignal.OneSignal;
+import com.skdirect.BuildConfig;
 import com.skdirect.activity.SplashActivity;
 
 
@@ -23,17 +24,17 @@ public class MyApplication extends Application {
     private static MyApplication mInstance;
 
     //Production
-    //private static final String AF_DEV_KEY = "govkuzbhqtFWx8WYppYa6P";
+    private static String AF_DEV_KEY = "govkuzbhqtFWx8WYppYa6P";
+    private static String ONESIGNAL_APP_ID = "eda68699-028d-403f-8ef8-cd7306db0a09";
 
-    //Test
-    private static final String AF_DEV_KEY = "govkuzbhqtF";
-    private static final String ONESIGNAL_APP_ID = "eda68699-028d-403f-8ef8-cd7306db0a09";
-    private static final String GOOGLE_PROJECT_ID = "1043986372556";
 
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        if (BuildConfig.DEBUG){
+            AF_DEV_KEY = "govkuzbhqtF";
+        }
 
         AppsFlyerConversionListener conversionListener = new AppsFlyerConversionListener() {
             @Override
@@ -69,13 +70,8 @@ public class MyApplication extends Application {
 
         OneSignal.setNotificationOpenedHandler(
                 result -> {
-                    String actionId = result.getAction().getActionId();
-                    String title = result.getNotification().getTitle();
-                    System.out.println("Result - "+ result.toString());
-                    System.out.println("accept-button - "+actionId);
                     try {
                         String link = result.getNotification().getAdditionalData().getString("URL");
-                        System.out.println("Result - "+ link);
                         if (link != null && !link.equals("")) {
                             Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
                             intent.putExtra("url", link);

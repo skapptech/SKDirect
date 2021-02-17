@@ -58,6 +58,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
+import com.onesignal.OneSignal;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
@@ -434,20 +435,32 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
 
             return otpNumber;
         }
+
         @JavascriptInterface
         public void addAppsFlayersEvent(String eventName, String value) {
-            Utils.logAppsFlayerEventApp(getApplicationContext(),eventName, value);
+            Utils.logAppsFlayerEventApp(getApplicationContext(), eventName, value);
         }
 
         @JavascriptInterface
         public void addAppsFlayersJsonEvent(String eventName, String value) {
-            Utils.logAppsFlayerJSONEventApp(getApplicationContext(),eventName, value);
+            Utils.logAppsFlayerJSONEventApp(getApplicationContext(), eventName, value);
         }
 
         @JavascriptInterface
         public void shareItemWithImage(String imagePath, String msg) {
             shareProductwithImage(imagePath, msg);
         }
+
+        @JavascriptInterface
+        public String updateOneSignalPlayerId() {
+            return getOneSignalPlayerId();
+        }
+
+        @JavascriptInterface
+        public void rateDirectApp() {
+            moveToRateApp();
+        }
+
     }
 
     //Start JS Function's Method
@@ -804,6 +817,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
                         .setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(1, 1)
                         .start(activity);
             }
+
             @Override
             public void onDenied(Context context, ArrayList<String> deniedPermissions) {
                 super.onDenied(context, deniedPermissions);
@@ -815,10 +829,10 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SELLER, isSeller);
     }
 
-    public void saveContact(String name, String number){
+    public void saveContact(String name, String number) {
         try {
             new CreateContact(activity, number, name);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -868,6 +882,25 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
     };
 
+
+    private String getOneSignalPlayerId() {
+        String playerId = "";
+        try {
+            playerId = OneSignal.getDeviceState().getUserId();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return playerId;
+    }
+
+    private void moveToRateApp() {
+        final String appName = activity.getPackageName();
+        try {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appName)));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appName)));
+        }
+    }
     //End JS Function's Method
 
 
