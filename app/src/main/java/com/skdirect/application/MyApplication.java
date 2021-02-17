@@ -8,6 +8,8 @@ import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
 import com.onesignal.OSNotification;
 import com.onesignal.OSNotificationOpenedResult;
+import com.onesignal.OSSubscriptionObserver;
+import com.onesignal.OSSubscriptionStateChanges;
 import com.onesignal.OneSignal;
 import com.skdirect.BuildConfig;
 import com.skdirect.activity.SplashActivity;
@@ -63,7 +65,6 @@ public class MyApplication extends Application {
         };
         AppsFlyerLib.getInstance().init(AF_DEV_KEY, conversionListener, this);
         AppsFlyerLib.getInstance().start(this);
-
         OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
         OneSignal.initWithContext(this);
         OneSignal.setAppId(ONESIGNAL_APP_ID);

@@ -166,5 +166,9 @@ public class Utils {
         }
     }
 
+    public static boolean isNullOrEmpty(String s) {
+        return (s == null) || (s.length() == 0) || (s.equalsIgnoreCase("null")) || (s.equalsIgnoreCase("0"));
+    }
+
 
 }

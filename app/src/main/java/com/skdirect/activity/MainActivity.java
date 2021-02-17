@@ -461,6 +461,24 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             moveToRateApp();
         }
 
+        @JavascriptInterface
+        public void fcmSubscribeTopic(String topicName) {
+            subscribeTopic(topicName);
+        }
+        @JavascriptInterface
+        public void fcmUnsubscribeTopic(String topicName) {
+            unsubscribeTopic(topicName);
+        }
+
+        @JavascriptInterface
+        public void oneSignalSendTag(String key, String value) {
+            sendOneSignalTag(key,value);
+        }
+        @JavascriptInterface
+        public void oneSignalDeleteTag(String key) {
+            deleteOneSignalTag(key);
+        }
+
     }
 
     //Start JS Function's Method
@@ -901,6 +919,33 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appName)));
         }
     }
+
+    private void subscribeTopic(String topic) {
+        if (Utils.isNullOrEmpty(topic)) {
+            FirebaseMessaging.getInstance().subscribeToTopic(topic);
+        }
+    }
+
+    private void unsubscribeTopic(String topic) {
+        if (Utils.isNullOrEmpty(topic)) {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(topic);
+        }
+    }
+
+    private void sendOneSignalTag(String key, String value) {
+        if (Utils.isNullOrEmpty(key)&&Utils.isNullOrEmpty(value)) {
+            OneSignal.sendTag(key,value);
+        }
+    }
+
+    private void deleteOneSignalTag(String key) {
+        if (Utils.isNullOrEmpty(key)) {
+            OneSignal.deleteTag(key);
+        }
+    }
+
+
+
     //End JS Function's Method
 
 

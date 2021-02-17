@@ -16,6 +16,7 @@ import com.appsflyer.AFInAppEventParameterName;
 import com.appsflyer.AFInAppEventType;
 import com.appsflyer.AppsFlyerLib;
 import com.appsflyer.attribution.AppsFlyerRequestListener;
+import com.onesignal.OneSignal;
 import com.skdirect.R;
 import com.skdirect.adapter.IntroAdapter;
 import com.skdirect.databinding.ActivityIntroBinding;
@@ -81,6 +82,7 @@ public class IntroActivity extends AppCompatActivity {
 
 
         mBinding.tvBuyer.setOnClickListener(view -> {
+            OneSignal.sendTag("user_type","Buyer");
             Utils.logAppsFlayerEventApp(getApplicationContext(),"IntroScreen", "Introduction Screen Buyer Button Click");
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SELLER, false);
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SHOW_INTRO, true);
@@ -89,6 +91,7 @@ public class IntroActivity extends AppCompatActivity {
             finish();
         });
         mBinding.tvSeller.setOnClickListener(view -> {
+            OneSignal.sendTag("user_type","Seller");
             Utils.logAppsFlayerEventApp(getApplicationContext(),"IntroScreen", "Introduction Screen Seller Button Click");
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SELLER, true);
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SHOW_INTRO, true);
