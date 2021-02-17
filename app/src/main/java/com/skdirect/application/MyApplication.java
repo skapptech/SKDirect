@@ -34,9 +34,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-        if (BuildConfig.DEBUG){
-            AF_DEV_KEY = "govkuzbhqtF";
-        }
 
         AppsFlyerConversionListener conversionListener = new AppsFlyerConversionListener() {
             @Override
