@@ -7,15 +7,19 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -23,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
@@ -53,6 +58,18 @@ import com.appsflyer.AppsFlyerLib;
 import com.appsflyer.attribution.AppsFlyerRequestListener;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -111,13 +128,18 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     private SmsBroadcastReceiver mSmsBroadcastReceiver;
     private CountDownTimer cTimer;
 
+    GPSTracker gpsTracker;
+    boolean isLocationPermissionAllowed = false;
+    boolean isGpsOn = false;
+    String locationFinal = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         activity = this;
         initViews();
-        callRunTimePermissions();
+        //callRunTimePermissions();
         Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
 
         FirebaseMessaging.getInstance().getToken()
@@ -126,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
                         return;
                     }
                     firebaseToken = task.getResult();
+                    System.out.println("firebaseToken - " + firebaseToken);
                 });
     }
 
@@ -268,10 +291,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        if (BuildConfig.DEBUG) {
-            FirebaseMessaging.getInstance().subscribeToTopic("uat_testing");
-        }
-        FirebaseMessaging.getInstance().subscribeToTopic("global");
+        // getCurrentLatLong();
        /* mSmsBroadcastReceiver = new SmsBroadcastReceiver();
         mSmsBroadcastReceiver.setOnOtpListeners(MainActivity.this);
         startSMSListener();*/
@@ -398,6 +418,17 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
 
         @JavascriptInterface
+        public boolean getLocationPermission() {
+            return getLocationPemissionValue();
+        }
+
+        @JavascriptInterface
+        public boolean getGPSValue() {
+            return getGpsPemissionValue();
+        }
+
+
+        @JavascriptInterface
         public void otpBroadCastReg(boolean value) {
             registerBroadcast(value);
         }
@@ -465,6 +496,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         public void fcmSubscribeTopic(String topicName) {
             subscribeTopic(topicName);
         }
+
         @JavascriptInterface
         public void fcmUnsubscribeTopic(String topicName) {
             unsubscribeTopic(topicName);
@@ -472,13 +504,23 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
 
         @JavascriptInterface
         public void oneSignalSendTag(String key, String value) {
-            sendOneSignalTag(key,value);
+            sendOneSignalTag(key, value);
         }
+
         @JavascriptInterface
         public void oneSignalDeleteTag(String key) {
             deleteOneSignalTag(key);
         }
 
+        @JavascriptInterface
+        public void askLocationPermission() {
+            callRunTimeLocationPermissions();
+        }
+
+        @JavascriptInterface
+        public String getFirebaseToken() {
+            return firebaseToken;
+        }
     }
 
     //Start JS Function's Method
@@ -491,23 +533,94 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
     }
 
+
     private String getCurrentLatLong() {
         JSONObject jsonObject = new JSONObject();
         GPSTracker gpsTracker = new GPSTracker(MainActivity.this);
-        if (gpsTracker.canGetLocation()) {
-            double latitude = gpsTracker.getLatitude();
-            double longitude = gpsTracker.getLongitude();
-            try {
-                jsonObject.put("lat", latitude);
-                jsonObject.put("long", longitude);
-            } catch (Exception e) {
-                e.printStackTrace();
+        double latitude = gpsTracker.getLatitude();
+        double longitude = gpsTracker.getLongitude();
+        try {
+            jsonObject.put("lat", latitude);
+            jsonObject.put("long", longitude);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        locationFinal = jsonObject.toString();
+
+        /*Handler locHandler = new Handler();
+        locHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Utils.setToast(activity, "Loop - ");
+                JSONObject jsonObject = new JSONObject();
+                GPSTracker gpsTracker = new GPSTracker(MainActivity.this);
+                double latitude = gpsTracker.getLatitude();
+                double longitude = gpsTracker.getLongitude();
+                try {
+                    jsonObject.put("lat", latitude);
+                    jsonObject.put("long", longitude);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                locationFinal = jsonObject.toString();
+
+                if (locationFinal.equals("{}") || locationFinal.equals("{\"lat\":0,\"long\":0}")) {
+                    locHandler.postDelayed(this, 1000);
+                } else {
+                    System.out.println("FinalLoc1 - " + " - " + locationFinal);
+                    locHandler.removeCallbacks(this);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mBinding.webView.loadUrl("javascript:getAndroidLocation(\"abc\")");
+                        }
+                    });
+
+                }
             }
+        }, 1000);*/
+        return locationFinal;
+    }
+
+    private boolean getLocationPemissionValue() {
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+        Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+                isLocationPermissionAllowed = true;
+                //getGpsPemissionValue();
+            }
+
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+                isLocationPermissionAllowed = false;
+            }
+        });
+        return isLocationPermissionAllowed;
+    }
+
+    private boolean getGpsPemissionValue() {
+        gpsTracker = new GPSTracker(MainActivity.this);
+        if (gpsTracker.canGetLocation()) {
+            isGpsOn = true;
         } else {
+            isGpsOn = false;
             gpsTracker.showSettingsAlert();
         }
-        return jsonObject.toString();
+        return isGpsOn;
     }
+    private boolean getGpsPemissionValue2() {
+        gpsTracker = new GPSTracker(MainActivity.this);
+        if (gpsTracker.canGetLocation()) {
+            isGpsOn = true;
+        } else {
+            isGpsOn = false;
+            gpsTracker.showSettingsAlert();
+        }
+        return isGpsOn;
+    }
+
 
     private void Open(String PackageName) {
         Intent intent = getPackageManager().getLaunchIntentForPackage(PackageName);
@@ -731,7 +844,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     }
 
     public void callRunTimePermissions() {
-        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_CONTACTS};
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
         Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
             @Override
             public void onGranted() {
@@ -933,8 +1046,8 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     }
 
     private void sendOneSignalTag(String key, String value) {
-        if (Utils.isNullOrEmpty(key)&&Utils.isNullOrEmpty(value)) {
-            OneSignal.sendTag(key,value);
+        if (Utils.isNullOrEmpty(key) && Utils.isNullOrEmpty(value)) {
+            OneSignal.sendTag(key, value);
         }
     }
 
@@ -944,6 +1057,19 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
     }
 
+    public void callRunTimeLocationPermissions() {
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+        Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+            }
+
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+            }
+        });
+    }
 
 
     //End JS Function's Method

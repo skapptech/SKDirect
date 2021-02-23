@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.onesignal.OSNotification;
 import com.onesignal.OSNotificationOpenedResult;
 import com.onesignal.OSSubscriptionObserver;
@@ -34,6 +35,11 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+
+        if (BuildConfig.DEBUG) {
+            FirebaseMessaging.getInstance().subscribeToTopic("uat_testing");
+        }
+        FirebaseMessaging.getInstance().subscribeToTopic("global");
 
         AppsFlyerConversionListener conversionListener = new AppsFlyerConversionListener() {
             @Override
