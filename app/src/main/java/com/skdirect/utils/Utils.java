@@ -148,6 +148,25 @@ public class Utils {
             });
         }
     }
+    public static void logAppsFlayerEventApp2(Context context,String eventName, String key, String value) {
+        if (context != null) {
+            Map<String, Object> eventValue = new HashMap<String, Object>();
+            eventValue.put(key, value);
+            AppsFlyerLib.getInstance().logEvent(context, eventName, eventValue, new AppsFlyerRequestListener() {
+                @Override
+                public void onSuccess() {
+                    //Log.d("LOG_TAG", "Event sent successfully" + keyword + " - " + value);
+                }
+                @Override
+                public void onError(int i, @NonNull String s) {
+                    /*Log.d("LOG_TAG", "Event failed to be sent:\n" +
+                            "Error code: " + i + "\n"
+                            + "Error description: " + s);*/
+                }
+            });
+        }
+    }
+
     public static void logAppsFlayerJSONEventApp(Context context, String keyword, String value) {
         if (context != null) {
             HashMap<String,Object> eventValue = new Gson().fromJson(value, new TypeToken<HashMap<String, Object>>(){}.getType());

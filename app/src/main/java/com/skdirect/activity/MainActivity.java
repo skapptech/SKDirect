@@ -139,7 +139,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         activity = this;
         initViews();
-        //callRunTimePermissions();
         Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
 
         FirebaseMessaging.getInstance().getToken()
@@ -209,8 +208,8 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
                         webView.loadUrl("javascript:onEnter()");
                     }
             }
-
         });
+
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
@@ -264,11 +263,8 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
                 chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
                 chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
-
                 startActivityForResult(chooserIntent, INPUT_FILE_REQUEST_CODE);
-
                 return true;
-
             }
         });
 
@@ -284,17 +280,12 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         } else {
             loadUrlfromSession();
         }
-
         commonClassForAPI = CommonClassForAPI.getInstance();
     }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // getCurrentLatLong();
-       /* mSmsBroadcastReceiver = new SmsBroadcastReceiver();
-        mSmsBroadcastReceiver.setOnOtpListeners(MainActivity.this);
-        startSMSListener();*/
     }
 
     @Override
@@ -413,6 +404,10 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
 
         @JavascriptInterface
+        public String getCurrentLocation2() {
+            return getCurrentLatLong2();
+        }
+        @JavascriptInterface
         public String getCurrentLocation() {
             return getCurrentLatLong();
         }
@@ -471,6 +466,10 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         public void addAppsFlayersEvent(String eventName, String value) {
             Utils.logAppsFlayerEventApp(getApplicationContext(), eventName, value);
         }
+        @JavascriptInterface
+        public void addAppsFlayersEvent1(String eventName, String key, String value) {
+            Utils.logAppsFlayerEventApp2(getApplicationContext(), eventName,key, value);
+        }
 
         @JavascriptInterface
         public void addAppsFlayersJsonEvent(String eventName, String value) {
@@ -523,8 +522,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
     }
 
-    //Start JS Function's Method
-
+    // Start JS Function's Method
     public void loadUrlfromSession() {
         if (SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_SELLER)) {
             webView.loadUrl(SharePrefs.getInstance(activity).getString(SharePrefs.SELLER_URL));
@@ -588,7 +586,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             @Override
             public void onGranted() {
                 isLocationPermissionAllowed = true;
-                //getGpsPemissionValue();
             }
 
             @Override
@@ -610,17 +607,38 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
         return isGpsOn;
     }
-    private boolean getGpsPemissionValue2() {
-        gpsTracker = new GPSTracker(MainActivity.this);
-        if (gpsTracker.canGetLocation()) {
-            isGpsOn = true;
-        } else {
-            isGpsOn = false;
-            gpsTracker.showSettingsAlert();
-        }
-        return isGpsOn;
-    }
 
+
+    private String getCurrentLatLong2() {
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+        Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+                JSONObject jsonObject = new JSONObject();
+                GPSTracker gpsTracker = new GPSTracker(MainActivity.this);
+                if (gpsTracker.canGetLocation()) {
+                    double latitude = gpsTracker.getLatitude();
+                    double longitude = gpsTracker.getLongitude();
+                    try {
+                        jsonObject.put("lat", latitude);
+                        jsonObject.put("long", longitude);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    gpsTracker.showSettingsAlert();
+                }
+                locationFinal = jsonObject.toString();
+            }
+
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+                locationFinal = "";
+            }
+        });
+        return locationFinal;
+    }
 
     private void Open(String PackageName) {
         Intent intent = getPackageManager().getLaunchIntentForPackage(PackageName);

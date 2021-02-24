@@ -56,7 +56,7 @@ public class IntroActivity extends AppCompatActivity {
        // mBinding.viewpager.setPageTransformer(false, new IntroPageTransformer());
         drawPageSelectionIndicators(0);
 
-        Utils.logAppsFlayerEventApp(getApplicationContext(),"IntroScreen", "Introduction Screen 1");
+        Utils.logAppsFlayerEventApp(getApplicationContext(),"IntroScreen", "Introduction Screen");
 
         mBinding.viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
