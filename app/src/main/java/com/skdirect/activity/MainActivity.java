@@ -140,14 +140,13 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         activity = this;
         initViews();
         Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
-
+        callRunTimePermissions();
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
                         return;
                     }
                     firebaseToken = task.getResult();
-                    System.out.println("firebaseToken - " + firebaseToken);
                 });
     }
 
@@ -467,7 +466,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             Utils.logAppsFlayerEventApp(getApplicationContext(), eventName, value);
         }
         @JavascriptInterface
-        public void addAppsFlayersEvent1(String eventName, String key, String value) {
+        public void addAppsFlayersEvent2(String eventName, String key, String value) {
             Utils.logAppsFlayerEventApp2(getApplicationContext(), eventName,key, value);
         }
 
