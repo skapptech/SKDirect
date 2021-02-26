@@ -2,26 +2,16 @@ package com.skdirect.application;
 
 import android.app.Application;
 import android.content.Intent;
-import android.net.Uri;
-
 import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.onesignal.OSNotification;
-import com.onesignal.OSNotificationOpenedResult;
-import com.onesignal.OSSubscriptionObserver;
-import com.onesignal.OSSubscriptionStateChanges;
 import com.onesignal.OneSignal;
 import com.skdirect.BuildConfig;
 import com.skdirect.activity.SplashActivity;
-
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.Map;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class MyApplication extends Application {
     private static MyApplication mInstance;

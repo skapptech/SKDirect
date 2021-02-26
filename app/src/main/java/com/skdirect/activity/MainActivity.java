@@ -31,6 +31,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -75,6 +76,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
+import com.onesignal.OSInAppMessageAction;
 import com.onesignal.OneSignal;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
@@ -280,6 +282,15 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
             loadUrlfromSession();
         }
         commonClassForAPI = CommonClassForAPI.getInstance();
+
+        OneSignal.setInAppMessageClickHandler(new OneSignal.OSInAppMessageClickHandler() {
+            @Override
+            public void inAppMessageClicked(OSInAppMessageAction result) {
+                if (!Utils.isNullOrEmpty(result.getClickName()) && Patterns.WEB_URL.matcher(result.getClickName()).matches()) {
+                    mBinding.webView.loadUrl(result.getClickName());
+                }
+            }
+        });
     }
 
     @Override
