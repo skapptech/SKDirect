@@ -193,7 +193,7 @@ public class EditImageActivity extends AppCompatActivity implements OnPhotoEdito
         Uri imageUri= null;
         OutputStream fos;
         String directory=Environment.DIRECTORY_PICTURES;
-        String path = getExternalFilesDir(null).getAbsolutePath();
+        String path = Environment.getExternalStorageDirectory().toString();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             try{
                 ContentResolver resolver = this.getContentResolver();
