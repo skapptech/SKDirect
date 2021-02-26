@@ -57,6 +57,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.appsflyer.AFInAppEventParameterName;
 import com.appsflyer.AppsFlyerLib;
 import com.appsflyer.attribution.AppsFlyerRequestListener;
+import com.canhub.cropper.CropImage;
+import com.canhub.cropper.CropImageView;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.common.ConnectionResult;
@@ -95,8 +97,7 @@ import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+
 
 import org.json.JSONObject;
 

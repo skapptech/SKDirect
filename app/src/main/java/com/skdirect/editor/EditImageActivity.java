@@ -2,13 +2,17 @@ package com.skdirect.editor;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -35,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import id.zelory.compressor.Compressor;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -184,22 +189,50 @@ public class EditImageActivity extends AppCompatActivity implements OnPhotoEdito
     }
 
     private String SavedImages(Bitmap bm) {
-        String fileName = System.currentTimeMillis() + "_profile.jpg";
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Direct");
-        myDir.mkdirs();
-        File file = new File(myDir, fileName);
-        if (file.exists())
-            file.delete();
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        String fileName = System.currentTimeMillis() + "_profile";
+        Uri imageUri= null;
+        OutputStream fos;
+        String directory=Environment.DIRECTORY_PICTURES;
+        String path = Environment.getExternalStorageDirectory().toString();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            try{
+                ContentResolver resolver = this.getContentResolver();
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
+                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png");
+                contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, directory);
+                imageUri=resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+                fos = resolver.openOutputStream(imageUri);
+                boolean saved = bm.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.flush();
+                fos.close();
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+            Log.d(TAG, "SavedImages:"+path+ File.separator+directory+ File.separator + fileName);
+            return path+ File.separator+directory+ File.separator + fileName+".png";
         }
-        return root + "/Direct/" + fileName;
+        else{
+            String root = Environment.getExternalStorageDirectory().toString();
+            File myDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Direct");
+            myDir.mkdirs();
+            File file = new File(myDir, fileName);
+            if (file.exists())
+                file.delete();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return root + "/Direct/" + fileName;
+        }
+
     }
 
     private void showSaveDialog() {
