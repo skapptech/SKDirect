@@ -29,6 +29,7 @@ import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -111,6 +112,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 import io.reactivex.observers.DisposableObserver;
 
@@ -151,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
                     }
                     firebaseToken = task.getResult();
                 });
+        getUniqueId();
     }
 
     private void initViews() {
@@ -418,6 +421,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         public String getCurrentLocation2() {
             return getCurrentLatLong2();
         }
+
         @JavascriptInterface
         public String getCurrentLocation() {
             return getCurrentLatLong();
@@ -477,9 +481,10 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         public void addAppsFlayersEvent(String eventName, String value) {
             Utils.logAppsFlayerEventApp(getApplicationContext(), eventName, value);
         }
+
         @JavascriptInterface
         public void addAppsFlayersEvent2(String eventName, String key, String value) {
-            Utils.logAppsFlayerEventApp2(getApplicationContext(), eventName,key, value);
+            Utils.logAppsFlayerEventApp2(getApplicationContext(), eventName, key, value);
         }
 
         @JavascriptInterface
@@ -531,6 +536,22 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         public String getFirebaseToken() {
             return firebaseToken;
         }
+
+        @JavascriptInterface
+        public void addOneSignalTrigger(String key, String value) {
+            sendOneSignalTrigger(key, value);
+        }
+
+        @JavascriptInterface
+        public void addOneSignalRemoveTrigger(String key) {
+            deleteOneSignalTrigger(key);
+        }
+
+        @JavascriptInterface
+        public String getSecureDeviceId(){
+            return getUniqueId();
+        }
+
     }
 
     // Start JS Function's Method
@@ -1086,6 +1107,19 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
     }
 
+    private void sendOneSignalTrigger(String key, String value) {
+        if (Utils.isNullOrEmpty(key) && Utils.isNullOrEmpty(value)) {
+            OneSignal.addTrigger(key, value);
+        }
+    }
+
+    private void deleteOneSignalTrigger(String key) {
+        if (Utils.isNullOrEmpty(key)) {
+            OneSignal.removeTriggerForKey(key);
+        }
+    }
+
+
     public void callRunTimeLocationPermissions() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
         Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
@@ -1100,6 +1134,16 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         });
     }
 
+    public String getUniqueId() {
+        String secureId ="";
+        try {
+            secureId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+            System.out.println("SecureId - "+secureId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return secureId;
+    }
 
     //End JS Function's Method
 
