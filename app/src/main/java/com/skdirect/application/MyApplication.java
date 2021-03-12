@@ -2,6 +2,7 @@ package com.skdirect.application;
 
 import android.app.Application;
 import android.content.Intent;
+
 import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -10,6 +11,7 @@ import com.onesignal.OSNotification;
 import com.onesignal.OneSignal;
 import com.skdirect.BuildConfig;
 import com.skdirect.activity.SplashActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -58,14 +60,20 @@ public class MyApplication extends Application {
 
             OSNotification notification = notificationReceivedEvent.getNotification();
             JSONObject data = notification.getAdditionalData();
-                    if (data!=null) {
-                        notificationReceivedEvent.complete(notification);
-                    } else {
-                        notificationReceivedEvent.complete(null);
-                    }
+            if (data != null) {
+                notificationReceivedEvent.complete(notification);
+            } else {
+                notificationReceivedEvent.complete(null);
+            }
         });
         OSDeviceState device = OneSignal.getDeviceState();
-        String deviceId = device.getUserId();
+        String deviceId = "";
+        try {
+            deviceId = device.getUserId();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         Map<String, Object> oneSignalData = new HashMap<>();
         oneSignalData.put("onesignalCustomerId", deviceId);
 

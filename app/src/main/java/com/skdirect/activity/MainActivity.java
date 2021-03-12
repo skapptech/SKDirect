@@ -153,7 +153,6 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
                     }
                     firebaseToken = task.getResult();
                 });
-        getUniqueId();
     }
 
     private void initViews() {
@@ -548,7 +547,7 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
 
         @JavascriptInterface
-        public String getSecureDeviceId(){
+        public String getSecureDeviceId() {
             return getUniqueId();
         }
 
@@ -1084,37 +1083,37 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     }
 
     private void subscribeTopic(String topic) {
-        if (Utils.isNullOrEmpty(topic)) {
+        if (!Utils.isNullOrEmpty(topic)) {
             FirebaseMessaging.getInstance().subscribeToTopic(topic);
         }
     }
 
     private void unsubscribeTopic(String topic) {
-        if (Utils.isNullOrEmpty(topic)) {
+        if (!Utils.isNullOrEmpty(topic)) {
             FirebaseMessaging.getInstance().unsubscribeFromTopic(topic);
         }
     }
 
     private void sendOneSignalTag(String key, String value) {
-        if (Utils.isNullOrEmpty(key) && Utils.isNullOrEmpty(value)) {
+        if (!Utils.isNullOrEmpty(key) && !Utils.isNullOrEmpty(value)) {
             OneSignal.sendTag(key, value);
         }
     }
 
     private void deleteOneSignalTag(String key) {
-        if (Utils.isNullOrEmpty(key)) {
+        if (!Utils.isNullOrEmpty(key)) {
             OneSignal.deleteTag(key);
         }
     }
 
     private void sendOneSignalTrigger(String key, String value) {
-        if (Utils.isNullOrEmpty(key) && Utils.isNullOrEmpty(value)) {
+        if (!Utils.isNullOrEmpty(key) && !Utils.isNullOrEmpty(value)) {
             OneSignal.addTrigger(key, value);
         }
     }
 
     private void deleteOneSignalTrigger(String key) {
-        if (Utils.isNullOrEmpty(key)) {
+        if (!Utils.isNullOrEmpty(key)) {
             OneSignal.removeTriggerForKey(key);
         }
     }
@@ -1135,11 +1134,10 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
     }
 
     public String getUniqueId() {
-        String secureId ="";
+        String secureId = "";
         try {
             secureId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-            System.out.println("SecureId - "+secureId);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return secureId;
