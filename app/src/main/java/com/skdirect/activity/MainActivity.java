@@ -286,14 +286,21 @@ public class MainActivity extends AppCompatActivity implements OtpReceivedInterf
         }
         commonClassForAPI = CommonClassForAPI.getInstance();
 
-        OneSignal.setInAppMessageClickHandler(new OneSignal.OSInAppMessageClickHandler() {
-            @Override
-            public void inAppMessageClicked(OSInAppMessageAction result) {
-                if (!Utils.isNullOrEmpty(result.getClickName()) && Patterns.WEB_URL.matcher(result.getClickName()).matches()) {
-                    mBinding.webView.loadUrl(result.getClickName());
-                }
+
+        /*try {
+            if (OneSignal.getDeviceState().getUserId() != null) {
+                OneSignal.setInAppMessageClickHandler(new OneSignal.OSInAppMessageClickHandler() {
+                    @Override
+                    public void inAppMessageClicked(OSInAppMessageAction result) {
+                        if (!Utils.isNullOrEmpty(result.getClickName()) && Patterns.WEB_URL.matcher(result.getClickName()).matches()) {
+                            mBinding.webView.loadUrl(result.getClickName());
+                        }
+                    }
+                });
             }
-        });
+        }catch (Exception e){
+            e.printStackTrace();
+        }*/
     }
 
     @Override
