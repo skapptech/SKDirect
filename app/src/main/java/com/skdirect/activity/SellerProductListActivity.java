@@ -126,7 +126,6 @@ public class SellerProductListActivity extends AppCompatActivity implements View
                             loading = true;
                         }
                     });
-
                 }else
                 {
                     loading = false;

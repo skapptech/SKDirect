@@ -56,7 +56,7 @@ import retrofit2.http.Query;
 
 public interface APIServices {
 
-    @GET("api/App/GetAppInfo")
+        @GET("api/App/GetAppInfo")
     Call<AppVersionModel> getAppversion();
 
     @POST("api/Notification/UpdateFcmId")

@@ -227,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
     private void getCartItemApi() {
         mainActivityViewMode.getCartItemsRequest("123");
         mainActivityViewMode.getCartItemsVM().observe(this, new Observer<CartItemModel>() {

@@ -90,8 +90,6 @@ public class SplashActivity extends AppCompatActivity {
                     }else{
                         checkVersionData(appVersionModels);
                     }
-
-
                 }
             }
         });
@@ -102,7 +100,7 @@ public class SplashActivity extends AppCompatActivity {
         if (SharePrefs.getInstance(SplashActivity.this).getBoolean(SharePrefs.IS_LOGIN)){
             startActivity(new Intent(this,MainActivity.class));
         }else {
-            startActivity(new Intent(this,LoginActivity.class));
+            startActivity(new Intent(this,PlaceSearchActivity.class));
         }
     }
 

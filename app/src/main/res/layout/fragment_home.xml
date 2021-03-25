@@ -16,7 +16,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
@@ -26,6 +25,7 @@
 
                     <EditText
                         android:id="@+id/et_search_seller"
+                        style="@style/font_normal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -36,7 +36,6 @@
                         android:drawablePadding="10dp"
                         android:hint="Search seller by name or product"
                         android:imeOptions="actionSearch"
-                        style="@style/font_normal"
                         android:inputType="text"
                         android:maxLines="1"
                         android:padding="8dp"
@@ -45,239 +44,240 @@
 
                 </RelativeLayout>
 
-
-                <RelativeLayout
+               <!-- <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp">
+                    android:background="@drawable/ic_home_mall"
+                    android:orientation="vertical">-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:padding="5dp"
-                        android:text="Nearby Items"
-                        style="@style/font_normal"
-                        android:textColor="@color/seller_button_color"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tv_near_by_view_all"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/rounded_drawer"
-                        android:padding="5dp"
-                        style="@style/font_normal_sami_bold"
-                        android:text="View More"
-                        android:textColor="@color/seller_button_color"
-                        android:textSize="10sp"
-                        android:textStyle="normal" />
-
-
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_near_by_item"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scrollbars="horizontal" />
-
-                    <LinearLayout
-                        android:id="@+id/ll_near_by_not_found"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone">
+                        android:layout_margin="10dp">
 
                         <TextView
+                            style="@style/font_normal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
-                            android:layout_gravity="center"
                             android:padding="5dp"
-                            android:text="No Item Found"
-                            android:textColor="@color/red"
+                            android:text="Nearby Items"
+                            android:textColor="@color/seller_button_color"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tv_near_by_view_all"
+                            style="@style/font_normal_sami_bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_gravity="center"
-                            android:gravity="center"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/rounded_drawer"
                             android:padding="5dp"
-                            android:text="For your Location there is no  seller active,please in \n future  "
-                            android:textColor="@color/grid_divder"
-                            android:textStyle="bold" />
+                            android:text="View More"
+                            android:textColor="@color/seller_button_color"
+                            android:textSize="10sp"
+                            android:textStyle="normal" />
 
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
-
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:padding="5dp"
-                        android:text="Nearby Seller"
-                        style="@style/font_normal"
-                        android:textColor="@color/seller_button_color"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tv_near_by_sellar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/rounded_drawer"
-                        android:padding="5dp"
-                        style="@style/font_normal_sami_bold"
-                        android:text="View More"
-                        android:textColor="@color/seller_button_color"
-                        android:textSize="10sp"
-                        android:textStyle="normal" />
-
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_top_seller"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scrollbars="horizontal" />
+                        android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:id="@+id/ll_top_seller_not_found"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_near_by_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scrollbars="horizontal" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_near_by_not_found"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_gravity="center"
+                                android:padding="5dp"
+                                android:text="No Item Found"
+                                android:textColor="@color/red"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                android:text="For your Location there is no  seller active,please in \n future  "
+                                android:textColor="@color/grid_divder"
+                                android:textStyle="bold" />
+
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone">
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp">
 
                         <TextView
+                            style="@style/font_normal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
-                            android:layout_gravity="center"
                             android:padding="5dp"
-                            android:text="No Item Found"
-                            android:textColor="@color/red"
+                            android:text="Nearby Seller"
+                            android:textColor="@color/seller_button_color"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tv_near_by_sellar"
+                            style="@style/font_normal_sami_bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_gravity="center"
-                            android:gravity="center"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/rounded_drawer"
                             android:padding="5dp"
-                            android:text="For your Location there is no  seller active,please in \n future  "
-                            android:textColor="@color/grid_divder"
-                            android:textStyle="bold" />
+                            android:text="View More"
+                            android:textColor="@color/seller_button_color"
+                            android:textSize="10sp"
+                            android:textStyle="normal" />
 
+                    </RelativeLayout>
 
-                    </LinearLayout>
-
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:padding="5dp"
-                        style="@style/font_normal"
-                        android:text="All Categories"
-                        android:textColor="@color/seller_button_color"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tv_cetegory"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/rounded_drawer"
-                        android:padding="5dp"
-                        android:text="View More"
-                        android:textColor="@color/seller_button_color"
-                        android:textSize="10sp"
-                        style="@style/font_normal_sami_bold"
-                        android:textStyle="normal" />
-
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_all_cetegory"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scrollbars="horizontal" />
+                        android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:id="@+id/ll_all_cetegory_not_found"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_top_seller"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scrollbars="horizontal" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_top_seller_not_found"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_gravity="center"
+                                android:padding="5dp"
+                                android:text="No Item Found"
+                                android:textColor="@color/red"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                android:text="For your Location there is no  seller active,please in \n future  "
+                                android:textColor="@color/grid_divder"
+                                android:textStyle="bold" />
+
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone">
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp">
 
                         <TextView
+                            style="@style/font_normal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
-                            android:layout_gravity="center"
                             android:padding="5dp"
-                            android:text="No Item Found"
-                            android:textColor="@color/red"
+                            android:text="All Categories"
+                            android:textColor="@color/seller_button_color"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tv_cetegory"
+                            style="@style/font_normal_sami_bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_gravity="center"
-                            android:gravity="center"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/rounded_drawer"
                             android:padding="5dp"
-                            android:text="For your Location there is no  seller active,please in \n future  "
-                            android:textColor="@color/grid_divder"
-                            android:textStyle="bold" />
+                            android:text="View More"
+                            android:textColor="@color/seller_button_color"
+                            android:textSize="10sp"
+                            android:textStyle="normal" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_all_cetegory"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scrollbars="horizontal" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_all_cetegory_not_found"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_gravity="center"
+                                android:padding="5dp"
+                                android:text="No Item Found"
+                                android:textColor="@color/red"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                android:text="For your Location there is no  seller active,please in \n future  "
+                                android:textColor="@color/grid_divder"
+                                android:textStyle="bold" />
 
 
-                    </LinearLayout>
+                        </LinearLayout>
 
 
-                </RelativeLayout>
+                    </RelativeLayout>
 
-
+               <!-- </LinearLayout>-->
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

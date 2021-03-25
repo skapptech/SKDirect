@@ -39,6 +39,17 @@
             android:screenOrientation="portrait">
 
         </activity>
+
+        <activity
+            android:name="com.skdirect.activity.PlaceSearchActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name="com.skdirect.activity.UserLocationActvity"
+            android:screenOrientation="portrait">
+
+        </activity>
         <activity
             android:name="com.skdirect.activity.SplashActivity"
             android:screenOrientation="portrait">
