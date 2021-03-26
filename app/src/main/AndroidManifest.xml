@@ -33,7 +33,6 @@
         android:theme="@style/Theme.WebView"
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="adjustPan">
-        <activity android:name=".activity.ImageEditorActivity"></activity>
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTask"
