@@ -14,6 +14,8 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.soloader.SoLoader;
 
 import java.io.IOException;
 
@@ -34,6 +36,8 @@ public class MyApplication extends Application implements LifecycleObserver {
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         appContext = this;
         mInstance = this;
+        SoLoader.init(this, false);
+        Fresco.initialize(this);
     }
 
 
