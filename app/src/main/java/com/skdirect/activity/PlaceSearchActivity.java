@@ -39,17 +39,12 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
     private void initView() {
         mGeocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         mBinding.etLocation.setOnClickListener(this);
-        mBinding.etCity.setOnClickListener(this);
         mBinding.btSave.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.et_city:
-                findCityLocation();
-                break;
-            
             case R.id.et_location:
                 findLocation();
                 break;
@@ -61,9 +56,7 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void saveLocationData() {
-        if (TextUtils.isNullOrEmpty(mBinding.etCity.getText().toString().trim())) {
-            Utils.setToast(this,"Enter Your City Name");
-        }else if (TextUtils.isNullOrEmpty(mBinding.etLocation.getText().toString().trim())){
+         if (TextUtils.isNullOrEmpty(mBinding.etLocation.getText().toString().trim())){
             Utils.setToast(this,"Enter your Address");
         }else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString().trim())){
             Utils.setToast(this,"Enter your PinCode");
@@ -72,21 +65,12 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void findCityLocation() {
-        if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
-        }
-        startActivityForResult(new Intent(getApplicationContext(), UserLocationActvity.class)
-                .putExtra("cityname", "")
-                .putExtra("searchCity", false), REQUEST_FOR_CITY);
-    }
-
     private void findLocation() {
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
         }
         startActivityForResult(new Intent(getApplicationContext(), UserLocationActvity.class)
-                .putExtra("cityname", mBinding.etCity.getText().toString().trim())
+                .putExtra("cityname", "")
                 .putExtra("searchCity", false), REQUEST_FOR_ADDRESS);
 
     }
@@ -116,10 +100,6 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else if (requestCode == REQUEST_FOR_CITY & resultCode == RESULT_OK){
-            place = data.getParcelableExtra("PlaceResult");
-            mBinding.etCity.setText(place.getAddress());
-
         }
     }
 
