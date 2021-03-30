@@ -1,42 +1,58 @@
 package com.skdirect.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.skdirect.R;
 import com.skdirect.adapter.PlacesAutoCompleteAdapter;
 import com.skdirect.databinding.ActivityUserLocationBinding;
-import com.skdirect.utils.MyApplication;
+import com.skdirect.location.EasyWayLocation;
+import com.skdirect.location.LocationData;
+import com.skdirect.location.Listener;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 
-public class UserLocationActvity extends AppCompatActivity implements PlacesAutoCompleteAdapter.ClickListener {
+public class UserLocationActvity extends AppCompatActivity implements PlacesAutoCompleteAdapter.ClickListener,Listener, LocationData.AddressCallBack {
     private ActivityUserLocationBinding mBinding;
     private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
     private String cityName = "";
     private boolean searchCity = false;
+    private EasyWayLocation easyWayLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_location);
-        mBinding.toolbarTittle.ivBackPress.setOnClickListener(view -> onBackPressed());
+        easyWayLocation = new EasyWayLocation(this, false,this);
+
 
 
         if (getIntent() != null) {
             cityName = getIntent().getStringExtra("cityname");
             searchCity = getIntent().getBooleanExtra("searchCity", false);
         }
+        initView();
 
+
+
+    }
+
+    private void initView() {
 
         Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
 
@@ -58,6 +74,12 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
             return false;
         });
         mBinding.imSearchPlace.setOnClickListener(view -> searchPlace());
+        mBinding.btUseCurrentLocation.setOnClickListener(view ->  getLocation());
+        mBinding.toolbarTittle.ivBackPress.setOnClickListener(view -> onBackPressed());
+    }
+
+    private void getLocation() {
+        easyWayLocation.startLocation();
     }
 
     @Override
@@ -90,5 +112,31 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
             mBinding.imSearchPlace.setVisibility(View.VISIBLE);
             mBinding.progressSearch.setVisibility(View.INVISIBLE);
         }, 2000);
+    }
+
+
+
+    @Override
+    public void locationData(LocationData locationData) {
+
+    }
+
+    @Override
+    public void locationOn() {
+
+    }
+
+    @Override
+    public void currentLocation(Location location) {
+        LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+        Intent intent = new Intent();
+        intent.putExtra("PlaceResult", latLng);
+        setResult(3, intent);
+        finish();
+    }
+
+    @Override
+    public void locationCancelled() {
+
     }
 }

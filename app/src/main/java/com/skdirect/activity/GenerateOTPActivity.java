@@ -212,9 +212,13 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     if (model.getIsUserExist()!=null) {
                         SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, model.getIsUserExist());
                         SharePrefs.getInstance(GenerateOTPActivity.this).putString(SharePrefs.USER_ID, model.getUserid());
-                        SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_LOGIN, true);
                         commonClassForAPI.getToken(callToken, "password", mobileNumber, otpString, true, true, "BUYERAPP");
-                        startActivity(new Intent(GenerateOTPActivity.this, MainActivity.class));
+
+                        if (SharePrefs.getInstance(GenerateOTPActivity.this).getBoolean(SharePrefs.IS_LOGIN)){
+                            startActivity(new Intent(GenerateOTPActivity.this,MainActivity.class));
+                        }else {
+                            startActivity(new Intent(GenerateOTPActivity.this,PlaceSearchActivity.class));
+                        }
                         finish();
 
                     }else {
@@ -247,7 +251,6 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
-                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
                     commonClassForAPI.getUpdateToken(updatecallToken,new UpdateTokenModel(fcmToken));
 
 

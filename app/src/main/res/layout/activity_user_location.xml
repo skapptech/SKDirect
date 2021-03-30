@@ -25,7 +25,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp">
+                android:layout_marginBottom="10dp">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/address"
@@ -71,6 +71,30 @@
                     android:indeterminateTint="@color/colorPrimaryDark"
                     android:visibility="gone" />
             </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OR"
+                android:textColor="@color/black"/>
+
+
+            <Button
+                android:id="@+id/bt_use_current_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Use Current Location"
+                android:padding="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:drawableLeft="@drawable/ic_fdfds"
+                android:drawableTint="@color/white"
+                android:drawablePadding="5dp"
+                style="@style/font_normal_sami_bold"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:background="@drawable/background_for_buttons"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/places_recycler_view"
