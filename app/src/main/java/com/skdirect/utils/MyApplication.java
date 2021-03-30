@@ -14,6 +14,7 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
 
+import com.facebook.soloader.SoLoader;
 
 import java.io.IOException;
 
@@ -31,6 +32,7 @@ public class MyApplication extends Application implements LifecycleObserver {
     @Override
     public void onCreate() {
         super.onCreate();
+        SoLoader.init(this, false);
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         appContext = this;
         mInstance = this;
