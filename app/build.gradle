@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'com.jakewharton.butterknife'
 }
 apply plugin: 'com.google.gms.google-services'
 
@@ -103,5 +104,10 @@ dependencies {
 // SoLoader
     implementation 'com.facebook.soloader:soloader:0.5.1'
     implementation 'com.facebook.fresco:fresco:1.2.0'
+
+
+    implementation "com.airbnb.android:epoxy:4.4.4"
+    // Add the annotation processor if you are using Epoxy's annotations (recommended)
+    annotationProcessor "com.airbnb.android:epoxy-processor:4.4.4"
 
 }
