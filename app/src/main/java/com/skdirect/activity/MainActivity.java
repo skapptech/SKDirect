@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.ll_logout:
                 clearSharePrefs();
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), PlaceSearchActivity.class));
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;
