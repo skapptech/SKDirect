@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_lost_items" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/bg_all_cet"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="5dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_lost_items" />
+
+                        <TextView
+                            style="@style/font_normal_sami_bold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:padding="2dp"
+                            android:text="bhagwan"
+                            android:textColor="@color/black"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/bg_all_cet"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="5dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_lost_items" />
+
+                        <TextView
+                            style="@style/font_normal_sami_bold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:padding="2dp"
+                            android:text="bhagwan"
+                            android:textColor="@color/black"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/bg_all_cet"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="5dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_lost_items" />
+
+                        <TextView
+                            style="@style/font_normal_sami_bold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:padding="2dp"
+                            android:text="bhagwan"
+                            android:textColor="@color/black"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/bg_all_cet"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_lost_items" />
+
+                <TextView
+                    style="@style/font_normal_sami_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:padding="2dp"
+                    android:text="bhagwan"
+                    android:textColor="@color/black"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/bg_all_cet"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_lost_items" />
+
+                <TextView
+                    style="@style/font_normal_sami_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:padding="2dp"
+                    android:text="bhagwan"
+                    android:textColor="@color/black"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/bg_all_cet"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_lost_items" />
+
+                <TextView
+                    style="@style/font_normal_sami_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:padding="2dp"
+                    android:text="bhagwan"
+                    android:textColor="@color/black"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

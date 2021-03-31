@@ -14,6 +14,7 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
 
+import com.skdirect.api.ProteusManager;
 
 import java.io.IOException;
 
@@ -23,6 +24,8 @@ public class MyApplication extends Application implements LifecycleObserver {
     private static MyApplication mInstance;
     private static MediaRecorder mediaRecorder;
     public Activity activity;
+
+    private ProteusManager proteusManager;
 
     public static synchronized MyApplication getInstance() {
         return mInstance;
@@ -34,8 +37,13 @@ public class MyApplication extends Application implements LifecycleObserver {
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         appContext = this;
         mInstance = this;
+
+        proteusManager = new ProteusManager(null);
     }
 
 
+    public ProteusManager getProteusManager() {
+        return proteusManager;
+    }
 
 }

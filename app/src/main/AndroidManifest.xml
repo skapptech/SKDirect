@@ -12,46 +12,36 @@
     <uses-permission android:name="android.Manifest.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-
     <application
         android:name=".utils.MyApplication"
         android:allowBackup="true"
         android:allowClearUserData="false"
         android:fitsSystemWindows="true"
-        android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
         android:windowDisablePreview="true"
-        android:windowSoftInputMode="adjustResize"
-        >
+        android:windowSoftInputMode="adjustResize">
+        <activity android:name=".activity.SplashActivity"></activity>
         <activity
-            android:name="com.skdirect.activity.MainActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.IntroActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
-
+            android:name=".activity.IntroActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.PlaceSearchActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.PlaceSearchActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.UserLocationActvity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.UserLocationActvity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.SplashActivity"
+            android:name=".activity.ProteusActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -59,7 +49,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait" />
@@ -69,69 +58,49 @@
         <activity
             android:name=".activity.LoginWithPasswordActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.NearByItemProductListActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.SellerProductListActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.CategoriesListActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.SearchActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait" />
-
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.ProductDetailsActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.ProfilePrimaryAddressActivity"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".activity.ChangePasswordActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.MyOrderActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.ReviewActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.OrderDetailActivity"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".activity.ProfileActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.UpdateProfileActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.PrimaryAddressActivity"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".activity.NewAddressActivity"
             android:screenOrientation="portrait" />
-
-
-
-
         <activity
             android:name=".activity.SellerProfileActivity"
             android:label=""
@@ -140,14 +109,10 @@
             android:name=".activity.CartActivity"
             android:label=""
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.PaymentActivity"
             android:label=""
             android:screenOrientation="portrait" />
-
-
-
         <activity
             android:name=".activity.MapsActivity"
             android:hardwareAccelerated="false"
@@ -173,7 +138,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/logo" />
