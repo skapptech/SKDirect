@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.skdirect.BuildConfig;
 import com.skdirect.R;
 
 import java.text.DateFormat;
@@ -152,6 +154,15 @@ public class Utils {
             return "null";
         }
 
+    }
+
+    public static String getDeviceUniqueID(Activity activity) {
+        if (BuildConfig.DEBUG) {
+            return Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID) + "shinoo";
+            // return Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
+        } else {
+            return Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
+        }
     }
 
 }
