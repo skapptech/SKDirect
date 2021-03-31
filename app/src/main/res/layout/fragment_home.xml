@@ -45,7 +45,7 @@
                 </RelativeLayout>
 
 
-           <!-- <LinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_home_mall"
@@ -56,13 +56,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginStart="12sp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20sp"
                     android:src="@drawable/ic_shoping"/>
                 
                 
-            </LinearLayout>-->
-                
+            </LinearLayout>
 
 
 
@@ -283,10 +282,7 @@
                             android:textColor="@color/grid_divder"
                             android:textStyle="bold" />
 
-
                     </LinearLayout>
-
-
                 </RelativeLayout>
 
             </LinearLayout>
