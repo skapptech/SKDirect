@@ -30,6 +30,7 @@ import com.flipkart.android.proteus.support.design.DesignModule;
 import com.flipkart.android.proteus.support.v4.SupportV4Module;
 import com.flipkart.android.proteus.support.v7.CardViewModule;
 import com.flipkart.android.proteus.support.v7.RecyclerViewModule;
+import com.flipkart.android.proteus.support.v7.layoutmanager.ProteusLinearLayoutManager;
 import com.flipkart.android.proteus.value.DrawableValue;
 import com.flipkart.android.proteus.value.Layout;
 import com.flipkart.android.proteus.value.ObjectValue;
@@ -1247,7 +1248,6 @@ public class ProteusActivity extends AppCompatActivity implements ProteusManager
                 "  ]\n" +
                 "}";*/
 
-        LinearLayoutManager layoutManagerH = new LinearLayoutManager(getApplicationContext(), RecyclerView.HORIZONTAL, false);
 
         final String LAYOUT  = "{\n" +
                 "  \"type\": \"RelativeLayout\",\n" +
@@ -1278,6 +1278,71 @@ public class ProteusActivity extends AppCompatActivity implements ProteusManager
                 "              \"src\": \"@drawable/ic_lost_items\"\n" +
                 "            },\n" +
                 " {\n" +
+                "        \"type\": \"RecyclerView\",\n" +
+                "        \"layout_width\": \"match_parent\",\n" +
+                "        \"layout_height\": \"wrap_content\",\n" +
+                "        \"layout_margin\": \"10dp\",\n" +
+                "        \"background\": \"#ffffff\",\n" +
+                "        \"data\": {\n" +
+                "          \"items\": \"@{data.achievements}\",\n" +
+                "          \"images\":\"@{data.image}\"\n" +
+                "        },\n" +
+                "        \"layout_manager\": {\n" +
+                "          \"type\": \"LinearLayoutManagerHorizontal\"\n" +
+                "        },\n" +
+                "        \"adapter\": {\n" +
+                "          \"@\": {\n" +
+                "            \"type\": \"SimpleListAdapter\",\n" +
+                "            \"item-count\": \"@{items.$length}\",\n" +
+                "            \"item-layout\": {\n" +
+                "                      \"type\": \"LinearLayout\",\n" +
+                "                      \"layout_width\": \"120dp\",\n" +
+                "                      \"gravity\": \"center\",\n" +
+                "                      \"layout_height\": \"wrap_content\",\n" +
+                "                      \"layout_margin\": \"10dp\",\n" +
+                " \"data\": {\n" +
+                "                            \"item\": \"@{items[$index]}\",\n" +
+                "                            \"image\": \"@{images[$index]}\"\n" +
+                "                       },\n" +
+                "                      \"orientation\": \"vertical\",\n" +
+                "                      \"children\": [\n" +
+                "                        {\n" +
+                "                      \"type\": \"LinearLayout\",\n" +
+                "                      \"layout_width\": \"match_parent\",\n" +
+                "                      \"layout_height\": \"wrap_content\",\n" +
+                "                      \"layout_margin\": \"10dp\",\n" +
+                "                      \"background\": \"@drawable/bg_all_cet\",\n" +
+                "                      \"orientation\": \"vertical\",\n" +
+                "                      \"children\": [\n" +
+                "                        {\n" +
+                "                          \"type\": \"ImageView\",\n" +
+                "                          \"layout_width\": \"100dp\",\n" +
+                "                          \"layout_height\": \"100dp\",\n" +
+                "                          \"layout_marginTop\": \"5dp\",\n" +
+                "                          \"onClick\": {\n" +
+                "                              \"type\": \"showToast\"\n" +
+                "                           },\n" +
+                "                          \"scaleType\": \"centerInside\",\n" +
+                "                          \"src\": \"@{image}\"\n" +
+                "                        },\n" +
+                "                        {\n" +
+                "                          \"type\": \"TextView\",\n" +
+                "                          \"layout_width\": \"match_parent\",\n" +
+                "                          \"layout_height\": \"wrap_content\",\n" +
+                "                          \"layout_marginTop\": \"10dp\",\n" +
+                "                          \"ellipsize\": \"end\",\n" +
+                "                          \"gravity\": \"center\",\n" +
+                "                          \"maxLines\": \"1\",\n" +
+                "                          \"padding\": \"2dp\",\n" +
+                "                          \"text\": \"@{item}\",\n" +
+                "                          \"textColor\": \"@color/black\",\n" +
+                "                          \"textSize\": \"11sp\"\n" +
+                "                        }\n" +
+                "                      ]\n" +
+                "                    }]}\n" +
+                "          }\n" +
+                "        }\n" +
+                "      },{\n" +
                 "        \"type\": \"RecyclerView\",\n" +
                 "        \"layout_width\": \"match_parent\",\n" +
                 "        \"layout_height\": \"500dp\",\n" +
@@ -1315,8 +1380,8 @@ public class ProteusActivity extends AppCompatActivity implements ProteusManager
                 "                      \"children\": [\n" +
                 "                        {\n" +
                 "                          \"type\": \"ImageView\",\n" +
-                "                          \"layout_width\": \"match_parent\",\n" +
-                "                          \"layout_height\": \"match_parent\",\n" +
+                "                          \"layout_width\": \"100dp\",\n" +
+                "                          \"layout_height\": \"100dp\",\n" +
                 "                          \"layout_marginTop\": \"5dp\",\n" +
                 "                          \"onClick\": {\n" +
                 "                              \"type\": \"showToast\"\n" +

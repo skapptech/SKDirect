@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':proteus-core', ':gson-adapter', ':support-v4', ':recyclerview-v7', ':cardview-v7', ':design'
 rootProject.name = "SKDirect"
