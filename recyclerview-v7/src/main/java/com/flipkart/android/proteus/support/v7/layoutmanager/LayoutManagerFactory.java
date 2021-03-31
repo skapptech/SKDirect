@@ -45,7 +45,7 @@ public class LayoutManagerFactory {
   }
 
   public RecyclerView.LayoutManager create(@NonNull String type, @NonNull ProteusRecyclerView view, @NonNull ObjectValue config) {
-    return builders.get(type).create(view, config,type);
+    return builders.get(type).create(view, config, type);
   }
 
 }

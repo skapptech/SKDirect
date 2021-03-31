@@ -1267,354 +1267,126 @@ public class ProteusActivity extends AppCompatActivity implements ProteusManager
                 "          \"orientation\": \"vertical\",\n" +
                 "          \"children\": [\n" +
                 "            {\n" +
-                "              \"type\": \"ImageView\",\n" +
-                "              \"layout_width\": \"wrap_content\",\n" +
-                "              \"layout_height\": \"wrap_content\",\n" +
-                "              \"layout_marginTop\": \"5dp\",\n" +
-                "              \"scaleType\": \"centerInside\",\n" +
-                "               \"onClick\": {\n" +
-                "                    \"type\": \"showToast\"\n" +
-                "                  },\n" +
-                "              \"src\": \"@drawable/ic_lost_items\"\n" +
-                "            },\n" +
-                " {\n" +
-                "        \"type\": \"RecyclerView\",\n" +
-                "        \"layout_width\": \"match_parent\",\n" +
-                "        \"layout_height\": \"wrap_content\",\n" +
-                "        \"layout_margin\": \"10dp\",\n" +
-                "        \"background\": \"#ffffff\",\n" +
-                "        \"data\": {\n" +
-                "          \"items\": \"@{data.achievements}\",\n" +
-                "          \"images\":\"@{data.image}\"\n" +
-                "        },\n" +
-                "        \"layout_manager\": {\n" +
-                "          \"type\": \"LinearLayoutManagerHorizontal\"\n" +
-                "        },\n" +
-                "        \"adapter\": {\n" +
-                "          \"@\": {\n" +
-                "            \"type\": \"SimpleListAdapter\",\n" +
-                "            \"item-count\": \"@{items.$length}\",\n" +
-                "            \"item-layout\": {\n" +
-                "                      \"type\": \"LinearLayout\",\n" +
-                "                      \"layout_width\": \"120dp\",\n" +
-                "                      \"gravity\": \"center\",\n" +
-                "                      \"layout_height\": \"wrap_content\",\n" +
-                "                      \"layout_margin\": \"10dp\",\n" +
-                " \"data\": {\n" +
-                "                            \"item\": \"@{items[$index]}\",\n" +
-                "                            \"image\": \"@{images[$index]}\"\n" +
-                "                       },\n" +
-                "                      \"orientation\": \"vertical\",\n" +
-                "                      \"children\": [\n" +
-                "                        {\n" +
-                "                      \"type\": \"LinearLayout\",\n" +
-                "                      \"layout_width\": \"match_parent\",\n" +
-                "                      \"layout_height\": \"wrap_content\",\n" +
-                "                      \"layout_margin\": \"10dp\",\n" +
-                "                      \"background\": \"@drawable/bg_all_cet\",\n" +
-                "                      \"orientation\": \"vertical\",\n" +
-                "                      \"children\": [\n" +
-                "                        {\n" +
-                "                          \"type\": \"ImageView\",\n" +
-                "                          \"layout_width\": \"100dp\",\n" +
-                "                          \"layout_height\": \"100dp\",\n" +
-                "                          \"layout_marginTop\": \"5dp\",\n" +
-                "                          \"onClick\": {\n" +
-                "                              \"type\": \"showToast\"\n" +
-                "                           },\n" +
-                "                          \"scaleType\": \"centerInside\",\n" +
-                "                          \"src\": \"@{image}\"\n" +
-                "                        },\n" +
-                "                        {\n" +
-                "                          \"type\": \"TextView\",\n" +
-                "                          \"layout_width\": \"match_parent\",\n" +
-                "                          \"layout_height\": \"wrap_content\",\n" +
-                "                          \"layout_marginTop\": \"10dp\",\n" +
-                "                          \"ellipsize\": \"end\",\n" +
-                "                          \"gravity\": \"center\",\n" +
-                "                          \"maxLines\": \"1\",\n" +
-                "                          \"padding\": \"2dp\",\n" +
-                "                          \"text\": \"@{item}\",\n" +
-                "                          \"textColor\": \"@color/black\",\n" +
-                "                          \"textSize\": \"11sp\"\n" +
-                "                        }\n" +
-                "                      ]\n" +
-                "                    }]}\n" +
-                "          }\n" +
-                "        }\n" +
-                "      },{\n" +
-                "        \"type\": \"RecyclerView\",\n" +
-                "        \"layout_width\": \"match_parent\",\n" +
-                "        \"layout_height\": \"500dp\",\n" +
-                "        \"layout_margin\": \"10dp\",\n" +
-                "        \"background\": \"#ffffff\",\n" +
-                "        \"data\": {\n" +
-                "          \"items\": \"@{data.achievements}\",\n" +
-                "          \"images\":\"@{data.image}\"\n" +
-                "        },\n" +
-                "        \"layout_manager\": {\n" +
-                "          \"type\": \"LinearLayoutManager\"\n" +
-                "        },\n" +
-                "        \"adapter\": {\n" +
-                "          \"@\": {\n" +
-                "            \"type\": \"SimpleListAdapter\",\n" +
-                "            \"item-count\": \"@{items.$length}\",\n" +
-                "            \"item-layout\": {\n" +
-                "                      \"type\": \"LinearLayout\",\n" +
-                "                      \"layout_width\": \"match_parent\",\n" +
-                "                      \"layout_height\": \"wrap_content\",\n" +
-                "                      \"layout_margin\": \"10dp\",\n" +
-                " \"data\": {\n" +
-                "                            \"item\": \"@{items[$index]}\",\n" +
-                "                            \"image\": \"@{images[$index]}\"\n" +
-                "                       },\n" +
-                "                      \"orientation\": \"vertical\",\n" +
-                "                      \"children\": [\n" +
-                "                        {\n" +
-                "                      \"type\": \"LinearLayout\",\n" +
-                "                      \"layout_width\": \"match_parent\",\n" +
-                "                      \"layout_height\": \"wrap_content\",\n" +
-                "                      \"layout_margin\": \"10dp\",\n" +
-                "                      \"background\": \"@drawable/bg_all_cet\",\n" +
-                "                      \"orientation\": \"vertical\",\n" +
-                "                      \"children\": [\n" +
-                "                        {\n" +
-                "                          \"type\": \"ImageView\",\n" +
-                "                          \"layout_width\": \"100dp\",\n" +
-                "                          \"layout_height\": \"100dp\",\n" +
-                "                          \"layout_marginTop\": \"5dp\",\n" +
-                "                          \"onClick\": {\n" +
-                "                              \"type\": \"showToast\"\n" +
-                "                           },\n" +
-                "                          \"scaleType\": \"centerInside\",\n" +
-                "                          \"src\": \"@{image}\"\n" +
-                "                        },\n" +
-                "                        {\n" +
-                "                          \"type\": \"TextView\",\n" +
-                "                          \"layout_width\": \"match_parent\",\n" +
-                "                          \"layout_height\": \"wrap_content\",\n" +
-                "                          \"layout_marginTop\": \"10dp\",\n" +
-                "                          \"ellipsize\": \"end\",\n" +
-                "                          \"gravity\": \"center\",\n" +
-                "                          \"maxLines\": \"1\",\n" +
-                "                          \"padding\": \"2dp\",\n" +
-                "                          \"text\": \"@{item}\",\n" +
-                "                          \"textColor\": \"@color/black\",\n" +
-                "                          \"textSize\": \"11sp\"\n" +
-                "                        }\n" +
-                "                      ]\n" +
-                "                    }]}\n" +
-                "          }\n" +
-                "        }\n" +
-                "      },\n" +
-                "            {\n" +
-                "              \"type\": \"HorizontalScrollView\",\n" +
-                "              \"layout_width\": \"match_parent\",\n" +
-                "              \"layout_height\": \"wrap_content\",\n" +
-                "              \"children\": [\n" +
-                "                {\n" +
-                "                  \"type\": \"LinearLayout\",\n" +
-                "                  \"layout_width\": \"match_parent\",\n" +
-                "                  \"layout_height\": \"wrap_content\",\n" +
-                "                  \"orientation\": \"horizontal\",\n" +
-                "                  \"children\": [\n" +
-                "                    {\n" +
-                "                      \"type\": \"LinearLayout\",\n" +
-                "                      \"layout_width\": \"match_parent\",\n" +
-                "                      \"layout_height\": \"wrap_content\",\n" +
-                "                      \"layout_margin\": \"5dp\",\n" +
-                "                      \"background\": \"@drawable/bg_all_cet\",\n" +
-                "                      \"orientation\": \"vertical\",\n" +
-                "                      \"children\": [\n" +
-                "                        {\n" +
-                "                          \"type\": \"ImageView\",\n" +
-                "                          \"layout_width\": \"match_parent\",\n" +
-                "                          \"layout_height\": \"match_parent\",\n" +
-                "                          \"layout_marginTop\": \"5dp\",\n" +
-                "                          \"scaleType\": \"centerInside\",\n" +
-                "                          \"src\": \"@drawable/ic_lost_items\"\n" +
-                "                        },\n" +
-                "                        {\n" +
-                "                          \"type\": \"TextView\",\n" +
-                "                          \"layout_width\": \"match_parent\",\n" +
-                "                          \"layout_height\": \"wrap_content\",\n" +
-                "                          \"layout_marginTop\": \"10dp\",\n" +
-                "                          \"ellipsize\": \"end\",\n" +
-                "                          \"gravity\": \"center\",\n" +
-                "                          \"maxLines\": \"1\",\n" +
-                "                          \"padding\": \"2dp\",\n" +
-                "                          \"text\": \"bhagwan\",\n" +
-                "                          \"textColor\": \"@color/black\",\n" +
-                "                          \"textSize\": \"11sp\"\n" +
-                "                        }\n" +
-                "                      ]\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                      \"type\": \"LinearLayout\",\n" +
-                "                      \"layout_width\": \"match_parent\",\n" +
-                "                      \"layout_height\": \"wrap_content\",\n" +
-                "                      \"layout_margin\": \"5dp\",\n" +
-                "                      \"background\": \"@drawable/bg_all_cet\",\n" +
-                "                      \"orientation\": \"vertical\",\n" +
-                "                      \"children\": [\n" +
-                "                        {\n" +
-                "                          \"type\": \"ImageView\",\n" +
-                "                          \"layout_width\": \"match_parent\",\n" +
-                "                          \"layout_height\": \"match_parent\",\n" +
-                "                          \"layout_marginTop\": \"5dp\",\n" +
-                "                          \"scaleType\": \"centerInside\",\n" +
-                "                          \"src\": \"@drawable/ic_lost_items\"\n" +
-                "                        },\n" +
-                "                        {\n" +
-                "                          \"type\": \"TextView\",\n" +
-                "                          \"layout_width\": \"match_parent\",\n" +
-                "                          \"layout_height\": \"wrap_content\",\n" +
-                "                          \"layout_marginTop\": \"10dp\",\n" +
-                "                          \"ellipsize\": \"end\",\n" +
-                "                          \"gravity\": \"center\",\n" +
-                "                          \"maxLines\": \"1\",\n" +
-                "                          \"padding\": \"2dp\",\n" +
-                "                          \"text\": \"bhagwan\",\n" +
-                "                          \"textColor\": \"@color/black\",\n" +
-                "                          \"textSize\": \"11sp\"\n" +
-                "                        }\n" +
-                "                      ]\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                      \"type\": \"LinearLayout\",\n" +
-                "                      \"layout_width\": \"match_parent\",\n" +
-                "                      \"layout_height\": \"wrap_content\",\n" +
-                "                      \"layout_margin\": \"5dp\",\n" +
-                "                      \"background\": \"@drawable/bg_all_cet\",\n" +
-                "                      \"orientation\": \"vertical\",\n" +
-                "                      \"children\": [\n" +
-                "                        {\n" +
-                "                          \"type\": \"ImageView\",\n" +
-                "                          \"layout_width\": \"match_parent\",\n" +
-                "                          \"layout_height\": \"match_parent\",\n" +
-                "                          \"layout_marginTop\": \"5dp\",\n" +
-                "                          \"scaleType\": \"centerInside\",\n" +
-                "                          \"src\": \"@drawable/ic_lost_items\"\n" +
-                "                        },\n" +
-                "                        {\n" +
-                "                          \"type\": \"TextView\",\n" +
-                "                          \"layout_width\": \"match_parent\",\n" +
-                "                          \"layout_height\": \"wrap_content\",\n" +
-                "                          \"layout_marginTop\": \"10dp\",\n" +
-                "                          \"ellipsize\": \"end\",\n" +
-                "                          \"gravity\": \"center\",\n" +
-                "                          \"maxLines\": \"1\",\n" +
-                "                          \"padding\": \"2dp\",\n" +
-                "                          \"text\": \"bhagwan\",\n" +
-                "                          \"textColor\": \"@color/black\",\n" +
-                "                          \"textSize\": \"11sp\"\n" +
-                "                        }\n" +
-                "                      ]\n" +
-                "                    }\n" +
-                "                  ]\n" +
-                "                }\n" +
-                "              ]\n" +
-                "            },\n" +
-                "            {\n" +
-                "              \"type\": \"LinearLayout\",\n" +
+                "              \"type\": \"RecyclerView\",\n" +
                 "              \"layout_width\": \"match_parent\",\n" +
                 "              \"layout_height\": \"match_parent\",\n" +
-                "              \"orientation\": \"vertical\",\n" +
-                "              \"children\": [\n" +
-                "                {\n" +
-                "                  \"type\": \"LinearLayout\",\n" +
-                "                  \"layout_width\": \"match_parent\",\n" +
-                "                  \"layout_height\": \"wrap_content\",\n" +
-                "                  \"layout_margin\": \"5dp\",\n" +
-                "                  \"background\": \"@drawable/bg_all_cet\",\n" +
-                "                  \"orientation\": \"vertical\",\n" +
-                "                  \"children\": [\n" +
-                "                    {\n" +
-                "                      \"type\": \"ImageView\",\n" +
-                "                      \"layout_width\": \"match_parent\",\n" +
-                "                      \"layout_height\": \"match_parent\",\n" +
-                "                      \"layout_marginTop\": \"5dp\",\n" +
-                "                      \"scaleType\": \"centerInside\",\n" +
-                "                      \"src\": \"@drawable/ic_lost_items\"\n" +
+                "              \"layout_margin\": \"10dp\",\n" +
+                "              \"background\": \"#ffffff\",\n" +
+                "              \"data\": {\n" +
+                "                \"storeCategoryList\": \"@{data.StoreCategoryList}\"\n" +
+                "              },\n" +
+                "              \"layout_manager\": {\n" +
+                "                \"type\": \"GridLayoutManager\"\n" +
+                "              },\n" +
+                "              \"adapter\": {\n" +
+                "                \"@\": {\n" +
+                "                  \"type\": \"SimpleListAdapter\",\n" +
+                "                  \"item-count\": \"@{storeCategoryList.$length}\",\n" +
+                "                  \"item-layout\": {\n" +
+                "                    \"type\": \"LinearLayout\",\n" +
+                "                    \"layout_width\": \"match_parent\",\n" +
+                "                    \"layout_height\": \"wrap_content\",\n" +
+                "                    \"layout_margin\": \"10dp\",\n" +
+                "                    \"data\": {\n" +
+                "                      \"catNameJson\": \"@{storeCategoryList[$index]}\",\n" +
+                "                      \"catName\": \"@{catNameJson.CategoryName}\"\n" +
                 "                    },\n" +
-                "                    {\n" +
-                "                      \"type\": \"TextView\",\n" +
-                "                      \"layout_width\": \"match_parent\",\n" +
-                "                      \"layout_height\": \"wrap_content\",\n" +
-                "                      \"layout_marginTop\": \"10dp\",\n" +
-                "                      \"ellipsize\": \"end\",\n" +
-                "                      \"gravity\": \"center\",\n" +
-                "                      \"maxLines\": \"1\",\n" +
-                "                      \"padding\": \"2dp\",\n" +
-                "                      \"text\": \"bhagwan\",\n" +
-                "                      \"textColor\": \"@color/black\",\n" +
-                "                      \"textSize\": \"11sp\"\n" +
-                "                    }\n" +
-                "                  ]\n" +
-                "                },\n" +
-                "                {\n" +
-                "                  \"type\": \"LinearLayout\",\n" +
-                "                  \"layout_width\": \"match_parent\",\n" +
-                "                  \"layout_height\": \"wrap_content\",\n" +
-                "                  \"layout_margin\": \"5dp\",\n" +
-                "                  \"background\": \"@drawable/bg_all_cet\",\n" +
-                "                  \"orientation\": \"vertical\",\n" +
-                "                  \"children\": [\n" +
-                "                    {\n" +
-                "                      \"type\": \"ImageView\",\n" +
-                "                      \"layout_width\": \"match_parent\",\n" +
-                "                      \"layout_height\": \"match_parent\",\n" +
-                "                      \"layout_marginTop\": \"5dp\",\n" +
-                "                      \"scaleType\": \"centerInside\",\n" +
-                "                      \"src\": \"@drawable/ic_lost_items\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                      \"type\": \"TextView\",\n" +
-                "                      \"layout_width\": \"match_parent\",\n" +
-                "                      \"layout_height\": \"wrap_content\",\n" +
-                "                      \"layout_marginTop\": \"10dp\",\n" +
-                "                      \"ellipsize\": \"end\",\n" +
-                "                      \"gravity\": \"center\",\n" +
-                "                      \"maxLines\": \"1\",\n" +
-                "                      \"padding\": \"2dp\",\n" +
-                "                      \"text\": \"bhagwan\",\n" +
-                "                      \"textColor\": \"@color/black\",\n" +
-                "                      \"textSize\": \"11sp\"\n" +
-                "                    }\n" +
-                "                  ]\n" +
-                "                },\n" +
-                "                {\n" +
-                "                  \"type\": \"LinearLayout\",\n" +
-                "                  \"layout_width\": \"match_parent\",\n" +
-                "                  \"layout_height\": \"wrap_content\",\n" +
-                "                  \"layout_margin\": \"5dp\",\n" +
-                "                  \"background\": \"@drawable/bg_all_cet\",\n" +
-                "                  \"orientation\": \"vertical\",\n" +
-                "                  \"children\": [\n" +
-                "                    {\n" +
-                "                      \"type\": \"ImageView\",\n" +
-                "                      \"layout_width\": \"match_parent\",\n" +
-                "                      \"layout_height\": \"match_parent\",\n" +
-                "                      \"layout_marginTop\": \"5dp\",\n" +
-                "                      \"scaleType\": \"centerInside\",\n" +
-                "                      \"src\": \"@drawable/ic_lost_items\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                      \"type\": \"TextView\",\n" +
-                "                      \"layout_width\": \"match_parent\",\n" +
-                "                      \"layout_height\": \"wrap_content\",\n" +
-                "                      \"layout_marginTop\": \"10dp\",\n" +
-                "                      \"ellipsize\": \"end\",\n" +
-                "                      \"gravity\": \"center\",\n" +
-                "                      \"maxLines\": \"1\",\n" +
-                "                      \"padding\": \"2dp\",\n" +
-                "                      \"text\": \"bhagwan\",\n" +
-                "                      \"textColor\": \"@color/black\",\n" +
-                "                      \"textSize\": \"11sp\"\n" +
-                "                    }\n" +
-                "                  ]\n" +
+                "                    \"orientation\": \"vertical\",\n" +
+                "                    \"children\": [\n" +
+                "                      {\n" +
+                "                        \"type\": \"LinearLayout\",\n" +
+                "                        \"layout_width\": \"match_parent\",\n" +
+                "                        \"layout_height\": \"wrap_content\",\n" +
+                "                        \"layout_margin\": \"10dp\",\n" +
+                "                        \"background\": \"@drawable/bg_all_cet\",\n" +
+                "                        \"orientation\": \"vertical\",\n" +
+                "                        \"children\": [\n" +
+                "                          {\n" +
+                "                            \"type\": \"TextView\",\n" +
+                "                            \"layout_width\": \"match_parent\",\n" +
+                "                            \"layout_height\": \"wrap_content\",\n" +
+                "                            \"layout_marginTop\": \"10dp\",\n" +
+                "                            \"ellipsize\": \"end\",\n" +
+                "                            \"gravity\": \"center\",\n" +
+                "                            \"maxLines\": \"1\",\n" +
+                "                            \"padding\": \"2dp\",\n" +
+                "                            \"text\": \"@{catName}\",\n" +
+                "                            \"textColor\": \"@color/black\",\n" +
+                "                            \"textSize\": \"11sp\"\n" +
+                "                          },\n" +
+                "                          {\n" +
+                "                            \"type\": \"RecyclerView\",\n" +
+                "                            \"layout_width\": \"match_parent\",\n" +
+                "                            \"layout_height\": \"wrap_content\",\n" +
+                "                            \"layout_margin\": \"10dp\",\n" +
+                "                            \"background\": \"#ffffff\",\n" +
+                "                            \"data\": {\n" +
+                "                              \"storeListArray\": \"@{catNameJson.StoreList}\"\n" +
+                "                            },\n" +
+                "                            \"layout_manager\": {\n" +
+                "                              \"type\": \"GridLayoutManagerHorizontal\"\n" +
+                "                            },\n" +
+                "                            \"adapter\": {\n" +
+                "                              \"@\": {\n" +
+                "                                \"type\": \"SimpleListAdapter\",\n" +
+                "                                \"item-count\": \"@{storeListArray.$length}\",\n" +
+                "                                \"item-layout\": {\n" +
+                "                                  \"type\": \"LinearLayout\",\n" +
+                "                                  \"layout_width\": \"wrap_content\",\n" +
+                "                                  \"layout_height\": \"wrap_content\",\n" +
+                "                                  \"layout_margin\": \"10dp\",\n" +
+                "                                  \"data\": {\n" +
+                "                                    \"storeListJson\": \"@{storeListArray[$index]}\",\n" +
+                "                                    \"sellerName\": \"@{storeListJson.SellerName}\",\n" +
+                "                                    \"sellerImage\": \"@{storeListJson.ImagePath}\"\n" +
+                "                                  },\n" +
+                "                                  \"orientation\": \"vertical\",\n" +
+                "                                  \"children\": [\n" +
+                "                                    {\n" +
+                "                                      \"type\": \"LinearLayout\",\n" +
+                "                                      \"layout_width\": \"wrap_content\",\n" +
+                "                                      \"layout_height\": \"wrap_content\",\n" +
+                "                                      \"layout_margin\": \"10dp\",\n" +
+                "                                      \"background\": \"@drawable/bg_all_cet\",\n" +
+                "                                      \"orientation\": \"vertical\",\n" +
+                "                                      \"children\": [\n" +
+                "                                        {\n" +
+                "                                          \"type\": \"ImageView\",\n" +
+                "                                          \"layout_width\": \"90dp\",\n" +
+                "                                          \"layout_height\": \"90dp\",\n" +
+                "                                          \"layout_margin\": \"5dp\",\n" +
+                "                                          \"onClick\": {\n" +
+                "                                            \"type\": \"showToast\"\n" +
+                "                                          },\n" +
+                "                                          \"scaleType\": \"centerInside\",\n" +
+                "                                          \"src\": \"@{sellerImage}\"\n" +
+                "                                        },\n" +
+                "                                        {\n" +
+                "                                          \"type\": \"TextView\",\n" +
+                "                                          \"layout_width\": \"100dp\",\n" +
+                "                                          \"layout_height\": \"wrap_content\",\n" +
+                "                                          \"layout_marginTop\": \"10dp\",\n" +
+                "                                          \"ellipsize\": \"end\",\n" +
+                "                                          \"gravity\": \"center\",\n" +
+                "                                          \"maxLines\": \"1\",\n" +
+                "                                          \"padding\": \"2dp\",\n" +
+                "                                          \"text\": \"@{sellerName}\",\n" +
+                "                                          \"textColor\": \"@color/black\",\n" +
+                "                                          \"textSize\": \"11sp\"\n" +
+                "                                        }\n" +
+                "                                      ]\n" +
+                "                                    }\n" +
+                "                                  ]\n" +
+                "                                }\n" +
+                "                              }\n" +
+                "                            }\n" +
+                "                          }\n" +
+                "                        ]\n" +
+                "                      }\n" +
+                "                    ]\n" +
+                "                  }\n" +
                 "                }\n" +
-                "              ]\n" +
+                "              }\n" +
                 "            }\n" +
                 "          ]\n" +
                 "        }\n" +
@@ -1658,41 +1430,39 @@ public class ProteusActivity extends AppCompatActivity implements ProteusManager
                 "    \"loc\": \"BLR, IND\"\n" +
                 "  },\n" +
                 "  \"data\": {\n" +
-                "    \"achievements\": [\n" +
-                "      \"Malcontent\",\n" +
-                "      \"Trusty Hardware\",\n" +
-                "      \"Anchor's Aweigh!\",\n" +
-                "      \"Heavy Weapons\",\n" +
-                "      \"Revenge!\",\n" +
-                "      \"Submissive\",\n" +
-                "      \"Zero-Point Energy\",\n" +
-                "      \"Hallowed Ground\",\n" +
-                "      \"Where Cubbage Fears to Tread\",\n" +
-                "      \"Barnacle Bowling\",\n" +
-                "      \"Bug Hunt\",\n" +
-                "      \"Defiant\",\n" +
-                "      \"Warden Freeman\",\n" +
-                "      \"Follow Freeman\",\n" +
-                "      \"Radiation Levels Detected\",\n" +
-                "      \"Plaza Defender\",\n" +
-                "      \"Blast from the Past\",\n" +
-                "      \"One Man Army\",\n" +
-                "      \"Fight the Power\",\n" +
-                "      \"Giant Killer\",\n" +
-                "      \"Singularity Collapse\",\n" +
-                "      \"OSHA Violation\",\n" +
-                "      \"Targetted Advertising\",\n" +
-                "      \"Atomizer\",\n" +
-                "      \"What cat?\",\n" +
-                "      \"Counter-Sniper\",\n" +
-                "      \"Two Points\",\n" +
-                "      \"Vorticough\",\n" +
-                "      \"Flushed\",\n" +
-                "      \"Hack Attack!\",\n" +
-                "      \"Zombie Chopper\",\n" +
-                "      \"Keep Off the Sand!\",\n" +
-                "      \"Lambda Locator\"\n" +
-                "    ],\n" +
+                "    \"StoreCategoryList\": [{\n" +
+                "\t\t\"CategoryId\": 15,\n" +
+                "\t\t\"CategoryName\": \"Furniture\",\n" +
+                "\t\t\"StoreList\": [{\n" +
+                "\t\t\t\"SellerName\": \"Ravindra\",\n" +
+                "\t\t\t\"SellerId\": 34830,\n" +
+                "\t\t\t\"ImagePath\": \"https://res.cloudinary.com/dinsfrmzp/image/upload/v1610367725/~/images/SKDirect/fae24f10-ad13-4ede-b175-2a7d5a33e211_Product.jpg.jpg\",\n" +
+                "\t\t\t\"ShopName\": \"Ravindra Shop\",\n" +
+                "\t\t\t\"StoreView\": 62\n" +
+                "\t\t}, {\n" +
+                "\t\t\t\"SellerName\": \"SKDirectTest\",\n" +
+                "\t\t\t\"SellerId\": 34808,\n" +
+                "\t\t\t\"ImagePath\": \"https://res.cloudinary.com/dinsfrmzp/image/upload/v1615460266/~/images/SKDirect/50d57d92-2cc4-404a-a820-9d25546ac3c4.jpg\",\n" +
+                "\t\t\t\"ShopName\": \"Retailer\",\n" +
+                "\t\t\t\"StoreView\": 238\n" +
+                "\t\t}]\n" +
+                "\t}, {\n" +
+                "\t\t\"CategoryId\": 1,\n" +
+                "\t\t\"CategoryName\": \"Grocery\",\n" +
+                "\t\t\"StoreList\": [{\n" +
+                "\t\t\t\"SellerName\": \"Shivam buyer test\",\n" +
+                "\t\t\t\"SellerId\": 34929,\n" +
+                "\t\t\t\"ImagePath\": \"https://res.cloudinary.com/shopkirana/image/upload/v1616699359/Direct/dkwbhu0tu9sgf6j9ezhj.jpg\",\n" +
+                "\t\t\t\"ShopName\": \"Shivam Shop\",\n" +
+                "\t\t\t\"StoreView\": 263\n" +
+                "\t\t}, {\n" +
+                "\t\t\t\"SellerName\": \"Anurag Shop\",\n" +
+                "\t\t\t\"SellerId\": 34886,\n" +
+                "\t\t\t\"ImagePath\": \"https://res.cloudinary.com/shopkirana/image/upload/v1616743643/Direct/rsn1iat4bjzjltcipswf.jpg\",\n" +
+                "\t\t\t\"ShopName\": \"Anurag Shop\",\n" +
+                "\t\t\t\"StoreView\": 0\n" +
+                "\t\t}]\n" +
+                "\t}],\n" +
                 "    \"image\": [\n" +
                 "      \"https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Play_Prism.max-1100x1100.png\",\n" +
                 "      \"Trusty Hardware\",\n" +

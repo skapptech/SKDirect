@@ -41,8 +41,28 @@ public class RecyclerViewModule implements ProteusBuilder.Module {
 
   static final String ADAPTER_SIMPLE_LIST = "SimpleListAdapter";
 
-  public static final String LAYOUT_MANAGER_LINEAR = "LinearLayoutManager";
+  /*public static final String LAYOUT_MANAGER_LINEAR = "LinearLayoutManager";
   public static final String LAYOUT_MANAGER_LINEAR_HORIZONTAL = "LinearLayoutManagerHorizontal";
+  public static final String LAYOUT_MANAGER_GRID = "GridLayoutManager";*/
+
+  public static final String LAYOUT_MANAGER_GRID = "GridLayoutManager";
+  public static final String LAYOUT_MANAGER_GRID_HORIZONTAL = "GridLayoutManagerHorizontal";
+
+  //for SpanCount 2
+  public static final String LAYOUT_MANAGER_GRID2 = "GridLayoutManager2";
+  public static final String LAYOUT_MANAGER_GRID_HORIZONTAL2 = "GridLayoutManagerHorizontal2";
+
+
+  //for SpanCount 3
+  public static final String LAYOUT_MANAGER_GRID3 = "GridLayoutManager3";
+  public static final String LAYOUT_MANAGER_GRID_HORIZONTAL3 = "GridLayoutManagerHorizontal3";
+
+
+
+
+
+
+
 
   @NonNull
   private final RecyclerViewAdapterFactory adapterFactory;
@@ -178,6 +198,11 @@ public class RecyclerViewModule implements ProteusBuilder.Module {
       if (includeDefaultLayoutManagers) {
         registerDefaultLayoutManagers();
         registerDefaultLayoutManagersH();
+        registerDefaultLayoutManagers2();
+        registerDefaultLayoutManagersH2();
+        registerDefaultLayoutManagers3();
+        registerDefaultLayoutManagersH3();
+
       }
 
       return new RecyclerViewModule(adapterFactory, layoutManagerFactory);
@@ -188,12 +213,31 @@ public class RecyclerViewModule implements ProteusBuilder.Module {
     }
 
     private void registerDefaultLayoutManagers() {
-      register(LAYOUT_MANAGER_LINEAR, ProteusLinearLayoutManager.BUILDER);
+      register(LAYOUT_MANAGER_GRID, ProteusLinearLayoutManager.BUILDER);
     }
 
     private void registerDefaultLayoutManagersH() {
-      register(LAYOUT_MANAGER_LINEAR_HORIZONTAL, ProteusLinearLayoutManager.BUILDER);
+      register(LAYOUT_MANAGER_GRID_HORIZONTAL, ProteusLinearLayoutManager.BUILDER);
     }
+
+    private void registerDefaultLayoutManagers2() {
+      register(LAYOUT_MANAGER_GRID2, ProteusLinearLayoutManager.BUILDER);
+    }
+
+    private void registerDefaultLayoutManagersH2() {
+      register(LAYOUT_MANAGER_GRID_HORIZONTAL2, ProteusLinearLayoutManager.BUILDER);
+    }
+
+    private void registerDefaultLayoutManagers3() {
+      register(LAYOUT_MANAGER_GRID3, ProteusLinearLayoutManager.BUILDER);
+    }
+
+    private void registerDefaultLayoutManagersH3() {
+      register(LAYOUT_MANAGER_GRID_HORIZONTAL3, ProteusLinearLayoutManager.BUILDER);
+    }
+
+
+
 
   }
 }
