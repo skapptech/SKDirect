@@ -24,6 +24,7 @@ import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityPlacesSearchBinding;
 import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.OtpVerificationModel;
+import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateTokenModel;
 import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.SharePrefs;
@@ -85,16 +86,11 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
         }else {
              if (Utils.isNetworkAvailable(this)) {
                  if (commonClassForAPI!=null){
-                     commonClassForAPI.getToken(callToken, "password", "", "", true, true, "BUYERAPP",true,Utils.getDeviceUniqueID(PlaceSearchActivity.this),latLng.latitude,latLng.longitude,pinCode);
+                     commonClassForAPI.getToken(callToken, "password", Utils.getDeviceUniqueID(PlaceSearchActivity.this), "", true, true, "BUYERAPP",true,Utils.getDeviceUniqueID(PlaceSearchActivity.this),latLng.latitude,latLng.longitude,pinCode);
                  }
              } else {
                  Utils.setToast(this, "No Internet Connection Please connect.");
              }
-
-
-
-             SharePrefs.getInstance(this).putBoolean(SharePrefs.IS_LOGIN, true);
-            startActivity(new Intent(this,MainActivity.class));
         }
     }
 
@@ -174,16 +170,23 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private DisposableObserver<LoginWithPasswordModel> callToken = new DisposableObserver<LoginWithPasswordModel>() {
+    private DisposableObserver<TokenModel> callToken = new DisposableObserver<TokenModel>() {
         @Override
-        public void onNext(LoginWithPasswordModel model) {
+        public void onNext(TokenModel model) {
             try {
                 Utils.hideProgressDialog();
                 if (model != null) {
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE, model.getIsRegistrationComplete());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAT,model.getLatitiute());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LON, model.getLongitude());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
                     commonClassForAPI.getUpdateToken(updatecallToken,new UpdateTokenModel(fcmToken));
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
+                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
 
 
                 }

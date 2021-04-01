@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.adapter.SellerProductAdapter;
 import com.skdirect.databinding.ActivitySellerProfileBinding;
@@ -26,13 +27,17 @@ import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.AddViewModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.ItemAddModel;
+import com.skdirect.model.SellerDeliveryModel;
 import com.skdirect.model.SellerDetailsModel;
 import com.skdirect.model.SellerProductList;
+import com.skdirect.model.SellerProductMainModel;
 import com.skdirect.model.SellerProductModel;
 import com.skdirect.model.SellerProfileDataModel;
+import com.skdirect.model.UserDetailModel;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.SellerProfileViewMode;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -49,7 +54,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     private boolean loading = true;
     private final ArrayList<SellerProductList> sellerProductModels = new ArrayList<>();
     private SellerProductAdapter sellerShopListAdapter;
-    private String searchSellerName, EncryptSellerId;
+    private String searchSellerName;
 
 
     @Override
@@ -147,8 +152,16 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onChanged(SellerDetailsModel sellerDetailsModel) {
                 Utils.hideProgressDialog();
-                mBinding.tvSellerName.setText(sellerDetailsModel.getShopName());
-                mBinding.tvMobileNumber.setText(sellerDetailsModel.getSellerMobileNumber());
+                if (sellerDetailsModel!=null) {
+                    mBinding.tvSellerName.setText(sellerDetailsModel.getSellerInfoModel().getShopName());
+                    mBinding.tvMinimumOrderAmt.setText("₹ "+Math.round(sellerDetailsModel.getSellerInfoModel().getMinOrderValue()));
+                    mBinding.tvDiliverDistance.setText(""+Math.round(sellerDetailsModel.getSellerInfoModel().getRadialDistance()));
+                    if (sellerDetailsModel.getSellerInfoModel().getImagePath()!=null && !sellerDetailsModel.getSellerInfoModel().getImagePath().contains("http")) {
+                        Picasso.get().load(BuildConfig.apiEndpoint+sellerDetailsModel.getSellerInfoModel().getImagePath()).error(R.drawable.ic_top_seller).into(mBinding.ivSShopImage);
+                    }else {
+                        Picasso.get().load(sellerDetailsModel.getSellerInfoModel().getImagePath()).placeholder(R.drawable.ic_top_seller).into(mBinding.ivSShopImage);
+                    }
+                }
             }
         });
     }
@@ -156,33 +169,57 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     private void getSellerProductsApi(String searchSellerName) {
         SellerProfileDataModel paginationModel = new SellerProfileDataModel(sellerID, 0, 0, "", skipCount, takeCount, 0, searchSellerName);
         sellerProfileViewMode.getSellerProductRequest(paginationModel);
-        sellerProfileViewMode.getSellerProductVM().observe(this, new Observer<SellerProductModel>() {
+        sellerProfileViewMode.getSellerProductVM().observe(this, new Observer<SellerProductMainModel>() {
             @Override
-            public void onChanged(SellerProductModel sellerProdList) {
+            public void onChanged(SellerProductMainModel sellerProdList) {
                 Utils.hideProgressDialog();
                 if (sellerProdList != null) {
-                    mBinding.rvCategories.post(new Runnable() {
-                        public void run() {
-                            sellerProductModels.addAll(sellerProdList.getSellerProductLists());
-                            if (MainActivity.cartItemModel != null && MainActivity.cartItemModel.getCart().size() > 0) {
-                                for (int i = 0; i < sellerProductModels.size(); i++) {
-                                    for (int j = 0; j < MainActivity.cartItemModel.getCart().size(); j++) {
-                                        if (sellerProductModels.get(i).getId() == MainActivity.cartItemModel.getCart().get(j).getId()) {
-                                            sellerProductModels.get(i).setQty(MainActivity.cartItemModel.getCart().get(j).getQuantity());
+                    if (sellerProdList.getSellerProductModel().getSellerProductLists().size()>0) {
+                        mBinding.rvCategories.post(new Runnable() {
+                            public void run() {
+                                sellerProductModels.addAll(sellerProdList.getSellerProductModel().getSellerProductLists());
+                                updateUserDetails(sellerProdList.getSellerProductModel().getUserDetailModel(),sellerProdList.getSellerProductModel().getSellerDeliveryModel());
+
+                                if (MainActivity.cartItemModel != null && MainActivity.cartItemModel.getCart().size() > 0) {
+                                    for (int i = 0; i < sellerProductModels.size(); i++) {
+                                        for (int j = 0; j < MainActivity.cartItemModel.getCart().size(); j++) {
+                                            if (sellerProductModels.get(i).getId() == MainActivity.cartItemModel.getCart().get(j).getId()) {
+                                                sellerProductModels.get(i).setQty(MainActivity.cartItemModel.getCart().get(j).getQuantity());
+                                            }
                                         }
                                     }
+                                    sellerShopListAdapter.notifyDataSetChanged();
                                 }
                                 sellerShopListAdapter.notifyDataSetChanged();
+                                loading = true;
+
+
                             }
-                            sellerShopListAdapter.notifyDataSetChanged();
-                            loading = true;
-                        }
-                    });
+                        });
+
+                    }
                 } else {
                     loading = false;
                 }
             }
         });
+    }
+
+    private void updateUserDetails(UserDetailModel userDetailModel, ArrayList<SellerDeliveryModel> sellerDeliveryModel) {
+        String deliveryOption = "";
+        mBinding.tvAddreshOne.setText(userDetailModel.getAddressOne()+" "+userDetailModel.getAddressTwo());
+        mBinding.tvDeliveryOption.setText(userDetailModel.getAddressOne()+" "+userDetailModel.getAddressTwo());
+        mBinding.tvSellerDistance.setText(""+Utils.distance(Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)),Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)),userDetailModel.getLatitiute(),userDetailModel.getLongitude()));
+        if (sellerDeliveryModel.size()>0){
+
+            for (int i = 0; i <sellerDeliveryModel.size() ; i++) {
+                deliveryOption+=sellerDeliveryModel.get(i).getDelivery()+", ";
+            }
+            mBinding.tvDeliveryOption.setText(deliveryOption);
+        }
+
+
+
     }
 
     private void addProduct() {

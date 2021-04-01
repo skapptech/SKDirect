@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int  itemQuatntiy;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +68,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
         openFragment(new HomeFragment());
         initView();
+        setlocationInHader();
         clickListener();
         setupBadge();
-        callRunTimePermissions();
+        ///callRunTimePermissions();
 
     }
 
@@ -97,8 +99,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userNameTV = mBinding.tvUserName;
         mobileNumberTV = mBinding.tvMobileName;
         setLocationTV = mBinding.toolbarId.tvLoction;
-
-
 //        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBinding.toolbarId.bottomNavigation.getLayoutParams();
 //        layoutParams.setBehavior(new BottomNavigationBehavior());
 
@@ -144,6 +144,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(new Intent(MainActivity.this,MapsActivity.class),2);
             }
         });
+    }
+
+    private void setlocationInHader() {
+        setLocationTV.setText(Utils.getCityName(this,Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)), Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LON))));
     }
 
     @Override
@@ -258,15 +262,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Address address=data.getParcelableExtra("address");
                 double lat = address.getLatitude();
                 double log = address.getLongitude();
-                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-                List<Address> addresses = null;
-                try {
-                    addresses = geocoder.getFromLocation(lat, log, 1);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                String cityName = addresses.get(0).getLocality();
-                setLocationTV.setText(cityName);
+                setLocationTV.setText(Utils.getCityName(this,lat,log));
             }
 
         }

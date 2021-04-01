@@ -26,6 +26,10 @@ android {
         }
     }*/
 
+    repositories {
+        jcenter()
+    }
+
     buildFeatures {
         dataBinding = true
     }
@@ -94,11 +98,20 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.5.0@aar'
     implementation 'com.google.android.libraries.places:places:2.4.0'
 
+
     implementation project(':proteus-core')
     implementation project(':gson-adapter')
     implementation project(':support-v4')
     implementation project(':recyclerview-v7')
     implementation project(':cardview-v7')
     implementation project(':design')
+
+    implementation 'com.facebook.litho:litho-core:0.40.0'
+    implementation 'com.facebook.litho:litho-widget:0.40.0'
+    annotationProcessor 'com.facebook.litho:litho-processor:0.40.0'
+    implementation 'com.facebook.soloader:soloader:0.9.0'
+    testImplementation 'com.facebook.litho:litho-testing:0.40.0'
+
+    
 
 }
