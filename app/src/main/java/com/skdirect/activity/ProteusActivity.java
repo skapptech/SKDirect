@@ -39,7 +39,6 @@ import com.google.gson.stream.JsonReader;
 import com.skdirect.R;
 import com.skdirect.api.CircleViewParser;
 import com.skdirect.api.ImageLoaderTarget;
-import com.skdirect.api.ProteusManager;
 import com.skdirect.databinding.ActivityProteusBinding;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
@@ -52,39 +51,9 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProteusActivity extends AppCompatActivity implements ProteusManager.Listener {
+public class ProteusActivity extends AppCompatActivity {
     ProteusActivity activity;
     ActivityProteusBinding binding;
-
-    private ProteusManager proteusManager;
-    private ProteusLayoutInflater layoutInflater;
-
-    ObjectValue data;
-    Layout layout;
-    Styles styles;
-    Map<String, Layout> layouts;
-
-    private StyleManager styleManager = new StyleManager() {
-
-        @Nullable
-        @Override
-        protected Styles getStyles() {
-            return styles;
-        }
-    };
-
-    private LayoutManager layoutManager = new LayoutManager() {
-
-        @Nullable
-        @Override
-        protected Map<String, Layout> getLayouts() {
-            return layouts;
-        }
-    };
-
-
-    ProteusView view;
-    private ViewGroup container;
     Proteus proteus;
     private ProteusLayoutInflater.ImageLoader loader = new ProteusLayoutInflater.ImageLoader() {
         @Override
@@ -1528,16 +1497,6 @@ public class ProteusActivity extends AppCompatActivity implements ProteusManager
         });*/
         //layoutInflater = context.getInflater();
         //alert();
-    }
-
-    @Override
-    public void onLoad() {
-
-    }
-
-    @Override
-    public void onError(@NonNull Exception e) {
-
     }
 
     private void alert() {
