@@ -37,8 +37,8 @@ public class CommonClassForAPI {
 
 
 
-    public void getToken(final DisposableObserver observer,String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp) {
-        RestClient.getInstance().getService().getToken(password, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp)
+    public void getToken(final DisposableObserver observer,String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp,boolean isDevice,String deviceID,double lat,double log,String pincode) {
+        RestClient.getInstance().getService().getToken(password, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp,isDevice,deviceID,lat,log ,pincode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<LoginWithPasswordModel>() {

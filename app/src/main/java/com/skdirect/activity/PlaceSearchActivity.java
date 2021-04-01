@@ -15,10 +15,16 @@ import androidx.databinding.DataBindingUtil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.JsonObject;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 import com.skdirect.R;
+import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityPlacesSearchBinding;
+import com.skdirect.model.LoginWithPasswordModel;
+import com.skdirect.model.OtpVerificationModel;
+import com.skdirect.model.UpdateTokenModel;
 import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
@@ -28,11 +34,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.observers.DisposableObserver;
+
 public class PlaceSearchActivity extends AppCompatActivity implements View.OnClickListener {
     private final int REQUEST_FOR_ADDRESS = 1001;
     private ActivityPlacesSearchBinding mBinding;
     private Place place;
     private Geocoder mGeocoder;
+    private CommonClassForAPI commonClassForAPI;
+    private String fcmToken;
+    private  LatLng latLng;
+    private  String pinCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +55,8 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void initView() {
+        commonClassForAPI = CommonClassForAPI.getInstance(this);
+        fcmToken = FirebaseInstanceId.getInstance().getToken();
         mGeocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         mBinding.etLocation.setOnClickListener(this);
         mBinding.btSave.setOnClickListener(this);
@@ -69,6 +83,16 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
         }else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString().trim())){
             Utils.setToast(this,"Enter your PinCode");
         }else {
+             if (Utils.isNetworkAvailable(this)) {
+                 if (commonClassForAPI!=null){
+                     commonClassForAPI.getToken(callToken, "password", "", "", true, true, "BUYERAPP",true,Utils.getDeviceUniqueID(PlaceSearchActivity.this),latLng.latitude,latLng.longitude,pinCode);
+                 }
+             } else {
+                 Utils.setToast(this, "No Internet Connection Please connect.");
+             }
+
+
+
              SharePrefs.getInstance(this).putBoolean(SharePrefs.IS_LOGIN, true);
             startActivity(new Intent(this,MainActivity.class));
         }
@@ -92,12 +116,12 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
             place = data.getParcelableExtra("PlaceResult");
                 mBinding.etLocation.setText(place.getAddress());
                 try {
-                    LatLng latLng = place.getLatLng();
+                    latLng = place.getLatLng();
                     List<Address> addresses = mGeocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
                     if (addresses.get(0).getLocality() != null) {
-                        String pin = addresses.get(0).getPostalCode();
+                        pinCode = addresses.get(0).getPostalCode();
                         String tempCity = addresses.get(0).getLocality();
-                        mBinding.etPinCode.setText(pin);
+                        mBinding.etPinCode.setText(pinCode);
                         if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString())) {
                             mBinding.etPinCode.setFocusable(true);
                             mBinding.etPinCode.setFocusableInTouchMode(true);
@@ -111,13 +135,13 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
                 }
         }else if (resultCode==3){
             try {
-                LatLng latLng = data.getParcelableExtra("PlaceResult");
+                latLng = data.getParcelableExtra("PlaceResult");
                 List<Address> addresses = mGeocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
                 mBinding.etLocation.setText(addresses.get(0).getAddressLine(0));
                 if (addresses.get(0).getLocality() != null) {
-                    String pin = addresses.get(0).getPostalCode();
+                    pinCode= addresses.get(0).getPostalCode();
                     String tempCity = addresses.get(0).getLocality();
-                    mBinding.etPinCode.setText(pin);
+                    mBinding.etPinCode.setText(pinCode);
                     if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString())) {
                         mBinding.etPinCode.setFocusable(true);
                         mBinding.etPinCode.setFocusableInTouchMode(true);
@@ -149,5 +173,65 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
             }
         });
     }
+
+    private DisposableObserver<LoginWithPasswordModel> callToken = new DisposableObserver<LoginWithPasswordModel>() {
+        @Override
+        public void onNext(LoginWithPasswordModel model) {
+            try {
+                Utils.hideProgressDialog();
+                if (model != null) {
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
+                    commonClassForAPI.getUpdateToken(updatecallToken,new UpdateTokenModel(fcmToken));
+
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Utils.setToast(getApplicationContext(), "Invalid Password");
+
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Utils.setToast(getApplicationContext(), "Invalid Password");
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+            Utils.hideProgressDialog();
+        }
+    };
+
+    private DisposableObserver<JsonObject> updatecallToken = new DisposableObserver<JsonObject>() {
+        @Override
+        public void onNext(JsonObject model) {
+            try {
+                Utils.hideProgressDialog();
+                if (model != null) {
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+
+
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+            Utils.hideProgressDialog();
+        }
+    };
 
 }

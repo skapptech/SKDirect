@@ -22,6 +22,7 @@ import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.broadcast.SmsBroadcastReceiver;
 import com.skdirect.databinding.ActivityGenerateOtpBinding;
 import com.skdirect.interfacee.OtpReceivedInterface;
+import com.skdirect.location.EasyWayLocation;
 import com.skdirect.model.LoginResponseModel;
 import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.OtpResponceModel;
@@ -42,6 +43,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     private CountDownTimer cTimer = null;
     private CommonClassForAPI commonClassForAPI;
     private String fcmToken;
+    private EasyWayLocation easyWayLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,7 +214,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     if (model.getIsUserExist()!=null) {
                         SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, model.getIsUserExist());
                         SharePrefs.getInstance(GenerateOTPActivity.this).putString(SharePrefs.USER_ID, model.getUserid());
-                        commonClassForAPI.getToken(callToken, "password", mobileNumber, otpString, true, true, "BUYERAPP");
+                      /*  commonClassForAPI.getToken(callToken, "password", mobileNumber, otpString, true, true, "BUYERAPP",true,Utils.getDeviceUniqueID(GenerateOTPActivity.this),);*/
 
                         if (SharePrefs.getInstance(GenerateOTPActivity.this).getBoolean(SharePrefs.IS_LOGIN)){
                             startActivity(new Intent(GenerateOTPActivity.this,MainActivity.class));

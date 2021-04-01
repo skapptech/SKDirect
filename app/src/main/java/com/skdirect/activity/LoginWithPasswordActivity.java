@@ -71,7 +71,7 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
     private void checkPasswordApi() {
         if (Utils.isNetworkAvailable(this)) {
             if (commonClassForAPI != null) {
-                commonClassForAPI.getToken(callToken, "password", mobileNumber, passwordString, false, true, "BUYERAPP");
+                /*commonClassForAPI.getToken(callToken, "password", mobileNumber, passwordString, false, true, "BUYERAPP");*/
             } else {
                 Utils.setToast(this, "No Internet Connection Please connect.");
             }
