@@ -3,6 +3,8 @@ package com.skdirect.utils;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
@@ -16,10 +18,12 @@ import com.google.android.material.snackbar.Snackbar;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -43,11 +47,13 @@ public class Utils {
         toast.setGravity(Gravity.BOTTOM, 0, 0);
         toast.show();
     }
+
     public static void setLongToast(Context _mContext, String str) {
         Toast toast = Toast.makeText(_mContext, str, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
+
     public static boolean isValidMobile(String mobile) {
         Pattern pattern = Pattern.compile(MOBILE_NO_PATTERN);
         Matcher matcher = pattern.matcher(mobile);
@@ -163,6 +169,60 @@ public class Utils {
         } else {
             return Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
         }
+    }
+
+    public static String getFullAddress(Activity activity, double lat, double log) {
+        String locationAddresh = null;
+        try {
+        Geocoder mGeocoder = new Geocoder(activity, Locale.getDefault());
+        List<Address> addresses = mGeocoder.getFromLocation(lat, log, 1);
+        if (addresses.get(0).getLocality() != null) {
+            locationAddresh = addresses.get(0).getAddressLine(0);
+        }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return locationAddresh;
+    }
+
+    public static String getCityName(Activity activity, double lat, double log) {
+        String locationAddresh = null;
+        try {
+            Geocoder mGeocoder = new Geocoder(activity, Locale.getDefault());
+            List<Address> addresses = mGeocoder.getFromLocation(lat, log, 1);
+            if (addresses.get(0).getLocality() != null) {
+                locationAddresh = addresses.get(0).getLocality();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return locationAddresh;
+    }
+
+    public static double distance(double initialLat, double initialLong,
+                                  double finalLat, double finalLong) {
+        int R = 6371; // km (Earth radius)
+        double dLat = deg2rad(finalLat-initialLat);
+        double dLon = deg2rad(finalLong-initialLong);
+        initialLat = deg2rad(initialLat);
+        finalLat = deg2rad(finalLat);
+
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(initialLat) * Math.cos(finalLat);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    }
+
+
+
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private static double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
     }
 
 }

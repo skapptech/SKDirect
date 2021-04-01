@@ -3,7 +3,6 @@ package com.skdirect.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,31 +19,27 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.activity.CategoriesListActivity;
-import com.skdirect.activity.GenerateOTPActivity;
-import com.skdirect.activity.LoginActivity;
 import com.skdirect.activity.MainActivity;
 import com.skdirect.activity.NearByItemProductListActivity;
 import com.skdirect.activity.SearchActivity;
 import com.skdirect.activity.SellerProductListActivity;
-import com.skdirect.activity.SplashActivity;
 import com.skdirect.adapter.AllCategoriesAdapter;
+import com.skdirect.adapter.MallCategorieBannerAdapter;
 import com.skdirect.adapter.TopNearByItemAdapter;
 import com.skdirect.adapter.TopSellerAdapter;
 import com.skdirect.databinding.FragmentHomeBinding;
 import com.skdirect.model.AllCategoriesModel;
-import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CustomerDataModel;
-import com.skdirect.model.LoginResponseModel;
+import com.skdirect.model.MallMainModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.HomeViewModel;
-import com.skdirect.viewmodel.LoginViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -60,15 +55,11 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         initViews();
-        topNearByItem();
-        getSellerAPi();
-        getAllCategoriesAPi();
-
-
+        getMall();
         return mBinding.getRoot();
     }
 
@@ -77,11 +68,18 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         super.onResume();
         mBinding.etSearchSeller.setText("");
     }
+
     @Override
     public void onRefresh() {
-        topNearByItem();
-        getSellerAPi();
-        getAllCategoriesAPi();
+        if (mBinding.llMainAppHome.getVisibility() == View.VISIBLE) {
+            topNearByItem();
+            getSellerAPi();
+            getAllCategoriesAPi();
+        } else {
+           //mBinding.swiperefresh.setVisibility(View.GONE);
+        }
+
+
     }
 
     private void getAllCategoriesAPi() {
@@ -111,17 +109,47 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
+    private void getMall() {
+        if (Utils.isNetworkAvailable(activity)) {
+            Utils.showProgressDialog(activity);
+            getMallApiData();
+        } else {
+            Utils.setToast(activity, "No Internet Connection Please connect.");
+        }
+    }
+
+    private void getMallApiData() {
+        homeViewModel.getMallData().observe(this, new Observer<MallMainModel>() {
+            @Override
+            public void onChanged(MallMainModel mallMainModel) {
+                Utils.hideProgressDialog();
+                if (mallMainModel.getResultItem() != null) {
+                    MallCategorieBannerAdapter mallCategorieBannerAdapter = new MallCategorieBannerAdapter(getActivity(),mallMainModel.getResultItem().getStoreCategoryList());
+                    mBinding.rvStoreCategoryList.setAdapter(mallCategorieBannerAdapter);
+                    mBinding.llMainAppHome.setVisibility(View.GONE);
+                    mBinding.llMallHome.setVisibility(View.VISIBLE);
+                } else {
+                    mBinding.llMainAppHome.setVisibility(View.VISIBLE);
+                    mBinding.llMallHome.setVisibility(View.GONE);
+                    topNearByItem();
+                    getSellerAPi();
+                    getAllCategoriesAPi();
+                }
+            }
+        });
+    }
+
     private void getNearByItem() {
         homeViewModel.GetTopNearByItem().observe(this, new Observer<ArrayList<TopNearByItemModel>>() {
             @Override
             public void onChanged(ArrayList<TopNearByItemModel> topNearByItemList) {
                 Utils.hideProgressDialog();
-                mBinding.swiperefresh.setRefreshing(false);
-                if (topNearByItemList.size()>0){
-                    TopNearByItemAdapter topNearByItemAdapter = new TopNearByItemAdapter(getActivity(),topNearByItemList);
+                //mBinding.swiperefresh.setRefreshing(false);
+                if (topNearByItemList.size() > 0) {
+                    TopNearByItemAdapter topNearByItemAdapter = new TopNearByItemAdapter(getActivity(), topNearByItemList);
                     mBinding.rvNearByItem.setAdapter(topNearByItemAdapter);
 
-                }else {
+                } else {
                     mBinding.llNearByNotFound.setVisibility(View.VISIBLE);
                     mBinding.rvNearByItem.setVisibility(View.GONE);
                 }
@@ -133,13 +161,13 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         homeViewModel.GetTopSellerLiveData().observe(this, new Observer<ArrayList<TopSellerModel>>() {
             @Override
             public void onChanged(ArrayList<TopSellerModel> topSellerList) {
-                mBinding.swiperefresh.setRefreshing(false);
+                //mBinding.swiperefresh.setRefreshing(false);
                 Utils.hideProgressDialog();
-                if (topSellerList.size()>0){
-                    TopSellerAdapter topSellerAdapter = new TopSellerAdapter(getActivity(),topSellerList);
+                if (topSellerList.size() > 0) {
+                    TopSellerAdapter topSellerAdapter = new TopSellerAdapter(getActivity(), topSellerList);
                     mBinding.rvTopSeller.setAdapter(topSellerAdapter);
 
-                }else {
+                } else {
                     mBinding.llTopSellerNotFound.setVisibility(View.VISIBLE);
                     mBinding.rvTopSeller.setVisibility(View.GONE);
                 }
@@ -149,17 +177,15 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
 
-
-
     private void getAllCategories() {
         homeViewModel.getAllCategoriesLiveData().observe(this, new Observer<ArrayList<AllCategoriesModel>>() {
             @Override
             public void onChanged(ArrayList<AllCategoriesModel> allCategoriesList) {
-                mBinding.swiperefresh.setRefreshing(false);
-                if (allCategoriesList.size()>0){
-                    AllCategoriesAdapter allCategoriesAdapter = new AllCategoriesAdapter(getActivity(),allCategoriesList);
+               // mBinding.swiperefresh.setRefreshing(false);
+                if (allCategoriesList.size() > 0) {
+                    AllCategoriesAdapter allCategoriesAdapter = new AllCategoriesAdapter(getActivity(), allCategoriesList);
                     mBinding.rvAllCetegory.setAdapter(allCategoriesAdapter);
-                }else {
+                } else {
                     mBinding.llAllCetegoryNotFound.setVisibility(View.VISIBLE);
                     mBinding.rvAllCetegory.setVisibility(View.GONE);
                 }
@@ -171,10 +197,10 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void initViews() {
-        mBinding.swiperefresh.setOnRefreshListener(this);
+        //mBinding.swiperefresh.setOnRefreshListener(this);
         mBinding.rvNearByItem.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         mBinding.rvTopSeller.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
-        mBinding.rvAllCetegory.setLayoutManager(new GridLayoutManager(activity,3));
+        mBinding.rvAllCetegory.setLayoutManager(new GridLayoutManager(activity, 3));
         activity.appBarLayout.setVisibility(View.VISIBLE);
         if (Utils.isNetworkAvailable(activity)) {
             Utils.showProgressDialog(activity);
@@ -220,7 +246,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void searchData() {
         String searchSellerName = mBinding.etSearchSeller.getText().toString().trim();
-        startActivity(new Intent(getActivity(), SearchActivity.class).putExtra("searchSellerName",searchSellerName));
+        startActivity(new Intent(getActivity(), SearchActivity.class).putExtra("searchSellerName", searchSellerName));
 
 
     }
@@ -230,7 +256,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             public void onChanged(CustomerDataModel customerDataModel) {
                 Utils.hideProgressDialog();
-                if (customerDataModel!=null) {
+                if (customerDataModel != null) {
                     activity.userNameTV.setText(customerDataModel.getFirstName());
                     activity.mobileNumberTV.setText(customerDataModel.getMobileNo());
 
@@ -268,7 +294,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         });
 
     }
-
 
 
 }

@@ -13,6 +13,7 @@ import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.SellerDetailsModel;
+import com.skdirect.model.SellerProductMainModel;
 import com.skdirect.model.SellerProductModel;
 import com.skdirect.model.SellerProfileDataModel;
 import com.skdirect.utils.Utils;
@@ -25,7 +26,7 @@ public class SellerProfileViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
 
     private MutableLiveData<SellerDetailsModel> sellerDetailsVM;
-    private MutableLiveData<SellerProductModel> sellerProductVM;
+    private MutableLiveData<SellerProductMainModel> sellerProductVM;
     private MutableLiveData<Boolean> addProductVM;
     private MutableLiveData<AddCartItemModel> addItemsInCardVM;
     private MutableLiveData<Object> clearCartItemVM;
@@ -37,7 +38,7 @@ public class SellerProfileViewMode extends ViewModel {
         return sellerDetailsVM;
     }
 
-    public LiveData<SellerProductModel> getSellerProductVM() {
+    public LiveData<SellerProductMainModel> getSellerProductVM() {
         sellerProductVM=null;
         sellerProductVM = new MutableLiveData<>();
         return sellerProductVM;
@@ -84,10 +85,10 @@ public class SellerProfileViewMode extends ViewModel {
         return sellerDetailsVM;
     }
 
-    public MutableLiveData<SellerProductModel> getSellerProductRequest(SellerProfileDataModel paginationModel) {
-        RestClient.getInstance().getService().GetSellerProduct(paginationModel).enqueue(new Callback<SellerProductModel>() {
+    public MutableLiveData<SellerProductMainModel> getSellerProductRequest(SellerProfileDataModel paginationModel) {
+        RestClient.getInstance().getService().GetSellerProduct(paginationModel).enqueue(new Callback<SellerProductMainModel>() {
             @Override
-            public void onResponse(Call<SellerProductModel> call, Response<SellerProductModel> response) {
+            public void onResponse(Call<SellerProductMainModel> call, Response<SellerProductMainModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.code());
                     sellerProductVM.setValue(response.body());
@@ -95,7 +96,7 @@ public class SellerProfileViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<SellerProductModel> call, Throwable t) {
+            public void onFailure(Call<SellerProductMainModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + t.toString());
                 Utils.hideProgressDialog();
             }

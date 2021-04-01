@@ -15,6 +15,7 @@ import com.skdirect.model.DeliveryOptionModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.LoginResponseModel;
 import com.skdirect.model.LoginWithPasswordModel;
+import com.skdirect.model.MallMainModel;
 import com.skdirect.model.MyOrderModel;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.NearBySallerModel;
@@ -31,8 +32,10 @@ import com.skdirect.model.RemoveItemRequestModel;
 import com.skdirect.model.SearchDataModel;
 import com.skdirect.model.SearchRequestModel;
 import com.skdirect.model.SellerDetailsModel;
+import com.skdirect.model.SellerProductMainModel;
 import com.skdirect.model.SellerProductModel;
 import com.skdirect.model.SellerProfileDataModel;
+import com.skdirect.model.TokenModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.UpdateTokenModel;
@@ -56,7 +59,7 @@ import retrofit2.http.Query;
 
 public interface APIServices {
 
-        @GET("api/App/GetAppInfo")
+    @GET("api/App/GetAppInfo")
     Call<AppVersionModel> getAppversion();
 
     @POST("api/Notification/UpdateFcmId")
@@ -70,7 +73,7 @@ public interface APIServices {
 
     @FormUrlEncoded
     @POST("/token")
-    Observable<LoginWithPasswordModel> getToken(@Field("grant_type") String grant_type, @Field("username") String username, @Field("password") String password, @Field("ISOTP") boolean isOTp, @Field("ISBUYER") boolean isBuyer, @Field("LOGINTYPE") String LOGINTYPE, @Field("ISDEVICE") boolean ISDEVICE,@Field("DEVICEID") String DEVICEID,@Field("LAT") double LAT,@Field("LNG") double LNG,@Field("PINCODE") String pincode);
+    Observable<TokenModel> getToken(@Field("grant_type") String grant_type, @Field("username") String username, @Field("password") String password, @Field("ISOTP") boolean isOTp, @Field("ISBUYER") boolean isBuyer, @Field("LOGINTYPE") String LOGINTYPE, @Field("ISDEVICE") boolean ISDEVICE, @Field("DEVICEID") String DEVICEID, @Field("LAT") double LAT, @Field("LNG") double LNG, @Field("PINCODE") String pincode);
 
     @GET("api/buyer/Profile/GetUserDetail")
     Call<CustomerDataModel> GetUserDetail();
@@ -121,23 +124,22 @@ public interface APIServices {
     @POST("api/Buyer/SellerProfile/AddProductView")
     Call<Boolean> AddProductView(@Body PaginationModel paginationModel);
 
-    @GET("api/Buyer/SellerProfile/GetSellerDetail/{GetSellerDetail}")
+    @GET("api/NativeBuyer/SellerProfile/GetSellerDetail/{GetSellerDetail}")
     Call<SellerDetailsModel> GetSellerDetail(@Path("GetSellerDetail") String GetSellerDetail);
 
+    @POST("api/NativeBuyer/SellerProfile/GetSellerProduct")
+    Call<SellerProductMainModel> GetSellerProduct(@Body SellerProfileDataModel paginationModel);
 
-    @POST("api/Buyer/SellerProfile/GetSellerProduct")
-    Call<SellerProductModel> GetSellerProduct(@Body SellerProfileDataModel paginationModel);
-
-    @POST("api/Buyer/SellerProfile/AddStoreView")
+    @POST("api/NativeBuyer/SellerProfile/AddStoreView")
     Call<Boolean> AddStoreView(@Body AddViewModel paginationModel);
 
-    @POST("api/Buyer/SellerProfile/AddCart")
+    @POST("api/NativeBuyer/SellerProfile/AddCart")
     Call<AddCartItemModel> AddCart(@Body ItemAddModel itemAddModel);
 
     @GET("api/Buyer/SellerProfile/GetCartItems")
     Call<CartItemModel> GetCartItem(@Query("CookieValue") String CookieValue);
 
-    @POST("api/Buyer/SellerProfile/ClearCart")
+    @POST("api/NativeBuyer/SellerProfile/ClearCart")
     Call<Object> ClearCart(@Query("Id") String id);
 
     @GET("api/Buyer/CartOverview/GetCartItems/{GetCartItems}")
@@ -195,6 +197,9 @@ public interface APIServices {
 
     @POST("api/buyer/MyOrder/CancelOrder")
     Call<Boolean> CancelOrder(@Query("OrderId") int OrderId);
+
+    @GET("api/NativeBuyer/Mall/GetMall")
+    Call<MallMainModel> getMall();
 
 
 

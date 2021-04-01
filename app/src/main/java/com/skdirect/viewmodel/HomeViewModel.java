@@ -13,6 +13,7 @@ import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.LoginResponseModel;
+import com.skdirect.model.MallMainModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.utils.Utils;
@@ -29,6 +30,8 @@ public class HomeViewModel extends ViewModel {
     private MutableLiveData<ArrayList<TopNearByItemModel>> topNearByItem;
     private MutableLiveData<ArrayList<TopSellerModel>> topSellerLiveData;
     private MutableLiveData<ArrayList<AllCategoriesModel>> allCategoriesLiveData;
+
+    private MutableLiveData<MallMainModel> mallDataViewModel;
 
 
 
@@ -63,6 +66,14 @@ public class HomeViewModel extends ViewModel {
             allCategoriesLiveData = getAllCategoriesRequest();
         }
         return allCategoriesLiveData;
+    }
+
+    public LiveData<MallMainModel> getMallData() {
+        if(mallDataViewModel==null){
+            mallDataViewModel = new MutableLiveData<>();
+            mallDataViewModel = getMallDataRequest();
+        }
+        return mallDataViewModel;
     }
 
 
@@ -145,6 +156,26 @@ public class HomeViewModel extends ViewModel {
         });
 
         return allCategoriesLiveData;
+    }
+
+    public MutableLiveData<MallMainModel> getMallDataRequest() {
+        RestClient.getInstance().getService().getMall().enqueue(new Callback<MallMainModel>() {
+            @Override
+            public void onResponse(Call<MallMainModel> call, Response<MallMainModel> response) {
+                if (response.isSuccessful() && response.body()!=null ) {
+                    Log.e(TAG, "request response="+response.body());
+                    mallDataViewModel.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MallMainModel> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + call.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return mallDataViewModel;
     }
 
 

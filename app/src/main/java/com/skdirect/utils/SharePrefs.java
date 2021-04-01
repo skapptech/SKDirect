@@ -39,11 +39,15 @@ public class SharePrefs {
     public static final String IMAGE_PATH ="image_path";
     public static final String IS_REGISTRATIONCOMPLETE ="IsRegistrationcomplete";
     public static final String IS_CONTACTREAD ="IscontactRead";
+    public static final String IS_SUPER_ADMIN ="IsSuperAdmin";
     public static final String ID ="id";
     public static final String USER_DC_ID ="_user_id";
     public static final String USER_DC_USER_ID ="user_dc_id";
     public static final String ENCRIPTED_ID ="encrited_id";
-    public static final String DELIVERY ="Delivery";
+    public static final String LAT ="Latitiute";
+    public static final String LON ="Longitude";
+    public static final String BUSINESS_TYPE ="BusinessType";
+    public static final String DELIVERY ="delivery";
 
 
 
@@ -75,6 +79,7 @@ public class SharePrefs {
     public void putInt(String key, Integer val) {
         sharedPreferences.edit().putInt(key, val).apply();
     }
+
 
     public void putBoolean(String key, Boolean val) {
         sharedPreferences.edit().putBoolean(key, val).apply();

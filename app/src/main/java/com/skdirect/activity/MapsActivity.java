@@ -36,8 +36,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
 import com.google.gson.JsonObject;
 import com.skdirect.R;
+import com.skdirect.adapter.PlacesAutoCompleteAdapter;
 import com.skdirect.databinding.ActivityMapsBinding;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
@@ -60,6 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Address address;
     private MapViewViewMode mapViewViewMode;
     private ActivityMapsBinding mBinding;
+    //private PlacesAutoCompleteAdapter placesAutoCompleteAdapter;
 
 
     @Override
@@ -69,11 +72,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapViewViewMode = ViewModelProviders.of(this).get(MapViewViewMode.class);
 
         initView();
-
-
     }
 
     private void initView() {
+        //Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -84,6 +86,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+
+      /*  placesAutoCompleteAdapter = new PlacesAutoCompleteAdapter(this, true);
+        mBinding.placesRecyclerView.setAdapter(placesAutoCompleteAdapter);
+        placesAutoCompleteAdapter.notifyDataSetChanged();*/
+
 
         mBinding.etLoctionSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -111,6 +118,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void searchLocation() {
+        mBinding.placesRecyclerView.setVisibility(View.VISIBLE);
         String location =  mBinding.etLoctionSearch.getText().toString();
         List<Address> addressList = null;
 
@@ -127,6 +135,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.addMarker(new MarkerOptions().position(latLng).title(location));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         }
+
+        //placesAutoCompleteAdapter.getFilter().filter(mBinding.etLoctionSearch.getText().toString());
     }
 
     private void setLocation(double latitude, double longitude) {
@@ -212,7 +222,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .draggable(true)
-                .title("Marker in India"));
+                .title(Utils.getFullAddress(this,latitude, longitude)));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));

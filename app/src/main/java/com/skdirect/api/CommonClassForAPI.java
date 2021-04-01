@@ -10,6 +10,7 @@ import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
+import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateTokenModel;
 
 import io.reactivex.Observer;
@@ -41,13 +42,13 @@ public class CommonClassForAPI {
         RestClient.getInstance().getService().getToken(password, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp,isDevice,deviceID,lat,log ,pincode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<LoginWithPasswordModel>() {
+                .subscribe(new Observer<TokenModel>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onNext(LoginWithPasswordModel o) {
+                    public void onNext(TokenModel o) {
                         observer.onNext(o);
                     }
 

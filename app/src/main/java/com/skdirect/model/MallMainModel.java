@@ -2,14 +2,13 @@ package com.skdirect.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class SellerDetailsModel {
-
+public class MallMainModel {
 
     @SerializedName("IsSuccess")
     private boolean IsSuccess;
 
     @SerializedName("ResultItem")
-    private SellerInfoModel sellerInfoModel;
+    private MallResultItemModel ResultItem;
 
     @SerializedName("SuccessMessage")
     private String SuccessMessage;
@@ -25,12 +24,12 @@ public class SellerDetailsModel {
         IsSuccess = success;
     }
 
-    public SellerInfoModel getSellerInfoModel() {
-        return sellerInfoModel;
+    public MallResultItemModel getResultItem() {
+        return ResultItem;
     }
 
-    public void setSellerInfoModel(SellerInfoModel sellerInfoModel) {
-        this.sellerInfoModel = sellerInfoModel;
+    public void setResultItem(MallResultItemModel resultItem) {
+        ResultItem = resultItem;
     }
 
     public String getSuccessMessage() {
