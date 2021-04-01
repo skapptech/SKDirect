@@ -1,6 +1,7 @@
 {
   "type": "RelativeLayout",
   "android": "http://schemas.android.com/apk/res/android",
+  "app": "http://schemas.android.com/apk/res-auto",
   "layout_width": "match_parent",
   "layout_height": "match_parent",
   "children": [
@@ -16,11 +17,24 @@
           "orientation": "vertical",
           "children": [
             {
+              "type": "ImageView",
+              "layout_width": "wrap_content",
+              "layout_height": "wrap_content",
+              "layout_marginLeft": "10dp",
+              "layout_marginTop": "10dp",
+              "layout_marginRight": "10dp",
+              "background": "@drawable/ic_top",
+              "padding": "20dp",
+              "src": "@drawable/ic_shoping"
+            },
+            {
               "type": "RecyclerView",
               "layout_width": "match_parent",
               "layout_height": "match_parent",
-              "layout_margin": "10dp",
-              "background": "#ffffff",
+              "layout_marginLeft": "10dp",
+              "layout_marginRight": "10dp",
+              "layout_marginTop": "-25dp",
+              "background": "@drawable/ic_middle",
               "data": {
                 "storeCategoryList": "@{data.StoreCategoryList}"
               },
@@ -33,9 +47,11 @@
                   "item-count": "@{storeCategoryList.$length}",
                   "item-layout": {
                     "type": "LinearLayout",
+                    "android": "http://schemas.android.com/apk/res/android",
+                    "app": "http://schemas.android.com/apk/res-auto",
                     "layout_width": "match_parent",
                     "layout_height": "wrap_content",
-                    "layout_margin": "10dp",
+                    "layout_margin": "20dp",
                     "data": {
                       "catNameJson": "@{storeCategoryList[$index]}",
                       "catName": "@{catNameJson.CategoryName}"
@@ -46,96 +62,126 @@
                         "type": "LinearLayout",
                         "layout_width": "match_parent",
                         "layout_height": "wrap_content",
-                        "layout_margin": "10dp",
-                        "background": "@drawable/bg_all_cet",
-                        "orientation": "vertical",
+                        "layout_marginLeft": "20dp",
+                        "layout_marginRight": "20dp",
+                        "layout_marginTop": "10dp",
+                        "background": "@drawable/ic_banner",
                         "children": [
                           {
                             "type": "TextView",
+                            "id": "tv_mall_category_name",
                             "layout_width": "match_parent",
                             "layout_height": "wrap_content",
-                            "layout_marginTop": "10dp",
-                            "ellipsize": "end",
+                            "layout_gravity": "center",
                             "gravity": "center",
-                            "maxLines": "1",
-                            "padding": "2dp",
                             "text": "@{catName}",
                             "textColor": "@color/black",
-                            "textSize": "11sp"
-                          },
-                          {
-                            "type": "RecyclerView",
-                            "layout_width": "match_parent",
-                            "layout_height": "wrap_content",
-                            "layout_margin": "10dp",
-                            "background": "#ffffff",
-                            "data": {
-                              "storeListArray": "@{catNameJson.StoreList}"
-                            },
-                            "layout_manager": {
-                              "type": "GridLayoutManagerHorizontal"
-                            },
-                            "adapter": {
-                              "@": {
-                                "type": "SimpleListAdapter",
-                                "item-count": "@{storeListArray.$length}",
-                                "item-layout": {
+                            "textSize": "18dp"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "RecyclerView",
+                        "layout_width": "match_parent",
+                        "layout_height": "wrap_content",
+                        "layout_marginLeft": "20dp",
+                        "layout_marginRight": "20dp",
+                        "data": {
+                          "storeListArray": "@{catNameJson.StoreList}"
+                        },
+                        "layout_manager": {
+                          "type": "GridLayoutManagerHorizontal"
+                        },
+                        "adapter": {
+                          "@": {
+                            "type": "SimpleListAdapter",
+                            "item-count": "@{storeListArray.$length}",
+                            "item-layout": {
+                              "type": "LinearLayout",
+                              "layout_width": "wrap_content",
+                              "layout_height": "wrap_content",
+                              "data": {
+                                "storeListJson": "@{storeListArray[$index]}",
+                                "sellerName": "@{storeListJson.SellerName}",
+                                "sellerImage": "@{storeListJson.ImagePath}"
+                              },
+                              "orientation": "vertical",
+                              "children": [
+                                {
                                   "type": "LinearLayout",
+                                  "id": "LL_apparels",
                                   "layout_width": "wrap_content",
                                   "layout_height": "wrap_content",
-                                  "layout_margin": "10dp",
-                                  "data": {
-                                    "storeListJson": "@{storeListArray[$index]}",
-                                    "sellerName": "@{storeListJson.SellerName}",
-                                    "sellerImage": "@{storeListJson.ImagePath}"
-                                  },
+                                  "layout_marginLeft": "10dp",
+                                  "layout_marginTop": "10dp",
                                   "orientation": "vertical",
                                   "children": [
                                     {
-                                      "type": "LinearLayout",
-                                      "layout_width": "wrap_content",
+                                      "type": "RelativeLayout",
+                                      "layout_width": "match_parent",
                                       "layout_height": "wrap_content",
-                                      "layout_margin": "10dp",
-                                      "background": "@drawable/bg_all_cet",
-                                      "orientation": "vertical",
                                       "children": [
                                         {
-                                          "type": "ImageView",
-                                          "layout_width": "90dp",
-                                          "layout_height": "90dp",
-                                          "layout_margin": "5dp",
-                                          "onClick": {
-                                            "type": "showToast"
-                                          },
-                                          "scaleType": "centerInside",
-                                          "src": "@{sellerImage}"
+                                          "type": "CardView",
+                                          "layout_width": "150dp",
+                                          "layout_height": "130dp",
+                                          "cardCornerRadius": "10dp",
+                                          "cardElevation": "0dp",
+                                          "layout_marginTop": "60dp",
+                                          "children": [
+                                            {
+                                              "type": "ImageView",
+                                              "id": "iv_image",
+                                              "layout_width": "150dp",
+                                              "layout_height": "130dp",
+                                              "adjustViewBounds": "true",
+                                              "scaleType": "centerCrop",
+                                              "src": "@{sellerImage}"
+                                            }
+                                          ]
                                         },
                                         {
-                                          "type": "TextView",
-                                          "layout_width": "100dp",
+                                          "type": "LinearLayout",
+                                          "layout_width": "wrap_content",
                                           "layout_height": "wrap_content",
-                                          "layout_marginTop": "10dp",
-                                          "ellipsize": "end",
-                                          "gravity": "center",
-                                          "maxLines": "1",
-                                          "padding": "2dp",
-                                          "text": "@{sellerName}",
-                                          "textColor": "@color/black",
-                                          "textSize": "11sp"
+                                          "background": "@drawable/ic_mall_shop",
+                                          "orientation": "vertical",
+                                          "children": [
+                                            {
+                                              "type": "TextView",
+                                              "id": "tv_store_list",
+                                              "layout_width": "match_parent",
+                                              "layout_height": "match_parent",
+                                              "layout_marginTop": "5dp",
+                                              "gravity": "center",
+                                              "text": "@{sellerName}",
+                                              "textColor": "@color/white",
+                                              "textSize": "12dp"
+                                            }
+                                          ]
                                         }
                                       ]
                                     }
                                   ]
                                 }
-                              }
+                              ]
                             }
                           }
-                        ]
+                        }
                       }
                     ]
                   }
                 }
               }
+            },
+            {
+              "type": "ImageView",
+              "layout_width": "wrap_content",
+              "layout_height": "wrap_content",
+              "layout_marginLeft": "10dp",
+              "layout_marginTop": "-2dp",
+              "layout_marginRight": "10dp",
+              "background": "@drawable/ic_bottom"
             }
           ]
         }

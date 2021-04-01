@@ -3,6 +3,7 @@ package com.skdirect.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,16 +20,35 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
+import com.flipkart.android.proteus.Proteus;
+import com.flipkart.android.proteus.ProteusBuilder;
+import com.flipkart.android.proteus.ProteusContext;
+import com.flipkart.android.proteus.ProteusLayoutInflater;
+import com.flipkart.android.proteus.ProteusView;
+import com.flipkart.android.proteus.exceptions.ProteusInflateException;
+import com.flipkart.android.proteus.gson.ProteusTypeAdapterFactory;
+import com.flipkart.android.proteus.support.design.DesignModule;
+import com.flipkart.android.proteus.support.v4.SupportV4Module;
+import com.flipkart.android.proteus.support.v7.CardViewModule;
+import com.flipkart.android.proteus.support.v7.RecyclerViewModule;
+import com.flipkart.android.proteus.value.DrawableValue;
+import com.flipkart.android.proteus.value.Layout;
+import com.flipkart.android.proteus.value.ObjectValue;
+import com.flipkart.android.proteus.value.Value;
+import com.google.gson.stream.JsonReader;
 import com.skdirect.R;
 import com.skdirect.activity.CategoriesListActivity;
 import com.skdirect.activity.MainActivity;
 import com.skdirect.activity.NearByItemProductListActivity;
+import com.skdirect.activity.ProteusActivity;
 import com.skdirect.activity.SearchActivity;
 import com.skdirect.activity.SellerProductListActivity;
 import com.skdirect.adapter.AllCategoriesAdapter;
 import com.skdirect.adapter.MallCategorieBannerAdapter;
 import com.skdirect.adapter.TopNearByItemAdapter;
 import com.skdirect.adapter.TopSellerAdapter;
+import com.skdirect.api.ImageLoaderTarget;
 import com.skdirect.databinding.FragmentHomeBinding;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.CustomerDataModel;
@@ -41,13 +61,18 @@ import com.skdirect.viewmodel.HomeViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
+
+import static com.skdirect.utils.JsonData.DATA;
+import static com.skdirect.utils.JsonData.LAYOUT;
 
 public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private FragmentHomeBinding mBinding;
     private MainActivity activity;
     private HomeViewModel homeViewModel;
-
+    Proteus proteus;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -197,6 +222,31 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void initViews() {
+
+        proteus = new ProteusBuilder()
+                .register(SupportV4Module.create())
+                .register(RecyclerViewModule.create())
+                .register(CardViewModule.create())
+                .register(DesignModule.create())
+                .build();
+        ProteusTypeAdapterFactory adapter = new ProteusTypeAdapterFactory(getActivity());
+        ProteusTypeAdapterFactory.PROTEUS_INSTANCE_HOLDER.setProteus(proteus);
+
+        Layout layout;
+        ObjectValue data;
+        try {
+            layout = adapter.LAYOUT_TYPE_ADAPTER.read(new JsonReader(new StringReader(LAYOUT)));
+            data = adapter.OBJECT_TYPE_ADAPTER.read(new JsonReader(new StringReader(DATA)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        ProteusContext context = proteus.createContextBuilder(getActivity()).setCallback(callback).setImageLoader(loader).build();
+        ProteusLayoutInflater inflater = context.getInflater();
+        ProteusView view = inflater.inflate(layout, data, mBinding.contentMain, 0);
+        mBinding.contentMain.addView(view.getAsView());
+
+
+
         //mBinding.swiperefresh.setOnRefreshListener(this);
         mBinding.rvNearByItem.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         mBinding.rvTopSeller.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
@@ -294,6 +344,44 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         });
 
     }
+
+
+    private ProteusLayoutInflater.ImageLoader loader = new ProteusLayoutInflater.ImageLoader() {
+        @Override
+        public void getBitmap(ProteusView view, String url, final DrawableValue.AsyncCallback callback) {
+            Glide.with(getActivity())
+                    .load(url)
+                    .placeholder(R.drawable.ic_direct_active)
+                    .error(R.drawable.ic_direct_active)
+                    .into(new ImageLoaderTarget(callback));
+        }
+    };
+    private ProteusLayoutInflater.Callback callback = new ProteusLayoutInflater.Callback() {
+
+        @NonNull
+        @Override
+        public ProteusView onUnknownViewType(ProteusContext context, String type, Layout layout, ObjectValue data, int index) {
+            // TODO: instead return some implementation of an unknown view
+            throw new ProteusInflateException("Unknown view type '" + type + "' cannot be inflated");
+        }
+
+        @Override
+        public void onEvent(String event, Value value, ProteusView view) {
+            ObjectValue objectValue = value.getAsObject();
+            Log.i("ProteusEvent", event+" - "+objectValue.get("type").getAsString());
+            String type = objectValue.get("type").getAsString();
+            if (event.equalsIgnoreCase("onClick")){
+                if (type.equalsIgnoreCase("showToast")){
+                    showToast();
+                }
+            }
+        }
+    };
+    public void showToast(){
+        Utils.setToast(activity,"Showing Toast");
+    }
+
+
 
 
 }

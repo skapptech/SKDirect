@@ -1221,6 +1221,7 @@ public class ProteusActivity extends AppCompatActivity {
         final String LAYOUT  = "{\n" +
                 "  \"type\": \"RelativeLayout\",\n" +
                 "  \"android\": \"http://schemas.android.com/apk/res/android\",\n" +
+                "  \"app\": \"http://schemas.android.com/apk/res-auto\",\n" +
                 "  \"layout_width\": \"match_parent\",\n" +
                 "  \"layout_height\": \"match_parent\",\n" +
                 "  \"children\": [\n" +
@@ -1236,11 +1237,24 @@ public class ProteusActivity extends AppCompatActivity {
                 "          \"orientation\": \"vertical\",\n" +
                 "          \"children\": [\n" +
                 "            {\n" +
+                "              \"type\": \"ImageView\",\n" +
+                "              \"layout_width\": \"wrap_content\",\n" +
+                "              \"layout_height\": \"wrap_content\",\n" +
+                "              \"layout_marginLeft\": \"10dp\",\n" +
+                "              \"layout_marginTop\": \"10dp\",\n" +
+                "              \"layout_marginRight\": \"10dp\",\n" +
+                "              \"background\": \"@drawable/ic_top\",\n" +
+                "              \"padding\": \"20dp\",\n" +
+                "              \"src\": \"@drawable/ic_shoping\"\n" +
+                "            },\n" +
+                "            {\n" +
                 "              \"type\": \"RecyclerView\",\n" +
                 "              \"layout_width\": \"match_parent\",\n" +
                 "              \"layout_height\": \"match_parent\",\n" +
-                "              \"layout_margin\": \"10dp\",\n" +
-                "              \"background\": \"#ffffff\",\n" +
+                "              \"layout_marginLeft\": \"10dp\",\n" +
+                "              \"layout_marginRight\": \"10dp\",\n" +
+                "              \"layout_marginTop\": \"-25dp\",\n" +
+                "              \"background\": \"@drawable/ic_middle\",\n" +
                 "              \"data\": {\n" +
                 "                \"storeCategoryList\": \"@{data.StoreCategoryList}\"\n" +
                 "              },\n" +
@@ -1253,9 +1267,11 @@ public class ProteusActivity extends AppCompatActivity {
                 "                  \"item-count\": \"@{storeCategoryList.$length}\",\n" +
                 "                  \"item-layout\": {\n" +
                 "                    \"type\": \"LinearLayout\",\n" +
+                "                    \"android\": \"http://schemas.android.com/apk/res/android\",\n" +
+                "                    \"app\": \"http://schemas.android.com/apk/res-auto\",\n" +
                 "                    \"layout_width\": \"match_parent\",\n" +
                 "                    \"layout_height\": \"wrap_content\",\n" +
-                "                    \"layout_margin\": \"10dp\",\n" +
+                "                    \"layout_margin\": \"20dp\",\n" +
                 "                    \"data\": {\n" +
                 "                      \"catNameJson\": \"@{storeCategoryList[$index]}\",\n" +
                 "                      \"catName\": \"@{catNameJson.CategoryName}\"\n" +
@@ -1266,96 +1282,126 @@ public class ProteusActivity extends AppCompatActivity {
                 "                        \"type\": \"LinearLayout\",\n" +
                 "                        \"layout_width\": \"match_parent\",\n" +
                 "                        \"layout_height\": \"wrap_content\",\n" +
-                "                        \"layout_margin\": \"10dp\",\n" +
-                "                        \"background\": \"@drawable/bg_all_cet\",\n" +
-                "                        \"orientation\": \"vertical\",\n" +
+                "                        \"layout_marginLeft\": \"20dp\",\n" +
+                "                        \"layout_marginRight\": \"20dp\",\n" +
+                "                        \"layout_marginTop\": \"10dp\",\n" +
+                "                        \"background\": \"@drawable/ic_banner\",\n" +
                 "                        \"children\": [\n" +
                 "                          {\n" +
                 "                            \"type\": \"TextView\",\n" +
+                "                            \"id\": \"tv_mall_category_name\",\n" +
                 "                            \"layout_width\": \"match_parent\",\n" +
                 "                            \"layout_height\": \"wrap_content\",\n" +
-                "                            \"layout_marginTop\": \"10dp\",\n" +
-                "                            \"ellipsize\": \"end\",\n" +
+                "                            \"layout_gravity\": \"center\",\n" +
                 "                            \"gravity\": \"center\",\n" +
-                "                            \"maxLines\": \"1\",\n" +
-                "                            \"padding\": \"2dp\",\n" +
                 "                            \"text\": \"@{catName}\",\n" +
                 "                            \"textColor\": \"@color/black\",\n" +
-                "                            \"textSize\": \"11sp\"\n" +
-                "                          },\n" +
-                "                          {\n" +
-                "                            \"type\": \"RecyclerView\",\n" +
-                "                            \"layout_width\": \"match_parent\",\n" +
-                "                            \"layout_height\": \"wrap_content\",\n" +
-                "                            \"layout_margin\": \"10dp\",\n" +
-                "                            \"background\": \"#ffffff\",\n" +
-                "                            \"data\": {\n" +
-                "                              \"storeListArray\": \"@{catNameJson.StoreList}\"\n" +
-                "                            },\n" +
-                "                            \"layout_manager\": {\n" +
-                "                              \"type\": \"GridLayoutManagerHorizontal\"\n" +
-                "                            },\n" +
-                "                            \"adapter\": {\n" +
-                "                              \"@\": {\n" +
-                "                                \"type\": \"SimpleListAdapter\",\n" +
-                "                                \"item-count\": \"@{storeListArray.$length}\",\n" +
-                "                                \"item-layout\": {\n" +
+                "                            \"textSize\": \"18dp\"\n" +
+                "                          }\n" +
+                "                        ]\n" +
+                "                      },\n" +
+                "                      {\n" +
+                "                        \"type\": \"RecyclerView\",\n" +
+                "                        \"layout_width\": \"match_parent\",\n" +
+                "                        \"layout_height\": \"wrap_content\",\n" +
+                "                        \"layout_marginLeft\": \"20dp\",\n" +
+                "                        \"layout_marginRight\": \"20dp\",\n" +
+                "                        \"data\": {\n" +
+                "                          \"storeListArray\": \"@{catNameJson.StoreList}\"\n" +
+                "                        },\n" +
+                "                        \"layout_manager\": {\n" +
+                "                          \"type\": \"GridLayoutManagerHorizontal\"\n" +
+                "                        },\n" +
+                "                        \"adapter\": {\n" +
+                "                          \"@\": {\n" +
+                "                            \"type\": \"SimpleListAdapter\",\n" +
+                "                            \"item-count\": \"@{storeListArray.$length}\",\n" +
+                "                            \"item-layout\": {\n" +
+                "                              \"type\": \"LinearLayout\",\n" +
+                "                              \"layout_width\": \"wrap_content\",\n" +
+                "                              \"layout_height\": \"wrap_content\",\n" +
+                "                              \"data\": {\n" +
+                "                                \"storeListJson\": \"@{storeListArray[$index]}\",\n" +
+                "                                \"sellerName\": \"@{storeListJson.SellerName}\",\n" +
+                "                                \"sellerImage\": \"@{storeListJson.ImagePath}\"\n" +
+                "                              },\n" +
+                "                              \"orientation\": \"vertical\",\n" +
+                "                              \"children\": [\n" +
+                "                                {\n" +
                 "                                  \"type\": \"LinearLayout\",\n" +
+                "                                  \"id\": \"LL_apparels\",\n" +
                 "                                  \"layout_width\": \"wrap_content\",\n" +
                 "                                  \"layout_height\": \"wrap_content\",\n" +
-                "                                  \"layout_margin\": \"10dp\",\n" +
-                "                                  \"data\": {\n" +
-                "                                    \"storeListJson\": \"@{storeListArray[$index]}\",\n" +
-                "                                    \"sellerName\": \"@{storeListJson.SellerName}\",\n" +
-                "                                    \"sellerImage\": \"@{storeListJson.ImagePath}\"\n" +
-                "                                  },\n" +
+                "                                  \"layout_marginLeft\": \"10dp\",\n" +
+                "                                  \"layout_marginTop\": \"10dp\",\n" +
                 "                                  \"orientation\": \"vertical\",\n" +
                 "                                  \"children\": [\n" +
                 "                                    {\n" +
-                "                                      \"type\": \"LinearLayout\",\n" +
-                "                                      \"layout_width\": \"wrap_content\",\n" +
+                "                                      \"type\": \"RelativeLayout\",\n" +
+                "                                      \"layout_width\": \"match_parent\",\n" +
                 "                                      \"layout_height\": \"wrap_content\",\n" +
-                "                                      \"layout_margin\": \"10dp\",\n" +
-                "                                      \"background\": \"@drawable/bg_all_cet\",\n" +
-                "                                      \"orientation\": \"vertical\",\n" +
                 "                                      \"children\": [\n" +
                 "                                        {\n" +
-                "                                          \"type\": \"ImageView\",\n" +
-                "                                          \"layout_width\": \"90dp\",\n" +
-                "                                          \"layout_height\": \"90dp\",\n" +
-                "                                          \"layout_margin\": \"5dp\",\n" +
-                "                                          \"onClick\": {\n" +
-                "                                            \"type\": \"showToast\"\n" +
-                "                                          },\n" +
-                "                                          \"scaleType\": \"centerInside\",\n" +
-                "                                          \"src\": \"@{sellerImage}\"\n" +
+                "                                          \"type\": \"CardView\",\n" +
+                "                                          \"layout_width\": \"150dp\",\n" +
+                "                                          \"layout_height\": \"130dp\",\n" +
+                "                                          \"cardCornerRadius\": \"10dp\",\n" +
+                "                                          \"cardElevation\": \"0dp\",\n" +
+                "                                          \"layout_marginTop\": \"60dp\",\n" +
+                "                                          \"children\": [\n" +
+                "                                            {\n" +
+                "                                              \"type\": \"ImageView\",\n" +
+                "                                              \"id\": \"iv_image\",\n" +
+                "                                              \"layout_width\": \"150dp\",\n" +
+                "                                              \"layout_height\": \"130dp\",\n" +
+                "                                              \"adjustViewBounds\": \"true\",\n" +
+                "                                              \"scaleType\": \"centerCrop\",\n" +
+                "                                              \"src\": \"@{sellerImage}\"\n" +
+                "                                            }\n" +
+                "                                          ]\n" +
                 "                                        },\n" +
                 "                                        {\n" +
-                "                                          \"type\": \"TextView\",\n" +
-                "                                          \"layout_width\": \"100dp\",\n" +
+                "                                          \"type\": \"LinearLayout\",\n" +
+                "                                          \"layout_width\": \"wrap_content\",\n" +
                 "                                          \"layout_height\": \"wrap_content\",\n" +
-                "                                          \"layout_marginTop\": \"10dp\",\n" +
-                "                                          \"ellipsize\": \"end\",\n" +
-                "                                          \"gravity\": \"center\",\n" +
-                "                                          \"maxLines\": \"1\",\n" +
-                "                                          \"padding\": \"2dp\",\n" +
-                "                                          \"text\": \"@{sellerName}\",\n" +
-                "                                          \"textColor\": \"@color/black\",\n" +
-                "                                          \"textSize\": \"11sp\"\n" +
+                "                                          \"background\": \"@drawable/ic_mall_shop\",\n" +
+                "                                          \"orientation\": \"vertical\",\n" +
+                "                                          \"children\": [\n" +
+                "                                            {\n" +
+                "                                              \"type\": \"TextView\",\n" +
+                "                                              \"id\": \"tv_store_list\",\n" +
+                "                                              \"layout_width\": \"match_parent\",\n" +
+                "                                              \"layout_height\": \"match_parent\",\n" +
+                "                                              \"layout_marginTop\": \"5dp\",\n" +
+                "                                              \"gravity\": \"center\",\n" +
+                "                                              \"text\": \"@{sellerName}\",\n" +
+                "                                              \"textColor\": \"@color/white\",\n" +
+                "                                              \"textSize\": \"12dp\"\n" +
+                "                                            }\n" +
+                "                                          ]\n" +
                 "                                        }\n" +
                 "                                      ]\n" +
                 "                                    }\n" +
                 "                                  ]\n" +
                 "                                }\n" +
-                "                              }\n" +
+                "                              ]\n" +
                 "                            }\n" +
                 "                          }\n" +
-                "                        ]\n" +
+                "                        }\n" +
                 "                      }\n" +
                 "                    ]\n" +
                 "                  }\n" +
                 "                }\n" +
                 "              }\n" +
+                "            },\n" +
+                "            {\n" +
+                "              \"type\": \"ImageView\",\n" +
+                "              \"layout_width\": \"wrap_content\",\n" +
+                "              \"layout_height\": \"wrap_content\",\n" +
+                "              \"layout_marginLeft\": \"10dp\",\n" +
+                "              \"layout_marginTop\": \"-2dp\",\n" +
+                "              \"layout_marginRight\": \"10dp\",\n" +
+                "              \"background\": \"@drawable/ic_bottom\"\n" +
                 "            }\n" +
                 "          ]\n" +
                 "        }\n" +

@@ -27,7 +27,7 @@
         android:usesCleartextTraffic="true"
         android:windowDisablePreview="true"
         android:windowSoftInputMode="adjustResize">
-        <activity android:name=".activity.SplashActivity"></activity>
+        <activity android:name=".activity.ProteusActivity"></activity>
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"></activity>
@@ -41,7 +41,7 @@
             android:name=".activity.UserLocationActvity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".activity.ProteusActivity"
+            android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
