@@ -41,6 +41,17 @@ public class UserDetailModel {
     @SerializedName("LastName")
     private String LastName;
 
+    @SerializedName("Distance")
+    private double Distance;
+
+    public double getDistance() {
+        return Distance;
+    }
+
+    public void setDistance(double distance) {
+        Distance = distance;
+    }
+
     public String getMobileNumber() {
         return MobileNumber;
     }
