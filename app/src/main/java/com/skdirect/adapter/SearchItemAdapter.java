@@ -53,6 +53,9 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         DecimalFormat precision = new DecimalFormat("0.00");
         holder.mBinding.tvPriceOff.setText(precision.format(offPersentagePrice*100));
 
+
+
+
         if (model.getImagePath()!=null && !model.getImagePath().contains("http")) {
             Picasso.get().load(BuildConfig.apiEndpoint+model.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.ivItemImage);
         }else {
