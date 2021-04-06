@@ -102,6 +102,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userNameTV = mBinding.tvUserName;
         mobileNumberTV = mBinding.tvMobileName;
         setLocationTV = mBinding.toolbarId.tvLoction;
+
+        if(!TextUtils.isNullOrEmpty(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME)))
+        {
+            userNameTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME));
+        }
+        mobileNumberTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.MOBILE_NUMBER));
+
 //        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBinding.toolbarId.bottomNavigation.getLayoutParams();
 //        layoutParams.setBehavior(new BottomNavigationBehavior());
 
@@ -144,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setLocationTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(MainActivity.this,MapsExtendedActivity.class),2);
+                startActivityForResult(new Intent(MainActivity.this,MapsActivity.class),2);
             }
         });
 
@@ -217,18 +224,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.ll_logout:
                 clearSharePrefs();
-                if (SharePrefs.getInstance(this).getBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE)) {
-                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                }
-                else{
-                    startActivity(new Intent(getApplicationContext(), PlaceSearchActivity.class));
-                }
-
+                startActivity(new Intent(getApplicationContext(), PlaceSearchActivity.class));
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;
                 case  R.id.ll_sign_in:
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
                 case R.id.ll_howto_use:
