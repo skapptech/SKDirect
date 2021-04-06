@@ -23,12 +23,15 @@ import com.skdirect.adapter.BottomListAdapter;
 import com.skdirect.adapter.ShowImagesAdapter;
 import com.skdirect.adapter.TopNearByItemAdapter;
 import com.skdirect.adapter.TopSellerAdapter;
+import com.skdirect.adapter.TopSimilarSellerAdapter;
 import com.skdirect.databinding.ActivityProductDetailsBinding;
 import com.skdirect.interfacee.BottomBarInterface;
 import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.ImageListModel;
 import com.skdirect.model.ItemAddModel;
+import com.skdirect.model.MainSimilarTopSellerModel;
+import com.skdirect.model.MainTopSimilarSellerModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.ProductDataModel;
 import com.skdirect.model.ProductResultModel;
@@ -245,7 +248,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     }
 
     private void addProduct() {
-        productDetailsViewMode.getAddProductVMRequest(new PaginationModel(productID));
+        productDetailsViewMode.getAddProductVMRequest(productID);
         productDetailsViewMode.getAddProductVM().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
@@ -258,17 +261,21 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
     private void SellarOtherProductsAPI() {
         productDetailsViewMode.getSellarOtherVMRequest(productID);
-        productDetailsViewMode.getSallerOtherProducsVM().observe(this, new Observer<ArrayList<TopNearByItemModel>>() {
+        productDetailsViewMode.getSallerOtherProducsVM().observe(this, new Observer<MainTopSimilarSellerModel>() {
             @Override
-            public void onChanged(ArrayList<TopNearByItemModel> topNearSimilarProduct) {
+            public void onChanged(MainTopSimilarSellerModel model) {
                 Utils.hideProgressDialog();
-                if (topNearSimilarProduct.size() > 0) {
-                    mBinding.llSellarsOtherProducs.setVisibility(View.VISIBLE);
-                    TopNearByItemAdapter topNearByItemAdapter = new TopNearByItemAdapter(ProductDetailsActivity.this, topNearSimilarProduct);
-                    mBinding.rvSellarsOthersItems.setAdapter(topNearByItemAdapter);
+                if (model.isSuccess()) {
+                    if (model.getResultItem().size() > 0) {
+                        mBinding.llSellarsOtherProducs.setVisibility(View.VISIBLE);
+                        TopSimilarSellerAdapter topSimilarSellerAdapter = new TopSimilarSellerAdapter(ProductDetailsActivity.this, model.getResultItem());
+                        mBinding.rvSellarsOthersItems.setAdapter(topSimilarSellerAdapter);
 
-                } else {
-                    mBinding.llSellarsOtherProducs.setVisibility(View.GONE);
+                    } else {
+                        mBinding.llSellarsOtherProducs.setVisibility(View.GONE);
+                    }
+                }else {
+
                 }
 
             }
@@ -278,19 +285,24 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
     private void topSimilarProductAPI() {
         productDetailsViewMode.getSimilarProductVMRequest(productID);
-        productDetailsViewMode.getSimilarProductVM().observe(this, new Observer<ArrayList<TopNearByItemModel>>() {
+        productDetailsViewMode.getSimilarProductVM().observe(this, new Observer<MainTopSimilarSellerModel>() {
             @Override
-            public void onChanged(ArrayList<TopNearByItemModel> topNearSimilarProduct) {
+            public void onChanged(MainTopSimilarSellerModel topNearSimilarProduct) {
                 Utils.hideProgressDialog();
-                if (topNearSimilarProduct.size() > 0) {
-                    mBinding.llSimilarProduct.setVisibility(View.VISIBLE);
-                    TopNearByItemAdapter topNearByItemAdapter = new TopNearByItemAdapter(ProductDetailsActivity.this, topNearSimilarProduct);
-                    mBinding.rvNearByItem.setAdapter(topNearByItemAdapter);
+                if (topNearSimilarProduct.isSuccess()){
+                    if (topNearSimilarProduct.getResultItem().size() > 0) {
+                        mBinding.llSimilarProduct.setVisibility(View.VISIBLE);
+                        TopSimilarSellerAdapter topSellerAdapter = new TopSimilarSellerAdapter(ProductDetailsActivity.this, topNearSimilarProduct.getResultItem());
+                        mBinding.rvNearByItem.setAdapter(topSellerAdapter);
 
-                } else {
+                    } else {
 
-                    mBinding.llSimilarProduct.setVisibility(View.GONE);
+                        mBinding.llSimilarProduct.setVisibility(View.GONE);
+                    }
+                }else {
+                    Utils.setToast(ProductDetailsActivity.this,topNearSimilarProduct.getErrorMessage());
                 }
+
 
             }
 
@@ -300,18 +312,23 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
     private void getTopSeller() {
         productDetailsViewMode.GetTopSellerLiveRequest(productID);
-        productDetailsViewMode.GetTopSellerLiveData().observe(this, new Observer<ArrayList<TopSellerModel>>() {
+        productDetailsViewMode.GetTopSellerLiveData().observe(this, new Observer<MainSimilarTopSellerModel>() {
             @Override
-            public void onChanged(ArrayList<TopSellerModel> topSellerList) {
+            public void onChanged(MainSimilarTopSellerModel topSimilarSellerModel) {
                 Utils.hideProgressDialog();
-                if (topSellerList.size() > 0) {
-                    mBinding.llOtherSellar.setVisibility(View.VISIBLE);
-                    TopSellerAdapter topSellerAdapter = new TopSellerAdapter(ProductDetailsActivity.this, topSellerList);
-                    mBinding.rvOtherSellars.setAdapter(topSellerAdapter);
+                if (topSimilarSellerModel.isSuccess()){
+                    if (topSimilarSellerModel.getResultItem().size() > 0) {
+                        mBinding.llOtherSellar.setVisibility(View.VISIBLE);
+                        TopSellerAdapter topSellerAdapter = new TopSellerAdapter(ProductDetailsActivity.this, topSimilarSellerModel.getResultItem());
+                        mBinding.rvOtherSellars.setAdapter(topSellerAdapter);
 
-                } else {
-                    mBinding.llOtherSellar.setVisibility(View.GONE);
+                    } else {
+                        mBinding.llOtherSellar.setVisibility(View.GONE);
+                    }
+                }else {
+                    Utils.setToast(ProductDetailsActivity.this,topSimilarSellerModel.getErrorMessage());
                 }
+
             }
         });
     }
@@ -362,7 +379,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                                 mBinding.tvDiscount.setVisibility(View.VISIBLE);
                                 double DiscountAmount = productDataModel.getResultItem().getVariationModelList().get(i).getSellingPrice()-productDataModel.getResultItem().getVariationModelList().get(i).getDiscountAmount();
                                 mBinding.tvDiscount.setText(""+DiscountAmount+"OFF");
-                                mBinding.tvItemMrpOff.setPaintFlags(mBinding.tvItemMrpOff.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                                //mBinding.tvItemMrpOff.setPaintFlags(mBinding.tvItemMrpOff.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             }
 
 
@@ -374,9 +391,15 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                             }
 
                             mBinding.tvItemName.setText(productDataModel.getResultItem().getVariationModelList().get(i).getProductName());
-                            mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getVariationModelList().get(i).getMrp());
-                            mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                            mBinding.tvItemMrpOff.setText(String.valueOf(productDataModel.getResultItem().getVariationModelList().get(i).getSellingPrice()));
+                            if ( productDataModel.getResultItem().getVariationModelList().get(i).getMrp()== productDataModel.getResultItem().getVariationModelList().get(i).getSellingPrice()){
+                                mBinding.llSellingPrice.setVisibility(View.GONE);
+                                mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getVariationModelList().get(i).getMrp());
+                            }else {
+                                mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getVariationModelList().get(i).getMrp());
+                                mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                                mBinding.tvSellingPrice.setText(String.valueOf(productDataModel.getResultItem().getVariationModelList().get(i).getSellingPrice()));
+                            }
+
                             mBinding.tvQuantity.setText("Quantity "+productDataModel.getResultItem().getVariationModelList().get(i).getMeasurement()+productDataModel.getResultItem().getVariationModelList().get(i).getUomValue());
                             mBinding.tvShopName.setText(productDataModel.getResultItem().getShopName());
                             String varientName = "";
@@ -402,10 +425,18 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                             imageListModels = productDataModel.getResultItem().getImageList();
                         }
                         mBinding.tvItemName.setText(productDataModel.getResultItem().getProductName());
-                        mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getMrp());
-                        mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        mBinding.tvItemMrpOff.setText(String.valueOf(productDataModel.getResultItem().getSellingPrice()));
-                        mBinding.tvAddresh.setText(productDataModel.getResultItem().getAddressOne()+" "+productDataModel.getResultItem().getAddressTwo() + "\n- "+productDataModel.getResultItem().getPincode()+"("+productDataModel.getResultItem().getState()+")");
+
+
+                        if (productDataModel.getResultItem().getMrp()==productDataModel.getResultItem().getSellingPrice()){
+                            mBinding.llSellingPrice.setVisibility(View.GONE);
+                            mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getMrp());
+                        }else {
+                            mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getMrp());
+                            mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                            mBinding.tvSellingPrice.setText(String.valueOf(productDataModel.getResultItem().getSellingPrice()));
+                            mBinding.tvAddresh.setText(productDataModel.getResultItem().getAddressOne()+" "+productDataModel.getResultItem().getAddressTwo() + "\n- "+productDataModel.getResultItem().getPincode()+"("+productDataModel.getResultItem().getState()+")");
+                        }
+
 
                         if (productDataModel.getResultItem().getDeliveryOptionDC().size()>0){
                             mBinding.llDeliverOption.setVisibility(View.VISIBLE);

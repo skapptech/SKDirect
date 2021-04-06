@@ -160,7 +160,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onChanged(SellerDetailsModel sellerDetailsModel) {
                 Utils.hideProgressDialog();
-                if (sellerDetailsModel != null) {
+                if (sellerDetailsModel.isSuccess()) {
                     if (sellerDetailsModel.getSellerInfoModel().getRating() > 0.0) {
                         Double deg = sellerDetailsModel.getSellerInfoModel().getRating();
                         float rating = deg.floatValue();
@@ -189,7 +189,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     }
 
     private void getSellerProductsApi(String searchSellerName) {
-        SellerProfileDataModel paginationModel = new SellerProfileDataModel(sellerID, 0, 0, "", skipCount, takeCount, 0, searchSellerName);
+        SellerProfileDataModel paginationModel = new SellerProfileDataModel(sellerID, 0, 0, "", skipCount, takeCount, 0, searchSellerName,Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)),Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LON)));
         sellerProfileViewMode.getSellerProductRequest(paginationModel);
         sellerProfileViewMode.getSellerProductVM().observe(this, new Observer<SellerProductMainModel>() {
             @Override
@@ -243,7 +243,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             }
             mBinding.tvAddreshOne.setText(userDetailModel.getAddressOne() + " " + userDetailModel.getAddressTwo() + " " + userDetailModel.getCity() + " - " + userDetailModel.getPincode() + " (" + userDetailModel.getState() + ")");
             mBinding.tvDeliveryOption.setText(userDetailModel.getAddressOne() + " " + userDetailModel.getAddressTwo());
-            mBinding.tvSellerDistance.setText("" + Utils.distance(Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)), Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)), userDetailModel.getLatitiute(), userDetailModel.getLongitude()));
+            mBinding.tvSellerDistance.setText(""+String.format("%.2f", userDetailModel.getDistance())+" KM");
 
         } else {
             mBinding.tvSellerDistance.setVisibility(View.GONE);

@@ -61,7 +61,7 @@ public class SellerProfileDataModel {
     }
 
 
-    public SellerProfileDataModel(int sellerId, int cateogryId, int brandId,String productName, int skip, int take, int parentProductId, String keyword) {
+    public SellerProfileDataModel(int sellerId, int cateogryId, int brandId,String productName, int skip, int take, int parentProductId, String keyword,double lat,double log) {
         DecryptsellerId = sellerId;
         CateogryId = cateogryId;
         BrandId = brandId;
@@ -70,6 +70,9 @@ public class SellerProfileDataModel {
         Take = take;
         ParentProductId = parentProductId;
         Keyword = keyword;
+        Latitude = lat;
+        Longitude = log;
+
 
     }
 }

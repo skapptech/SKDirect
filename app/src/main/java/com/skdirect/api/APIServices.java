@@ -15,6 +15,8 @@ import com.skdirect.model.DeliveryOptionModel;
 import com.skdirect.model.GenerateOtpModel;
 import com.skdirect.model.GenerateOtpResponseModel;
 import com.skdirect.model.ItemAddModel;
+import com.skdirect.model.MainSimilarTopSellerModel;
+import com.skdirect.model.MainTopSimilarSellerModel;
 import com.skdirect.model.MallMainModel;
 import com.skdirect.model.MyOrderModel;
 import com.skdirect.model.MyOrderRequestModel;
@@ -114,20 +116,20 @@ public interface APIServices {
     Call<ProductDataModel> GetSellerProductById(@Path("GetSellerProductById") int GetSellerProductById);
 
     @GET("api/NativeProductDetail/GetTopSimilarproduct/{GetSellerProductById}")
-    Call<ArrayList<TopNearByItemModel>> GetTopSimilarproduct(@Path("GetSellerProductById") int GetSellerProductById);
+    Call<MainTopSimilarSellerModel> GetTopSimilarproduct(@Path("GetSellerProductById") int GetSellerProductById);
 
 
     @GET("api/NativeProductDetail/GetSimilarProductTopSeller/{GetSimilarProductTopSeller}")
-    Call<ArrayList<TopSellerModel>> GetSimilarProductTopSeller(@Path("GetSimilarProductTopSeller") int GetSellerProductById);
+    Call<MainSimilarTopSellerModel> GetSimilarProductTopSeller(@Path("GetSimilarProductTopSeller") int GetSellerProductById);
 
     @GET("api/NativeProductDetail/GetMoreSimilarSellerProduct/{GetMoreSimilarSellerProduct}")
-    Call<ArrayList<TopNearByItemModel>> GetMoreSimilarSellerProduct(@Path("GetMoreSimilarSellerProduct") int GetSellerProductById);
+    Call<MainTopSimilarSellerModel> GetMoreSimilarSellerProduct(@Path("GetMoreSimilarSellerProduct") int GetSellerProductById);
 
     @GET("api/Buyer/CartOverview/GetCartItems/{GetCartItems}")
     Call<CartItemModel> GetCartItems(@Path("GetCartItems") String GetSellerProductById);
 
-    @POST("api/Buyer/SellerProfile/AddProductView")
-    Call<Boolean> AddProductView(@Body PaginationModel paginationModel);
+    @GET("api/NativeBuyer/SellerProfile/AddProductView")
+    Call<Boolean> AddProductView(@Query("productId") int productID);
 
     @GET("api/NativeBuyer/SellerProfile/GetSellerDetail/{GetSellerDetail}")
     Call<SellerDetailsModel> GetSellerDetail(@Path("GetSellerDetail") int GetSellerDetail);
