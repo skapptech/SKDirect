@@ -45,11 +45,17 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SellerProductList sellerProductModel = sellerProductModels.get(position);
         holder.mBinding.tvSallerName.setText(sellerProductModel.getProductName());
-        holder.mBinding.tvMrp.setText("₹ " + sellerProductModel.getMrp());
-        holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        holder.mBinding.tvSellingPrice.setText("₹ " + sellerProductModel.getSellingPrice());
-        holder.mBinding.tvTax.setText("Inclusive of all taxes");
+        holder.mBinding.tvTax.setText(context.getString(R.string.txt_Inclusive));
         holder.mBinding.tvQuantity.setText("Quantity "+sellerProductModel.getMeasurement()+sellerProductModel.getUom());
+
+        if (sellerProductModel.getMrp() ==sellerProductModel.getSellingPrice()){
+            holder.mBinding.llSellingPrice.setVisibility(View.GONE);
+            holder.mBinding.tvMrp.setText("₹ " + sellerProductModel.getMrp());
+        }else {
+            holder.mBinding.tvMrp.setText("₹ " + sellerProductModel.getMrp());
+            holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.mBinding.tvSellingPrice.setText("₹ " + sellerProductModel.getSellingPrice());
+        }
 
         if (sellerProductModel.getOffPercentage()!=0.0) {
             holder.mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
@@ -57,6 +63,8 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
         }else {
             holder.mBinding.tvMagrginOff.setVisibility(View.GONE);
         }
+
+
 
         if (sellerProductModel.getNoofView()>0){
             holder.mBinding.llNoOfView.setVisibility(View.VISIBLE);

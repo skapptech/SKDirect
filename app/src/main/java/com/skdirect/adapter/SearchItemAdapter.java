@@ -49,11 +49,14 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         holder.mBinding.tvSellingPrice.setText("₹ "+String.valueOf(model.getSellingPrice()));
         holder.mBinding.tvTax.setText(context.getString(R.string.txt_Inclusive));
         holder.mBinding.tvQty.setText("Qty "+String.valueOf(model.getMeasurement())+ " PC");
+        holder.mBinding.tvPice.setText("("+model.getMeasurement()+" "+model.getUom()+" )");
         double offPersentagePrice = model.getMrp()-model.getSellingPrice()/model.getMrp();
         DecimalFormat precision = new DecimalFormat("0.00");
         holder.mBinding.tvPriceOff.setText(precision.format(offPersentagePrice*100));
 
         if (model.getNoofView()>0){
+            holder.mBinding.tvNoView.setVisibility(View.VISIBLE);
+            holder.mBinding.tvNoView.setText(String.valueOf(model.getNoofView()));
 
         }
 

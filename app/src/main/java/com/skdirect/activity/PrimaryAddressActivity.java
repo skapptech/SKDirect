@@ -95,6 +95,7 @@ public class PrimaryAddressActivity extends AppCompatActivity implements View.On
             @Override
             public void onChanged(ArrayList<UserLocationModel> locationModel) {
                 Utils.hideProgressDialog();
+                locationModelArrayList.clear();
                 if (locationModel != null) {
                     if (locationModel.size() > 0) {
                         locationModelArrayList.addAll(locationModel);

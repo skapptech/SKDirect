@@ -37,6 +37,7 @@ import com.skdirect.model.ProductDataModel;
 import com.skdirect.model.ProfileResponseModel;
 import com.skdirect.model.RemoveItemRequestModel;
 import com.skdirect.model.SearchDataModel;
+import com.skdirect.model.SearchMainModel;
 import com.skdirect.model.SearchRequestModel;
 import com.skdirect.model.SellerDetailsModel;
 import com.skdirect.model.SellerProductMainModel;
@@ -109,8 +110,8 @@ public interface APIServices {
     @POST("api/Buyer/cateogry/GetCategorybyfilter")
     Call<ArrayList<AllCategoriesModel>> GetCategorybyfilter(@Body PaginationModel paginationModel);
 
-    @POST("api/Buyer/Item/GetSellerListWithItem")
-    Call<SearchDataModel> GetSellerListWithItem(@Body SearchRequestModel paginationModel);
+    @POST("/api/NativeBuyer/ItemList/GetSellerListWithItem")
+    Call<SearchMainModel> GetSellerListWithItem(@Body SearchRequestModel paginationModel);
 
 
     @GET("api/buyer/Seller/GetTopSeller")

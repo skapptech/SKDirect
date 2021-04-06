@@ -58,12 +58,12 @@ public class SearchDataAdapter extends RecyclerView.Adapter<SearchDataAdapter.Vi
         }
 
 
-       /* holder.mBinding.tvViewMore.setOnClickListener(new View.OnClickListener() {
+        holder.mBinding.tvViewMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, SellerProfileActivity.class).putExtra("ID",String.valueOf(model.getProductList().get(0).getSellerId())));
+                context.startActivity(new Intent(context, SellerProfileActivity.class).putExtra("ID",model.getProductList().get(0).getSellerId()));
             }
-        });*/
+        });
 
 
         SearchItemAdapter searchDataAdapter = new SearchItemAdapter(context, model.getProductList());
