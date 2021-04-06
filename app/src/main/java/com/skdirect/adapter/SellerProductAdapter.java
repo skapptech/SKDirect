@@ -2,6 +2,7 @@ package com.skdirect.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +46,17 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
         SellerProductList sellerProductModel = sellerProductModels.get(position);
         holder.mBinding.tvSallerName.setText(sellerProductModel.getProductName());
         holder.mBinding.tvMrp.setText("₹ " + sellerProductModel.getMrp());
+        holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        holder.mBinding.tvSellingPrice.setText("₹ " + sellerProductModel.getSellingPrice());
         holder.mBinding.tvTax.setText("Inclusive of all taxes");
+        holder.mBinding.tvQuantity.setText("Quantity "+sellerProductModel.getMeasurement()+sellerProductModel.getUom());
 
+        if (sellerProductModel.getOffPercentage()!=0.0) {
+            holder.mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
+            holder.mBinding.tvMagrginOff.setText("" + sellerProductModel.getOffPercentage() + "%\n OFF");
+        }else {
+            holder.mBinding.tvMagrginOff.setVisibility(View.GONE);
+        }
 
         if (sellerProductModel.getQty()>0){
             holder.mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
@@ -92,7 +102,6 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
                 context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID",sellerProductModel.getSellerProductId()));
             }
         });
-
 
     }
 

@@ -109,7 +109,6 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.iv_back_press:
                 onBackPressed();
                 break;
-
             case R.id.rl_check_out:
                 startActivity(new Intent(this, PaymentActivity.class).putExtra("cartItemSize",cartItemDataModel).putExtra("totalAmount",totalAmount));
                 break;

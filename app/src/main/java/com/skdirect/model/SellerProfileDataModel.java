@@ -8,7 +8,7 @@ public class SellerProfileDataModel {
     private String SellerId;
 
     @SerializedName("DecryptsellerId")
-    private String DecryptsellerId;
+    private int DecryptsellerId;
 
     @SerializedName("ParentProductId")
     private int ParentProductId;
@@ -61,7 +61,7 @@ public class SellerProfileDataModel {
     }
 
 
-    public SellerProfileDataModel(String sellerId, int cateogryId, int brandId,String productName, int skip, int take, int parentProductId, String keyword) {
+    public SellerProfileDataModel(int sellerId, int cateogryId, int brandId,String productName, int skip, int take, int parentProductId, String keyword) {
         DecryptsellerId = sellerId;
         CateogryId = cateogryId;
         BrandId = brandId;
