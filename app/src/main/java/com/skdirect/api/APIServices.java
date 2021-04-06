@@ -19,6 +19,7 @@ import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.MainSimilarTopSellerModel;
 import com.skdirect.model.MainTopSimilarSellerModel;
 import com.skdirect.model.MallMainModel;
+import com.skdirect.model.MallMainModelBolleanResult;
 import com.skdirect.model.MyOrderModel;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.NearBySallerModel;
@@ -182,7 +183,7 @@ public interface APIServices {
     @POST("api/buyer/Profile/UpdateUserDetail")
     Call<Boolean> UpdateUserDetail(@Body JsonObject jsonObject );
 
-    @POST("api/Native/BuyerProfile/UpdateBuyerProfile")
+    @POST("api/NativeBuyer/BuyerProfile")
     Observable<GenerateOtpResponseModel> UpdateProfile(@Body UpdateProfilePostModel updateProfilePostModel );
 
     @GET("api/buyer/Profile/MakeDefaultAddress/{MakeDefaultAddress}")
@@ -207,8 +208,8 @@ public interface APIServices {
     @GET("api/buyer/MyOrder/GetOrderDetails/{OrderId}")
     Call<ArrayList<OrderItemModel>> GetOrderDetails(@Query("OrderId") int OrderId);
 
-    @POST("api/NativeBuyer/MyOrder/CancelOrder")
-    Call<Boolean> CancelOrder(@Query("OrderId") int OrderId);
+    @GET("api/NativeBuyer/MyOrder/CancelOrder")
+    Call<MallMainModelBolleanResult> CancelOrder(@Query("OrderId") int OrderId);
 
     @GET("api/NativeBuyer/Mall/GetMall")
     Call<MallMainModel> getMall();
