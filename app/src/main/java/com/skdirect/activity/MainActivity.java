@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setLocationTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(MainActivity.this,MapsActivity.class),2);
+                startActivityForResult(new Intent(MainActivity.this,MapsExtendedActivity.class),2);
             }
         });
 
