@@ -183,7 +183,7 @@ public interface APIServices {
     @POST("api/buyer/Profile/ChangePassword")
     Call<Boolean> ChangePassword(@Body ChangePasswordRequestModel passwordRequestModel);
 
-    @POST("api/buyer/MyOrder/GetOrderMaster")
+    @POST("api/NativeBuyer/Order/GetMyOrder")
     Call<ArrayList<MyOrderModel>> GetOrderMaster(@Body MyOrderRequestModel myOrderRequestModel);
 
     @POST("api/buyer/OrderReview/Rating")
