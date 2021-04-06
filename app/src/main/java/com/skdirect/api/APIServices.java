@@ -22,6 +22,7 @@ import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.OrderDetailsModel;
 import com.skdirect.model.OrderItemModel;
+import com.skdirect.model.OrderModel;
 import com.skdirect.model.OrderPlaceModel;
 import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.OtpResponceModel;
@@ -184,7 +185,7 @@ public interface APIServices {
     Call<Boolean> ChangePassword(@Body ChangePasswordRequestModel passwordRequestModel);
 
     @POST("api/NativeBuyer/Order/GetMyOrder")
-    Call<ArrayList<MyOrderModel>> GetOrderMaster(@Body MyOrderRequestModel myOrderRequestModel);
+    Call<OrderModel> GetOrderMaster(@Body MyOrderRequestModel myOrderRequestModel);
 
     @POST("api/buyer/OrderReview/Rating")
     Call<Boolean> getRating(@Body AddReviewModel reViewViewMode);

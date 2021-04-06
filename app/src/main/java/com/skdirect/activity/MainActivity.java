@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonObject;
 import com.nabinbhandari.android.permissions.PermissionHandler;
@@ -36,6 +37,7 @@ import com.skdirect.model.CartItemModel;
 import com.skdirect.utils.AppSignatureHelper;
 import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.SharePrefs;
+import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.MainActivityViewMode;
 
@@ -144,6 +146,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(new Intent(MainActivity.this,MapsActivity.class),2);
             }
         });
+
+        if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.USER_IMAGE))) {
+            Glide.with(this)
+                    .load( SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.USER_IMAGE))
+                    .centerCrop()
+                    .into(mBinding.profileImageNav);
+        } else {
+            mBinding.profileImageNav.setImageDrawable(getResources().getDrawable(R.drawable.profile_round));
+        }
     }
 
     private void setlocationInHader() {

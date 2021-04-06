@@ -252,7 +252,6 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                 if (model != null) {
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
                     commonClassForAPI.getUpdateToken(updatecallToken,new UpdateTokenModel(fcmToken));
 
 

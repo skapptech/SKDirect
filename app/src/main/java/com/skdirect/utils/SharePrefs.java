@@ -20,6 +20,7 @@ public class SharePrefs {
     public static final String IS_LOGIN ="is_loggedIn";
     public static final String TOKEN ="access_token";
     public static final String USER_NAME ="user_name";
+    public static final String USER_IMAGE ="user_image";
     public static final String FIRST_NAME ="first_name";
     public static final String MIDDLE_NAME ="middle_name";
     public static final String LAST_NAME ="last_name";
