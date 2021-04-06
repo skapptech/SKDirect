@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name1">Direct</string>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyD5ftRk6-UwGVAWWKE5IWtm4yxppzP6_xs</string>
+    <string name="txt_mrp">MRP</string>
+    <string name="txt_selling_price">Selling Price</string>
+    <string name="txt_Inclusive">Inclusive of all taxes</string>
+    <string name="txt_seller_details">Seller Detail</string>
+    <string name="txt_shop_name">Shop Name</string>
+
 </resources>

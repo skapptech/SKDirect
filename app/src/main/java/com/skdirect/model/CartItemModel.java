@@ -35,6 +35,13 @@ public class CartItemModel implements Serializable {
     @SerializedName("Id")
     private String Id;
 
+    public CartItemModel() {
+    }
+
+    public CartItemModel(ArrayList<CartModel> cart) {
+        Cart = cart;
+    }
+
     public ArrayList<CartModel> getCart() {
         return Cart;
     }

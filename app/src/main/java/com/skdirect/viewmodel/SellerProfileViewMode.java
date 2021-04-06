@@ -65,7 +65,7 @@ public class SellerProfileViewMode extends ViewModel {
     }
 
 
-    public MutableLiveData<SellerDetailsModel> getSellerDetailsRequest(String id) {
+    public MutableLiveData<SellerDetailsModel> getSellerDetailsRequest(int id) {
         RestClient.getInstance().getService().GetSellerDetail(id).enqueue(new Callback<SellerDetailsModel>() {
             @Override
             public void onResponse(Call<SellerDetailsModel> call, Response<SellerDetailsModel> response) {

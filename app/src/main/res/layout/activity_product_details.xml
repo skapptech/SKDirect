@@ -42,7 +42,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="180dp"
                             android:layout_marginTop="4dp" />
-
                         <com.viewpagerindicator.CirclePageIndicator
                             android:id="@+id/indicator"
                             android:layout_width="match_parent"
@@ -50,8 +49,6 @@
                             android:layout_alignBottom="@+id/pager"
                             android:layout_marginBottom="5dp"
                             android:padding="5dp" />
-
-
                         <TextView
                             android:id="@+id/tv_varient_button"
                             android:layout_width="wrap_content"
@@ -66,6 +63,22 @@
                             android:textColor="@color/seller_button_color"
                             android:textSize="10sp"
                             android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/tv_magrgin_off"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/ic_off"
+                            android:textColor="@color/white"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginStart="5dp"
+                            android:gravity="center"
+                            android:visibility="gone"
+                            android:text=""
+                            android:textSize="8dp"
+                            style="@style/font_normal"
+                            />
+
 
 
                     </RelativeLayout>
@@ -94,6 +107,198 @@
                             android:textSize="18sp" />
 
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:padding="2dp"
+                                    style="@style/font_normal"
+                                    android:text="@string/txt_mrp"
+                                    android:textColor="@color/black"
+                                    android:textSize="10dp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_item_mrp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:padding="2dp"
+                                    style="@style/font_normal"
+                                    android:text=""
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_tax"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:text="@string/txt_Inclusive"
+                                    style="@style/font_normal"
+                                    android:textColor="@color/seller_button_color"
+                                    android:textSize="11dp"
+                                    android:textStyle="normal" />
+
+                                <TextView
+                                    android:id="@+id/tv_quantity"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:text="@string/txt_Inclusive"
+                                    style="@style/font_normal"
+                                    android:textSize="13dp"
+                                    android:textStyle="normal" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:ellipsize="end"
+                                    style="@style/font_normal"
+                                    android:maxLines="1"
+                                    android:padding="2dp"
+                                    android:text="@string/txt_selling_price"
+                                    android:textColor="@color/black"
+                                    android:textSize="10dp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_item_mrp_off"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:ellipsize="end"
+                                    style="@style/font_normal"
+                                    android:maxLines="1"
+                                    android:padding="2dp"
+                                    android:text=""
+                                    android:textColor="@color/seller_button_color"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+
+                            <TextView
+                                android:id="@+id/tv_discount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginEnd="10dp"
+                                android:ellipsize="end"
+                                android:visibility="gone"
+                                style="@style/font_normal"
+                                android:maxLines="1"
+                                android:padding="2dp"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="10dp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_seller_deatil"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            style="@style/font_normal_sami_bold"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:padding="2dp"
+                            android:text="@string/txt_seller_details"
+                            android:textColor="@color/seller_button_color"
+                            android:textSize="15sp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:ellipsize="end"
+                                style="@style/font_normal"
+                                android:maxLines="1"
+                                android:padding="2dp"
+                                android:text="@string/txt_shop_name"
+                                android:textColor="@color/black"
+                                android:textSize="14dp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_shop_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:ellipsize="end"
+                                style="@style/font_normal"
+                                android:maxLines="1"
+                                android:padding="2dp"
+                                android:text=""
+                                android:textColor="@color/seller_button_color"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+
+                        <TextView
+                            android:id="@+id/tv_addresh"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="10dp"
+                            style="@style/font_normal"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:padding="2dp"
+                            android:text=""
+                            android:textColor="@color/grid_divder"
+                            android:textSize="15sp" />
 
 
                         <TextView
@@ -116,73 +321,9 @@
                     </LinearLayout>
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="1">
 
-                        <TextView
-                            android:id="@+id/tv_item_mrp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginEnd="10dp"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:padding="2dp"
-                            style="@style/font_normal"
-                            android:text=""
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tv_item_mrp_off"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginEnd="10dp"
-                            android:ellipsize="end"
-                            style="@style/font_normal"
-                            android:maxLines="1"
-                            android:padding="2dp"
-                            android:text=""
-                            android:textColor="@color/grid_divder"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tv_item_mrp_percent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginEnd="10dp"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            style="@style/font_normal"
-                            android:padding="2dp"
-                            android:text=""
-                            android:textColor="@color/seller_button_color"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tv_tax"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="1dp"
-                        android:layout_marginEnd="10dp"
-                        android:text=""
-                        style="@style/font_normal_sami_bold"
-                        android:textColor="@color/seller_button_color"
-                        android:textSize="12dp"
-                        android:textStyle="normal" />
 
 
 
@@ -201,14 +342,14 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:padding="2dp"
-                            android:text="ShopName:"
+                            android:text=""
                             style="@style/font_normal"
                             android:textColor="@color/black"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
 
-                        <TextView
+                        <!--<TextView
                             android:id="@+id/tv_shop_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -220,7 +361,7 @@
                             android:text=""
                             android:textColor="@color/seller_button_color"
                             android:textSize="15sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold" />-->
 
 
                     </LinearLayout>
