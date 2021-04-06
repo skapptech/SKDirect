@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class AddViewModel {
 
-    @SerializedName("SellerId")
-    private String  SellerId;
+    @SerializedName("DecryptSellerId")
+    private int  SellerId;
 
-    public AddViewModel(String productId) {
+    public AddViewModel(int productId) {
         SellerId = productId;
     }
 }
