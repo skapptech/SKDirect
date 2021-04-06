@@ -19,9 +19,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHolder> {
-    private Context context;
+    private final Context context;
     ArrayList<CartModel> cartItemList;
-    private CartItemInterface cartItemInterface;
+    private final CartItemInterface cartItemInterface;
 
     public CartListAdapter(Context context, ArrayList<CartModel> cartItemList, CartItemInterface cartItemInter) {
         this.context = context;
@@ -41,7 +41,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         CartModel cartModel = cartItemList.get(position);
         holder.mBinding.tvProductName.setText(cartModel.getProductName());
         holder.mBinding.tvSellerName.setText("Seller: " + cartModel.getShopName());
-        holder.mBinding.tvMrp.setText("₹ " + String.valueOf(cartModel.getPrice()));
+        holder.mBinding.tvMrp.setText("₹ " + cartModel.getPrice());
         holder.mBinding.tvSelectedQty.setText(String.valueOf(cartModel.getQuantity()));
 
         if (cartModel.getImagePath() != null && !cartModel.getImagePath().contains("http")) {
@@ -53,6 +53,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         holder.mBinding.tvQtyPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                cartModel.setQuantity(cartModel.getQuantity() + 1);
                 cartItemInterface.plusButtonOnClick(cartModel, holder.mBinding.tvSelectedQty);
             }
         });
@@ -60,6 +61,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         holder.mBinding.tvQtyMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                cartModel.setQuantity(cartModel.getQuantity() - 1);
                 cartItemInterface.minusButtonOnClick(cartModel, holder.mBinding.tvSelectedQty, holder.mBinding.LLPlusMinus);
             }
         });

@@ -2,13 +2,12 @@ package com.skdirect.api;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.AddReviewModel;
 import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.AddViewModel;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.AppVersionModel;
-import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.ChangePasswordRequestModel;
 import com.skdirect.model.CustomerDataModel;
@@ -19,7 +18,6 @@ import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.MainSimilarTopSellerModel;
 import com.skdirect.model.MainTopSimilarSellerModel;
 import com.skdirect.model.MallMainModel;
-import com.skdirect.model.MyOrderModel;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.NearProductListModel;
@@ -27,7 +25,6 @@ import com.skdirect.model.OrderDetailsModel;
 import com.skdirect.model.OrderItemModel;
 import com.skdirect.model.OrderModel;
 import com.skdirect.model.OrderPlaceMainModel;
-import com.skdirect.model.OrderPlaceModel;
 import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
@@ -43,9 +40,7 @@ import com.skdirect.model.TokenModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.UpdateProfilePostModel;
-import com.skdirect.model.UpdateTokenModel;
 import com.skdirect.model.UserLocationModel;
-
 
 import java.util.ArrayList;
 
@@ -149,10 +144,10 @@ public interface APIServices {
     Call<CartItemModel> GetCartItem(@Query("CookieValue") String CookieValue);
 
     @POST("api/NativeBuyer/SellerProfile/ClearCart")
-    Call<Object> ClearCart(@Query("Id") String id);
+    Call<Object> ClearCart(@Query("Id") int id);
 
     @GET("api/Buyer/CartOverview/GetCartItems/{GetCartItems}")
-    Call<CartItemModel> CartItems(@Path("GetCartItems") String GetCartItems);
+    Call<CartItemModel> CartItems(@Path("GetCartItems") int GetCartItems);
 
     @POST("api/Buyer/SellerProfile/DeleteCartItems")
     Call<JsonObject> deleteCartItems(@Body RemoveItemRequestModel itemRequestModel);

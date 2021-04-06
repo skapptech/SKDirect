@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonObject;
-import com.skdirect.activity.MainActivity;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.CartItemModel;
@@ -60,7 +59,7 @@ public class CartItemViewMode extends ViewModel {
         return removeItemFromCartVM;
     }
 
-    public MutableLiveData<CartItemModel> getCartItemModelVMRequest(String id, RecyclerView rvCartItem, LinearLayout blankBasket) {
+    public MutableLiveData<CartItemModel> getCartItemModelVMRequest(int id, RecyclerView rvCartItem, LinearLayout blankBasket) {
         RestClient.getInstance().getService().CartItems(id).enqueue(new Callback<CartItemModel>() {
             @Override
             public void onResponse(Call<CartItemModel> call, Response<CartItemModel> response) {
@@ -119,7 +118,6 @@ public class CartItemViewMode extends ViewModel {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + t.toString());
-                MainActivity.cartItemModel = null;
                 Utils.hideProgressDialog();
             }
         });
