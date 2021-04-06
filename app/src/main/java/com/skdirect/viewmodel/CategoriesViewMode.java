@@ -25,8 +25,12 @@ public class CategoriesViewMode extends ViewModel {
     private MutableLiveData<ArrayList<AllCategoriesModel>> categoriesViewModel;
 
     public LiveData<ArrayList<AllCategoriesModel>> getCategoriesViewModel() {
-        categoriesViewModel=null;
+       if(categoriesViewModel==null)
         categoriesViewModel = new MutableLiveData<>();
+        if (categoriesViewModel.getValue() != null)
+        {
+            categoriesViewModel.setValue(null);
+        }
         return categoriesViewModel;
     }
 

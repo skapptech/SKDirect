@@ -29,14 +29,22 @@ public class SearchViewMode extends ViewModel {
     private MutableLiveData<ArrayList<TopSellerModel>> shopDataViewModel;
 
     public LiveData<SearchDataModel> getSearchViewModel() {
-        searchViewModel=null;
-        searchViewModel = new MutableLiveData<>();
+        if(searchViewModel==null){
+            searchViewModel = new MutableLiveData<>();
+        }
+        if (searchViewModel.getValue() != null) {
+            searchViewModel.setValue(null);
+        }
         return searchViewModel;
     }
 
     public LiveData<ArrayList<TopSellerModel>> getShopDataViewModel() {
-        shopDataViewModel=null;
-        shopDataViewModel = new MutableLiveData<>();
+        if(shopDataViewModel==null){
+            shopDataViewModel = new MutableLiveData<>();
+        }
+        if (shopDataViewModel.getValue() != null) {
+            shopDataViewModel.setValue(null);
+        }
         return shopDataViewModel;
     }
 
