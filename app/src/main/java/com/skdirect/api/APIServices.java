@@ -26,6 +26,7 @@ import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.OrderDetailsModel;
 import com.skdirect.model.OrderItemModel;
 import com.skdirect.model.OrderModel;
+import com.skdirect.model.OrderPlaceMainModel;
 import com.skdirect.model.OrderPlaceModel;
 import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.OtpResponceModel;
@@ -168,8 +169,8 @@ public interface APIServices {
     @GET("api/Buyer/Order/GetCheckOutItem")
     Call<JsonObject> GetCheckOutItem(@Query("CookieValue") String CookieValue);
 
-    @POST("api/Buyer/Order/PlaceOrder")
-    Call<OrderPlaceModel> PlaceOrder(@Body OrderPlaceRequestModel placeRequestModel);
+    @POST("api/NativeBuyer/Order/PlaceOrder")
+    Call<OrderPlaceMainModel> PlaceOrder(@Body OrderPlaceRequestModel placeRequestModel);
 
     @POST("api/buyer/Profile/AddLocation")
     Call<Boolean> AddLocation(@Body JsonArray jsonArray);

@@ -25,6 +25,7 @@ import com.skdirect.adapter.DeliveryOptionAdapter;
 import com.skdirect.databinding.ActivityPaymentBinding;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.DeliveryOptionModel;
+import com.skdirect.model.OrderPlaceMainModel;
 import com.skdirect.model.OrderPlaceModel;
 import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.UserLocationModel;
@@ -150,15 +151,16 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private void orderPlaceAPI() {
         OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASE", deliveryOption, cartItemModel.getId(), UserLocationId);
         paymentViewMode.getOrderPlaceVMRequest(orderPlaceRequestModel);
-        paymentViewMode.getOrderPlaceVM().observe(this, new Observer<OrderPlaceModel>() {
+        paymentViewMode.getOrderPlaceVM().observe(this, new Observer<OrderPlaceMainModel>() {
             @Override
-            public void onChanged(OrderPlaceModel orderPlaceModel) {
+            public void onChanged(OrderPlaceMainModel response) {
                 Utils.hideProgressDialog();
-                if (orderPlaceModel != null) {
+                if (response.isSuccess()) {
                     orderPlaceDialog();
                     clearCartItem(cartItemModel.getId());
-
-                    ///Toast.makeText(PaymentActivity.this, "Order Place", Toast.LENGTH_SHORT).show();
+                }else
+                {
+                  Toast.makeText(PaymentActivity.this, response.getErrorMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
