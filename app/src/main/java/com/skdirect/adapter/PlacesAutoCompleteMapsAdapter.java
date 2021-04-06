@@ -1,4 +1,4 @@
-package com.moreyeahs.hindmud.supplier.adapters;
+package com.skdirect.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -28,8 +28,9 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.moreyeahs.hindmud.supplier.R;
-import com.moreyeahs.hindmud.supplier.activity.signup.PlacesActivity;
+import com.skdirect.R;
+import com.skdirect.activity.PlacesActivity;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -146,9 +147,9 @@ public class PlacesAutoCompleteMapsAdapter extends RecyclerView.Adapter<PlacesAu
     public void onBindViewHolder(@NonNull PredictionHolder mPredictionHolder, final int i) {
         mPredictionHolder.address.setText(mResultList.get(i).address);
         mPredictionHolder.area.setText(mResultList.get(i).area);
-        activity.binding.placesProgress.setVisibility(View.GONE);
+        /*activity.binding.placesProgress.setVisibility(View.GONE);
         activity.binding.ivCancel.setVisibility(View.VISIBLE);
-        activity.binding.ivCancel.setOnClickListener(v -> activity.binding.etSearchPlace.setText(""));
+        activity.binding.ivCancel.setOnClickListener(v -> activity.binding.etSearchPlace.setText(""));*/
     }
 
     @Override

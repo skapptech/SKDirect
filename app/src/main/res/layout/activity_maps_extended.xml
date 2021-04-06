@@ -36,7 +36,7 @@
                     android:id="@+id/tv_current_address"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:textColor="@color/White"
+                    android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </androidx.cardview.widget.CardView>
@@ -46,20 +46,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:src="@drawable/ic_gps_icon" />
+                android:src="@drawable/location" />
 
-            <TextView
-                android:visibility="visible"
-                android:id="@+id/tv_sorry"
-                android:layout_width="match_parent"
-                android:gravity="center"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="@dimen/_6sdp"
-                android:textSize="16sp"
-                android:textColor="@color/White"
-                android:background="@color/Red"
-                android:text="@string/shop_location_must"
-                android:layout_height="25dp" />
+
         </RelativeLayout>
 
         <LinearLayout
@@ -68,15 +57,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="-8dp"
-            android:background="@color/White">
+            android:background="@color/white">
 
             <TextView
                 android:textSize="15sp"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:text="@string/your_location"
-                style="@style/TextStyleSemiBold"
-                android:textColor="@color/Black"
+                android:text="Your location"
+                style="@style/font_Bold"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -98,7 +87,7 @@
                     android:maxLines="2"
                     android:layout_weight="1"
                     android:ellipsize="end"
-                    style="@style/TextStyleSemiBold"
+                    style="@style/font_normal_sami_bold"
                     android:lineSpacingMultiplier="1.3"
                     android:textSize="14sp" />
 
@@ -107,8 +96,8 @@
                     android:layout_width="70dp"
                     android:layout_height="25dp"
                     android:gravity="center"
-                    android:text="@string/change"
-                    android:textColor="@color/green_dark"
+                    android:text="change"
+                    android:textColor="@color/seller_button_color"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     android:visibility="visible" />
@@ -118,7 +107,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginVertical="5dp"
-                android:background="@color/view_color_grey" />
+                android:background="@color/grey" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -127,71 +116,10 @@
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:visibility="gone"
-                android:fontFamily="@font/poppins_bold"
                 android:layout_marginTop="10dp"
-                android:text="@string/flat_no" />
+                android:text="flat_no" />
 
-            <TextView
-                android:layout_marginTop="15dp"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginBottom="7dp"
-                android:textSize="14sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/shop_no"
-                android:textColor="@color/Black" />
 
-            <EditText
-                android:id="@+id/etShopNumber"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/greyrectangle"
-                android:drawablePadding="10dp"
-                style="@style/TextStyleSemiBold"
-                android:hint="@string/shop_no"
-                android:imeOptions="actionNext"
-                android:inputType="textCapWords"
-                android:paddingVertical="13dp"
-                android:paddingStart="10dp"
-                android:textSize="14sp"
-                android:paddingEnd="1dp"
-                android:singleLine="true"
-                android:text=""
-                android:textColor="@color/light_black"
-                android:textColorHint="@color/text_hint_color"
-                tools:ignore="Autofill,LabelFor" />
-
-            <TextView
-                android:layout_marginTop="10dp"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginBottom="7dp"
-                android:textSize="14sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/landmark_optional"
-                android:textColor="@color/Black" />
-
-            <EditText
-                android:id="@+id/et_landmark"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/greyrectangle"
-                android:drawablePadding="10dp"
-                style="@style/TextStyleSemiBold"
-                android:hint="@string/landmark_optional"
-                android:imeOptions="actionNext"
-                android:inputType="textCapWords"
-                android:paddingVertical="13dp"
-                android:paddingStart="10dp"
-                android:textSize="14sp"
-                android:paddingEnd="1dp"
-                android:singleLine="true"
-                android:text=""
-                android:textColor="@color/light_black"
-                android:textColorHint="@color/text_hint_color"
-                tools:ignore="Autofill,LabelFor" />
 
             <RelativeLayout
                 android:id="@+id/other_name_layout"
@@ -199,7 +127,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:visibility="gone"
-                android:background="@drawable/btn_bck"
                 android:layout_marginHorizontal="20dp"
                 android:orientation="horizontal">
 
@@ -212,15 +139,15 @@
                     android:ellipsize="end"
                     android:layout_marginVertical="2dp"
                     android:layout_toStartOf="@+id/cancel"
-                    android:background="@color/White"
-                    style="@style/TextStyleSemiBold"
+                    android:background="@color/white"
+                    style="@style/font_normal_sami_bold"
                     android:gravity="start"
-                    android:hint="@string/name"
+                    android:hint="name"
                     android:maxLines="1"
                     android:paddingHorizontal="18dp"
                     android:paddingVertical="13dp"
                     android:singleLine="true"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/black"
                     android:textSize="15sp"
                     tools:ignore="Autofill,TextFields" />
 
@@ -231,7 +158,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:gravity="center"
-                    android:text="@string/cancel"
+                    android:text="cancel"
                     android:layout_marginEnd="18dp"
                     android:textColor="#EF3828"
                     android:textSize="14sp"
@@ -246,16 +173,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingVertical="10dp"
-                android:background="@drawable/global_btn_grey"
+                android:background="@drawable/button_drawer"
                 android:gravity="center"
                 android:layout_marginTop="10dp"
                 android:maxEms="12"
-                style="@style/TextStyleSemiBold"
-                android:paddingHorizontal="@dimen/_20sdp"
+                style="@style/font_normal_sami_bold"
+                android:paddingHorizontal="20dp"
                 android:minWidth="125dp"
-                android:text="@string/confirm_location"
+                android:text="Confirm Location"
                 android:textAllCaps="false"
-                android:textColor="@color/Darkgrey"
+                android:textColor="@color/seller_button_color"
                 android:textSize="16sp" />
 
         </LinearLayout>

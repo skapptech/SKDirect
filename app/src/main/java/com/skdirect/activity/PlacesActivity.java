@@ -1,4 +1,4 @@
-package com.moreyeahs.hindmud.supplier.activity.signup;
+package com.skdirect.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.moreyeahs.hindmud.supplier.R;
-import com.moreyeahs.hindmud.supplier.adapters.PlacesAutoCompleteMapsAdapter;
-import com.moreyeahs.hindmud.supplier.databinding.ActivityPlacesBinding;
-import com.moreyeahs.hindmud.supplier.utils.LocaleHelper;
+import com.skdirect.R;
+import com.skdirect.adapter.PlacesAutoCompleteMapsAdapter;
+import com.skdirect.databinding.ActivityPlacesBinding;
+
 
 /**
  * Created by Pritesh on 17/07/2020.
@@ -31,10 +31,7 @@ public class PlacesActivity extends AppCompatActivity implements PlacesAutoCompl
     private Boolean searchCity = false;
 
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.onAttach(newBase));
-    }
+
 
     @Override
     public void applyOverrideConfiguration(Configuration overrideConfiguration) {

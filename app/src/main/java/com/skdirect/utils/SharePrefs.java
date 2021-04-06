@@ -22,6 +22,7 @@ public class SharePrefs {
     public static final String USER_NAME ="user_name";
     public static final String FIRST_NAME ="first_name";
     public static final String MIDDLE_NAME ="middle_name";
+    public static final String CITY_NAME ="CITY_NAME";
     public static final String LAST_NAME ="last_name";
     public static final String MOBILE_NUMBER ="mobile";
     public static final String SHOP_NAME ="shop_name";

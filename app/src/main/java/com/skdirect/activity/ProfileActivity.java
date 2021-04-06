@@ -58,9 +58,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.rl_chnage_password:
                 startActivity(new Intent(ProfileActivity.this,ChangePasswordActivity.class));
                 break;
-
-
-
         }
     }
 }

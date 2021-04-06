@@ -1,4 +1,4 @@
-package com.moreyeahs.hindmud.supplier.activity.signup;
+package com.skdirect.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -28,6 +28,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -40,18 +42,23 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.moreyeahs.hindmud.supplier.BuildConfig;
-import com.moreyeahs.hindmud.supplier.R;
-import com.moreyeahs.hindmud.supplier.api.CommonClassForApi;
-import com.moreyeahs.hindmud.supplier.databinding.ActivityMapsExtendedBinding;
-import com.moreyeahs.hindmud.supplier.utils.GpsUtils;
-import com.moreyeahs.hindmud.supplier.utils.IntentKeys;
-import com.moreyeahs.hindmud.supplier.utils.LocaleHelper;
-import com.moreyeahs.hindmud.supplier.utils.Utils;
+import com.google.gson.JsonObject;
+import com.skdirect.R;
+import com.skdirect.api.CommonClassForAPI;
+import com.skdirect.databinding.ActivityMapsExtendedBinding;
+import com.skdirect.utils.GpsUtils;
+import com.skdirect.utils.SharePrefs;
+import com.skdirect.utils.Utils;
+import com.skdirect.viewmodel.MapViewViewMode;
+
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -61,7 +68,7 @@ import java.util.Objects;
 public class MapsExtendedActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
     private ActivityMapsExtendedBinding mBinding;
     Utils utils;
-    CommonClassForApi commonClassForAPI;
+    CommonClassForAPI commonClassForAPI;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -71,7 +78,6 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
     boolean selectedLocation = false;
     public boolean isPermissionAllowed = false;
     View mapView;
-
     String zipCode;
     String premises;
     String country;
@@ -84,15 +90,9 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
     Double longitude = 0.0;
     LatLng mCenterLatLong;
     Boolean isGPS = false;
-    String mobileNumber;
-    String password;
-    String businessName;
-    String businessEmail;
+    private MapViewViewMode mapViewViewMode;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.onAttach(newBase));
-    }
+
 
     @Override
     public void applyOverrideConfiguration(Configuration overrideConfiguration) {
@@ -113,80 +113,20 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
         }
     };
 
-//    DisposableObserver<ZipCodeResponse> getZipCode = new DisposableObserver<ZipCodeResponse>() {
-//        @Override
-//        public void onNext(ZipCodeResponse zipCodeResponse) {
-//            Utils.hideProgressDialog(MapsExtendedActivity.this);
-//            if (zipCodeResponse != null) {
-//                if (zipCodeResponse.getCityId() > 0) {
-//                    mBinding.tvSorry.setVisibility(View.GONE);
-//                    mBinding.tvSubmit.setEnabled(true);
-//                    cityId = zipCodeResponse.getCityId();
-//                } else {
-//                    mBinding.tvSorry.setVisibility(View.VISIBLE);
-//                    mBinding.tvSubmit.setEnabled(false);
-//                }
-//            }
-//        }
-//
-//        @Override
-//        public void onError(Throwable e) {
-//            Utils.hideProgressDialog(MapsExtendedActivity.this);
-//            e.printStackTrace();
-//        }
-//
-//        @Override
-//        public void onComplete() {
-//
-//        }
-//    };
-//
-//    DisposableObserver<UpdateAddressResponse> postAddressDess = new DisposableObserver<UpdateAddressResponse>() {
-//        @Override
-//        public void onNext(UpdateAddressResponse addressResponse) {
-//            Utils.hideProgressDialog(MapsExtendedActivity.this);
-//            if (addressResponse.getMessage().equalsIgnoreCase("Successfully")) {
-//                Toast.makeText(MapsExtendedActivity.this, getString(R.string.LocationUpdatedSuccessfully), Toast.LENGTH_SHORT).show();
-//                saveToMyPref();
-//                SharePrefs.getInstance(MapsExtendedActivity.this).putInt(SharePrefs.VENDOR_CITYID, addressResponse.getCityid());
-//                startActivity(new Intent(MapsExtendedActivity.this, IndustriesListActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-//                finish();
-//            }
-//            else
-//            {
-//                Toast.makeText(MapsExtendedActivity.this, getString(R.string.someee), Toast.LENGTH_SHORT).show();
-//
-//            }
-//        }
-//
-//        @Override
-//        public void onError(Throwable e) {
-//            e.printStackTrace();
-//            postAddressDess.dispose();
-//            Toast.makeText(MapsExtendedActivity.this, getString(R.string.someee), Toast.LENGTH_SHORT).show();
-//
-//            Utils.hideProgressDialog(MapsExtendedActivity.this);
-//        }
-//
-//        @Override
-//        public void onComplete() {
-//
-//        }
-//    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_maps_extended);
-
-        getExtrasFromIntent();
         initializeViews();
         checkPlayServices();
     }
 
     private void initializeViews() {
         utils = new Utils(MapsExtendedActivity.this);
-        commonClassForAPI = CommonClassForApi.getInstance(MapsExtendedActivity.this);
+        mapViewViewMode = ViewModelProviders.of(this).get(MapViewViewMode.class);
+        commonClassForAPI = CommonClassForAPI.getInstance(MapsExtendedActivity.this);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -202,16 +142,13 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
         layoutParams.setMargins(0, 0, 30, 95);
 
         mBinding.tvSubmit.setOnClickListener(v -> {
-            if (zipCode != null && zipCode.length() > 0) {
-                if (mBinding.etShopNumber.getText().toString().trim().isEmpty()) {
-                    Utils.setToast(getApplicationContext(), getString(R.string.Pleas));
-                } else {
-                    confirmAddress(mBinding.etShopNumber.getText().toString().trim(),
-                            mBinding.etLandmark.getText().toString().trim());
-                }
+            if (Utils.isNetworkAvailable(getApplicationContext())) {
+                Utils.showProgressDialog(MapsExtendedActivity.this);
+                callLocationAPI(latitude, longitude);
             } else {
-                Toast.makeText(this, getString(R.string.unable), Toast.LENGTH_SHORT).show();
+                Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
             }
+
         });
 
         new GpsUtils(this).turnGPSOn(isGPSEnable -> {
@@ -221,36 +158,46 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
 
         mBinding.tvChangeMe.setOnClickListener(V -> startActivityForResult(new Intent(this, PlacesActivity.class), LAUNCH_PLACES_ACTIVITY));
 
-        mBinding.etShopNumber.addTextChangedListener(new TextWatcher() {
+
+    }
+    private void callLocationAPI(double latitude, double longitude) {
+        mapViewViewMode.getMapViewModelRequest(latitude, longitude);
+        mapViewViewMode.getMapViewModel().observe(this, new Observer<JsonObject>() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onChanged(JsonObject data) {
+                Utils.hideProgressDialog();
 
-            }
+                JSONObject jsonResponse = null;
+                try {
+                    jsonResponse = new JSONObject(data.toString());
+                    JSONObject components = jsonResponse.getJSONObject("geometry");
+                    JSONObject location = components.getJSONObject("location");
+                    double lat = location.getDouble("lat");
+                    double lng = location.getDouble("lng");
+                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                    List<Address> addresses = null;
+                    try {
+                        addresses = geocoder.getFromLocation(lat, lng, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    String cityName = addresses.get(0).getLocality();
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CITYNAME,cityName);
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAT, String.valueOf(lat));
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LON, String.valueOf(lng));
+                    Log.e("cityName", "cityName  "+cityName);
+                    startActivity(new Intent(MapsExtendedActivity.this,MainActivity.class));
+                    finish();
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!mBinding.etShopNumber.getText().toString().trim().isEmpty()) {
-                    mBinding.tvSubmit.setTextColor(getResources().getColor(R.color.White));
-                    mBinding.tvSubmit.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.black_bg));
-                } else {
-                    mBinding.tvSubmit.setTextColor(getResources().getColor(R.color.Darkgrey));
-                    mBinding.tvSubmit.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.global_btn_grey));
-
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+
+
             }
         });
-    }
 
-    private void getExtrasFromIntent() {
-        mobileNumber = getIntent().getStringExtra(IntentKeys.MOBILE_NUMBER);
-        password = getIntent().getStringExtra(IntentKeys.PASSWORD);
-        businessName = getIntent().getStringExtra(IntentKeys.BUSINESS_NAME);
-        businessEmail = getIntent().getStringExtra(IntentKeys.BUSINESS_EMAIL);
+
     }
 
     @Override
@@ -291,7 +238,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             }
-            Toast.makeText(this, getString(R.string.loca), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Location", Toast.LENGTH_SHORT).show();
         } else if (isGPS) {
             buildGoogleApiClient();
         }
@@ -309,24 +256,11 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                 intent.setClass(MapsExtendedActivity.this, MapsExtendedActivity.class);
                 startActivity(intent);
                 finish();
-            } else {
-                closeActivityPopup();
             }
         }
     }
 
-    private void closeActivityPopup() {
-        final Dialog dialog = Utils.showCustomDialog(this, R.layout.permission_dialog);
-        TextView ok = dialog.findViewById(R.id.btn_ok);
-        ok.setOnClickListener(v -> {
-            isPermissionAllowed = true;
-            startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
-            dialog.dismiss();
-        });
-        TextView cancel = dialog.findViewById(R.id.btn_cancel);
-        cancel.setOnClickListener(v -> dialog.dismiss());
-        dialog.show();
-    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -344,8 +278,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
             mMap.setOnCameraMoveStartedListener(i -> {
-                mBinding.tvSorry.setVisibility(View.GONE);
-                mBinding.cvAddress.setVisibility(View.GONE);
+
             });
             mMap.setOnCameraIdleListener(() -> {
                 mCenterLatLong = mMap.getCameraPosition().target;
@@ -369,9 +302,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                             longitude = addresses.get(0).getLongitude();
                         }
 
-                        if (mBinding.etShopNumber.getText().toString().length() > 0) {
-                            fullAddress = fullAddress + mBinding.etShopNumber.getText().toString();
-                        }
+
                         if (addresses.get(0).getPremises() != null) {
                             premises = addresses.get(0).getPremises();
                             if (fullAddress.length() > 0) {
@@ -449,7 +380,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
 
         } else {
             Toast.makeText(getApplicationContext(),
-                    getString(R.string.soory), Toast.LENGTH_SHORT)
+                    "Sorry", Toast.LENGTH_SHORT)
                     .show();
         }
     }
@@ -533,46 +464,6 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
-    public void exitApp(Context activity) {
-        final Dialog dialog = Utils.showCustomDialog(activity, R.layout.exit_dialog);
-        TextView text = (TextView) dialog.findViewById(R.id.text_dialog);
-        TextView ok = (TextView) dialog.findViewById(R.id.btn_ok);
-        ok.setOnClickListener(v -> {
-            dialog.dismiss();
-            finishAffinity();
-        });
-        TextView cancel = (TextView) dialog.findViewById(R.id.btn_cancel);
-        cancel.setOnClickListener(v -> dialog.dismiss());
-        dialog.show();
-    }
-
-//    void getCityIdApiCall(String zip) {
-//        if (utils.isNetworkAvailable()) {
-//            if (commonClassForAPI != null) {
-//                commonClassForAPI.fetchCityId(getZipCode, Integer.parseInt(zip));
-//            }
-//        } else {
-//            Utils.setToast(this, getString(R.string.internet_connection));
-//        }
-//    }
-
-    void confirmAddress(String shopNo, String landmark) {
-        startActivity(new Intent(this, PersonalDetailsActivity.class)
-                .putExtra(IntentKeys.MOBILE_NUMBER, mobileNumber)
-                .putExtra(IntentKeys.PASSWORD, password)
-                .putExtra(IntentKeys.BUSINESS_NAME, businessName)
-                .putExtra(IntentKeys.BUSINESS_EMAIL, businessEmail)
-                .putExtra(IntentKeys.SHOP_NUMBER, shopNo)
-                .putExtra(IntentKeys.LANDMARK, landmark)
-                .putExtra(IntentKeys.SUB_LOCALITY, subLocality)
-                .putExtra(IntentKeys.CITY, city)
-                .putExtra(IntentKeys.STATE, customerState)
-                .putExtra(IntentKeys.COUNTRY, country)
-                .putExtra(IntentKeys.ZIPCODE, Integer.parseInt(zipCode))
-                .putExtra(IntentKeys.LATITUDE, latitude.toString())
-                .putExtra(IntentKeys.LONGITUDE, longitude.toString())
-                .putExtra(IntentKeys.FULL_ADDRESS, fullAddress));
-    }
 
     @Override
     protected void onDestroy() {

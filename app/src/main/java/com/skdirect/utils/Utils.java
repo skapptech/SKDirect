@@ -190,7 +190,21 @@ public class Utils {
 
         return locationAddresh;
     }
+    public static boolean gpsPermission(Activity activity, String callTime) {
+        final boolean[] isGPS = new boolean[1];
+        try {
+            new GpsUtils(activity).turnGPSOn(isGPSEnable -> {
+                isGPS[0] = isGPSEnable;
+                if (!isGPS[0] && !callTime.equalsIgnoreCase("runtime")) {
+                    new GpsUtils(activity).turnGPSOn(isGPSEnable1 -> isGPS[0] = isGPSEnable1);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
 
+        }
+        return isGPS[0];
+    }
     public static String getCityName(Activity activity, double lat, double log) {
         String locationAddresh = null;
         try {
