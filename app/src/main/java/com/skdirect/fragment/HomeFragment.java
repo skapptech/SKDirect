@@ -255,14 +255,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             public void onChanged(CustomerDataModel customerDataModel) {
                 Utils.hideProgressDialog();
                 if (customerDataModel != null) {
-                    if( SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE)){
-                        activity.userNameTV.setText(customerDataModel.getFirstName());
-                        activity.mBinding.llLogout.setVisibility(View.VISIBLE);
-                    }
-                    else{
-                        activity.userNameTV.setText(R.string.guest_user);
-                        activity.mBinding.llSignIn.setVisibility(View.VISIBLE);
-                    }
+
 
                     activity.mobileNumberTV.setText(customerDataModel.getMobileNo());
                     SharePrefs.getInstance(activity).putString(SharePrefs.FIRST_NAME, customerDataModel.getFirstName());
@@ -292,6 +285,14 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                             SharePrefs.getInstance(activity).putInt(SharePrefs.USER_DC_USER_ID, customerDataModel.getUserDeliveryDC().get(i).getUserId());
                             SharePrefs.getInstance(activity).putString(SharePrefs.DELIVERY, customerDataModel.getUserDeliveryDC().get(i).getDelivery());
 
+                        }
+                        if(customerDataModel.isRegistrationComplete()){
+                            activity.userNameTV.setText(customerDataModel.getFirstName());
+                            activity.mBinding.llLogout.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            activity.userNameTV.setText(R.string.guest_user);
+                            activity.mBinding.llSignIn.setVisibility(View.VISIBLE);
                         }
                     }
                 }

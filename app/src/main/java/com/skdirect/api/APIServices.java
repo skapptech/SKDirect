@@ -19,6 +19,7 @@ import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.MainSimilarTopSellerModel;
 import com.skdirect.model.MainTopSimilarSellerModel;
 import com.skdirect.model.MallMainModel;
+import com.skdirect.model.MallMainModelBolleanResult;
 import com.skdirect.model.MyOrderModel;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.NearBySallerModel;
@@ -33,6 +34,7 @@ import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.ProductDataModel;
+import com.skdirect.model.ProfileResponseModel;
 import com.skdirect.model.RemoveItemRequestModel;
 import com.skdirect.model.SearchDataModel;
 import com.skdirect.model.SearchMainModel;
@@ -149,7 +151,7 @@ public interface APIServices {
     @GET("api/Buyer/SellerProfile/GetCartItems")
     Call<CartItemModel> GetCartItem(@Query("CookieValue") String CookieValue);
 
-    @POST("api/NativeBuyer/SellerProfile/ClearCart")
+    @GET("api/NativeBuyer/SellerProfile/ClearCart")
     Call<Object> ClearCart(@Query("Id") String id);
 
     @GET("api/Buyer/CartOverview/GetCartItems/{GetCartItems}")
@@ -183,8 +185,9 @@ public interface APIServices {
     @POST("api/buyer/Profile/UpdateUserDetail")
     Call<Boolean> UpdateUserDetail(@Body JsonObject jsonObject );
 
-    @POST("api/Native/BuyerProfile/UpdateBuyerProfile")
-    Observable<GenerateOtpResponseModel> UpdateProfile(@Body UpdateProfilePostModel updateProfilePostModel );
+
+    @POST("api/NativeBuyer/BuyerProfile")
+    Observable<ProfileResponseModel> UpdateProfile(@Body UpdateProfilePostModel updateProfilePostModel );
 
     @GET("api/buyer/Profile/MakeDefaultAddress/{MakeDefaultAddress}")
     Call<Boolean> MakeDefaultAddress(@Path("MakeDefaultAddress") int UserDetailId);
@@ -196,7 +199,7 @@ public interface APIServices {
     @POST("api/buyer/Profile/ChangePassword")
     Call<Boolean> ChangePassword(@Body ChangePasswordRequestModel passwordRequestModel);
 
-    @POST("api/NativeBuyer/Order/GetMyOrder")
+    @POST("api/NativeBuyer/MyOrder/GetMyOrder")
     Call<OrderModel> GetOrderMaster(@Body MyOrderRequestModel myOrderRequestModel);
 
     @POST("api/buyer/OrderReview/Rating")
@@ -208,8 +211,8 @@ public interface APIServices {
     @GET("api/buyer/MyOrder/GetOrderDetails/{OrderId}")
     Call<ArrayList<OrderItemModel>> GetOrderDetails(@Query("OrderId") int OrderId);
 
-    @POST("api/buyer/MyOrder/CancelOrder")
-    Call<Boolean> CancelOrder(@Query("OrderId") int OrderId);
+    @GET("api/NativeBuyer/MyOrder/CancelOrder")
+    Call<MallMainModelBolleanResult> CancelOrder(@Query("OrderId") int OrderId);
 
     @GET("api/NativeBuyer/Mall/GetMall")
     Call<MallMainModel> getMall();

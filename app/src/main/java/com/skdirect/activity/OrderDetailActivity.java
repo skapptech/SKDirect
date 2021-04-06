@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.skdirect.R;
 import com.skdirect.adapter.OrderDetailsItemAdapter;
 import com.skdirect.databinding.ActivityOrderDeatilsBinding;
+import com.skdirect.model.MallMainModelBolleanResult;
 import com.skdirect.model.MyOrderModel;
 import com.skdirect.model.OrderDetailsModel;
 import com.skdirect.model.OrderItemModel;
@@ -181,11 +182,11 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
 
     private void orderCancleFromUser() {
         orderDetailsViewMode.getCancelOrderVMRequest(myOrderModel.getId());
-        orderDetailsViewMode.getCancelOrderVM().observe(this, new Observer<Boolean>() {
+        orderDetailsViewMode.getCancelOrderVM().observe(this, new Observer<MallMainModelBolleanResult>() {
             @Override
-            public void onChanged(Boolean jsonObject) {
+            public void onChanged(MallMainModelBolleanResult result) {
                 Utils.hideProgressDialog();
-                if (jsonObject != null) {
+                if (result.isSuccess()) {
                     onBackPressed();
                 }
             }
