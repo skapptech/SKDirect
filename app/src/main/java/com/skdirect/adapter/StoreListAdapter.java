@@ -52,9 +52,9 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.View
         holder.mBinding.LLApparels.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent menuIntent = new Intent(context, SellerProfileActivity.class);
-                menuIntent.putExtra("ID",String.valueOf(storeListModel.getSellerId()));
-                context.startActivity(menuIntent);
+                Intent intent = new Intent(context, SellerProfileActivity.class);
+                intent.putExtra("ID",storeListModel.getSellerId());
+                context.startActivity(intent);
             }
         });
 

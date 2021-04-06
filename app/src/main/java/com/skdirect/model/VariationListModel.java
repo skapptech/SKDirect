@@ -67,6 +67,17 @@ public  class VariationListModel {
     @SerializedName("Id")
     private int Id;
 
+    public double getDiscountAmount() {
+        return DiscountAmount;
+    }
+
+    public void setDiscountAmount(double discountAmount) {
+        DiscountAmount = discountAmount;
+    }
+
+    @SerializedName("DiscountAmount")
+    public double DiscountAmount;
+
     public ArrayList<ImageListModel> getImageList() {
         return ImageList;
     }

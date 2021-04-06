@@ -41,6 +41,26 @@
                     android:textSize="20dp"
                     android:textColor="@color/white"/>
 
+
+                <TextView
+                    android:id="@+id/tv_store_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:padding="5dp"
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/ic_eye"
+                    android:background="@drawable/drwable_view"
+                    android:layout_marginRight="55dp"
+                    android:visibility="gone"
+                    android:text=""
+                    style="@style/font_normal"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:textSize="12dp"
+                    android:textColor="@color/seller_button_color"/>
+
                 <FrameLayout
                     android:id="@+id/notifiction_count"
                     style="?attr/actionButtonStyle"
@@ -51,15 +71,15 @@
                     android:clipToPadding="false"
                     android:focusable="true">
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_my_order_un"/>
 
                     <TextView
                         android:id="@+id/cart_badge"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_gravity="right|end|top"
                         android:layout_marginEnd="-5dp"
                         android:layout_marginRight="-5dp"

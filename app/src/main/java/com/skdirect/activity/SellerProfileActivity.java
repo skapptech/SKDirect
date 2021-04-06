@@ -1,13 +1,13 @@
 package com.skdirect.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -31,7 +31,6 @@ import com.skdirect.model.SellerDeliveryModel;
 import com.skdirect.model.SellerDetailsModel;
 import com.skdirect.model.SellerProductList;
 import com.skdirect.model.SellerProductMainModel;
-import com.skdirect.model.SellerProductModel;
 import com.skdirect.model.SellerProfileDataModel;
 import com.skdirect.model.UserDetailModel;
 import com.skdirect.utils.SharePrefs;
@@ -45,7 +44,7 @@ import java.util.ArrayList;
 public class SellerProfileActivity extends AppCompatActivity implements View.OnClickListener, AddItemInterface {
     private ActivitySellerProfileBinding mBinding;
     private SellerProfileViewMode sellerProfileViewMode;
-    private String sellerID;
+    private int sellerID;
     private int skipCount = 0;
     private final int takeCount = 5;
     private int pastVisiblesItems = 0;
@@ -80,17 +79,23 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     }
 
     private void getIntentData() {
-        sellerID = getIntent().getStringExtra("ID");
+        sellerID = getIntent().getIntExtra("ID", 0);
     }
 
     private void initView() {
+        mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
         mBinding.toolbarTittle.tvTittle.setText("Seller Items");
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
+        mBinding.toolbarTittle.notifictionCount.setOnClickListener(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         mBinding.rvCategories.setLayoutManager(layoutManager);
 
         sellerShopListAdapter = new SellerProductAdapter(SellerProfileActivity.this, sellerProductModels, this);
         mBinding.rvCategories.setAdapter(sellerShopListAdapter);
+
+        if (MainActivity.cartItemModel != null && MainActivity.cartItemModel.getCart().size() > 0) {
+            mBinding.toolbarTittle.cartBadge.setText("" + MainActivity.cartItemModel.getCart().size());
+        }
 
 
         mBinding.etSearchSeller.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -142,6 +147,9 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             case R.id.iv_back_press:
                 onBackPressed();
                 break;
+            case R.id.notifiction_count:
+                startActivity(new Intent(SellerProfileActivity.this, CartActivity.class));
+                break;
         }
     }
 
@@ -152,13 +160,27 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onChanged(SellerDetailsModel sellerDetailsModel) {
                 Utils.hideProgressDialog();
-                if (sellerDetailsModel!=null) {
+                if (sellerDetailsModel != null) {
+                    if (sellerDetailsModel.getSellerInfoModel().getRating() > 0.0) {
+                        Double deg = sellerDetailsModel.getSellerInfoModel().getRating();
+                        float rating = deg.floatValue();
+                        mBinding.ratingbarSeller.setRating(rating);
+                    } else {
+                        mBinding.ratingbarSeller.setVisibility(View.GONE);
+                    }
+
                     mBinding.tvSellerName.setText(sellerDetailsModel.getSellerInfoModel().getShopName());
-                    mBinding.tvMinimumOrderAmt.setText("₹ "+Math.round(sellerDetailsModel.getSellerInfoModel().getMinOrderValue()));
-                    mBinding.tvDiliverDistance.setText(""+Math.round(sellerDetailsModel.getSellerInfoModel().getRadialDistance()));
-                    if (sellerDetailsModel.getSellerInfoModel().getImagePath()!=null && !sellerDetailsModel.getSellerInfoModel().getImagePath().contains("http")) {
-                        Picasso.get().load(BuildConfig.apiEndpoint+sellerDetailsModel.getSellerInfoModel().getImagePath()).error(R.drawable.ic_top_seller).into(mBinding.ivSShopImage);
-                    }else {
+                    if (sellerDetailsModel.getSellerInfoModel().getMinOrderValue() != 0.0 && sellerDetailsModel.getSellerInfoModel().getRadialDistance() != 0.0) {
+                        mBinding.tvMinimumOrderAmt.setText("₹ " + Math.round(sellerDetailsModel.getSellerInfoModel().getMinOrderValue()));
+                        mBinding.tvDiliverDistance.setText("" + Math.round(sellerDetailsModel.getSellerInfoModel().getRadialDistance()));
+                    } else {
+                        mBinding.llMiniOrder.setVisibility(View.GONE);
+                        mBinding.llDelivert.setVisibility(View.GONE);
+                    }
+
+                    if (sellerDetailsModel.getSellerInfoModel().getImagePath() != null && !sellerDetailsModel.getSellerInfoModel().getImagePath().contains("http")) {
+                        Picasso.get().load(BuildConfig.apiEndpoint + sellerDetailsModel.getSellerInfoModel().getImagePath()).error(R.drawable.ic_top_seller).into(mBinding.ivSShopImage);
+                    } else {
                         Picasso.get().load(sellerDetailsModel.getSellerInfoModel().getImagePath()).placeholder(R.drawable.ic_top_seller).into(mBinding.ivSShopImage);
                     }
                 }
@@ -174,12 +196,11 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             public void onChanged(SellerProductMainModel sellerProdList) {
                 Utils.hideProgressDialog();
                 if (sellerProdList != null) {
-                    if (sellerProdList.getSellerProductModel().getSellerProductLists().size()>0) {
+                    updateUserDetails(sellerProdList.getSellerProductModel().getUserDetailModel(), sellerProdList.getSellerProductModel().getSellerDeliveryModel());
+                    if (sellerProdList.getSellerProductModel().getSellerProductLists().size() > 0) {
                         mBinding.rvCategories.post(new Runnable() {
                             public void run() {
                                 sellerProductModels.addAll(sellerProdList.getSellerProductModel().getSellerProductLists());
-                                updateUserDetails(sellerProdList.getSellerProductModel().getUserDetailModel(),sellerProdList.getSellerProductModel().getSellerDeliveryModel());
-
                                 if (MainActivity.cartItemModel != null && MainActivity.cartItemModel.getCart().size() > 0) {
                                     for (int i = 0; i < sellerProductModels.size(); i++) {
                                         for (int j = 0; j < MainActivity.cartItemModel.getCart().size(); j++) {
@@ -196,6 +217,11 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
 
                             }
                         });
+                    } else {
+                        if (sellerProductModels.size() == 0) {
+                            mBinding.tvItemNotFound.setVisibility(View.VISIBLE);
+                            mBinding.rvCategories.setVisibility(View.GONE);
+                        }
 
                     }
                 } else {
@@ -207,19 +233,30 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
 
     private void updateUserDetails(UserDetailModel userDetailModel, ArrayList<SellerDeliveryModel> sellerDeliveryModel) {
         String deliveryOption = "";
-        mBinding.tvAddreshOne.setText(userDetailModel.getAddressOne()+" "+userDetailModel.getAddressTwo());
-        mBinding.tvDeliveryOption.setText(userDetailModel.getAddressOne()+" "+userDetailModel.getAddressTwo());
-        mBinding.tvSellerDistance.setText(""+Utils.distance(Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)),Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)),userDetailModel.getLatitiute(),userDetailModel.getLongitude()));
-        if (sellerDeliveryModel.size()>0){
 
-            for (int i = 0; i <sellerDeliveryModel.size() ; i++) {
-                deliveryOption+=sellerDeliveryModel.get(i).getDelivery()+", ";
+        if (userDetailModel != null) {
+            if (userDetailModel.getStoreView() != 0) {
+                mBinding.toolbarTittle.tvStoreView.setVisibility(View.VISIBLE);
+                mBinding.toolbarTittle.tvStoreView.setText(String.valueOf(userDetailModel.getStoreView()));
+            } else {
+                mBinding.toolbarTittle.tvStoreView.setVisibility(View.GONE);
             }
-            mBinding.tvDeliveryOption.setText(deliveryOption);
+            mBinding.tvAddreshOne.setText(userDetailModel.getAddressOne() + " " + userDetailModel.getAddressTwo() + " " + userDetailModel.getCity() + " - " + userDetailModel.getPincode() + " (" + userDetailModel.getState() + ")");
+            mBinding.tvDeliveryOption.setText(userDetailModel.getAddressOne() + " " + userDetailModel.getAddressTwo());
+            mBinding.tvSellerDistance.setText("" + Utils.distance(Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)), Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)), userDetailModel.getLatitiute(), userDetailModel.getLongitude()));
+
+        } else {
+            mBinding.tvSellerDistance.setVisibility(View.GONE);
         }
 
-
-
+        if (sellerDeliveryModel.size() > 0) {
+            for (int i = 0; i < sellerDeliveryModel.size(); i++) {
+                deliveryOption += sellerDeliveryModel.get(i).getDelivery() + ", ";
+            }
+            mBinding.tvDeliveryOption.setText(deliveryOption);
+        } else {
+            mBinding.llDeliverOption.setVisibility(View.GONE);
+        }
     }
 
     private void addProduct() {
@@ -227,7 +264,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         sellerProfileViewMode.getAddProductVM().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                 Utils.hideProgressDialog();
+                Utils.hideProgressDialog();
             }
         });
     }
@@ -236,15 +273,18 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     public void plusButtonOnClick(SellerProductList sellerProductModel, TextView tvSelectedQty) {
         int increaseCount = Integer.parseInt(tvSelectedQty.getText().toString().trim());
         increaseCount++;
+        mBinding.toolbarTittle.cartBadge.setVisibility(View.VISIBLE);
         tvSelectedQty.setText("" + increaseCount);
         SharePrefs.getInstance(SellerProfileActivity.this).putInt(SharePrefs.COUNT, increaseCount);
         addItemInCart(increaseCount, sellerProductModel);
+
         if (MainActivity.cartItemModel != null) {
             for (int i = 0; i < MainActivity.cartItemModel.getCart().size(); i++) {
                 if (sellerProductModel.getId() == MainActivity.cartItemModel.getCart().get(i).getId()) {
                     MainActivity.cartItemModel.getCart().get(i).setQuantity(increaseCount);
                 }
             }
+            mBinding.toolbarTittle.cartBadge.setText("" + MainActivity.cartItemModel.getCart().size());
         }
     }
 
@@ -259,35 +299,46 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         } else {
             btAddToCart.setVisibility(View.VISIBLE);
             LLPlusMinus.setVisibility(View.GONE);
+            mBinding.toolbarTittle.cartBadge.setVisibility(View.GONE);
         }
 
         if (MainActivity.cartItemModel != null) {
             for (int i = 0; i < MainActivity.cartItemModel.getCart().size(); i++) {
                 if (sellerProductModel.getId() == MainActivity.cartItemModel.getCart().get(i).getId()) {
                     MainActivity.cartItemModel.getCart().get(i).setQuantity(decreaseCount);
+                    if (MainActivity.cartItemModel.getCart().get(i).getQuantity() == 0) {
+                        MainActivity.cartItemModel.getCart().remove(i);
+                        break;
+                    }
                 }
             }
+            mBinding.toolbarTittle.cartBadge.setText("" + MainActivity.cartItemModel.getCart().size());
         }
     }
 
     @Override
-    public void addButtonOnClick(SellerProductList sellerProductModel, TextView selectedQty, TextView btAddToCart, LinearLayout LLPlusMinus) {
-        if (MainActivity.cartItemModel != null && MainActivity.cartItemModel.getEncryptSellerId() != null) {
-            if (MainActivity.cartItemModel.getEncryptSellerId().equals(sellerID)) {
+    public void addButtonOnClick(SellerProductList sellerProductModel, TextView tvSelectedQty, TextView btAddToCart, LinearLayout LLPlusMinus) {
+        mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
+        if (MainActivity.cartItemModel != null && MainActivity.cartItemModel.getSellerId() != 0) {
+            if (MainActivity.cartItemModel.getSellerId() == sellerID) {
                 btAddToCart.setVisibility(View.GONE);
                 LLPlusMinus.setVisibility(View.VISIBLE);
-                CartItemModel.CartModel cartModel = new CartItemModel.CartModel(null,0,null,false,sellerProductModel.isStockRequired(),sellerProductModel.getStock(),sellerProductModel.getMeasurement(),sellerProductModel.getUom(),sellerProductModel.getImagePath(),0,sellerProductModel.getProductName(),0,0,false,0,0,0,sellerProductModel.getQty(),sellerProductModel.getCreatedBy(),null,sellerProductModel.getSellerId(),0,0, sellerProductModel.getMargin(),sellerProductModel.getMrp(),sellerProductModel.getMOQ(),sellerProductModel.getId());
+                CartItemModel.CartModel cartModel = new CartItemModel.CartModel(null, 0, null, false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(), 0, 0, false, 0, 0, 0, sellerProductModel.getQty(), sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
                 MainActivity.cartItemModel.getCart().add(cartModel);
-                SellerProfileActivity.this.plusButtonOnClick(sellerProductModel, selectedQty);
+                SellerProfileActivity.this.plusButtonOnClick(sellerProductModel, tvSelectedQty);
             } else {
-                checkCustomerAlertDialog(MainActivity.cartItemModel.getId(), sellerProductModel,btAddToCart,LLPlusMinus);
+                checkCustomerAlertDialog(MainActivity.cartItemModel.getId(), sellerProductModel, btAddToCart, LLPlusMinus);
             }
         } else {
+            MainActivity.cartItemModel = new CartItemModel(new ArrayList<>());
             btAddToCart.setVisibility(View.GONE);
             LLPlusMinus.setVisibility(View.VISIBLE);
-            SellerProfileActivity.this.plusButtonOnClick(sellerProductModel, selectedQty);
+            tvSelectedQty.setText("1");
+            // add item  to cart
+            CartItemModel.CartModel cartModel = new CartItemModel.CartModel(null, 0, null, false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(), 0, 0, false, 0, 0, 0, 1, sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
+            MainActivity.cartItemModel.setSellerId(sellerID);
+            MainActivity.cartItemModel.getCart().add(cartModel);
         }
-
     }
 
     private void addItemInCart(int QTY, SellerProductList sellerProductModel) {
@@ -298,7 +349,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             public void onChanged(AddCartItemModel sellerProdList) {
                 Utils.hideProgressDialog();
                 if (sellerProdList != null) {
-                   // sellerShopListAdapter.notifyDataSetChanged();
+                    // sellerShopListAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -314,8 +365,8 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             public void onClick(DialogInterface dialog, int which) {
                 clearCartItem(id);
                 CartItemModel cartModel = new CartItemModel();
-                cartModel.setEncryptSellerId(sellerID);
-                CartItemModel.CartModel cartItemModel = new CartItemModel.CartModel(null,0,null,false,sellerProductModel.isStockRequired(),sellerProductModel.getStock(),sellerProductModel.getMeasurement(),sellerProductModel.getUom(),sellerProductModel.getImagePath(),0,sellerProductModel.getProductName(),0,0,false,0,0,0,sellerProductModel.getQty(),sellerProductModel.getCreatedBy(),null,sellerProductModel.getSellerId(),0,0, sellerProductModel.getMargin(),sellerProductModel.getMrp(),sellerProductModel.getMOQ(),sellerProductModel.getId());
+                cartModel.setSellerId(sellerID);
+                CartItemModel.CartModel cartItemModel = new CartItemModel.CartModel(null, 0, null, false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(), 0, 0, false, 0, 0, 0, sellerProductModel.getQty(), sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
                 cartModel.setCart(new ArrayList<>());
                 cartModel.getCart().add(cartItemModel);
                 MainActivity.cartItemModel = cartModel;

@@ -110,17 +110,17 @@ public interface APIServices {
     @GET("api/buyer/Seller/GetTopSeller")
     Call<ArrayList<TopSellerModel>> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword,@Query("categoryId") int categoryId);
 
-    @GET("api/buyer/SellerProductDetail/GetSellerProductById/{GetSellerProductById}")
+    @GET("api/NativeProductDetail/GetSellerProductById/{GetSellerProductById}")
     Call<ProductDataModel> GetSellerProductById(@Path("GetSellerProductById") int GetSellerProductById);
 
-    @GET("api/buyer/SellerProductDetail/GetTopSimilarproduct/{GetSellerProductById}")
+    @GET("api/NativeProductDetail/GetTopSimilarproduct/{GetSellerProductById}")
     Call<ArrayList<TopNearByItemModel>> GetTopSimilarproduct(@Path("GetSellerProductById") int GetSellerProductById);
 
 
-    @GET("api/buyer/SellerProductDetail/GetSimilarProductTopSeller/{GetSimilarProductTopSeller}")
+    @GET("api/NativeProductDetail/GetSimilarProductTopSeller/{GetSimilarProductTopSeller}")
     Call<ArrayList<TopSellerModel>> GetSimilarProductTopSeller(@Path("GetSimilarProductTopSeller") int GetSellerProductById);
 
-    @GET("api/buyer/SellerProductDetail/GetMoreSimilarSellerProduct/{GetMoreSimilarSellerProduct}")
+    @GET("api/NativeProductDetail/GetMoreSimilarSellerProduct/{GetMoreSimilarSellerProduct}")
     Call<ArrayList<TopNearByItemModel>> GetMoreSimilarSellerProduct(@Path("GetMoreSimilarSellerProduct") int GetSellerProductById);
 
     @GET("api/Buyer/CartOverview/GetCartItems/{GetCartItems}")
@@ -130,7 +130,7 @@ public interface APIServices {
     Call<Boolean> AddProductView(@Body PaginationModel paginationModel);
 
     @GET("api/NativeBuyer/SellerProfile/GetSellerDetail/{GetSellerDetail}")
-    Call<SellerDetailsModel> GetSellerDetail(@Path("GetSellerDetail") String GetSellerDetail);
+    Call<SellerDetailsModel> GetSellerDetail(@Path("GetSellerDetail") int GetSellerDetail);
 
     @POST("api/NativeBuyer/SellerProfile/GetSellerProduct")
     Call<SellerProductMainModel> GetSellerProduct(@Body SellerProfileDataModel paginationModel);
@@ -191,7 +191,7 @@ public interface APIServices {
     @POST("api/buyer/Profile/ChangePassword")
     Call<Boolean> ChangePassword(@Body ChangePasswordRequestModel passwordRequestModel);
 
-    @POST("api/buyer/MyOrder/GetOrderMaster")
+    @POST("api/NativeBuyer/Order/GetMyOrder")
     Call<ArrayList<MyOrderModel>> GetOrderMaster(@Body MyOrderRequestModel myOrderRequestModel);
 
     @POST("api/buyer/OrderReview/Rating")

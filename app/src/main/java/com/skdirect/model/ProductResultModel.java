@@ -67,6 +67,64 @@ public class ProductResultModel {
     @SerializedName("Id")
     public int Id;
 
+    @SerializedName("AddressOne")
+    public String AddressOne;
+
+    @SerializedName("AddressTwo")
+    public String AddressTwo;
+
+    @SerializedName("Pincode")
+    public String Pincode;
+
+    @SerializedName("State")
+    public String State;
+    @SerializedName("DiscountAmount")
+    public double DiscountAmount;
+
+    public String getState() {
+        return State;
+    }
+
+    public void setState(String state) {
+        State = state;
+    }
+
+
+
+    public String getAddressOne() {
+        return AddressOne;
+    }
+
+    public void setAddressOne(String addressOne) {
+        AddressOne = addressOne;
+    }
+
+    public String getAddressTwo() {
+        return AddressTwo;
+    }
+
+    public void setAddressTwo(String addressTwo) {
+        AddressTwo = addressTwo;
+    }
+
+    public String getPincode() {
+        return Pincode;
+    }
+
+    public void setPincode(String pincode) {
+        Pincode = pincode;
+    }
+
+
+
+    public double getDiscountAmount() {
+        return DiscountAmount;
+    }
+
+    public void setDiscountAmount(double discountAmount) {
+        DiscountAmount = discountAmount;
+    }
+
     @SerializedName("ShopName")
     public String ShopName;
 

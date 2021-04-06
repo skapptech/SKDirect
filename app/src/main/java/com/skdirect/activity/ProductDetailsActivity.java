@@ -2,6 +2,7 @@ package com.skdirect.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,8 +87,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.setToast(this, "No Internet Connection Please connect.");
         }
     }
-
-
     private void GetCartItems() {
         if (Utils.isNetworkAvailable(this)) {
             Utils.showProgressDialog(this);
@@ -96,7 +95,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.setToast(this, "No Internet Connection Please connect.");
         }
     }
-
     private void GetTopSimilarProduct() {
         if (Utils.isNetworkAvailable(this)) {
             Utils.showProgressDialog(this);
@@ -105,7 +103,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.setToast(this, "No Internet Connection Please connect.");
         }
     }
-
     private void GetSellarOtherProducts() {
         if (Utils.isNetworkAvailable(this)) {
             Utils.showProgressDialog(this);
@@ -114,7 +111,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.setToast(this, "No Internet Connection Please connect.");
         }
     }
-
     private void GetTopSellar() {
         if (Utils.isNetworkAvailable(this)) {
             Utils.showProgressDialog(this);
@@ -123,11 +119,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.setToast(this, "No Internet Connection Please connect.");
         }
     }
-
     private void getIntentData() {
         productID = getIntent().getIntExtra("ID", 0);
     }
-
     private void callProductData() {
         if (Utils.isNetworkAvailable(this)) {
             Utils.showProgressDialog(this);
@@ -363,12 +357,27 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                             if (productDataModel.getResultItem().getVariationModelList().get(i).getImageList() != null && productDataModel.getResultItem().getVariationModelList().get(i).getImageList().size() > 0) {
                                 imageListModels = productDataModel.getResultItem().getVariationModelList().get(i).getImageList();
                             }
+
+                            if (productDataModel.getResultItem().getVariationModelList().get(i).getDiscountAmount()==0.0){
+                                mBinding.tvDiscount.setVisibility(View.VISIBLE);
+                                double DiscountAmount = productDataModel.getResultItem().getVariationModelList().get(i).getSellingPrice()-productDataModel.getResultItem().getVariationModelList().get(i).getDiscountAmount();
+                                mBinding.tvDiscount.setText(""+DiscountAmount+"OFF");
+                                mBinding.tvItemMrpOff.setPaintFlags(mBinding.tvItemMrpOff.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                            }
+                            
+
+                            if (productDataModel.getResultItem().getVariationModelList().get(i).getOffPercentage()!=0.0) {
+                                mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
+                                mBinding.tvMagrginOff.setText(productDataModel.getResultItem().getVariationModelList().get(i).getOffPercentage() + "%\n OFF");
+                            }else {
+                                mBinding.tvMagrginOff.setVisibility(View.GONE);
+                            }
+
                             mBinding.tvItemName.setText(productDataModel.getResultItem().getVariationModelList().get(i).getProductName());
-                            mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getVariationModelList().get(i).getSellingPrice());
-                            mBinding.tvItemMrpOff.setText(String.valueOf(productDataModel.getResultItem().getVariationModelList().get(i).getMrp()));
-                            mBinding.tvItemMrpPercent.setText(productDataModel.getResultItem().getVariationModelList().get(i).getOffPercentage() + "%  Off");
-                            mBinding.tvTax.setText("Inclusive of all taxes");
-                            mBinding.tvDeatils.setText("ShopName:");
+                            mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getVariationModelList().get(i).getMrp());
+                            mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                            mBinding.tvItemMrpOff.setText(String.valueOf(productDataModel.getResultItem().getVariationModelList().get(i).getSellingPrice()));
+                            mBinding.tvQuantity.setText("Quantity "+productDataModel.getResultItem().getVariationModelList().get(i).getMeasurement()+productDataModel.getResultItem().getVariationModelList().get(i).getUomValue());
                             mBinding.tvShopName.setText(productDataModel.getResultItem().getShopName());
                             String varientName = "";
                             if (productDataModel.getResultItem().getVariationModelList().get(i).getProductVariantAttributeDC() != null && productDataModel.getResultItem().getVariationModelList().get(i).getProductVariantAttributeDC().size() > 0) {
@@ -377,9 +386,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                                     varientName = varientName + variantAttributeDCModels.get(j).getAttributeName() + " :" + variantAttributeDCModels.get(j).getAttributeValue() + " ";
                                 }
                             }
-
-
-
                             mBinding.tvItemColor.setText(varientName);
 
                             if (productDataModel.getResultItem().getVariationModelList().get(0).getProductVariantSpecification() != null && productDataModel.getResultItem().getVariationModelList().get(0).getProductVariantSpecification().size() > 0) {
@@ -396,15 +402,23 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                             imageListModels = productDataModel.getResultItem().getImageList();
                         }
                         mBinding.tvItemName.setText(productDataModel.getResultItem().getProductName());
-                        mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getSellingPrice());
-                        mBinding.tvItemMrpOff.setText(String.valueOf(productDataModel.getResultItem().getMrp()));
-                        if (productDataModel.getResultItem().getOffPercentage() != 0.0) {
-                            mBinding.tvItemMrpPercent.setText("( " + productDataModel.getResultItem().getOffPercentage() + ")" + "%  Off");
-                        } else {
-                            mBinding.tvItemMrpPercent.setVisibility(View.GONE);
+                        mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getMrp());
+                        mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        mBinding.tvItemMrpOff.setText(String.valueOf(productDataModel.getResultItem().getSellingPrice()));
+                        mBinding.tvAddresh.setText(productDataModel.getResultItem().getAddressOne()+" "+productDataModel.getResultItem().getAddressTwo() + "\n- "+productDataModel.getResultItem().getPincode()+"("+productDataModel.getResultItem().getState()+")");
+
+
+                        if (productDataModel.getResultItem().getDiscountAmount()==0.0){
+                          double DiscountAmount = productDataModel.getResultItem().getSellingPrice()-productDataModel.getResultItem().getDiscountAmount();
+                          mBinding.tvDiscount.setText(""+DiscountAmount+"OFF");
                         }
-                        mBinding.tvTax.setText("Inclusive of all taxes");
-                        mBinding.tvDeatils.setText("ShopName:");
+                        if (productDataModel.getResultItem().getOffPercentage() != 0.0) {
+                            mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
+                            mBinding.tvMagrginOff.setText(productDataModel.getResultItem().getOffPercentage() +  "%\n OFF");
+                        } else {
+                            mBinding.tvMagrginOff.setVisibility(View.GONE);
+                        }
+                        mBinding.tvQuantity.setText("Quantity "+productDataModel.getResultItem().getMeasurement()+" "+productDataModel.getResultItem().getUomValue());
                         mBinding.tvShopName.setText(productDataModel.getResultItem().getShopName());
 
 

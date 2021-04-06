@@ -18,7 +18,7 @@
 
             <TextView
                 android:id="@+id/tv_shop_name"
-                android:layout_width="300dp"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
@@ -41,7 +41,6 @@
                 android:background="@drawable/checkbox_selector"
                 android:button="@null"
                 app:buttonCompat="@null"
-
                 />
 
             <ImageView
