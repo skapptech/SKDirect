@@ -56,8 +56,8 @@ public class ProfileUserLocationAdapter extends RecyclerView.Adapter<ProfileUser
         }
 
         holder.mBinding.tvShopName.setText(userLocationModel.getAddressOne());
-        holder.mBinding.tvAddresh.setText(userLocationModel.getAddressTwo());
-        holder.mBinding.tvAddreshTree.setText(userLocationModel.getAddressThree());
+        holder.mBinding.tvAddresTwo.setText(userLocationModel.getAddressTwo());
+        holder.mBinding.tvAddresThree.setText(userLocationModel.getAddressThree());
         holder.mBinding.tvCityName.setText(userLocationModel.getCity() + " - " + userLocationModel.getPincode() + " (" + userLocationModel.getState() + ")");
 
 

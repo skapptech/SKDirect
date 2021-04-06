@@ -20,12 +20,11 @@
                 android:id="@+id/tv_shop_name"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
                 android:text="bhagwan"
-                style="@style/font_normal"
+                style="@style/font_Bold"
                 android:textColor="@color/black"
                 android:textSize="16dp"
                 android:textStyle="normal" />
@@ -37,14 +36,13 @@
                 android:layout_height="25dp"
                 android:layout_marginEnd="5dp"
                 android:visibility="invisible"
-                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
                 android:layout_toRightOf="@+id/tv_shop_name"
                 android:background="@drawable/checkbox_selector"
                 android:button="@null"
                 app:buttonCompat="@null"
 
                 />
-
 
             <ImageView
                 android:id="@+id/iv_opcation_value"
@@ -55,35 +53,32 @@
                 android:padding="5dp"
                 android:src="@drawable/ic_stat_name"
                 android:tint="@color/black" />
-
-
         </RelativeLayout>
 
 
-        <TextView
-            android:id="@+id/tv_addresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:text=""
-            style="@style/font_normal"
-            android:textColor="@color/grid_divder"
-            android:textSize="16dp"
-            android:textStyle="normal" />
+
 
         <TextView
-            android:id="@+id/tv_addresh_tree"
+            android:id="@+id/tv_addres_three"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             style="@style/font_normal"
             android:text=""
-            android:textColor="@color/grid_divder"
+            android:textColor="@color/black"
             android:textSize="16dp"
             android:textStyle="normal" />
-
+        <TextView
+            android:id="@+id/tv_addres_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text=""
+            style="@style/font_normal"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:textStyle="normal" />
 
         <TextView
             android:id="@+id/tv_city_name"

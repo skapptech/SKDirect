@@ -23,7 +23,8 @@ import com.skdirect.broadcast.SmsBroadcastReceiver;
 import com.skdirect.databinding.ActivityGenerateOtpBinding;
 import com.skdirect.interfacee.OtpReceivedInterface;
 import com.skdirect.location.EasyWayLocation;
-import com.skdirect.model.LoginResponseModel;
+import com.skdirect.model.GenerateOtpModel;
+import com.skdirect.model.GenerateOtpResponseModel;
 import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
@@ -58,7 +59,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     private void getIntentData() {
         mobileNumber = getIntent().getStringExtra("MobileNumber");
         latsFiveNumber = mobileNumber.substring(mobileNumber.length()-5);
-        fcmToken = FirebaseInstanceId.getInstance().getToken();
+        fcmToken = Utils.getFcmToken();
     }
 
     private void initView() {
@@ -170,7 +171,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     private void callOTPVerfiyAPI(String otpString) {
         if (Utils.isNetworkAvailable(this)) {
             if (commonClassForAPI!=null){
-                commonClassForAPI.getLogin(OTPVerfiyData, new OtpVerificationModel(mobileNumber,otpString));
+                commonClassForAPI.VerfiyOtp(OTPVerfiyData, new OtpVerificationModel(mobileNumber,otpString,Utils.getDeviceUniqueID(this)));
             }
         } else {
             Utils.setToast(this, "No Internet Connection Please connect.");
@@ -182,23 +183,27 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     private void callResendOTPApi(String mobileNumberString) {
         if (Utils.isNetworkAvailable(this)) {
             Utils.showProgressDialog(this);
-            getResendOTPData(mobileNumberString);
+            GenerateOtpModel model =new GenerateOtpModel(mobileNumberString,Utils.getDeviceUniqueID(this));
+            getResendOTPData(model);
         } else {
             Utils.setToast(this, "No Internet Connection Please connect.");
         }
 
     }
 
-    private void getResendOTPData(String mobileNumberString) {
-        otpVerificationViewModel.getLogin(mobileNumberString).observe(this, new Observer<LoginResponseModel>() {
+    private void getResendOTPData(GenerateOtpModel generateOtpModel) {
+        otpVerificationViewModel.getLogin(generateOtpModel).observe(this, new Observer<GenerateOtpResponseModel>() {
             @Override
-            public void onChanged(LoginResponseModel loginResponseModel) {
+            public void onChanged(GenerateOtpResponseModel model) {
                 Utils.hideProgressDialog();
-                if (loginResponseModel!=null){
-                    if (loginResponseModel.isResult()){
-                        SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, loginResponseModel.isUserExists());
-                        SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.RESULT, loginResponseModel.isResult());
+                if (model!=null){
+                    if (model.isSuccess()){
+                        SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, model.getResultItem().isUserExists());
+                        SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.RESULT, model.getResultItem().isResult());
                         startTimer(Binding.resendOtpTimer, Binding.resendotp);
+                    }
+                    else{
+                        Utils.setToast(GenerateOTPActivity.this,model.getErrorMessage());
                     }
                 }
             }
@@ -211,9 +216,9 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
         public void onNext(OtpResponceModel model) {
             Utils.hideProgressDialog();
                 if (model!=null){
-                    if (model.getIsUserExist()!=null) {
-                        SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, model.getIsUserExist());
-                        SharePrefs.getInstance(GenerateOTPActivity.this).putString(SharePrefs.USER_ID, model.getUserid());
+                    if (model.isSuccess()) {
+                        SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, model.getResultItem().getIsUserExist());
+                        SharePrefs.getInstance(GenerateOTPActivity.this).putString(SharePrefs.USER_ID, model.getResultItem().getUserid());
                       /*  commonClassForAPI.getToken(callToken, "password", mobileNumber, otpString, true, true, "BUYERAPP",true,Utils.getDeviceUniqueID(GenerateOTPActivity.this),);*/
 
                         if (SharePrefs.getInstance(GenerateOTPActivity.this).getBoolean(SharePrefs.IS_LOGIN)){
@@ -253,7 +258,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
-                    commonClassForAPI.getUpdateToken(updatecallToken,new UpdateTokenModel(fcmToken));
+                    commonClassForAPI.getUpdateToken(updatecallToken,fcmToken);
 
 
                 }

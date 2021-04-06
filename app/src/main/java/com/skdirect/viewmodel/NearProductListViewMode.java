@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.gson.JsonArray;
 import com.skdirect.api.RestClient;
-import com.skdirect.model.LoginResponseModel;
 import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.utils.Utils;

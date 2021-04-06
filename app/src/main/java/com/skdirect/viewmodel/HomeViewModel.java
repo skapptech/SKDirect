@@ -12,7 +12,6 @@ import com.skdirect.api.RestClient;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CustomerDataModel;
-import com.skdirect.model.LoginResponseModel;
 import com.skdirect.model.MallMainModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
@@ -38,16 +37,16 @@ public class HomeViewModel extends ViewModel {
     public LiveData<CustomerDataModel> GetUserDetail() {
         if(userDetailViewModel==null){
             userDetailViewModel = new MutableLiveData<>();
-            userDetailViewModel = getUserDetailRequest();
         }
+        userDetailViewModel = getUserDetailRequest();
         return userDetailViewModel;
     }
 
     public LiveData<ArrayList<TopNearByItemModel>> GetTopNearByItem() {
         if(topNearByItem==null){
             topNearByItem = new MutableLiveData<>();
-            topNearByItem = getGetTopNearByItemRequest();
         }
+        topNearByItem = getGetTopNearByItemRequest();
         return topNearByItem;
     }
 
@@ -55,24 +54,26 @@ public class HomeViewModel extends ViewModel {
     public LiveData<ArrayList<TopSellerModel>> GetTopSellerLiveData() {
         if(topSellerLiveData==null){
             topSellerLiveData = new MutableLiveData<>();
-            topSellerLiveData = GetTopSellerLiveRequest();
+
         }
+        topSellerLiveData = GetTopSellerLiveRequest();
         return topSellerLiveData;
     }
 
     public LiveData<ArrayList<AllCategoriesModel>> getAllCategoriesLiveData() {
         if(allCategoriesLiveData==null){
             allCategoriesLiveData = new MutableLiveData<>();
-            allCategoriesLiveData = getAllCategoriesRequest();
+
         }
+        allCategoriesLiveData = getAllCategoriesRequest();
         return allCategoriesLiveData;
     }
 
     public LiveData<MallMainModel> getMallData() {
         if(mallDataViewModel==null){
             mallDataViewModel = new MutableLiveData<>();
-            mallDataViewModel = getMallDataRequest();
         }
+        mallDataViewModel = getMallDataRequest();
         return mallDataViewModel;
     }
 

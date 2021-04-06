@@ -22,11 +22,8 @@ import com.nabinbhandari.android.permissions.Permissions;
 import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityPlacesSearchBinding;
-import com.skdirect.model.LoginWithPasswordModel;
-import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateTokenModel;
-import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
@@ -44,8 +41,8 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
     private Geocoder mGeocoder;
     private CommonClassForAPI commonClassForAPI;
     private String fcmToken;
-    private  LatLng latLng;
-    private  String pinCode;
+    private LatLng latLng;
+    private String pinCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +54,7 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
 
     private void initView() {
         commonClassForAPI = CommonClassForAPI.getInstance(this);
-        fcmToken = FirebaseInstanceId.getInstance().getToken();
+        fcmToken = Utils.getFcmToken();
         mGeocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         mBinding.etLocation.setOnClickListener(this);
         mBinding.btSave.setOnClickListener(this);
@@ -79,18 +76,18 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void saveLocationData() {
-         if (TextUtils.isNullOrEmpty(mBinding.etLocation.getText().toString().trim())){
-            Utils.setToast(this,"Enter your Address");
-        }else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString().trim())){
-            Utils.setToast(this,"Enter your PinCode");
-        }else {
-             if (Utils.isNetworkAvailable(this)) {
-                 if (commonClassForAPI!=null){
-                     commonClassForAPI.getToken(callToken, "password", Utils.getDeviceUniqueID(PlaceSearchActivity.this), "", true, true, "BUYERAPP",true,Utils.getDeviceUniqueID(PlaceSearchActivity.this),latLng.latitude,latLng.longitude,pinCode);
-                 }
-             } else {
-                 Utils.setToast(this, "No Internet Connection Please connect.");
-             }
+        if (TextUtils.isNullOrEmpty(mBinding.etLocation.getText().toString().trim())) {
+            Utils.setToast(this, "Enter your Address");
+        } else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString().trim())) {
+            Utils.setToast(this, "Enter your PinCode");
+        } else {
+            if (Utils.isNetworkAvailable(this)) {
+                if (commonClassForAPI != null) {
+                    commonClassForAPI.getToken(callToken, "password", Utils.getDeviceUniqueID(PlaceSearchActivity.this), "", true, true, "BUYERAPP", true, Utils.getDeviceUniqueID(PlaceSearchActivity.this), latLng.latitude, latLng.longitude, pinCode);
+                }
+            } else {
+                Utils.setToast(this, "No Internet Connection Please connect.");
+            }
         }
     }
 
@@ -110,32 +107,32 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
         if (requestCode == REQUEST_FOR_ADDRESS & resultCode == RESULT_OK) {
             //place = Autocomplete.getPlaceFromIntent(data);
             place = data.getParcelableExtra("PlaceResult");
-                mBinding.etLocation.setText(place.getAddress());
-                try {
-                    latLng = place.getLatLng();
-                    List<Address> addresses = mGeocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-                    if (addresses.get(0).getLocality() != null) {
-                        pinCode = addresses.get(0).getPostalCode();
-                        String tempCity = addresses.get(0).getLocality();
-                        mBinding.etPinCode.setText(pinCode);
-                        if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString())) {
-                            mBinding.etPinCode.setFocusable(true);
-                            mBinding.etPinCode.setFocusableInTouchMode(true);
-                        } else {
-                            mBinding.etPinCode.setFocusable(false);
-                        }
+            mBinding.etLocation.setText(place.getAddress());
+            try {
+                latLng = place.getLatLng();
+                List<Address> addresses = mGeocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                if (addresses.get(0).getLocality() != null) {
+                    pinCode = addresses.get(0).getPostalCode();
+                    String tempCity = addresses.get(0).getLocality();
+                    mBinding.etPinCode.setText(pinCode);
+                    if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString())) {
+                        mBinding.etPinCode.setFocusable(true);
+                        mBinding.etPinCode.setFocusableInTouchMode(true);
+                    } else {
+                        mBinding.etPinCode.setFocusable(false);
                     }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-        }else if (resultCode==3){
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (resultCode == 3) {
             try {
                 latLng = data.getParcelableExtra("PlaceResult");
                 List<Address> addresses = mGeocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
                 mBinding.etLocation.setText(addresses.get(0).getAddressLine(0));
                 if (addresses.get(0).getLocality() != null) {
-                    pinCode= addresses.get(0).getPostalCode();
+                    pinCode = addresses.get(0).getPostalCode();
                     String tempCity = addresses.get(0).getLocality();
                     mBinding.etPinCode.setText(pinCode);
                     if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString())) {
@@ -179,15 +176,15 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE, model.getIsRegistrationComplete());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAT,model.getLatitiute());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAT, model.getLatitiute());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LON, model.getLongitude());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
-                    commonClassForAPI.getUpdateToken(updatecallToken,new UpdateTokenModel(fcmToken));
+                    commonClassForAPI.getUpdateToken(updatecallToken, fcmToken);
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
-                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
-
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
 
                 }
             } catch (Exception e) {

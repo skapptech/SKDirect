@@ -5,7 +5,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public  class LoginResponseModel {
+public  class GenerateOtpResponseModel {
+
+
+
     @Expose
     @SerializedName("ErrorMessage")
     private String ErrorMessage;
@@ -17,10 +20,11 @@ public  class LoginResponseModel {
     private boolean IsSuccess;
     @Expose
     @SerializedName("ResultItem")
-    private ResultItemEntity ResultItem;
+    private ResultItemBean ResultItem;
     @Expose
     @SerializedName("ResultList")
     private List<String> ResultList;
+
     public String getErrorMessage() {
         return ErrorMessage;
     }
@@ -33,7 +37,7 @@ public  class LoginResponseModel {
         return IsSuccess;
     }
 
-    public ResultItemEntity getResultItem() {
+    public ResultItemBean getResultItem() {
         return ResultItem;
     }
 
@@ -41,27 +45,20 @@ public  class LoginResponseModel {
         return ResultList;
     }
 
-    public  class ResultItemEntity {
+    public  class ResultItemBean {
         @Expose
-        @SerializedName("AspNetUserId")
-        private String AspNetUserId;
+        @SerializedName("Result")
+        private boolean Result;
         @Expose
-        @SerializedName("IsUserExist")
-        private boolean IsUserExist;
-        @Expose
-        @SerializedName("Userid")
-        private String Userid;
+        @SerializedName("UserExists")
+        private boolean UserExists;
 
-        public String getAspNetUserId() {
-            return AspNetUserId;
+        public boolean isResult() {
+            return Result;
         }
 
-        public boolean getIsUserExist() {
-            return IsUserExist;
-        }
-
-        public String getUserid() {
-            return Userid;
+        public boolean isUserExists() {
+            return UserExists;
         }
     }
 }

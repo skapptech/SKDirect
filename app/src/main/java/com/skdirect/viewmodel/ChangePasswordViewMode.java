@@ -24,8 +24,12 @@ public class ChangePasswordViewMode extends ViewModel {
     private MutableLiveData<Boolean> changePasswordVM;
 
     public LiveData<Boolean> getChangePasswordVM() {
-        changePasswordVM=null;
+        if(changePasswordVM==null)
         changePasswordVM = new MutableLiveData<>();
+        if (changePasswordVM.getValue() != null)
+        {
+            changePasswordVM.setValue(null);
+        }
         return changePasswordVM;
     }
 

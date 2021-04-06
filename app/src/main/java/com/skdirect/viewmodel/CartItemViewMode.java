@@ -11,17 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonObject;
 import com.skdirect.activity.MainActivity;
-import com.skdirect.adapter.CartListAdapter;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AddCartItemModel;
-import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.ItemAddModel;
-import com.skdirect.model.PaginationModel;
 import com.skdirect.model.RemoveItemRequestModel;
 import com.skdirect.utils.Utils;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,20 +30,33 @@ public class CartItemViewMode extends ViewModel {
     private MutableLiveData<JsonObject> removeItemFromCartVM;
 
     public LiveData<CartItemModel> getCartItemModelVM() {
-        CartItemModelVM=null;
-        CartItemModelVM = new MutableLiveData<>();
+        if (CartItemModelVM == null) {
+            CartItemModelVM = new MutableLiveData<>();
+        }
+        if (CartItemModelVM.getValue() != null )
+        {
+            CartItemModelVM.setValue(null);
+        }
         return CartItemModelVM;
     }
 
     public LiveData<AddCartItemModel> getAddItemsInCardVM() {
-        addItemsInCardVM=null;
-        addItemsInCardVM = new MutableLiveData<>();
+        if (addItemsInCardVM == null)
+            addItemsInCardVM = new MutableLiveData<>();
+        if (addItemsInCardVM.getValue() != null)
+        {
+            addItemsInCardVM.setValue(null);
+        }
         return addItemsInCardVM;
     }
 
     public LiveData<JsonObject> getRemoveItemFromCartVM() {
-        removeItemFromCartVM=null;
-        removeItemFromCartVM = new MutableLiveData<>();
+        if (removeItemFromCartVM == null)
+            removeItemFromCartVM = new MutableLiveData<>();
+        if (removeItemFromCartVM.getValue() != null)
+        {
+            removeItemFromCartVM.setValue(null);
+        }
         return removeItemFromCartVM;
     }
 
@@ -56,10 +64,10 @@ public class CartItemViewMode extends ViewModel {
         RestClient.getInstance().getService().CartItems(id).enqueue(new Callback<CartItemModel>() {
             @Override
             public void onResponse(Call<CartItemModel> call, Response<CartItemModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     CartItemModelVM.setValue(response.body());
-                }else {
+                } else {
                     Utils.hideProgressDialog();
                     rvCartItem.setVisibility(View.GONE);
                     blankBasket.setVisibility(View.VISIBLE);
@@ -82,8 +90,8 @@ public class CartItemViewMode extends ViewModel {
         RestClient.getInstance().getService().AddCart(paginationModel).enqueue(new Callback<AddCartItemModel>() {
             @Override
             public void onResponse(Call<AddCartItemModel> call, Response<AddCartItemModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     addItemsInCardVM.setValue(response.body());
                 }
             }
@@ -102,8 +110,8 @@ public class CartItemViewMode extends ViewModel {
         RestClient.getInstance().getService().deleteCartItems(itemRequestModel).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     removeItemFromCartVM.setValue(response.body());
                 }
             }
