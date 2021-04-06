@@ -29,6 +29,7 @@ import com.skdirect.interfacee.BottomBarInterface;
 import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.CartItemModel;
+import com.skdirect.model.CartModel;
 import com.skdirect.model.ImageListModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.MainSimilarTopSellerModel;
@@ -40,6 +41,7 @@ import com.skdirect.model.ProductVariantAttributeDCModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.VariationListModel;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.ProductDetailsViewMode;
@@ -232,9 +234,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             if (cartItemModel.getSellerId() == resultModel.getSellerId()) {
                 mBinding.btAddToCart.setVisibility(View.GONE);
                 mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
-                CartItemModel.CartModel cartModel = new CartItemModel.CartModel(null, 0, null, resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(), resultModel.getUom(), "", 0, resultModel.getProductName(), 0, 0, resultModel.IsDelete, resultModel.getOffPercentage(), 0, 0, 0, 0, null, resultModel.getSellerId(), 0, 0, 0, resultModel.getMrp(), 0, resultModel.getId());
+                CartModel cartModel = new CartModel(null, 0, null, resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(), resultModel.getUom(), "", 0, resultModel.getProductName(), 0, 0, resultModel.IsDelete, resultModel.getOffPercentage(), 0, 0, 0, 0, null, resultModel.getSellerId(), 0, 0, 0, resultModel.getMrp(), 0, resultModel.getId());
                 cartItemModel.getCart().add(cartModel);
                 increaseQTY();
+                MyApplication.getInstance().cartRepository.addToCart(cartModel);
                 ///ProductDetailsActivity.this.plusButtonOnClick(sellerProductModel, selectedQty);
             } else {
                 checkCustomerAlertDialog(cartItemModel.getId());
@@ -513,19 +516,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private void addItemInCart(int QTY, int sellerItemID) {
         ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerItemID, 0, 0);
         productDetailsViewMode.getAddItemsInCardVMRequest(paginationModel);
-        productDetailsViewMode.getAddItemsInCardVM().observe(this, new Observer<AddCartItemModel>() {
-            @Override
-            public void onChanged(AddCartItemModel sellerProdList) {
-                Utils.hideProgressDialog();
-                if (sellerProdList != null) {
-                    if (sellerProdList.getShoppingCartItem().size() > 0) {
-                        for (int i = 0; i < sellerProdList.getShoppingCartItem().size(); i++) {
-                            mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
-                            mBinding.tvSelectedQty.setText(String.valueOf(sellerProdList.getShoppingCartItem().get(i).getQuantity()));
-                        }
-                    }else {
-                        mBinding.toolbarTittle.notifictionCount.setVisibility(View.GONE);
+        productDetailsViewMode.getAddItemsInCardVM().observe(this, sellerProdList -> {
+            Utils.hideProgressDialog();
+            if (sellerProdList != null) {
+                if (sellerProdList.getShoppingCartItem().size() > 0) {
+                    for (int i = 0; i < sellerProdList.getShoppingCartItem().size(); i++) {
+                        mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
+                        mBinding.tvSelectedQty.setText(String.valueOf(sellerProdList.getShoppingCartItem().get(i).getQuantity()));
                     }
+                }else {
+                    mBinding.toolbarTittle.notifictionCount.setVisibility(View.GONE);
                 }
             }
         });
@@ -535,21 +535,18 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Alert");
         builder.setMessage("Your Cart has existing items from Another Seller.Do You Want to clear it and add items from this Seller?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                clearCartItem(id);
-                CartItemModel cartModel = new CartItemModel();
-                cartModel.setEncryptSellerId(String.valueOf(resultModel.getSellerId()));
-                CartItemModel.CartModel cartItemModel = new CartItemModel.CartModel(null, 0, null, resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(), resultModel.getUom(), "", 0, resultModel.getProductName(), 0, 0, resultModel.IsDelete, resultModel.getOffPercentage(), 0, 0, 0, 0, null, resultModel.getSellerId(), 0, 0, 0, resultModel.getMrp(), 0, resultModel.getId());
-                cartModel.setCart(new ArrayList<>());
-                cartModel.getCart().add(cartItemModel);
-                MainActivity.cartItemModel = cartModel;
-                addItemInCart(1, SellerItemID);
-                mBinding.btAddToCart.setVisibility(View.GONE);
-                mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            clearCartItem(id);
+            CartItemModel cartModel = new CartItemModel();
+            cartModel.setEncryptSellerId(String.valueOf(resultModel.getSellerId()));
+            CartModel cartItemModel = new CartModel(null, 0, null, resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(), resultModel.getUom(), "", 0, resultModel.getProductName(), 0, 0, resultModel.IsDelete, resultModel.getOffPercentage(), 0, 0, 0, 0, null, resultModel.getSellerId(), 0, 0, 0, resultModel.getMrp(), 0, resultModel.getId());
+            cartModel.setCart(new ArrayList<>());
+            cartModel.getCart().add(cartItemModel);
+            MainActivity.cartItemModel = cartModel;
+            addItemInCart(1, SellerItemID);
+            mBinding.btAddToCart.setVisibility(View.GONE);
+            mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
 
-            }
         });
 
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
