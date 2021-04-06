@@ -284,7 +284,6 @@
 
                         </LinearLayout>
 
-
                         <TextView
                             android:id="@+id/tv_addresh"
                             android:layout_width="match_parent"
@@ -299,6 +298,81 @@
                             android:text=""
                             android:textColor="@color/grid_divder"
                             android:textSize="15sp" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_deliver_option"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:ellipsize="end"
+                                style="@style/font_normal"
+                                android:maxLines="1"
+                                android:padding="2dp"
+                                android:text="@string/txt_delivery"
+                                android:textColor="@color/black"
+                                android:textSize="14dp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_delivery_option"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:ellipsize="end"
+                                style="@style/font_normal"
+                                android:maxLines="1"
+                                android:padding="2dp"
+                                android:text=""
+                                android:textColor="@color/grid_divder"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_discr"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:orientation="vertical">
+
+
+
+                            <!--<TextView
+                                android:id="@+id/tv_varient"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginTop="1dp"
+                                android:layout_marginEnd="10dp"
+                                android:text=""
+                                android:textColor="@color/seller_button_color"
+                                android:textSize="12dp"
+                                android:textStyle="normal" />
+
+                            <TextView
+                                android:id="@+id/tv_discripction"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginTop="1dp"
+                                android:layout_marginEnd="10dp"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="14dp"
+                                android:textStyle="normal" />-->
+
+
+                        </LinearLayout>
 
 
                         <TextView
@@ -320,19 +394,12 @@
 
                     </LinearLayout>
 
-
-
-
-
-
-
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:layout_marginEnd="10dp">
 
                         <TextView
@@ -365,50 +432,7 @@
 
 
                     </LinearLayout>
-
-
-
-
                 </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_discr"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:orientation="vertical">
-
-
-
-                    <!--<TextView
-                        android:id="@+id/tv_varient"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="1dp"
-                        android:layout_marginEnd="10dp"
-                        android:text=""
-                        android:textColor="@color/seller_button_color"
-                        android:textSize="12dp"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:id="@+id/tv_discripction"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="1dp"
-                        android:layout_marginEnd="10dp"
-                        android:text=""
-                        android:textColor="@color/black"
-                        android:textSize="14dp"
-                        android:textStyle="normal" />-->
-
-
-                </LinearLayout>
-
-
 
                 <LinearLayout
                     android:id="@+id/ll_similar_product"
@@ -494,10 +518,6 @@
 
 
             </LinearLayout>
-
-
-
-
 
         </ScrollView>
 
