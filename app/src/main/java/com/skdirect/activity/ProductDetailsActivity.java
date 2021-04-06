@@ -277,16 +277,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         mBinding.llSellarsOtherProducs.setVisibility(View.VISIBLE);
                         TopSimilarSellerAdapter topSimilarSellerAdapter = new TopSimilarSellerAdapter(ProductDetailsActivity.this, model.getResultItem());
                         mBinding.rvSellarsOthersItems.setAdapter(topSimilarSellerAdapter);
-
                     } else {
                         mBinding.llSellarsOtherProducs.setVisibility(View.GONE);
                     }
                 }else {
-
                 }
-
             }
-
         });
     }
 
