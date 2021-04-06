@@ -10,6 +10,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AddReviewModel;
+import com.skdirect.model.MallMainModelBolleanResult;
 import com.skdirect.model.OrderDetailsModel;
 import com.skdirect.model.OrderItemModel;
 import com.skdirect.utils.Utils;
@@ -25,7 +26,7 @@ public class OrderDetailsViewMode extends ViewModel {
 
     private MutableLiveData<OrderDetailsModel> orderDetailsViewMode;
     private MutableLiveData<ArrayList<OrderItemModel>> orderDetailsItems;
-    private MutableLiveData<Boolean> CancelOrderVM;
+    private MutableLiveData<MallMainModelBolleanResult> CancelOrderVM;
 
     public LiveData<OrderDetailsModel> getOrderDetailsViewMode() {
         orderDetailsViewMode=null;
@@ -39,7 +40,7 @@ public class OrderDetailsViewMode extends ViewModel {
         return orderDetailsItems;
     }
 
-    public LiveData<Boolean> getCancelOrderVM() {
+    public LiveData<MallMainModelBolleanResult> getCancelOrderVM() {
         CancelOrderVM=null;
         CancelOrderVM = new MutableLiveData<>();
         return CancelOrderVM;
@@ -85,10 +86,10 @@ public class OrderDetailsViewMode extends ViewModel {
         return orderDetailsItems;
     }
 
-    public MutableLiveData<Boolean> getCancelOrderVMRequest(int orderID) {
-        RestClient.getInstance().getService().CancelOrder(orderID).enqueue(new Callback<Boolean>() {
+    public MutableLiveData<MallMainModelBolleanResult> getCancelOrderVMRequest(int orderID) {
+        RestClient.getInstance().getService().CancelOrder(orderID).enqueue(new Callback<MallMainModelBolleanResult>() {
             @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+            public void onResponse(Call<MallMainModelBolleanResult> call, Response<MallMainModelBolleanResult> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     CancelOrderVM.setValue(response.body());
@@ -96,7 +97,7 @@ public class OrderDetailsViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
+            public void onFailure(Call<MallMainModelBolleanResult> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + call.toString());
                 Utils.hideProgressDialog();
             }

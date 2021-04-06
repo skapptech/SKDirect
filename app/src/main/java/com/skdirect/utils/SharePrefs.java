@@ -20,6 +20,7 @@ public class SharePrefs {
     public static final String IS_LOGIN ="is_loggedIn";
     public static final String TOKEN ="access_token";
     public static final String USER_NAME ="user_name";
+    public static final String USER_IMAGE ="user_image";
     public static final String FIRST_NAME ="first_name";
     public static final String MIDDLE_NAME ="middle_name";
     public static final String CITY_NAME ="CITY_NAME";
@@ -28,7 +29,6 @@ public class SharePrefs {
     public static final String SHOP_NAME ="shop_name";
     public static final String EMAIL_ID ="email";
     public static final String STATE ="state";
-    public static final String COUNT ="count";
     public static final String CART_ITEM_ID ="cart_item_id";
     public static final String CITYNAME ="city_name";
     public static final String IS_ACTIVE ="IsActive";

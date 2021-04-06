@@ -23,12 +23,17 @@ import com.skdirect.adapter.BottomListAdapter;
 import com.skdirect.adapter.ShowImagesAdapter;
 import com.skdirect.adapter.TopNearByItemAdapter;
 import com.skdirect.adapter.TopSellerAdapter;
+import com.skdirect.adapter.TopSimilarSellerAdapter;
 import com.skdirect.databinding.ActivityProductDetailsBinding;
 import com.skdirect.interfacee.BottomBarInterface;
 import com.skdirect.model.AddCartItemModel;
+import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.CartItemModel;
+import com.skdirect.model.CartModel;
 import com.skdirect.model.ImageListModel;
 import com.skdirect.model.ItemAddModel;
+import com.skdirect.model.MainSimilarTopSellerModel;
+import com.skdirect.model.MainTopSimilarSellerModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.ProductDataModel;
 import com.skdirect.model.ProductResultModel;
@@ -36,6 +41,7 @@ import com.skdirect.model.ProductVariantAttributeDCModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.VariationListModel;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.ProductDetailsViewMode;
@@ -228,9 +234,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             if (cartItemModel.getSellerId() == resultModel.getSellerId()) {
                 mBinding.btAddToCart.setVisibility(View.GONE);
                 mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
-                CartItemModel.CartModel cartModel = new CartItemModel.CartModel(null, 0, null, resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(), resultModel.getUom(), "", 0, resultModel.getProductName(), 0, 0, resultModel.IsDelete, resultModel.getOffPercentage(), 0, 0, 0, 0, null, resultModel.getSellerId(), 0, 0, 0, resultModel.getMrp(), 0, resultModel.getId());
+                CartModel cartModel = new CartModel(null, 0, null, resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(), resultModel.getUom(), "", 0, resultModel.getProductName(), 0, 0, resultModel.IsDelete, resultModel.getOffPercentage(), 0, 0, 0, 0, null, resultModel.getSellerId(), 0, 0, 0, resultModel.getMrp(), 0, resultModel.getId());
                 cartItemModel.getCart().add(cartModel);
                 increaseQTY();
+                MyApplication.getInstance().cartRepository.addToCart(cartModel);
                 ///ProductDetailsActivity.this.plusButtonOnClick(sellerProductModel, selectedQty);
             } else {
                 checkCustomerAlertDialog(cartItemModel.getId());
@@ -245,11 +252,14 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     }
 
     private void addProduct() {
-        productDetailsViewMode.getAddProductVMRequest(new PaginationModel(productID));
-        productDetailsViewMode.getAddProductVM().observe(this, new Observer<Boolean>() {
+        productDetailsViewMode.getAddProductVMRequest(productID);
+        productDetailsViewMode.getAddProductVM().observe(this, new Observer<AddViewMainModel>() {
             @Override
-            public void onChanged(Boolean aBoolean) {
+            public void onChanged(AddViewMainModel aBoolean) {
                 Utils.hideProgressDialog();
+                if (aBoolean.isSuccess()){
+
+                }
 
             }
 
@@ -258,39 +268,44 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
     private void SellarOtherProductsAPI() {
         productDetailsViewMode.getSellarOtherVMRequest(productID);
-        productDetailsViewMode.getSallerOtherProducsVM().observe(this, new Observer<ArrayList<TopNearByItemModel>>() {
+        productDetailsViewMode.getSallerOtherProducsVM().observe(this, new Observer<MainTopSimilarSellerModel>() {
             @Override
-            public void onChanged(ArrayList<TopNearByItemModel> topNearSimilarProduct) {
+            public void onChanged(MainTopSimilarSellerModel model) {
                 Utils.hideProgressDialog();
-                if (topNearSimilarProduct.size() > 0) {
-                    mBinding.llSellarsOtherProducs.setVisibility(View.VISIBLE);
-                    TopNearByItemAdapter topNearByItemAdapter = new TopNearByItemAdapter(ProductDetailsActivity.this, topNearSimilarProduct);
-                    mBinding.rvSellarsOthersItems.setAdapter(topNearByItemAdapter);
-
-                } else {
-                    mBinding.llSellarsOtherProducs.setVisibility(View.GONE);
+                if (model.isSuccess()) {
+                    if (model.getResultItem().size() > 0) {
+                        mBinding.llSellarsOtherProducs.setVisibility(View.VISIBLE);
+                        TopSimilarSellerAdapter topSimilarSellerAdapter = new TopSimilarSellerAdapter(ProductDetailsActivity.this, model.getResultItem());
+                        mBinding.rvSellarsOthersItems.setAdapter(topSimilarSellerAdapter);
+                    } else {
+                        mBinding.llSellarsOtherProducs.setVisibility(View.GONE);
+                    }
+                }else {
                 }
-
             }
-
         });
     }
 
     private void topSimilarProductAPI() {
         productDetailsViewMode.getSimilarProductVMRequest(productID);
-        productDetailsViewMode.getSimilarProductVM().observe(this, new Observer<ArrayList<TopNearByItemModel>>() {
+        productDetailsViewMode.getSimilarProductVM().observe(this, new Observer<MainTopSimilarSellerModel>() {
             @Override
-            public void onChanged(ArrayList<TopNearByItemModel> topNearSimilarProduct) {
+            public void onChanged(MainTopSimilarSellerModel topNearSimilarProduct) {
                 Utils.hideProgressDialog();
-                if (topNearSimilarProduct.size() > 0) {
-                    mBinding.llSimilarProduct.setVisibility(View.VISIBLE);
-                    TopNearByItemAdapter topNearByItemAdapter = new TopNearByItemAdapter(ProductDetailsActivity.this, topNearSimilarProduct);
-                    mBinding.rvNearByItem.setAdapter(topNearByItemAdapter);
+                if (topNearSimilarProduct.isSuccess()){
+                    if (topNearSimilarProduct.getResultItem().size() > 0) {
+                        mBinding.llSimilarProduct.setVisibility(View.VISIBLE);
+                        TopSimilarSellerAdapter topSellerAdapter = new TopSimilarSellerAdapter(ProductDetailsActivity.this, topNearSimilarProduct.getResultItem());
+                        mBinding.rvNearByItem.setAdapter(topSellerAdapter);
 
-                } else {
+                    } else {
 
-                    mBinding.llSimilarProduct.setVisibility(View.GONE);
+                        mBinding.llSimilarProduct.setVisibility(View.GONE);
+                    }
+                }else {
+                    Utils.setToast(ProductDetailsActivity.this,topNearSimilarProduct.getErrorMessage());
                 }
+
 
             }
 
@@ -300,42 +315,44 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
     private void getTopSeller() {
         productDetailsViewMode.GetTopSellerLiveRequest(productID);
-        productDetailsViewMode.GetTopSellerLiveData().observe(this, new Observer<ArrayList<TopSellerModel>>() {
+        productDetailsViewMode.GetTopSellerLiveData().observe(this, new Observer<MainSimilarTopSellerModel>() {
             @Override
-            public void onChanged(ArrayList<TopSellerModel> topSellerList) {
+            public void onChanged(MainSimilarTopSellerModel topSimilarSellerModel) {
                 Utils.hideProgressDialog();
-                if (topSellerList.size() > 0) {
-                    mBinding.llOtherSellar.setVisibility(View.VISIBLE);
-                    TopSellerAdapter topSellerAdapter = new TopSellerAdapter(ProductDetailsActivity.this, topSellerList);
-                    mBinding.rvOtherSellars.setAdapter(topSellerAdapter);
+                if (topSimilarSellerModel.isSuccess()){
+                    if (topSimilarSellerModel.getResultItem().size() > 0) {
+                        mBinding.llOtherSellar.setVisibility(View.VISIBLE);
+                        TopSellerAdapter topSellerAdapter = new TopSellerAdapter(ProductDetailsActivity.this, topSimilarSellerModel.getResultItem());
+                        mBinding.rvOtherSellars.setAdapter(topSellerAdapter);
 
-                } else {
-                    mBinding.llOtherSellar.setVisibility(View.GONE);
+                    } else {
+                        mBinding.llOtherSellar.setVisibility(View.GONE);
+                    }
+                }else {
+                    Utils.setToast(ProductDetailsActivity.this,topSimilarSellerModel.getErrorMessage());
                 }
+
             }
         });
     }
 
     private void cartItemsAPI() {
         productDetailsViewMode.getCartItemsVMRequest("123");
-        productDetailsViewMode.getCartItemsVM().observe(this, new Observer<CartItemModel>() {
-            @Override
-            public void onChanged(CartItemModel model) {
-                Utils.hideProgressDialog();
-                itemQuatntiy =0;
-                Utils.hideProgressDialog();
-                if (model != null && model.getCart()!=null) {
-                    cartItemModel = model;
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CART_ITEM_ID, model.getId());
-                    for (int i = 0; i < model.getCart().size(); i++) {
-                        mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
-                        itemQuatntiy += model.getCart().get(i).getQuantity();
-                        mBinding.toolbarTittle.cartBadge.setText(String.valueOf(Math.min(itemQuatntiy, 99)));
-                    }
-
+        productDetailsViewMode.getCartItemsVM().observe(this, model -> {
+            Utils.hideProgressDialog();
+            itemQuatntiy =0;
+            Utils.hideProgressDialog();
+            if (model != null && model.getCart()!=null) {
+                cartItemModel = model;
+                SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CART_ITEM_ID, model.getId());
+                for (int i = 0; i < model.getCart().size(); i++) {
+                    mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
+                    itemQuatntiy += model.getCart().get(i).getQuantity();
+                    mBinding.toolbarTittle.cartBadge.setText(String.valueOf(Math.min(itemQuatntiy, 99)));
                 }
 
             }
+
         });
     }
 
@@ -362,9 +379,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                                 mBinding.tvDiscount.setVisibility(View.VISIBLE);
                                 double DiscountAmount = productDataModel.getResultItem().getVariationModelList().get(i).getSellingPrice()-productDataModel.getResultItem().getVariationModelList().get(i).getDiscountAmount();
                                 mBinding.tvDiscount.setText(""+DiscountAmount+"OFF");
-                                mBinding.tvItemMrpOff.setPaintFlags(mBinding.tvItemMrpOff.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                                //mBinding.tvItemMrpOff.setPaintFlags(mBinding.tvItemMrpOff.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             }
-                            
+
 
                             if (productDataModel.getResultItem().getVariationModelList().get(i).getOffPercentage()!=0.0) {
                                 mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
@@ -374,9 +391,15 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                             }
 
                             mBinding.tvItemName.setText(productDataModel.getResultItem().getVariationModelList().get(i).getProductName());
-                            mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getVariationModelList().get(i).getMrp());
-                            mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                            mBinding.tvItemMrpOff.setText(String.valueOf(productDataModel.getResultItem().getVariationModelList().get(i).getSellingPrice()));
+                            if ( productDataModel.getResultItem().getVariationModelList().get(i).getMrp()== productDataModel.getResultItem().getVariationModelList().get(i).getSellingPrice()){
+                                mBinding.llSellingPrice.setVisibility(View.GONE);
+                                mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getVariationModelList().get(i).getMrp());
+                            }else {
+                                mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getVariationModelList().get(i).getMrp());
+                                mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                                mBinding.tvSellingPrice.setText(String.valueOf(productDataModel.getResultItem().getVariationModelList().get(i).getSellingPrice()));
+                            }
+
                             mBinding.tvQuantity.setText("Quantity "+productDataModel.getResultItem().getVariationModelList().get(i).getMeasurement()+productDataModel.getResultItem().getVariationModelList().get(i).getUomValue());
                             mBinding.tvShopName.setText(productDataModel.getResultItem().getShopName());
                             String varientName = "";
@@ -402,11 +425,27 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                             imageListModels = productDataModel.getResultItem().getImageList();
                         }
                         mBinding.tvItemName.setText(productDataModel.getResultItem().getProductName());
-                        mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getMrp());
-                        mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        mBinding.tvItemMrpOff.setText(String.valueOf(productDataModel.getResultItem().getSellingPrice()));
-                        mBinding.tvAddresh.setText(productDataModel.getResultItem().getAddressOne()+" "+productDataModel.getResultItem().getAddressTwo() + "\n- "+productDataModel.getResultItem().getPincode()+"("+productDataModel.getResultItem().getState()+")");
 
+
+                        if (productDataModel.getResultItem().getMrp()==productDataModel.getResultItem().getSellingPrice()){
+                            mBinding.llSellingPrice.setVisibility(View.GONE);
+                            mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getMrp());
+                        }else {
+                            mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getMrp());
+                            mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                            mBinding.tvSellingPrice.setText(String.valueOf(productDataModel.getResultItem().getSellingPrice()));
+                            mBinding.tvAddresh.setText(productDataModel.getResultItem().getAddressOne()+" "+productDataModel.getResultItem().getAddressTwo() + "\n- "+productDataModel.getResultItem().getPincode()+"("+productDataModel.getResultItem().getState()+")");
+                        }
+
+
+                        if (productDataModel.getResultItem().getDeliveryOptionDC().size()>0){
+                            mBinding.llDeliverOption.setVisibility(View.VISIBLE);
+                            String deliveryOption = "";
+                            for (int j = 0; j <productDataModel.getResultItem().getDeliveryOptionDC().size() ; j++) {
+                                deliveryOption = deliveryOption+" "+ productDataModel.getResultItem().getDeliveryOptionDC().get(j).getDelivery();
+                            }
+                            mBinding.tvDeliveryOption.setText(deliveryOption);
+                        }
 
                         if (productDataModel.getResultItem().getDiscountAmount()==0.0){
                           double DiscountAmount = productDataModel.getResultItem().getSellingPrice()-productDataModel.getResultItem().getDiscountAmount();
@@ -420,8 +459,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         }
                         mBinding.tvQuantity.setText("Quantity "+productDataModel.getResultItem().getMeasurement()+" "+productDataModel.getResultItem().getUomValue());
                         mBinding.tvShopName.setText(productDataModel.getResultItem().getShopName());
-
-
                         if (productDataModel.getResultItem().getProductVariantSpecification() != null && productDataModel.getResultItem().getProductVariantSpecification().size() > 0) {
                             for (int i = 0; i < productDataModel.getResultItem().getProductVariantSpecification().size(); i++) {
 
@@ -449,9 +486,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
                             }
                         }
-
-
-
                         mBinding.pager.setAdapter(new ShowImagesAdapter(ProductDetailsActivity.this, imageListModels));
                         mBinding.indicator.setViewPager(mBinding.pager);
 
@@ -475,19 +509,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private void addItemInCart(int QTY, int sellerItemID) {
         ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerItemID, 0, 0);
         productDetailsViewMode.getAddItemsInCardVMRequest(paginationModel);
-        productDetailsViewMode.getAddItemsInCardVM().observe(this, new Observer<AddCartItemModel>() {
-            @Override
-            public void onChanged(AddCartItemModel sellerProdList) {
-                Utils.hideProgressDialog();
-                if (sellerProdList != null) {
-                    if (sellerProdList.getShoppingCartItem().size() > 0) {
-                        for (int i = 0; i < sellerProdList.getShoppingCartItem().size(); i++) {
-                            mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
-                            mBinding.tvSelectedQty.setText(String.valueOf(sellerProdList.getShoppingCartItem().get(i).getQuantity()));
-                        }
-                    }else {
-                        mBinding.toolbarTittle.notifictionCount.setVisibility(View.GONE);
+        productDetailsViewMode.getAddItemsInCardVM().observe(this, sellerProdList -> {
+            Utils.hideProgressDialog();
+            if (sellerProdList != null) {
+                if (sellerProdList.getShoppingCartItem().size() > 0) {
+                    for (int i = 0; i < sellerProdList.getShoppingCartItem().size(); i++) {
+                        mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
+                        mBinding.tvSelectedQty.setText(String.valueOf(sellerProdList.getShoppingCartItem().get(i).getQuantity()));
                     }
+                }else {
+                    mBinding.toolbarTittle.notifictionCount.setVisibility(View.GONE);
                 }
             }
         });
@@ -497,21 +528,18 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Alert");
         builder.setMessage("Your Cart has existing items from Another Seller.Do You Want to clear it and add items from this Seller?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                clearCartItem(id);
-                CartItemModel cartModel = new CartItemModel();
-                cartModel.setEncryptSellerId(String.valueOf(resultModel.getSellerId()));
-                CartItemModel.CartModel cartItemModel = new CartItemModel.CartModel(null, 0, null, resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(), resultModel.getUom(), "", 0, resultModel.getProductName(), 0, 0, resultModel.IsDelete, resultModel.getOffPercentage(), 0, 0, 0, 0, null, resultModel.getSellerId(), 0, 0, 0, resultModel.getMrp(), 0, resultModel.getId());
-                cartModel.setCart(new ArrayList<>());
-                cartModel.getCart().add(cartItemModel);
-                MainActivity.cartItemModel = cartModel;
-                addItemInCart(1, SellerItemID);
-                mBinding.btAddToCart.setVisibility(View.GONE);
-                mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            clearCartItem(id);
+            CartItemModel cartModel = new CartItemModel();
+            cartModel.setEncryptSellerId(String.valueOf(resultModel.getSellerId()));
+            CartModel cartItemModel = new CartModel(null, 0, null, resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(), resultModel.getUom(), "", 0, resultModel.getProductName(), 0, 0, resultModel.IsDelete, resultModel.getOffPercentage(), 0, 0, 0, 0, null, resultModel.getSellerId(), 0, 0, 0, resultModel.getMrp(), 0, resultModel.getId());
+            cartModel.setCart(new ArrayList<>());
+            cartModel.getCart().add(cartItemModel);
+            MainActivity.cartItemModel = cartModel;
+            addItemInCart(1, SellerItemID);
+            mBinding.btAddToCart.setVisibility(View.GONE);
+            mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
 
-            }
         });
 
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

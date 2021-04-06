@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.DeliveryOptionModel;
+import com.skdirect.model.OrderPlaceMainModel;
 import com.skdirect.model.OrderPlaceModel;
 import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.PaginationModel;
@@ -29,7 +30,7 @@ public class PaymentViewMode extends ViewModel {
     private MutableLiveData<ArrayList<DeliveryOptionModel>> DeliveryOptionVM;
     private MutableLiveData<JsonObject> checkOutItemVM;
     private MutableLiveData<JsonObject> mapViewModel;
-    private MutableLiveData<OrderPlaceModel> orderPlaceVM;
+    private MutableLiveData<OrderPlaceMainModel> orderPlaceVM;
     private MutableLiveData<Object> clearCartDataVM;
 
     public LiveData<ArrayList<UserLocationModel>> getUserLocationVM() {
@@ -56,7 +57,7 @@ public class PaymentViewMode extends ViewModel {
         return mapViewModel;
     }
 
-    public LiveData<OrderPlaceModel> getOrderPlaceVM() {
+    public LiveData<OrderPlaceMainModel> getOrderPlaceVM() {
         orderPlaceVM=null;
         orderPlaceVM = new MutableLiveData<>();
         return orderPlaceVM;
@@ -149,10 +150,10 @@ public class PaymentViewMode extends ViewModel {
         return mapViewModel;
     }
 
-    public MutableLiveData<OrderPlaceModel> getOrderPlaceVMRequest(OrderPlaceRequestModel placeRequestModel) {
-        RestClient.getInstance().getService().PlaceOrder(placeRequestModel).enqueue(new Callback<OrderPlaceModel>() {
+    public MutableLiveData<OrderPlaceMainModel> getOrderPlaceVMRequest(OrderPlaceRequestModel placeRequestModel) {
+        RestClient.getInstance().getService().PlaceOrder(placeRequestModel).enqueue(new Callback<OrderPlaceMainModel>() {
             @Override
-            public void onResponse(Call<OrderPlaceModel> call, Response<OrderPlaceModel> response) {
+            public void onResponse(Call<OrderPlaceMainModel> call, Response<OrderPlaceMainModel> response) {
                 if (response.isSuccessful()) {
                     Log.e(TAG, "request response="+response.body());
                     orderPlaceVM.setValue(response.body());
@@ -160,7 +161,7 @@ public class PaymentViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<OrderPlaceModel> call, Throwable t) {
+            public void onFailure(Call<OrderPlaceMainModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + call.toString());
                 Utils.hideProgressDialog();
             }

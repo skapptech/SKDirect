@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityProfileBinding;
 import com.skdirect.utils.SharePrefs;
+import com.skdirect.utils.TextUtils;
 import com.skdirect.viewmodel.SellerProfileViewMode;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
@@ -31,8 +32,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mBinding.rlSellerInfo.setOnClickListener(this);
         mBinding.rlChnagePassword.setOnClickListener(this);
         mBinding.rlMyOrder.setOnClickListener(this);
-
-        mBinding.tvSellerName.setText(SharePrefs.getInstance(ProfileActivity.this).getString(SharePrefs.FIRST_NAME));
+        if(!TextUtils.isNullOrEmpty(SharePrefs.getInstance(ProfileActivity.this).getString(SharePrefs.FIRST_NAME)))
+        {
+            mBinding.tvSellerName.setText(SharePrefs.getInstance(ProfileActivity.this).getString(SharePrefs.FIRST_NAME));
+        }
         mBinding.tvMobileNumber.setText(SharePrefs.getInstance(ProfileActivity.this).getString(SharePrefs.MOBILE_NUMBER));
 
     }

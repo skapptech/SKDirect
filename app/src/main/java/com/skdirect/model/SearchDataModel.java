@@ -47,6 +47,10 @@ public class SearchDataModel {
         @SerializedName("SellerId")
         private int SellerId;
 
+        @SerializedName("NoofView")
+        private int NoofView;
+
+
 
         @SerializedName("ImagePath")
         private String ImagePath;
@@ -116,6 +120,13 @@ public class SearchDataModel {
 
         public void setImagePath(String imagePath) {
             ImagePath = imagePath;
+        }
+        public int getNoofView() {
+            return NoofView;
+        }
+
+        public void setNoofView(int noofView) {
+            NoofView = noofView;
         }
     }
 

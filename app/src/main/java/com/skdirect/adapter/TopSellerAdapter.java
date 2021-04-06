@@ -53,12 +53,10 @@ public class TopSellerAdapter extends RecyclerView.Adapter<TopSellerAdapter.View
             @Override
             public void onClick(View view) {
                 Intent menuIntent = new Intent(context, SellerProfileActivity.class);
-                menuIntent.putExtra("ID",topSellerModel.getEncryptedId());
+                menuIntent.putExtra("ID",topSellerModel.getId());
                 context.startActivity(menuIntent);
             }
         });
-
-
 
     }
 

@@ -10,9 +10,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AddCartItemModel;
+import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.ItemAddModel;
+import com.skdirect.model.MainSimilarTopSellerModel;
+import com.skdirect.model.MainTopSimilarSellerModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.ProductDataModel;
 import com.skdirect.model.TopNearByItemModel;
@@ -29,11 +32,11 @@ public class ProductDetailsViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
 
     private MutableLiveData<ProductDataModel> productDetailsVM;
-    private MutableLiveData<ArrayList<TopNearByItemModel>> similarProductVM;
-    private MutableLiveData<ArrayList<TopSellerModel>> topSellerLiveData;
-    private MutableLiveData<ArrayList<TopNearByItemModel>> sallerOtherProducsVM;
+    private MutableLiveData<MainTopSimilarSellerModel> similarProductVM;
+    private MutableLiveData<MainSimilarTopSellerModel> topSellerLiveData;
+    private MutableLiveData<MainTopSimilarSellerModel> sallerOtherProducsVM;
     private MutableLiveData<CartItemModel> cartItemsVM;
-    private MutableLiveData<Boolean> addProductVM;
+    private MutableLiveData<AddViewMainModel> addProductVM;
     private MutableLiveData<AddCartItemModel> addItemsInCardVM;
     private MutableLiveData<Object> clearCartItemVM;
 
@@ -43,20 +46,20 @@ public class ProductDetailsViewMode extends ViewModel {
         return productDetailsVM;
     }
 
-    public LiveData<ArrayList<TopNearByItemModel>> getSimilarProductVM() {
+    public LiveData<MainTopSimilarSellerModel> getSimilarProductVM() {
         similarProductVM=null;
         similarProductVM = new MutableLiveData<>();
         return similarProductVM;
     }
 
-    public LiveData<ArrayList<TopSellerModel>> GetTopSellerLiveData() {
+    public LiveData<MainSimilarTopSellerModel> GetTopSellerLiveData() {
         if(topSellerLiveData==null){
             topSellerLiveData = new MutableLiveData<>();
         }
         return topSellerLiveData;
     }
 
-    public LiveData<ArrayList<TopNearByItemModel>> getSallerOtherProducsVM() {
+    public LiveData<MainTopSimilarSellerModel> getSallerOtherProducsVM() {
         sallerOtherProducsVM=null;
         sallerOtherProducsVM = new MutableLiveData<>();
         return sallerOtherProducsVM;
@@ -68,7 +71,7 @@ public class ProductDetailsViewMode extends ViewModel {
         return cartItemsVM;
     }
 
-    public LiveData<Boolean> getAddProductVM() {
+    public LiveData<AddViewMainModel> getAddProductVM() {
         addProductVM=null;
         addProductVM = new MutableLiveData<>();
         return addProductVM;
@@ -107,10 +110,10 @@ public class ProductDetailsViewMode extends ViewModel {
     }
 
 
-    public MutableLiveData<ArrayList<TopNearByItemModel>> getSimilarProductVMRequest(int productID) {
-        RestClient.getInstance().getService().GetTopSimilarproduct(productID).enqueue(new Callback<ArrayList<TopNearByItemModel>>() {
+    public MutableLiveData<MainTopSimilarSellerModel> getSimilarProductVMRequest(int productID) {
+        RestClient.getInstance().getService().GetTopSimilarproduct(productID).enqueue(new Callback<MainTopSimilarSellerModel>() {
             @Override
-            public void onResponse(Call<ArrayList<TopNearByItemModel>> call, Response<ArrayList<TopNearByItemModel>> response) {
+            public void onResponse(Call<MainTopSimilarSellerModel> call, Response<MainTopSimilarSellerModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     similarProductVM.setValue(response.body());
@@ -118,7 +121,7 @@ public class ProductDetailsViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<TopNearByItemModel>> call, Throwable t) {
+            public void onFailure(Call<MainTopSimilarSellerModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + t.toString());
                 Utils.hideProgressDialog();
             }
@@ -127,10 +130,10 @@ public class ProductDetailsViewMode extends ViewModel {
         return similarProductVM;
     }
 
-    public MutableLiveData<ArrayList<TopSellerModel>> GetTopSellerLiveRequest(int productID) {
-        RestClient.getInstance().getService().GetSimilarProductTopSeller(productID).enqueue(new Callback<ArrayList<TopSellerModel>>() {
+    public MutableLiveData<MainSimilarTopSellerModel> GetTopSellerLiveRequest(int productID) {
+        RestClient.getInstance().getService().GetSimilarProductTopSeller(productID).enqueue(new Callback<MainSimilarTopSellerModel>() {
             @Override
-            public void onResponse(Call<ArrayList<TopSellerModel>> call, Response<ArrayList<TopSellerModel>> response) {
+            public void onResponse(Call<MainSimilarTopSellerModel> call, Response<MainSimilarTopSellerModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     topSellerLiveData.setValue(response.body());
@@ -138,7 +141,7 @@ public class ProductDetailsViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<TopSellerModel>> call, Throwable t) {
+            public void onFailure(Call<MainSimilarTopSellerModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + t.toString());
                 Utils.hideProgressDialog();
             }
@@ -147,10 +150,10 @@ public class ProductDetailsViewMode extends ViewModel {
         return topSellerLiveData;
     }
 
-    public MutableLiveData<ArrayList<TopNearByItemModel>> getSellarOtherVMRequest(int productID) {
-        RestClient.getInstance().getService().GetMoreSimilarSellerProduct(productID).enqueue(new Callback<ArrayList<TopNearByItemModel>>() {
+    public MutableLiveData<MainTopSimilarSellerModel> getSellarOtherVMRequest(int productID) {
+        RestClient.getInstance().getService().GetMoreSimilarSellerProduct(productID).enqueue(new Callback<MainTopSimilarSellerModel>() {
             @Override
-            public void onResponse(Call<ArrayList<TopNearByItemModel>> call, Response<ArrayList<TopNearByItemModel>> response) {
+            public void onResponse(Call<MainTopSimilarSellerModel> call, Response<MainTopSimilarSellerModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     sallerOtherProducsVM.setValue(response.body());
@@ -158,7 +161,7 @@ public class ProductDetailsViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<TopNearByItemModel>> call, Throwable t) {
+            public void onFailure(Call<MainTopSimilarSellerModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + t.toString());
                 Utils.hideProgressDialog();
             }
@@ -188,10 +191,10 @@ public class ProductDetailsViewMode extends ViewModel {
         return cartItemsVM;
     }
 
-    public MutableLiveData<Boolean> getAddProductVMRequest(PaginationModel paginationModel) {
-        RestClient.getInstance().getService().AddProductView(paginationModel).enqueue(new Callback<Boolean>() {
+    public MutableLiveData<AddViewMainModel> getAddProductVMRequest(int productID) {
+        RestClient.getInstance().getService().AddProductView(productID).enqueue(new Callback<AddViewMainModel>() {
             @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+            public void onResponse(Call<AddViewMainModel> call, Response<AddViewMainModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     addProductVM.setValue(response.body());
@@ -199,7 +202,7 @@ public class ProductDetailsViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
+            public void onFailure(Call<AddViewMainModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + t.toString());
                 Utils.hideProgressDialog();
             }

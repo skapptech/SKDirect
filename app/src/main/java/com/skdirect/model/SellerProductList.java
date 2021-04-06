@@ -59,6 +59,17 @@ public class SellerProductList {
     @SerializedName("Id")
     private int Id;
 
+    @SerializedName("NoofView")
+    private int NoofView;
+
+    public int getNoofView() {
+        return NoofView;
+    }
+
+    public void setNoofView(int noofView) {
+        NoofView = noofView;
+    }
+
     public boolean isStockRequired() {
         return IsStockRequired;
     }
