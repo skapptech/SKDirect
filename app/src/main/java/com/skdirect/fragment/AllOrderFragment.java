@@ -28,6 +28,7 @@ import com.skdirect.databinding.FragmentAllOrderBinding;
 import com.skdirect.model.MyOrderModel;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.NearBySallerModel;
+import com.skdirect.model.OrderModel;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.MyOrderViewMode;
 import com.skdirect.viewmodel.PaymentViewMode;
@@ -160,24 +161,37 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     private void myOrderAPI() {
         MyOrderRequestModel myOrderRequestModel = new MyOrderRequestModel("",0,takeCount,skipCount,type, orderId);
         myOrderViewMode.getCategoriesViewModelRequest(myOrderRequestModel);
-        myOrderViewMode.getCategoriesViewModel().observe(this, new Observer<ArrayList<MyOrderModel>>() {
+        myOrderViewMode.getCategoriesViewModel().observe(this, new Observer<OrderModel>() {
             @Override
-            public void onChanged(ArrayList<MyOrderModel> myOrderModels) {
+            public void onChanged(OrderModel response) {
                 mBinding.swiperefresh.setRefreshing(false);
                 mBinding.shimmerViewContainer.stopShimmer();
                 mBinding.shimmerViewContainer.setVisibility(View.GONE);
-                if (myOrderModels!=null && myOrderModels.size()>0){
-                    mBinding.rMyOrder.post(new Runnable() {
-                        public void run() {
-                            orderModelArrayList.addAll(myOrderModels);
-                            myOrderAdapter.notifyDataSetChanged();
-                            loading = true;
-                        }
-                    });
+                mBinding.tlEmptyView.setVisibility(View.GONE);
+                mBinding.rMyOrder.setVisibility(View.VISIBLE);
+                if(response.isSuccess())
+                {
+                    if (response.getMyOrderModelsList()!=null && response.getMyOrderModelsList().size()>0){
+                        mBinding.rMyOrder.post(new Runnable() {
+                            public void run() {
+                                orderModelArrayList.addAll(response.getMyOrderModelsList());
+                                myOrderAdapter.notifyDataSetChanged();
+                                loading = true;
+                            }
+                        });
 
-                }else {
+                    }else {
+                        loading = false;
+                        mBinding.tlEmptyView.setVisibility(View.VISIBLE);
+                        mBinding.rMyOrder.setVisibility(View.GONE);
+                    }
+                }else
+                {
                     loading = false;
+                    mBinding.tlEmptyView.setVisibility(View.VISIBLE);
+                    mBinding.rMyOrder.setVisibility(View.GONE);
                 }
+
 
             }
         });
