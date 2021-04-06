@@ -33,7 +33,6 @@ import com.skdirect.R;
 import com.skdirect.databinding.ActivityMainBinding;
 import com.skdirect.fragment.BasketFragment;
 import com.skdirect.fragment.HomeFragment;
-import com.skdirect.fragment.MyOrderFragment;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.utils.AppSignatureHelper;
 import com.skdirect.utils.GPSTracker;
