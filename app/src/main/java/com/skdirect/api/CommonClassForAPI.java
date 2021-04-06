@@ -11,6 +11,7 @@ import com.skdirect.model.GenerateOtpResponseModel;
 import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
+import com.skdirect.model.ProfileResponseModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.UpdateTokenModel;
@@ -125,13 +126,13 @@ public class CommonClassForAPI {
         RestClient.getInstance().getService().UpdateProfile(updateProfilePostModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<GenerateOtpResponseModel>() {
+                .subscribe(new Observer<ProfileResponseModel>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onNext(GenerateOtpResponseModel o) {
+                    public void onNext(ProfileResponseModel o) {
                         observer.onNext(o);
                     }
 

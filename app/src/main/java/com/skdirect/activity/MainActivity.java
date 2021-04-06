@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setLocationTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(MainActivity.this,MapsActivity.class),2);
+                startActivityForResult(new Intent(MainActivity.this,MapsExtendedActivity.class),2);
             }
         });
     }
@@ -207,12 +207,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.ll_logout:
                 clearSharePrefs();
-                startActivity(new Intent(getApplicationContext(), PlaceSearchActivity.class));
+                if (SharePrefs.getInstance(this).getBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE)) {
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                }
+                else{
+                    startActivity(new Intent(getApplicationContext(), PlaceSearchActivity.class));
+                }
+
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;
                 case  R.id.ll_sign_in:
-                startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
                 case R.id.ll_howto_use:

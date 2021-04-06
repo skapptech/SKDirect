@@ -28,6 +28,7 @@ import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.ProductDataModel;
+import com.skdirect.model.ProfileResponseModel;
 import com.skdirect.model.RemoveItemRequestModel;
 import com.skdirect.model.SearchDataModel;
 import com.skdirect.model.SearchRequestModel;
@@ -178,7 +179,7 @@ public interface APIServices {
     Call<Boolean> UpdateUserDetail(@Body JsonObject jsonObject );
 
     @POST("api/Native/BuyerProfile/UpdateBuyerProfile")
-    Observable<GenerateOtpResponseModel> UpdateProfile(@Body UpdateProfilePostModel updateProfilePostModel );
+    Observable<ProfileResponseModel> UpdateProfile(@Body UpdateProfilePostModel updateProfilePostModel );
 
     @GET("api/buyer/Profile/MakeDefaultAddress/{MakeDefaultAddress}")
     Call<Boolean> MakeDefaultAddress(@Path("MakeDefaultAddress") int UserDetailId);

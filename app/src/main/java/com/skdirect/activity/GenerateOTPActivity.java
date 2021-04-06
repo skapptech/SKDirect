@@ -221,12 +221,19 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                         SharePrefs.getInstance(GenerateOTPActivity.this).putString(SharePrefs.USER_ID, model.getResultItem().getUserid());
                       /*  commonClassForAPI.getToken(callToken, "password", mobileNumber, otpString, true, true, "BUYERAPP",true,Utils.getDeviceUniqueID(GenerateOTPActivity.this),);*/
 
-                        if (SharePrefs.getInstance(GenerateOTPActivity.this).getBoolean(SharePrefs.IS_LOGIN)){
-                            startActivity(new Intent(GenerateOTPActivity.this,MainActivity.class));
+                        /*if (SharePrefs.getInstance(GenerateOTPActivity.this).getBoolean(SharePrefs.IS_LOGIN)){
+
                         }else {
                             startActivity(new Intent(GenerateOTPActivity.this,PlaceSearchActivity.class));
+                        }*/  if (SharePrefs.getInstance(GenerateOTPActivity.this).getBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE))
+                        {
+                            startActivity(new Intent(GenerateOTPActivity.this,MainActivity.class));
                         }
-                        finish();
+                        else{
+                            startActivity(new Intent(GenerateOTPActivity.this,RegisterationActivity.class));
+                        }
+
+                      //  finish();
 
                     }else {
                         Binding.btLoddingOtp.setText("Next");
