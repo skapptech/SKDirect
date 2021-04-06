@@ -27,6 +27,7 @@ import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.AddViewModel;
 import com.skdirect.model.CartItemModel;
+import com.skdirect.model.CartModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.SellerDeliveryModel;
 import com.skdirect.model.SellerDetailsModel;
@@ -279,7 +280,6 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         increaseCount++;
         mBinding.toolbarTittle.cartBadge.setVisibility(View.VISIBLE);
         tvSelectedQty.setText("" + increaseCount);
-        SharePrefs.getInstance(SellerProfileActivity.this).putInt(SharePrefs.COUNT, increaseCount);
         addItemInCart(increaseCount, sellerProductModel);
 
         if (MainActivity.cartItemModel != null) {
@@ -298,7 +298,6 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         decreaseCount--;
         if (decreaseCount >= 0) {
             selectedQty.setText("" + decreaseCount);
-            SharePrefs.getInstance(SellerProfileActivity.this).putInt(SharePrefs.COUNT, decreaseCount);
             addItemInCart(decreaseCount, sellerProductModel);
         } else {
             btAddToCart.setVisibility(View.VISIBLE);
@@ -327,7 +326,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             if (MainActivity.cartItemModel.getSellerId() == sellerID) {
                 btAddToCart.setVisibility(View.GONE);
                 LLPlusMinus.setVisibility(View.VISIBLE);
-                CartItemModel.CartModel cartModel = new CartItemModel.CartModel(null, 0, null, false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(), 0, 0, false, 0, 0, 0, sellerProductModel.getQty(), sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
+                CartModel cartModel = new CartModel(null, 0, null, false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(), 0, 0, false, 0, 0, 0, sellerProductModel.getQty(), sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
                 MainActivity.cartItemModel.getCart().add(cartModel);
                 SellerProfileActivity.this.plusButtonOnClick(sellerProductModel, tvSelectedQty);
             } else {
@@ -339,7 +338,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             LLPlusMinus.setVisibility(View.VISIBLE);
             tvSelectedQty.setText("1");
             // add item  to cart
-            CartItemModel.CartModel cartModel = new CartItemModel.CartModel(null, 0, null, false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(), 0, 0, false, 0, 0, 0, 1, sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
+            CartModel cartModel = new CartModel(null, 0, null, false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(), 0, 0, false, 0, 0, 0, 1, sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
             MainActivity.cartItemModel.setSellerId(sellerID);
             MainActivity.cartItemModel.getCart().add(cartModel);
         }
@@ -370,7 +369,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 clearCartItem(id);
                 CartItemModel cartModel = new CartItemModel();
                 cartModel.setSellerId(sellerID);
-                CartItemModel.CartModel cartItemModel = new CartItemModel.CartModel(null, 0, null, false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(), 0, 0, false, 0, 0, 0, sellerProductModel.getQty(), sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
+                CartModel cartItemModel = new CartModel(null, 0, null, false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(), 0, 0, false, 0, 0, 0, sellerProductModel.getQty(), sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
                 cartModel.setCart(new ArrayList<>());
                 cartModel.getCart().add(cartItemModel);
                 MainActivity.cartItemModel = cartModel;
