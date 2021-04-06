@@ -61,9 +61,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-/**
-* Created by Pritesh on 17/07/2020.
-**/
 
 public class MapsExtendedActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
     private ActivityMapsExtendedBinding mBinding;
