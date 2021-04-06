@@ -3,42 +3,25 @@ package com.skdirect.utils;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
-import android.media.MediaRecorder;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.util.Log;
 
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.OnLifecycleEvent;
-import androidx.lifecycle.ProcessLifecycleOwner;
-
 
 import com.facebook.soloader.SoLoader;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
-import com.skdirect.activity.MainActivity;
-import com.skdirect.activity.PlaceSearchActivity;
 import com.skdirect.api.CommonClassForAPI;
+import com.skdirect.db.CartRepository;
 import com.skdirect.model.TokenModel;
-import com.skdirect.model.UpdateTokenModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import io.reactivex.observers.DisposableObserver;
 
-
 public class MyApplication extends Application implements LifecycleObserver {
-    public   Context appContext;
+    public Context appContext;
     private static MyApplication mInstance;
-    private static MediaRecorder mediaRecorder;
     public Activity activity;
+    public CartRepository cartRepository;
+
 
     public static synchronized MyApplication getInstance() {
         return mInstance;
@@ -48,17 +31,21 @@ public class MyApplication extends Application implements LifecycleObserver {
     public void onCreate() {
         super.onCreate();
         SoLoader.init(this, false);
-        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         appContext = this;
         mInstance = this;
+        cartRepository = new CartRepository(getApplicationContext());
     }
 
     public void token() {
-        new CommonClassForAPI().getToken(callToken, "password", Utils.getDeviceUniqueID(activity), "", true, true, "BUYERAPP", true, Utils.getDeviceUniqueID(activity), 28.0, 72.00,"452011");
+        new CommonClassForAPI().getToken(callToken, "password", Utils.getDeviceUniqueID(activity),
+                "", true, true, "BUYERAPP", true,
+                Utils.getDeviceUniqueID(activity), 28.0, 72.00, "452011");
     }
-    private DisposableObserver<TokenModel> callToken = new DisposableObserver<TokenModel>() {
+
+
+    private final DisposableObserver<TokenModel> callToken = new DisposableObserver<TokenModel>() {
         @Override
-        public void onNext(TokenModel model) {
+        public void onNext(@NotNull TokenModel model) {
             try {
                 Utils.hideProgressDialog();
                 if (model != null) {
@@ -70,7 +57,7 @@ public class MyApplication extends Application implements LifecycleObserver {
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
-                    new CommonClassForAPI().getUpdateToken(updatecallToken,  Utils.getFcmToken());
+                    new CommonClassForAPI().getUpdateToken(updatecallToken, Utils.getFcmToken());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
                     if (activity != null)
                         activity.recreate();
@@ -94,7 +81,8 @@ public class MyApplication extends Application implements LifecycleObserver {
             Utils.hideProgressDialog();
         }
     };
-    private DisposableObserver<JsonObject> updatecallToken = new DisposableObserver<JsonObject>() {
+
+    private final DisposableObserver<JsonObject> updatecallToken = new DisposableObserver<JsonObject>() {
         @Override
         public void onNext(JsonObject model) {
             try {

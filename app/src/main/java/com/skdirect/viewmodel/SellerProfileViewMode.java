@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
+import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.AddViewModel;
 import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.CartItemModel;
@@ -27,7 +28,7 @@ public class SellerProfileViewMode extends ViewModel {
 
     private MutableLiveData<SellerDetailsModel> sellerDetailsVM;
     private MutableLiveData<SellerProductMainModel> sellerProductVM;
-    private MutableLiveData<Boolean> addProductVM;
+    private MutableLiveData<AddViewMainModel> addProductVM;
     private MutableLiveData<AddCartItemModel> addItemsInCardVM;
     private MutableLiveData<Object> clearCartItemVM;
 
@@ -44,7 +45,7 @@ public class SellerProfileViewMode extends ViewModel {
         return sellerProductVM;
     }
 
-    public LiveData<Boolean> getAddProductVM() {
+    public LiveData<AddViewMainModel> getAddProductVM() {
         addProductVM=null;
         addProductVM = new MutableLiveData<>();
         return addProductVM;
@@ -105,10 +106,10 @@ public class SellerProfileViewMode extends ViewModel {
         return sellerProductVM;
     }
 
-    public MutableLiveData<Boolean> getAddProductVMRequest(AddViewModel paginationModel) {
-        RestClient.getInstance().getService().AddStoreView(paginationModel).enqueue(new Callback<Boolean>() {
+    public MutableLiveData<AddViewMainModel> getAddProductVMRequest(AddViewModel paginationModel) {
+        RestClient.getInstance().getService().AddStoreView(paginationModel).enqueue(new Callback<AddViewMainModel>() {
             @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+            public void onResponse(Call<AddViewMainModel> call, Response<AddViewMainModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     addProductVM.setValue(response.body());
@@ -116,7 +117,7 @@ public class SellerProfileViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
+            public void onFailure(Call<AddViewMainModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + t.toString());
                 Utils.hideProgressDialog();
             }

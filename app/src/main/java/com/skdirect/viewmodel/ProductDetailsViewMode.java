@@ -10,6 +10,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AddCartItemModel;
+import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.ItemAddModel;
@@ -35,7 +36,7 @@ public class ProductDetailsViewMode extends ViewModel {
     private MutableLiveData<MainSimilarTopSellerModel> topSellerLiveData;
     private MutableLiveData<MainTopSimilarSellerModel> sallerOtherProducsVM;
     private MutableLiveData<CartItemModel> cartItemsVM;
-    private MutableLiveData<Boolean> addProductVM;
+    private MutableLiveData<AddViewMainModel> addProductVM;
     private MutableLiveData<AddCartItemModel> addItemsInCardVM;
     private MutableLiveData<Object> clearCartItemVM;
 
@@ -70,7 +71,7 @@ public class ProductDetailsViewMode extends ViewModel {
         return cartItemsVM;
     }
 
-    public LiveData<Boolean> getAddProductVM() {
+    public LiveData<AddViewMainModel> getAddProductVM() {
         addProductVM=null;
         addProductVM = new MutableLiveData<>();
         return addProductVM;
@@ -190,10 +191,10 @@ public class ProductDetailsViewMode extends ViewModel {
         return cartItemsVM;
     }
 
-    public MutableLiveData<Boolean> getAddProductVMRequest(int productID) {
-        RestClient.getInstance().getService().AddProductView(productID).enqueue(new Callback<Boolean>() {
+    public MutableLiveData<AddViewMainModel> getAddProductVMRequest(int productID) {
+        RestClient.getInstance().getService().AddProductView(productID).enqueue(new Callback<AddViewMainModel>() {
             @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+            public void onResponse(Call<AddViewMainModel> call, Response<AddViewMainModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     addProductVM.setValue(response.body());
@@ -201,7 +202,7 @@ public class ProductDetailsViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
+            public void onFailure(Call<AddViewMainModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + t.toString());
                 Utils.hideProgressDialog();
             }

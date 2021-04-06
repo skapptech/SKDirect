@@ -58,7 +58,7 @@ public class TopSimilarSellerAdapter extends RecyclerView.Adapter<TopSimilarSell
 
 
         if (topSellerModel.getNoOfView()>0){
-            holder.mBinding.tvItemView.setVisibility(View.VISIBLE);
+            holder.mBinding.llNoOfView.setVisibility(View.VISIBLE);
             holder.mBinding.tvItemView.setText(String.valueOf(topSellerModel.getNoOfView()));
 
         }else
