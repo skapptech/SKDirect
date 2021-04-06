@@ -39,23 +39,16 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_location);
         easyWayLocation = new EasyWayLocation(this, false,this);
-
-
-
         if (getIntent() != null) {
             cityName = getIntent().getStringExtra("cityname");
             searchCity = getIntent().getBooleanExtra("searchCity", false);
         }
         initView();
 
-
-
     }
 
     private void initView() {
-
         Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
-
         //mBinding.etSearchPlace.addTextChangedListener(filterTextWatcher);
         mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(this, searchCity);
         mAutoCompleteAdapter.setClickListener(this);

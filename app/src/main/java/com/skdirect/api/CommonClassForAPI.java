@@ -7,11 +7,14 @@ import androidx.annotation.RequiresApi;
 
 import com.google.gson.JsonObject;
 import com.skdirect.model.AppVersionModel;
+import com.skdirect.model.GenerateOtpResponseModel;
 import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.TokenModel;
+import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.UpdateTokenModel;
+import com.skdirect.utils.MyApplication;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,6 +29,7 @@ public class CommonClassForAPI {
 
 
     public static CommonClassForAPI getInstance(Activity activity) {
+        MyApplication.getInstance().activity = activity;
         if (CommonClassForAPI == null) {
             CommonClassForAPI = new CommonClassForAPI(activity);
         }
@@ -36,7 +40,9 @@ public class CommonClassForAPI {
         mActivity = activity;
     }
 
+    public CommonClassForAPI() {
 
+    }
 
     public void getToken(final DisposableObserver observer,String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp,boolean isDevice,String deviceID,double lat,double log,String pincode) {
         RestClient.getInstance().getService().getToken(password, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp,isDevice,deviceID,lat,log ,pincode)
@@ -64,8 +70,8 @@ public class CommonClassForAPI {
                 });
     }
 
-    public void getUpdateToken(final DisposableObserver observer,UpdateTokenModel updateTokenModel) {
-        RestClient.getInstance().getService().getUpdateToken(updateTokenModel)
+    public void getUpdateToken(final DisposableObserver observer,String fcmId) {
+        RestClient.getInstance().getService().getUpdateToken(fcmId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JsonObject>() {
@@ -90,7 +96,7 @@ public class CommonClassForAPI {
                 });
     }
 
-    public void getLogin(final DisposableObserver observer, OtpVerificationModel otpVerificationModel) {
+    public void VerfiyOtp(final DisposableObserver observer, OtpVerificationModel otpVerificationModel) {
         RestClient.getInstance().getService().getVerfiyOtp(otpVerificationModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -101,6 +107,31 @@ public class CommonClassForAPI {
 
                     @Override
                     public void onNext(OtpResponceModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+    public void UpdateUserProfile(final DisposableObserver observer, UpdateProfilePostModel updateProfilePostModel) {
+        RestClient.getInstance().getService().UpdateProfile(updateProfilePostModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<GenerateOtpResponseModel>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(GenerateOtpResponseModel o) {
                         observer.onNext(o);
                     }
 

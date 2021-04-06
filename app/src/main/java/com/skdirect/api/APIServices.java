@@ -12,9 +12,9 @@ import com.skdirect.model.CartItemModel;
 import com.skdirect.model.ChangePasswordRequestModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.DeliveryOptionModel;
+import com.skdirect.model.GenerateOtpModel;
+import com.skdirect.model.GenerateOtpResponseModel;
 import com.skdirect.model.ItemAddModel;
-import com.skdirect.model.LoginResponseModel;
-import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.MallMainModel;
 import com.skdirect.model.MyOrderModel;
 import com.skdirect.model.MyOrderRequestModel;
@@ -33,16 +33,14 @@ import com.skdirect.model.SearchDataModel;
 import com.skdirect.model.SearchRequestModel;
 import com.skdirect.model.SellerDetailsModel;
 import com.skdirect.model.SellerProductMainModel;
-import com.skdirect.model.SellerProductModel;
 import com.skdirect.model.SellerProfileDataModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
+import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.UpdateTokenModel;
 import com.skdirect.model.UserLocationModel;
-import com.skdirect.viewmodel.ReViewViewMode;
 
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -52,24 +50,30 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface APIServices {
 
-    @GET("api/App/GetAppInfo")
+    @GET("api/NativeBuyer/Common/GetAppInfo")
     Call<AppVersionModel> getAppversion();
 
-    @POST("api/Notification/UpdateFcmId")
-    Observable<JsonObject> getUpdateToken(@Body UpdateTokenModel updateTokenModel);
+    /*@POST("api/Notification/UpdateFcmId")*/
+    @GET("api/NativeBuyer/Common/UpdateFcmId")
+    Observable<JsonObject> getUpdateToken(@Query("fcmId") String fcmId);
 
-    @GET("api/Buyer/Registration/GenerateOtp/{GenerateOtp}")
-    Call<LoginResponseModel> GenerateOtp(@Path("GenerateOtp") String GenerateOtp);
+    /*@GET("api/Buyer/Registration/GenerateOtp/{GenerateOtp}")
+    Call<LoginResponseModel> GenerateOtp(@Path("GenerateOtp") String GenerateOtp);*/
 
-    @POST("api/Buyer/Registration/VerfiyOtp")
+/*    @POST("api/Buyer/Registration/VerfiyOtp")
+    Call<OtpResponceModel> getVerfiyOtp(@Body OtpVerificationModel OtpVerificationModel);*/
+
+    @POST("/api/NativeBuyer/Login/verifyOtp")
     Observable<OtpResponceModel> getVerfiyOtp(@Body OtpVerificationModel OtpVerificationModel);
+
+    @POST("/api/NativeBuyer/Login/GenerateOtp")
+    Call<GenerateOtpResponseModel> GenerateOtp(@Body GenerateOtpModel generateOtpModel);
 
     @FormUrlEncoded
     @POST("/token")
@@ -172,6 +176,9 @@ public interface APIServices {
 
     @POST("api/buyer/Profile/UpdateUserDetail")
     Call<Boolean> UpdateUserDetail(@Body JsonObject jsonObject );
+
+    @POST("api/Native/BuyerProfile/UpdateBuyerProfile")
+    Observable<GenerateOtpResponseModel> UpdateProfile(@Body UpdateProfilePostModel updateProfilePostModel );
 
     @GET("api/buyer/Profile/MakeDefaultAddress/{MakeDefaultAddress}")
     Call<Boolean> MakeDefaultAddress(@Path("MakeDefaultAddress") int UserDetailId);

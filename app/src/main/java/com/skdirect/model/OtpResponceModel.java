@@ -3,40 +3,65 @@ package com.skdirect.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class OtpResponceModel {
     @Expose
-    @SerializedName("Userid")
-    private String Userid;
-
+    @SerializedName("ErrorMessage")
+    private String ErrorMessage;
     @Expose
-    @SerializedName("IsUserExist")
-    private Boolean IsUserExist;
-
+    @SerializedName("SuccessMessage")
+    private String SuccessMessage;
     @Expose
-    @SerializedName("AspNetUserId")
-    private String AspNetUserId;
-
-    public String getUserid() {
-        return Userid;
+    @SerializedName("IsSuccess")
+    private boolean IsSuccess;
+    @Expose
+    @SerializedName("ResultItem")
+    private LoginResponseModel.ResultItemEntity ResultItem;
+    @Expose
+    @SerializedName("ResultList")
+    private List<String> ResultList;
+    public String getErrorMessage() {
+        return ErrorMessage;
     }
 
-    public void setUserid(String userid) {
-        Userid = userid;
+    public String getSuccessMessage() {
+        return SuccessMessage;
     }
 
-    public Boolean getIsUserExist() {
-        return IsUserExist;
+    public boolean isSuccess() {
+        return IsSuccess;
     }
 
-    public void setIsUserExist(Boolean isUserExist) {
-        IsUserExist = isUserExist;
+    public LoginResponseModel.ResultItemEntity getResultItem() {
+        return ResultItem;
     }
 
-    public String getAspNetUserId() {
-        return AspNetUserId;
+    public List<String> getResultList() {
+        return ResultList;
     }
 
-    public void setAspNetUserId(String aspNetUserId) {
-        AspNetUserId = aspNetUserId;
+    public  class ResultItemEntity {
+        @Expose
+        @SerializedName("AspNetUserId")
+        private String AspNetUserId;
+        @Expose
+        @SerializedName("IsUserExist")
+        private String IsUserExist;
+        @Expose
+        @SerializedName("Userid")
+        private String Userid;
+
+        public String getAspNetUserId() {
+            return AspNetUserId;
+        }
+
+        public String getIsUserExist() {
+            return IsUserExist;
+        }
+
+        public String getUserid() {
+            return Userid;
+        }
     }
 }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -48,7 +49,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivityMainBinding mBinding;
+    public ActivityMainBinding mBinding;
     private boolean doubleBackToExitPressedOnce = false;
     private SharedPreferences sharedPreferences;
     public boolean positionChanged = false;
@@ -81,7 +82,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.llChnagePassword.setOnClickListener(this);
         mBinding.llChet.setOnClickListener(this);
         mBinding.llLogout.setOnClickListener(this);
-        mBinding.llLogout.setOnClickListener(this);
+        mBinding.llSignIn.setOnClickListener(this);
+        mBinding.llHowtoUse.setOnClickListener(this);
 
     }
 
@@ -206,6 +208,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.ll_logout:
                 clearSharePrefs();
                 startActivity(new Intent(getApplicationContext(), PlaceSearchActivity.class));
+                finish();
+                mBinding.drawer.closeDrawers();
+                break;
+                case  R.id.ll_sign_in:
+                startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+                mBinding.drawer.closeDrawers();
+                break;
+                case R.id.ll_howto_use:
+                    Intent intent = new Intent(Intent.ACTION_VIEW , Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop"));
+                    startActivity(intent);
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;

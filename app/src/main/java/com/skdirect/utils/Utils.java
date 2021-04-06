@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 
@@ -169,6 +170,10 @@ public class Utils {
         } else {
             return Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
         }
+    }
+
+    public static String getFcmToken() {
+        return  FirebaseInstanceId.getInstance().getToken();
     }
 
     public static String getFullAddress(Activity activity, double lat, double log) {

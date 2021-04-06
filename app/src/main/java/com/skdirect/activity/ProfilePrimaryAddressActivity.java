@@ -56,8 +56,6 @@ public class ProfilePrimaryAddressActivity extends AppCompatActivity implements 
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.toolbarTittle.tvTittle.setText("Address");
         mBinding.btAddNewAddresh.setOnClickListener(this);
-
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         mBinding.rvUserLocation.setLayoutManager(layoutManager);
     }
@@ -92,6 +90,7 @@ public class ProfilePrimaryAddressActivity extends AppCompatActivity implements 
                 Utils.hideProgressDialog();
                 if (locationModel != null) {
                     if (locationModel.size() > 0) {
+                        locationModelArrayList.clear();
                         locationModelArrayList.addAll(locationModel);
                         int position = 0;
                         for (int i = 0; i < locationModelArrayList.size(); i++) {
