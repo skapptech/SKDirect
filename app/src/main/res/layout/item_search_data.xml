@@ -50,6 +50,10 @@
                         android:layout_weight=".2"
                         android:layout_height="wrap_content"
                         android:maxLines="3"
+                        android:drawablePadding="1dp"
+                        android:gravity="center"
+                        android:drawableLeft="@drawable/ic_item_eye"
+                        android:visibility="gone"
                         style="@style/font_normal"
                         android:textColor="@color/black"
                         android:textSize="15dp"
@@ -57,7 +61,17 @@
 
                 </LinearLayout>
 
-
+                <TextView
+                    android:id="@+id/tv_pice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:text=""
+                    style="@style/font_normal"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
 
 
                 <LinearLayout

@@ -50,10 +50,13 @@ public class SearchDataModel {
         @SerializedName("NoofView")
         private int NoofView;
 
-
-
         @SerializedName("ImagePath")
         private String ImagePath;
+
+        @SerializedName("Uom")
+        private String Uom;
+
+
 
         @SerializedName("Measurement")
         private int Measurement;
@@ -127,6 +130,13 @@ public class SearchDataModel {
 
         public void setNoofView(int noofView) {
             NoofView = noofView;
+        }
+        public String getUom() {
+            return Uom;
+        }
+
+        public void setUom(String uom) {
+            Uom = uom;
         }
     }
 
