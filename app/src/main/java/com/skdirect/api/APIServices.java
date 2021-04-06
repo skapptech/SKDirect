@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.skdirect.model.AddReviewModel;
+import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.AddViewModel;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.AppVersionModel;
@@ -129,7 +130,7 @@ public interface APIServices {
     Call<CartItemModel> GetCartItems(@Path("GetCartItems") String GetSellerProductById);
 
     @GET("api/NativeBuyer/SellerProfile/AddProductView")
-    Call<Boolean> AddProductView(@Query("productId") int productID);
+    Call<AddViewMainModel> AddProductView(@Query("productId") int productID);
 
     @GET("api/NativeBuyer/SellerProfile/GetSellerDetail/{GetSellerDetail}")
     Call<SellerDetailsModel> GetSellerDetail(@Path("GetSellerDetail") int GetSellerDetail);
@@ -138,7 +139,7 @@ public interface APIServices {
     Call<SellerProductMainModel> GetSellerProduct(@Body SellerProfileDataModel paginationModel);
 
     @POST("api/NativeBuyer/SellerProfile/AddStoreView")
-    Call<Boolean> AddStoreView(@Body AddViewModel paginationModel);
+    Call<AddViewMainModel> AddStoreView(@Body AddViewModel paginationModel);
 
     @POST("api/NativeBuyer/SellerProfile/AddCart")
     Call<AddCartItemModel> AddCart(@Body ItemAddModel itemAddModel);

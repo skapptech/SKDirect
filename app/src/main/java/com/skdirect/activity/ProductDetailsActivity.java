@@ -27,6 +27,7 @@ import com.skdirect.adapter.TopSimilarSellerAdapter;
 import com.skdirect.databinding.ActivityProductDetailsBinding;
 import com.skdirect.interfacee.BottomBarInterface;
 import com.skdirect.model.AddCartItemModel;
+import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.ImageListModel;
 import com.skdirect.model.ItemAddModel;
@@ -249,10 +250,13 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
     private void addProduct() {
         productDetailsViewMode.getAddProductVMRequest(productID);
-        productDetailsViewMode.getAddProductVM().observe(this, new Observer<Boolean>() {
+        productDetailsViewMode.getAddProductVM().observe(this, new Observer<AddViewMainModel>() {
             @Override
-            public void onChanged(Boolean aBoolean) {
+            public void onChanged(AddViewMainModel aBoolean) {
                 Utils.hideProgressDialog();
+                if (aBoolean.isSuccess()){
+
+                }
 
             }
 
