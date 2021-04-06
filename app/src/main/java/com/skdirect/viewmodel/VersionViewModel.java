@@ -19,14 +19,14 @@ import retrofit2.Response;
 
 public class VersionViewModel extends ViewModel {
     final String TAG = getClass().getSimpleName();
-
     private MutableLiveData<AppVersionModel> mutableLiveData;
 
     public LiveData<AppVersionModel> getVersion() {
-        if(mutableLiveData==null){
+        if(mutableLiveData==null)
+        {
             mutableLiveData = new MutableLiveData<>();
-            mutableLiveData = requestHolidays();
         }
+        mutableLiveData = requestHolidays();
         return mutableLiveData;
     }
 

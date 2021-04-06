@@ -247,8 +247,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private void searchData() {
         String searchSellerName = mBinding.etSearchSeller.getText().toString().trim();
         startActivity(new Intent(getActivity(), SearchActivity.class).putExtra("searchSellerName", searchSellerName));
-
-
     }
 
     private void getLoginData() {
@@ -257,9 +255,16 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             public void onChanged(CustomerDataModel customerDataModel) {
                 Utils.hideProgressDialog();
                 if (customerDataModel != null) {
-                    activity.userNameTV.setText(customerDataModel.getFirstName());
-                    activity.mobileNumberTV.setText(customerDataModel.getMobileNo());
+                    if( SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE)){
+                        activity.userNameTV.setText(customerDataModel.getFirstName());
+                        activity.mBinding.llLogout.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        activity.userNameTV.setText(R.string.guest_user);
+                        activity.mBinding.llSignIn.setVisibility(View.VISIBLE);
+                    }
 
+                    activity.mobileNumberTV.setText(customerDataModel.getMobileNo());
                     SharePrefs.getInstance(activity).putString(SharePrefs.FIRST_NAME, customerDataModel.getFirstName());
                     SharePrefs.getInstance(activity).putString(SharePrefs.MIDDLE_NAME, customerDataModel.getMiddleName());
                     SharePrefs.getInstance(activity).putString(SharePrefs.USER_NAME, customerDataModel.getUserName());

@@ -49,9 +49,7 @@ public class SplashActivity extends AppCompatActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
         versionViewModel = ViewModelProviders.of(this).get(VersionViewModel.class);
         activity = this;
-
         initViews();
-
     }
 
     private void initViews() {
@@ -84,12 +82,15 @@ public class SplashActivity extends AppCompatActivity {
             public void onChanged(AppVersionModel appVersionModels) {
                 mBinding.pBar.setVisibility(View.GONE);
                 if (appVersionModels != null) {
-                    if (BuildConfig.VERSION_NAME.equals(appVersionModels.getVersion())){
-                        launchHomeScreen();
-                        finish();
-                    }else{
-                        checkVersionData(appVersionModels);
+                    if(appVersionModels.isSuccess()){
+                        if (BuildConfig.VERSION_NAME.equals(appVersionModels.getResultItem().getVersion())){
+                            launchHomeScreen();
+                            finish();
+                        }else{
+                            checkVersionData(appVersionModels);
+                        }
                     }
+
                 }
             }
         });
@@ -106,22 +107,22 @@ public class SplashActivity extends AppCompatActivity {
 
     private void checkVersionData(AppVersionModel appVersionModels) {
         try {
-            SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL,appVersionModels.getSellerUrl());
-            SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL,appVersionModels.getBuyerUrl());
-            if (BuildConfig.VERSION_NAME.equalsIgnoreCase(appVersionModels.getVersion())) {
-                SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.APP_VERSION, appVersionModels.getVersion());
-
-            }else {
+            SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL,appVersionModels.getResultItem().getSellerUrl());
+            SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL,appVersionModels.getResultItem().getBuyerUrl());
+            if (BuildConfig.VERSION_NAME.equalsIgnoreCase(appVersionModels.getResultItem().getVersion())) {
+                SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.APP_VERSION, appVersionModels.getResultItem().getVersion());
+            }
+            else {
                 @SuppressLint("RestrictedApi") AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.Base_Theme_AppCompat_Dialog));
                 alertDialogBuilder.setTitle("Update Available");
-                alertDialogBuilder.setMessage("Please update the latest version " + appVersionModels.getVersion() + " from play store");
+                alertDialogBuilder.setMessage("Please update the latest version " + appVersionModels.getResultItem().getVersion() + " from play store");
                 alertDialogBuilder.setCancelable(false);
                 alertDialogBuilder.setPositiveButton("Update", (dialog, id) -> {
                     dialog.cancel();
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="+activity.getPackageName())));
                 });
-                alertDialogBuilder.setNegativeButton("Cancel", (dialog, i) -> {
-                    dialog.cancel();
+                alertDialogBuilder.setNegativeButton(R.string.skip, (dialog, i) -> {
+                    startActivity(new Intent(this,MainActivity.class));
                     finish();
                 });
                 alertDialogBuilder.show();

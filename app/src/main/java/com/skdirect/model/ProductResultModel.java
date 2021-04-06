@@ -14,6 +14,8 @@ public class ProductResultModel {
     public ArrayList<VariationListModel> VariationListModel;
     @SerializedName("ProductVariantAttributeDC")
     private ArrayList<ProductVariantAttributeDCModel> ProductVariantAttributeDC;
+    @SerializedName("DeliveryOptionDC")
+    private ArrayList<DeliveryOptionModel> DeliveryOptionDC;
     @SerializedName("EncryptSellerId")
     public String EncryptSellerId;
     @SerializedName("StockId")
@@ -374,5 +376,12 @@ public class ProductResultModel {
 
     public void setId(int id) {
         Id = id;
+    }
+    public ArrayList<DeliveryOptionModel> getDeliveryOptionDC() {
+        return DeliveryOptionDC;
+    }
+
+    public void setDeliveryOptionDC(ArrayList<DeliveryOptionModel> deliveryOptionDC) {
+        DeliveryOptionDC = deliveryOptionDC;
     }
 }

@@ -1,40 +1,70 @@
 package com.skdirect.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class AppVersionModel implements Serializable {
-    @SerializedName("Version")
-    private String Version;
+public  class AppVersionModel implements Serializable {
 
-    @SerializedName("SellerUrl")
-    private String SellerUrl;
 
-    @SerializedName("BuyerUrl")
-    private String BuyerUrl;
+    @Expose
+    @SerializedName("ErrorMessage")
+    private String ErrorMessage;
+    @Expose
+    @SerializedName("SuccessMessage")
+    private String SuccessMessage;
+    @Expose
+    @SerializedName("IsSuccess")
+    private boolean IsSuccess;
+    @Expose
+    @SerializedName("ResultItem")
+    private ResultItemEntity ResultItem;
 
-    public String getVersion() {
-        return Version;
+    public String getErrorMessage() {
+        return ErrorMessage;
     }
 
-    public void setVersion(String version) {
-        Version = version;
+    public String getSuccessMessage() {
+        return SuccessMessage;
     }
 
-    public String getSellerUrl() {
-        return SellerUrl;
+    public boolean isSuccess() {
+        return IsSuccess;
     }
 
-    public void setSellerUrl(String sellerUrl) {
-        SellerUrl = sellerUrl;
+    public ResultItemEntity getResultItem() {
+        return ResultItem;
     }
+    public  class ResultItemEntity {
+        @Expose
+        @SerializedName("IsCompulsory")
+        private boolean IsCompulsory;
+        @Expose
+        @SerializedName("BuyerUrl")
+        private String BuyerUrl;
+        @Expose
+        @SerializedName("SellerUrl")
+        private String SellerUrl;
+        @Expose
+        @SerializedName("Version")
+        private String Version;
 
-    public String getBuyerUrl() {
-        return BuyerUrl;
-    }
+        public boolean isCompulsory() {
+            return IsCompulsory;
+        }
 
-    public void setBuyerUrl(String buyerUrl) {
-        BuyerUrl = buyerUrl;
+        public String getBuyerUrl() {
+            return BuyerUrl;
+        }
+
+        public String getSellerUrl() {
+            return SellerUrl;
+        }
+
+        public String getVersion() {
+            return Version;
+        }
+
     }
 }

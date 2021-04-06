@@ -364,7 +364,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                                 mBinding.tvDiscount.setText(""+DiscountAmount+"OFF");
                                 mBinding.tvItemMrpOff.setPaintFlags(mBinding.tvItemMrpOff.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             }
-                            
+
 
                             if (productDataModel.getResultItem().getVariationModelList().get(i).getOffPercentage()!=0.0) {
                                 mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
@@ -407,6 +407,14 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         mBinding.tvItemMrpOff.setText(String.valueOf(productDataModel.getResultItem().getSellingPrice()));
                         mBinding.tvAddresh.setText(productDataModel.getResultItem().getAddressOne()+" "+productDataModel.getResultItem().getAddressTwo() + "\n- "+productDataModel.getResultItem().getPincode()+"("+productDataModel.getResultItem().getState()+")");
 
+                        if (productDataModel.getResultItem().getDeliveryOptionDC().size()>0){
+                            mBinding.llDeliverOption.setVisibility(View.VISIBLE);
+                            String deliveryOption = "";
+                            for (int j = 0; j <productDataModel.getResultItem().getDeliveryOptionDC().size() ; j++) {
+                                deliveryOption = deliveryOption+" "+ productDataModel.getResultItem().getDeliveryOptionDC().get(j).getDelivery();
+                            }
+                            mBinding.tvDeliveryOption.setText(deliveryOption);
+                        }
 
                         if (productDataModel.getResultItem().getDiscountAmount()==0.0){
                           double DiscountAmount = productDataModel.getResultItem().getSellingPrice()-productDataModel.getResultItem().getDiscountAmount();
@@ -420,8 +428,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         }
                         mBinding.tvQuantity.setText("Quantity "+productDataModel.getResultItem().getMeasurement()+" "+productDataModel.getResultItem().getUomValue());
                         mBinding.tvShopName.setText(productDataModel.getResultItem().getShopName());
-
-
                         if (productDataModel.getResultItem().getProductVariantSpecification() != null && productDataModel.getResultItem().getProductVariantSpecification().size() > 0) {
                             for (int i = 0; i < productDataModel.getResultItem().getProductVariantSpecification().size(); i++) {
 
@@ -449,9 +455,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
                             }
                         }
-
-
-
                         mBinding.pager.setAdapter(new ShowImagesAdapter(ProductDetailsActivity.this, imageListModels));
                         mBinding.indicator.setViewPager(mBinding.pager);
 
