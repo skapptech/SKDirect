@@ -1,7 +1,11 @@
 package com.skdirect.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -21,6 +25,8 @@ public class MyOrderActivity extends AppCompatActivity implements View.OnClickLi
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_my_order);
 
         initView();
+
+
     }
 
     private void initView() {

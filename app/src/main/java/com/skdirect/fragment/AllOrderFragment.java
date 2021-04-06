@@ -2,9 +2,12 @@ package com.skdirect.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,6 +47,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     private int pastVisiblesItems = 0;
     private int visibleItemCount = 0;
     private int totalItemCount = 0;
+    private int orderId = 0;
     private boolean loading = true;
     private MyOrderAdapter myOrderAdapter;
 
@@ -69,8 +73,24 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initialization();
-    }
 
+        mBinding.etSearchOrder.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    searchData();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+    }
+    private void searchData() {
+        orderId = Integer.parseInt(mBinding.etSearchOrder.getText().toString().trim());
+        skipCount = 0;
+        callMyOrder();
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -86,6 +106,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
         orderModelArrayList.clear();
         myOrderAdapter = new MyOrderAdapter(activity, orderModelArrayList);
         mBinding.rMyOrder.setAdapter(myOrderAdapter);
+        orderId = 0;
         callMyOrder();
     }
 
@@ -115,6 +136,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
                             loading = false;
                             skipCount=skipCount+10;
                             // mBinding.progressBar.setVisibility(View.VISIBLE);
+                            orderId = 0;
                             callMyOrder();
                         }
                     }
@@ -122,7 +144,9 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         });
         orderModelArrayList.clear();
+        orderId = 0;
         callMyOrder();
+
     }
 
     private void callMyOrder() {
@@ -134,7 +158,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void myOrderAPI() {
-        MyOrderRequestModel myOrderRequestModel = new MyOrderRequestModel("",0,takeCount,skipCount,type,0);
+        MyOrderRequestModel myOrderRequestModel = new MyOrderRequestModel("",0,takeCount,skipCount,type, orderId);
         myOrderViewMode.getCategoriesViewModelRequest(myOrderRequestModel);
         myOrderViewMode.getCategoriesViewModel().observe(this, new Observer<ArrayList<MyOrderModel>>() {
             @Override
