@@ -342,24 +342,21 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
     private void cartItemsAPI() {
         productDetailsViewMode.getCartItemsVMRequest("123");
-        productDetailsViewMode.getCartItemsVM().observe(this, new Observer<CartItemModel>() {
-            @Override
-            public void onChanged(CartItemModel model) {
-                Utils.hideProgressDialog();
-                itemQuatntiy =0;
-                Utils.hideProgressDialog();
-                if (model != null && model.getCart()!=null) {
-                    cartItemModel = model;
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CART_ITEM_ID, model.getId());
-                    for (int i = 0; i < model.getCart().size(); i++) {
-                        mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
-                        itemQuatntiy += model.getCart().get(i).getQuantity();
-                        mBinding.toolbarTittle.cartBadge.setText(String.valueOf(Math.min(itemQuatntiy, 99)));
-                    }
-
+        productDetailsViewMode.getCartItemsVM().observe(this, model -> {
+            Utils.hideProgressDialog();
+            itemQuatntiy =0;
+            Utils.hideProgressDialog();
+            if (model != null && model.getCart()!=null) {
+                cartItemModel = model;
+                SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CART_ITEM_ID, model.getId());
+                for (int i = 0; i < model.getCart().size(); i++) {
+                    mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
+                    itemQuatntiy += model.getCart().get(i).getQuantity();
+                    mBinding.toolbarTittle.cartBadge.setText(String.valueOf(Math.min(itemQuatntiy, 99)));
                 }
 
             }
+
         });
     }
 
