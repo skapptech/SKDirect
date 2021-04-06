@@ -53,6 +53,10 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         DecimalFormat precision = new DecimalFormat("0.00");
         holder.mBinding.tvPriceOff.setText(precision.format(offPersentagePrice*100));
 
+        if (model.getNoofView()>0){
+
+        }
+
 
 
 
