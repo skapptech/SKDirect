@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -26,12 +27,14 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonObject;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityMainBinding;
+import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.fragment.BasketFragment;
 import com.skdirect.fragment.HomeFragment;
 import com.skdirect.model.CartItemModel;
@@ -77,6 +80,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_FETCH_LANGUAGE)) {
+            new FirebaseLanguageFetch(getApplicationContext()).fetchLanguage();
+        }
+    }
+
 
     private void clickListener() {
         mBinding.llProfile.setOnClickListener(this);
@@ -85,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.llLogout.setOnClickListener(this);
         mBinding.llSignIn.setOnClickListener(this);
         mBinding.llHowtoUse.setOnClickListener(this);
+        mBinding.llChangeLanguage.setOnClickListener(this);
 
     }
 
@@ -241,6 +253,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;
+            case R.id.llChangeLanguage:
+                startActivity(new Intent(getApplicationContext(), ChangeLanguageActivity.class));
+                mBinding.drawer.closeDrawers();
+                break;
+
         }
     }
 

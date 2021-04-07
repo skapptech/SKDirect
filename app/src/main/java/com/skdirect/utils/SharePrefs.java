@@ -50,7 +50,8 @@ public class SharePrefs {
     public static final String BUSINESS_TYPE ="BusinessType";
     public static final String DELIVERY ="delivery";
     public static final String SELECTED_LANGUAGE ="selectedLanguage";
-
+    public static final String IS_FETCH_LANGUAGE = "is_fetch_language";
+    public static final String LAST_LANGUAGE_UPDATE_DATE = "last_language_update_date";
 
 
     private Context ctx;
