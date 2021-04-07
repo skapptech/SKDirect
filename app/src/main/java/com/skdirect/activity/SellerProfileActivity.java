@@ -191,7 +191,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     }
 
     private void getSellerProductsApi(String searchSellerName) {
-        SellerProfileDataModel paginationModel = new SellerProfileDataModel(sellerID, 0, 0, "", skipCount, takeCount, 0, searchSellerName,Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)),Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LON)));
+        SellerProfileDataModel paginationModel = new SellerProfileDataModel(sellerID, 0, 0, "", skipCount, takeCount, 0, searchSellerName,Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)),Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON)));
         sellerProfileViewMode.getSellerProductRequest(paginationModel);
         sellerProfileViewMode.getSellerProductVM().observe(this, new Observer<SellerProductMainModel>() {
             @Override

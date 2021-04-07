@@ -180,8 +180,8 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                     }
                     String cityName = addresses.get(0).getLocality();
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CITYNAME,cityName);
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAT, String.valueOf(lat));
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LON, String.valueOf(lng));
+                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LAT,String.valueOf(lat));
+                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LON, String.valueOf(lng));
                     Log.e("cityName", "cityName  "+cityName);
                     startActivity(new Intent(MapsExtendedActivity.this,MainActivity.class));
                     finish();

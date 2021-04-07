@@ -18,6 +18,7 @@ public class SharePrefs {
     public static final String RESULT = "Result";
     public static final String USER_ID = "Userid";
     public static final String IS_LOGIN ="is_loggedIn";
+    public static final String Is_First_Time ="Is_First_Time";
     public static final String TOKEN ="access_token";
     public static final String USER_NAME ="user_name";
     public static final String USER_IMAGE ="user_image";
@@ -53,7 +54,7 @@ public class SharePrefs {
 
 
     private Context ctx;
-    private SharedPreferences sharedPreferences;
+    public SharedPreferences sharedPreferences;
     private static SharePrefs instance;
 
 
@@ -94,9 +95,20 @@ public class SharePrefs {
         return sharedPreferences.getInt(key, 0);
     }
 
+    public static Boolean getSharedPreferences(Context context, String name) {
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
+        return settings.getBoolean(name,false );
+    }
+
+    public static void setSharedPreference(Context context, String name, boolean value) {
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(name, value);
+        editor.apply();
+    }
     public static String getStringSharedPreferences(Context context, String name) {
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
-        return settings.getString(name, "");
+        return settings.getString(name,"" );
     }
 
     public static void setStringSharedPreference(Context context, String name, String value) {

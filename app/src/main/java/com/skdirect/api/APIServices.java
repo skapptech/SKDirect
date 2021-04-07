@@ -92,7 +92,6 @@ public interface APIServices {
     @GET("api/buyer/SkAppHome/GetTopNearByItem")
     Call<ArrayList<TopNearByItemModel>> GetTopNearByItem();
 
-
     @GET("api/buyer/SkAppHome/GetTopSeller")
     Call<ArrayList<TopSellerModel>> GetTopSeller();
 
@@ -185,7 +184,7 @@ public interface APIServices {
     Call<Boolean> UpdateUserDetail(@Body JsonObject jsonObject );
 
 
-    @POST("api/NativeBuyer/BuyerProfile")
+    @POST("api/NativeBuyer/BuyerProfile/UpdateBuyerProfile")
     Observable<ProfileResponseModel> UpdateProfile(@Body UpdateProfilePostModel updateProfilePostModel );
 
     @GET("api/buyer/Profile/MakeDefaultAddress/{MakeDefaultAddress}")

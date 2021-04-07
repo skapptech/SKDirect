@@ -1,5 +1,14 @@
 package com.skdirect.activity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,35 +17,19 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-
 import com.bumptech.glide.Glide;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
-import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivitySplashBinding;
 import com.skdirect.model.AppVersionModel;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.VersionViewModel;
 
-import java.util.List;
-
-import io.reactivex.observers.DisposableObserver;
-
 public class SplashActivity extends AppCompatActivity {
     private ActivitySplashBinding mBinding;
-   private SplashActivity activity;
-   private VersionViewModel versionViewModel;
+    private SplashActivity activity;
+    private VersionViewModel versionViewModel;
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -69,7 +62,7 @@ public class SplashActivity extends AppCompatActivity {
             if (Utils.isNetworkAvailable(activity)) {
                 getAppVersionApi();
             } else {
-                Utils.setToast(getBaseContext(),"No Internet Connection!!");
+                Utils.setToast(getBaseContext(), "No Internet Connection!!");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,11 +75,11 @@ public class SplashActivity extends AppCompatActivity {
             public void onChanged(AppVersionModel appVersionModels) {
                 mBinding.pBar.setVisibility(View.GONE);
                 if (appVersionModels != null) {
-                    if(appVersionModels.isSuccess()){
-                        if (BuildConfig.VERSION_NAME.equals(appVersionModels.getResultItem().getVersion())){
+                    if (appVersionModels.isSuccess()) {
+                        if (BuildConfig.VERSION_NAME.equals(appVersionModels.getResultItem().getVersion())) {
                             launchHomeScreen();
                             finish();
-                        }else{
+                        } else {
                             checkVersionData(appVersionModels);
                         }
                     }
@@ -98,31 +91,47 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void launchHomeScreen() {
-        if (SharePrefs.getInstance(SplashActivity.this).getBoolean(SharePrefs.IS_LOGIN)){
-            startActivity(new Intent(this,MainActivity.class));
-        }else {
-            startActivity(new Intent(this,PlaceSearchActivity.class));
+        if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)) {
+            if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                startActivity(new Intent(this, MainActivity.class));
+            } else {
+                startActivity(new Intent(this, LoginActivity.class));
+            }
+
+        } else {
+            if (SharePrefs.getSharedPreferences(getApplicationContext(),SharePrefs.Is_First_Time)) {
+                if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+
+                    startActivity(new Intent(this, MainActivity.class));
+                } else {
+                    startActivity(new Intent(this, LoginActivity.class));
+
+                }
+            } else {
+                startActivity(new Intent(this, PlaceSearchActivity.class));
+            }
+
+
         }
     }
 
     private void checkVersionData(AppVersionModel appVersionModels) {
         try {
-            SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL,appVersionModels.getResultItem().getSellerUrl());
-            SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL,appVersionModels.getResultItem().getBuyerUrl());
+            SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL, appVersionModels.getResultItem().getSellerUrl());
+            SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL, appVersionModels.getResultItem().getBuyerUrl());
             if (BuildConfig.VERSION_NAME.equalsIgnoreCase(appVersionModels.getResultItem().getVersion())) {
-                SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.APP_VERSION, appVersionModels.getResultItem().getVersion());
-            }
-            else {
+
+            } else {
                 @SuppressLint("RestrictedApi") AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.Base_Theme_AppCompat_Dialog));
                 alertDialogBuilder.setTitle("Update Available");
                 alertDialogBuilder.setMessage("Please update the latest version " + appVersionModels.getResultItem().getVersion() + " from play store");
                 alertDialogBuilder.setCancelable(false);
                 alertDialogBuilder.setPositiveButton("Update", (dialog, id) -> {
                     dialog.cancel();
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="+activity.getPackageName())));
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + activity.getPackageName())));
                 });
                 alertDialogBuilder.setNegativeButton(R.string.skip, (dialog, i) -> {
-                    startActivity(new Intent(this,MainActivity.class));
+                    startActivity(new Intent(this, MainActivity.class));
                     finish();
                 });
                 alertDialogBuilder.show();

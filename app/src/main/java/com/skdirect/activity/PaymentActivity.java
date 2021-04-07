@@ -91,7 +91,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.tv_place_order:
-                if (SharePrefs.getInstance(PaymentActivity.this).getBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE)) {
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)) {
                     OrderPlaceAlertDialog();
                 } else {
                     Toast.makeText(this, "Complete Your Profile", Toast.LENGTH_SHORT).show();

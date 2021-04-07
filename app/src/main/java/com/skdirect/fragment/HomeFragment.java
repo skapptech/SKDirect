@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             getSellerAPi();
             getAllCategoriesAPi();
         } else {
-           //mBinding.swiperefresh.setVisibility(View.GONE);
+            //mBinding.swiperefresh.setVisibility(View.GONE);
         }
 
 
@@ -124,7 +124,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             public void onChanged(MallMainModel mallMainModel) {
                 Utils.hideProgressDialog();
                 if (mallMainModel.getResultItem() != null) {
-                    MallCategorieBannerAdapter mallCategorieBannerAdapter = new MallCategorieBannerAdapter(getActivity(),mallMainModel.getResultItem().getStoreCategoryList());
+                    MallCategorieBannerAdapter mallCategorieBannerAdapter = new MallCategorieBannerAdapter(getActivity(), mallMainModel.getResultItem().getStoreCategoryList());
                     mBinding.rvStoreCategoryList.setAdapter(mallCategorieBannerAdapter);
                     mBinding.llMainAppHome.setVisibility(View.GONE);
                     mBinding.llMallHome.setVisibility(View.VISIBLE);
@@ -181,7 +181,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         homeViewModel.getAllCategoriesLiveData().observe(this, new Observer<ArrayList<AllCategoriesModel>>() {
             @Override
             public void onChanged(ArrayList<AllCategoriesModel> allCategoriesList) {
-               // mBinding.swiperefresh.setRefreshing(false);
+                // mBinding.swiperefresh.setRefreshing(false);
                 if (allCategoriesList.size() > 0) {
                     AllCategoriesAdapter allCategoriesAdapter = new AllCategoriesAdapter(getActivity(), allCategoriesList);
                     mBinding.rvAllCetegory.setAdapter(allCategoriesAdapter);
@@ -255,8 +255,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             public void onChanged(CustomerDataModel customerDataModel) {
                 Utils.hideProgressDialog();
                 if (customerDataModel != null) {
-
-
                     activity.mobileNumberTV.setText(customerDataModel.getMobileNo());
                     SharePrefs.getInstance(activity).putString(SharePrefs.FIRST_NAME, customerDataModel.getFirstName());
                     SharePrefs.getInstance(activity).putString(SharePrefs.MIDDLE_NAME, customerDataModel.getMiddleName());
@@ -275,7 +273,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     SharePrefs.getInstance(activity).putInt(SharePrefs.PIN_CODE_master, customerDataModel.getPinCodeMasterId());
                     SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_ACTIVE, customerDataModel.isActive());
                     SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_DELETE, customerDataModel.isDelete());
-                    SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE, customerDataModel.isRegistrationComplete());
+                    SharePrefs.setSharedPreference(activity, SharePrefs.IS_REGISTRATIONCOMPLETE, customerDataModel.isRegistrationComplete());
 
                     if (customerDataModel.getUserDeliveryDC() != null && customerDataModel.getUserDeliveryDC().size() > 0) {
                         for (int i = 0; i < customerDataModel.getUserDeliveryDC().size(); i++) {
@@ -284,13 +282,12 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                             SharePrefs.getInstance(activity).putInt(SharePrefs.USER_DC_ID, customerDataModel.getUserDeliveryDC().get(i).getId());
                             SharePrefs.getInstance(activity).putInt(SharePrefs.USER_DC_USER_ID, customerDataModel.getUserDeliveryDC().get(i).getUserId());
                             SharePrefs.getInstance(activity).putString(SharePrefs.DELIVERY, customerDataModel.getUserDeliveryDC().get(i).getDelivery());
-
                         }
-                        if(customerDataModel.isRegistrationComplete()){
+
+                        if (customerDataModel.isRegistrationComplete() && SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_LOGIN)) {
                             activity.userNameTV.setText(customerDataModel.getFirstName());
                             activity.mBinding.llLogout.setVisibility(View.VISIBLE);
-                        }
-                        else{
+                        } else {
                             activity.userNameTV.setText(R.string.guest_user);
                             activity.mBinding.llSignIn.setVisibility(View.VISIBLE);
                         }

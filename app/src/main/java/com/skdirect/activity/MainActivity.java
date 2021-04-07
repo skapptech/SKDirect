@@ -55,11 +55,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SharedPreferences sharedPreferences;
     public boolean positionChanged = false;
     public Toolbar appBarLayout;
-    public TextView userNameTV, mobileNumberTV,setLocationTV;
+    public TextView userNameTV, mobileNumberTV, setLocationTV;
     private MainActivityViewMode mainActivityViewMode;
     public static CartItemModel cartItemModel;
-    private int  itemQuatntiy;
-
+    private int itemQuatntiy;
 
 
     @Override
@@ -68,11 +67,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainActivityViewMode = ViewModelProviders.of(this).get(MainActivityViewMode.class);
         Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
-        openFragment(new HomeFragment());
         initView();
+        openFragment(new HomeFragment());
         setlocationInHader();
         clickListener();
         setupBadge();
+
         ///callRunTimePermissions();
 
     }
@@ -119,11 +119,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case R.id.nav_profile:
                     positionChanged = true;
-                    startActivity(new Intent(MainActivity.this,ProfileActivity.class));
+                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                    }
+                    else{
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    }
+
                     break;
                 case R.id.nav_my_order:
                     positionChanged = true;
-                    startActivity(new Intent(MainActivity.this,MyOrderActivity.class));
+                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                        startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
+                    }
+                    else{
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+
+                    }
                     break;
                 case R.id.nav_basket:
                     positionChanged = true;
@@ -137,20 +149,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.toolbarId.notifictionCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,CartActivity.class));
+                startActivity(new Intent(MainActivity.this, CartActivity.class));
             }
         });
 
         setLocationTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(MainActivity.this,MapsExtendedActivity.class),2);
+                startActivityForResult(new Intent(MainActivity.this, MapsExtendedActivity.class), 2);
             }
         });
 
         if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.USER_IMAGE))) {
             Glide.with(this)
-                    .load( SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.USER_IMAGE))
+                    .load(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.USER_IMAGE))
                     .centerCrop()
                     .into(mBinding.profileImageNav);
         } else {
@@ -159,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setlocationInHader() {
-        setLocationTV.setText(Utils.getCityName(this,Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)), Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LON))));
+        setLocationTV.setText(Utils.getCityName(this, Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)), Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON))));
     }
 
     @Override
@@ -174,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     return;
                 }
                 doubleBackToExitPressedOnce = true;
-                Snackbar.make(mBinding.drawer, "Please click back again to exit",
+                Snackbar.make(mBinding.drawer, getString(R.string.back_again),
                         Snackbar.LENGTH_SHORT).show();
                 new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
             } else {
@@ -201,39 +213,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_profile:
-                startActivity(new Intent(MainActivity.this,ProfileActivity.class));
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                }
+                else{
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_chnage_password:
-                startActivity(new Intent(MainActivity.this,ChangePasswordActivity.class));
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                    startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
+                }
+                else{
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_chet:
                 Utils.setToast(getApplicationContext(), "Chet");
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+
+                }
+                else{
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_logout:
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 clearSharePrefs();
-                if (SharePrefs.getInstance(this).getBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE)) {
-                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                }
-                else{
-                    startActivity(new Intent(getApplicationContext(), PlaceSearchActivity.class));
-                }
-
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;
-                case  R.id.ll_sign_in:
+            case R.id.ll_sign_in:
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
-                case R.id.ll_howto_use:
-                    Intent intent = new Intent(Intent.ACTION_VIEW , Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop"));
-                    startActivity(intent);
+            case R.id.ll_howto_use:
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop"));
+                startActivity(intent);
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;
@@ -245,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setupBadge() {
-       // int CartItemCount = SharePrefs.getInstance(MainActivity.this).getInt(SharePrefs.COUNT);
+        // int CartItemCount = SharePrefs.getInstance(MainActivity.this).getInt(SharePrefs.COUNT);
         if (itemQuatntiy == 0) {
             if (mBinding.toolbarId.cartBadge.getVisibility() != View.GONE) {
                 mBinding.toolbarId.cartBadge.setVisibility(View.GONE);
@@ -264,9 +286,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainActivityViewMode.getCartItemsVM().observe(this, new Observer<CartItemModel>() {
             @Override
             public void onChanged(CartItemModel model) {
-                itemQuatntiy =0;
+                itemQuatntiy = 0;
                 Utils.hideProgressDialog();
-                if (model != null && model.getCart()!=null) {
+                if (model != null && model.getCart() != null) {
                     cartItemModel = model;
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CART_ITEM_ID, model.getId());
                     for (int i = 0; i < model.getCart().size(); i++) {
@@ -280,17 +302,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
-        if(requestCode==2)
-        {
+        if (requestCode == 2) {
             if (requestCode == 2 && resultCode == RESULT_OK) {
-                Address address=data.getParcelableExtra("address");
+                Address address = data.getParcelableExtra("address");
                 double lat = address.getLatitude();
                 double log = address.getLongitude();
-                setLocationTV.setText(Utils.getCityName(this,lat,log));
+                setLocationTV.setText(Utils.getCityName(this, lat, log));
             }
 
         }
@@ -317,8 +337,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         e.printStackTrace();
                     }
                     String cityName = addresses.get(0).getLocality();
-                    Log.e("cityName", "cityName  "+cityName);
-                   setLocationTV.setText(cityName);
+                    Log.e("cityName", "cityName  " + cityName);
+                    setLocationTV.setText(cityName);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -336,9 +356,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onGranted() {
                 Log.e("onDenied", "onGranted");
-                GPSTracker  gpsTracker = new GPSTracker(getApplicationContext());
-                if (gpsTracker!=null){
-                    callLocationAPI(gpsTracker.getLatitude(),gpsTracker.getLongitude());
+                GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
+                if (gpsTracker != null) {
+                    callLocationAPI(gpsTracker.getLatitude(), gpsTracker.getLongitude());
                 }
             }
 
