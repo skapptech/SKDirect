@@ -223,6 +223,10 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 cartItemList.remove(position);
                 cartListAdapter.notifyDataSetChanged();
             }
+            if (cartItemList.size() == 0) {
+                mBinding.rlCheckOut.setVisibility(View.GONE);
+                mBinding.blankBasket.setVisibility(View.VISIBLE);
+            }
         });
     }
 }
