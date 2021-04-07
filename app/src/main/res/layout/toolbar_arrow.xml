@@ -1,5 +1,4 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -10,8 +9,7 @@
             android:id="@+id/arrow_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?colorPrimary"
-           >
+            android:background="?colorPrimary">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -22,44 +20,44 @@
                     android:id="@+id/iv_back_press"
                     android:layout_width="30dp"
                     android:layout_height="?attr/actionBarSize"
-                    android:padding="2dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_baseline_arrow_back_24"/>
+                    android:padding="2dp"
+                    android:src="@drawable/ic_baseline_arrow_back_24" />
 
 
                 <TextView
                     android:id="@+id/tv_tittle"
+                    style="@style/font_normal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginStart="5dp"
                     android:layout_toRightOf="@+id/iv_back_press"
-                    android:text=""
-                    style="@style/font_normal"
-                    android:textStyle="bold"
                     android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/white"
                     android:textSize="20dp"
-                    android:textColor="@color/white"/>
+                    android:textStyle="bold" />
 
 
                 <TextView
                     android:id="@+id/tv_store_view"
+                    style="@style/font_normal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
-                    android:padding="5dp"
-                    android:drawablePadding="5dp"
-                    android:drawableLeft="@drawable/ic_eye"
-                    android:background="@drawable/drwable_view"
+                    android:layout_centerVertical="true"
                     android:layout_marginRight="55dp"
-                    android:visibility="gone"
-                    android:text=""
-                    style="@style/font_normal"
-                    android:textStyle="bold"
+                    android:background="@drawable/drwable_view"
+                    android:drawableLeft="@drawable/ic_eye"
+                    android:drawablePadding="5dp"
                     android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textColor="@color/seller_button_color"
                     android:textSize="12dp"
-                    android:textColor="@color/seller_button_color"/>
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <FrameLayout
                     android:id="@+id/notifiction_count"
@@ -67,29 +65,30 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:visibility="gone"
                     android:clipToPadding="false"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:visibility="invisible">
+
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_my_order_un"/>
+                        android:src="@drawable/ic_my_order_un" />
 
                     <TextView
                         android:id="@+id/cart_badge"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_gravity="right|end|top"
+                        android:layout_marginTop="3dp"
                         android:layout_marginEnd="-5dp"
                         android:layout_marginRight="-5dp"
-                        android:layout_marginTop="3dp"
                         android:background="@drawable/badge_background"
                         android:gravity="center"
                         android:padding="3dp"
-                        android:textColor="@android:color/black"
                         android:text="0"
-                        android:textSize="10sp"/>
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
 
                 </FrameLayout>
 
@@ -97,15 +96,15 @@
                     android:id="@+id/tv_using_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginStart="30dp"
                     android:layout_marginEnd="10dp"
-                    android:visibility="gone"
                     android:text="Use current location"
-                    android:textStyle="normal"
+                    android:textColor="@color/seller_button_color"
                     android:textSize="12dp"
-                    android:textColor="@color/seller_button_color"/>
+                    android:textStyle="normal"
+                    android:visibility="gone" />
 
 
             </RelativeLayout>

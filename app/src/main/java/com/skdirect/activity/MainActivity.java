@@ -64,21 +64,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainActivityViewMode = ViewModelProviders.of(this).get(MainActivityViewMode.class);
-        Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
+
         openFragment(new HomeFragment());
         initView();
         setlocationInHader();
         clickListener();
-        setupBadge();
         ///callRunTimePermissions();
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         setupBadge();
-        getCartItemApi();
     }
 
     @Override
@@ -228,6 +225,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             mBinding.profileImageNav.setImageDrawable(getResources().getDrawable(R.drawable.profile_round));
         }
+
+        getCartItemApi();
     }
 
     private void clickListener() {
@@ -257,25 +256,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setupBadge() {
         int count = MyApplication.getInstance().cartRepository.getCartCount1();
         if (count == 0) {
-            if (mBinding.toolbarId.cartBadge.getVisibility() != View.GONE) {
-                mBinding.toolbarId.cartBadge.setVisibility(View.GONE);
-            }
+            mBinding.toolbarId.cartBadge.setVisibility(View.GONE);
         } else {
+            mBinding.toolbarId.cartBadge.setVisibility(View.VISIBLE);
             mBinding.toolbarId.cartBadge.setText(String.valueOf(Math.min(count, 99)));
-            if (mBinding.toolbarId.cartBadge.getVisibility() != View.VISIBLE) {
-                mBinding.toolbarId.cartBadge.setVisibility(View.VISIBLE);
-            }
         }
     }
 
     private void getCartItemApi() {
         mainActivityViewMode.getCartItemsRequest("123");
         mainActivityViewMode.getCartItemsVM().observe(this, model -> {
+            System.out.println("SellerId " + model.getSellerId());
             Utils.hideProgressDialog();
             if (model != null && model.getCart() != null) {
                 MyApplication.getInstance().cartRepository.addToCart(model.getCart());
-                setupBadge();
+            } else {
+                MyApplication.getInstance().cartRepository.truncateCart();
             }
+            setupBadge();
         });
     }
 
@@ -306,8 +304,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
         });
     }

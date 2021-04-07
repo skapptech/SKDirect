@@ -67,32 +67,28 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void plusButtonOnClick(CartModel cartModel, TextView tvSelectedQty) {
-        int increaseCount = Integer.parseInt(tvSelectedQty.getText().toString().trim());
-        increaseCount++;
-        tvSelectedQty.setText("" + increaseCount);
+    public void plusButtonOnClick(CartModel cartModel) {
+        int qty = cartModel.getQuantity();
         totalAmount = totalAmount + cartModel.getPrice();
         mBinding.tvTotalAmount.setText("₹ " + totalAmount);
         MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
-        addItemInCart(increaseCount, cartModel);
+        addItemInCart(qty, cartModel);
     }
 
     @Override
-    public void minusButtonOnClick(CartModel cartModel, TextView selectedQty, LinearLayout LLPlusMinus) {
-        int decreaseCount = Integer.parseInt(selectedQty.getText().toString().trim());
-        decreaseCount--;
-        if (decreaseCount >= 1) {
-            selectedQty.setText("" + decreaseCount);
+    public void minusButtonOnClick(CartModel cartModel, LinearLayout LLPlusMinus) {
+        int qty = cartModel.getQuantity();
+        if (qty >= 1) {
             totalAmount = totalAmount - cartModel.getPrice();
             mBinding.tvTotalAmount.setText("₹ " + totalAmount);
             MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
-            addItemInCart(decreaseCount, cartModel);
+            addItemInCart(qty, cartModel);
         } else {
             cartItemList.remove(cartModel);
             totalAmount = totalAmount - cartModel.getPrice();
             mBinding.tvTotalAmount.setText("₹ " + totalAmount);
             cartListAdapter.notifyDataSetChanged();
-            addItemInCart(decreaseCount, cartModel);
+            addItemInCart(qty, cartModel);
             MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
 
             if (totalAmount == 0) {
@@ -215,10 +211,11 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     private void removeItemFromCart(CartModel cartModel, int position) {
         RemoveItemRequestModel itemRequestModel = new RemoveItemRequestModel("123", cartModel.getId());
         cartItemViewMode.getRemoveItemFromCartVMRequest(itemRequestModel);
-        cartItemViewMode.getRemoveItemFromCartVM().observe(this, jsonObject -> {
+        cartItemViewMode.getRemoveItemFromCartVM().observe(this, jsonElement -> {
             Utils.hideProgressDialog();
             try {
-                if (jsonObject != null) {
+                if (jsonElement != null || cartItemList.size() == 1) {
+                    MyApplication.getInstance().cartRepository.deleteCartItem(cartModel);
                     cartItemList.remove(position);
                     cartListAdapter.notifyDataSetChanged();
                 }

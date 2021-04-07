@@ -1,6 +1,5 @@
 package com.skdirect.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -43,9 +42,9 @@ import com.skdirect.viewmodel.ProductDetailsViewMode;
 import java.util.ArrayList;
 
 public class ProductDetailsActivity extends AppCompatActivity implements View.OnClickListener, BottomBarInterface {
-    ActivityProductDetailsBinding mBinding;
+    private ActivityProductDetailsBinding mBinding;
     private ProductDetailsViewMode productDetailsViewMode;
-    private int productID, itemQuatntiy;
+    private int productID;
     private ArrayList<ImageListModel> imageListModels = new ArrayList<>();
     private ArrayList<VariationListModel> variationList = new ArrayList<>();
     private ArrayList<ProductVariantAttributeDCModel> variantAttributeDCModels = new ArrayList<>();
@@ -63,6 +62,39 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         initView();
         ClickListener();
         apiCalling();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setupBadge();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back_press:
+                onBackPressed();
+                break;
+            case R.id.bt_add_to_cart:
+                addToCart();
+                break;
+            case R.id.tvQtyPlus:
+                increaseQTY();
+                break;
+            case R.id.tvQtyMinus:
+                decreaseQTY();
+                break;
+            case R.id.tv_varient_button:
+                openBottomSheetDialog();
+                break;
+            case R.id.notifiction_count:
+                startActivity(new Intent(ProductDetailsActivity.this, CartActivity.class));
+                break;
+            case R.id.tv_shop_name:
+                startActivity(new Intent(ProductDetailsActivity.this, SellerProfileActivity.class).putExtra("ID", resultModel.getEncryptSellerId()));
+                break;
+        }
     }
 
 
@@ -161,33 +193,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         mBinding.tvShopName.setOnClickListener(this);
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
-            case R.id.bt_add_to_cart:
-                addToCart();
-                break;
-            case R.id.tvQtyPlus:
-                increaseQTY();
-                break;
-            case R.id.tvQtyMinus:
-                decreaseQTY();
-                break;
-            case R.id.tv_varient_button:
-                openBottomSheetDialog();
-                break;
-            case R.id.notifiction_count:
-                startActivity(new Intent(ProductDetailsActivity.this, CartActivity.class));
-                break;
-            case R.id.tv_shop_name:
-                startActivity(new Intent(ProductDetailsActivity.this, SellerProfileActivity.class).putExtra("ID", resultModel.getEncryptSellerId()));
-                break;
-        }
-    }
-
     private void openBottomSheetDialog() {
         bottomSheetDialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
         View view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_lay, null);
@@ -204,10 +209,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private void increaseQTY() {
         int increaseCount = Integer.parseInt(mBinding.tvSelectedQty.getText().toString().trim());
         increaseCount++;
-        mBinding.toolbarTittle.cartBadge.setVisibility(View.VISIBLE);
         mBinding.tvSelectedQty.setText("" + increaseCount);
         addItemInCart(increaseCount, SellerItemID);
-        mBinding.toolbarTittle.cartBadge.setText("" + increaseCount);
     }
 
     private void decreaseQTY() {
@@ -217,11 +220,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         if (decreaseCount >= 0) {
             mBinding.tvSelectedQty.setText("" + decreaseCount);
             addItemInCart(decreaseCount, SellerItemID);
-            mBinding.toolbarTittle.cartBadge.setText("" + decreaseCount);
         } else {
             mBinding.btAddToCart.setVisibility(View.VISIBLE);
             mBinding.LLPlusMinus.setVisibility(View.GONE);
-            mBinding.toolbarTittle.cartBadge.setVisibility(View.GONE);
         }
     }
 
@@ -241,10 +242,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         } else {
             mBinding.btAddToCart.setVisibility(View.GONE);
             mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
-            // SellerProfileActivity.this.plusButtonOnClick(sellerProductModel, selectedQty);
         }
-
-
     }
 
     private void addProduct() {
@@ -336,16 +334,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         productDetailsViewMode.getCartItemsVMRequest("123");
         productDetailsViewMode.getCartItemsVM().observe(this, model -> {
             Utils.hideProgressDialog();
-            itemQuatntiy = 0;
             Utils.hideProgressDialog();
             if (model != null && model.getCart() != null) {
                 MyApplication.getInstance().cartRepository.addToCart(model.getCart());
                 SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CART_ITEM_ID, model.getId());
-                for (int i = 0; i < model.getCart().size(); i++) {
-                    mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
-                    itemQuatntiy += model.getCart().get(i).getQuantity();
-                    mBinding.toolbarTittle.cartBadge.setText(String.valueOf(Math.min(itemQuatntiy, 99)));
-                }
             }
         });
     }
@@ -534,21 +526,14 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             addItemInCart(1, SellerItemID);
             mBinding.btAddToCart.setVisibility(View.GONE);
             mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
-
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-
+        builder.setNegativeButton("No", (dialog, which) -> {
+            dialog.dismiss();
         });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
+//        AlertDialog dialog = builder.create();
+        builder.show();
     }
 
     private void clearCartItem(int id) {
@@ -557,11 +542,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             @Override
             public void onChanged(Object object) {
                 Utils.hideProgressDialog();
-//                if (object != null) {
-//                    if (object.equals(true)) {
-//                        MainActivity.cartItemModel.getCart().clear();
-//                    }
-//                }
             }
         });
     }
@@ -576,5 +556,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             mBinding.btAddToCart.setVisibility(View.VISIBLE);
             mBinding.LLPlusMinus.setVisibility(View.GONE);
         }
+    }
+
+    private void setupBadge() {
+        MyApplication.getInstance().cartRepository.getCartCount().observe(this, count -> {
+            if (count == 0) {
+                mBinding.toolbarTittle.notifictionCount.setVisibility(View.GONE);
+            } else {
+                mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
+                mBinding.toolbarTittle.cartBadge.setText(String.valueOf(Math.min(count, 99)));
+            }
+        });
     }
 }

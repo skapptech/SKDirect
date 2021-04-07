@@ -255,15 +255,13 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     }
 
     @Override
-    public void plusButtonOnClick(SellerProductList sellerProductModel, TextView tvSelectedQty) {
-        int qty = Integer.parseInt(tvSelectedQty.getText().toString().trim());
-        qty++;
+    public void plusButtonOnClick(SellerProductList model, TextView tvSelectedQty) {
         mBinding.toolbarTittle.cartBadge.setVisibility(View.VISIBLE);
-        tvSelectedQty.setText("" + qty);
+        tvSelectedQty.setText("" + model.getQty());
         // add item  to cart
-        CartModel cartModel = new CartModel(null, 0, null, false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(), 0, 0, false, 0, 0, 0, qty, sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
+        CartModel cartModel = new CartModel(null, 0, null, false, model.isStockRequired(), model.getStock(), model.getMeasurement(), model.getUom(), model.getImagePath(), 0, model.getProductName(), 0, 0, false, 0, 0, 0, model.getQty(), model.getCreatedBy(), null, model.getSellerId(), 0, 0, model.getMargin(), model.getMrp(), model.getMOQ(), model.getId());
         MyApplication.getInstance().cartRepository.addToCart(cartModel);
-        addItemInCart(qty, sellerProductModel);
+        addItemInCart(model.getQty(), model);
     }
 
     @Override
@@ -352,11 +350,6 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         sellerProfileViewMode.getClearCartItemVMRequest(id);
         sellerProfileViewMode.getClearCartItemVM().observe(this, object -> {
             Utils.hideProgressDialog();
-//                if (object != null) {
-//                    if (object.equals(true)) {
-//                        MainActivity.cartItemModel.getCart().clear();
-//                    }
-//                }
         });
     }
 }

@@ -50,16 +50,16 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
         holder.mBinding.tvSellingPrice.setText("₹ " + model.getSellingPrice());
         holder.mBinding.tvQuantity.setText("Quantity " + model.getMeasurement() + model.getUom());
 
-        if (model.getMrp() ==model.getSellingPrice()){
+        if (model.getMrp() == model.getSellingPrice()) {
             holder.mBinding.llSellingPrice.setVisibility(View.GONE);
             holder.mBinding.tvMrp.setText("₹ " + model.getMrp());
-        }else {
+        } else {
             holder.mBinding.tvMrp.setText("₹ " + model.getMrp());
             holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             holder.mBinding.tvSellingPrice.setText("₹ " + model.getSellingPrice());
         }
 
-        if (model.getOffPercentage()!=0.0) {
+        if (model.getOffPercentage() != 0.0) {
             holder.mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
             holder.mBinding.tvMagrginOff.setText("" + model.getOffPercentage() + "%\n OFF");
         } else {
@@ -90,34 +90,22 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
         }
 
 
-        holder.mBinding.tvQtyPlus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addItemInterface.plusButtonOnClick(model, holder.mBinding.tvSelectedQty);
-            }
+        holder.mBinding.tvQtyPlus.setOnClickListener(view -> {
+            model.setQty(model.getQty() + 1);
+            addItemInterface.plusButtonOnClick(model, holder.mBinding.tvSelectedQty);
         });
 
-        holder.mBinding.tvQtyMinus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addItemInterface.minusButtonOnClick(model, holder.mBinding.tvSelectedQty, holder.mBinding.tvAdd, holder.mBinding.LLPlusMinus);
-            }
+        holder.mBinding.tvQtyMinus.setOnClickListener(view -> {
+            model.setQty(model.getQty() - 1);
+            addItemInterface.minusButtonOnClick(model, holder.mBinding.tvSelectedQty, holder.mBinding.tvAdd, holder.mBinding.LLPlusMinus);
         });
 
-        holder.mBinding.tvAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addItemInterface.addButtonOnClick(model, holder.mBinding.tvSelectedQty, holder.mBinding.tvAdd, holder.mBinding.LLPlusMinus);
-            }
+        holder.mBinding.tvAdd.setOnClickListener(view -> {
+            model.setQty(model.getQty() + 1);
+            addItemInterface.addButtonOnClick(model, holder.mBinding.tvSelectedQty, holder.mBinding.tvAdd, holder.mBinding.LLPlusMinus);
         });
 
-        holder.mBinding.LLMainCat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID", model.getSellerProductId()));
-            }
-        });
-
+        holder.mBinding.LLMainCat.setOnClickListener(view -> context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID", model.getSellerProductId())));
     }
 
     @Override
