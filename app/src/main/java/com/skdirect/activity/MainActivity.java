@@ -260,7 +260,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(getApplicationContext(), ChangeLanguageActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
-
         }
     }
     public void clearSharePrefs() {
