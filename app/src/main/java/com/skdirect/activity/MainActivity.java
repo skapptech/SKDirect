@@ -28,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonObject;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
+import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityMainBinding;
 import com.skdirect.fragment.BasketFragment;
@@ -124,6 +125,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Utils.setToast(getApplicationContext(), "Chet");
                 mBinding.drawer.closeDrawers();
                 break;
+            case R.id.ll_rate_this_app:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.playStoreURL)));
+                finish();
+                mBinding.drawer.closeDrawers();
+                break;
 
             case R.id.ll_logout:
                 clearSharePrefs();
@@ -136,8 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_howto_use:
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop"));
-                startActivity(intent);
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop")));
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;
@@ -166,6 +171,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userNameTV = mBinding.tvUserName;
         mobileNumberTV = mBinding.tvMobileName;
         setLocationTV = mBinding.toolbarId.tvLoction;
+
+        if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME))) {
+            userNameTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME));
+        }
+        mobileNumberTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.MOBILE_NUMBER));
 
         mBinding.toolbarId.ivMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setLocationTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(MainActivity.this, MapsActivity.class), 2);
+                startActivityForResult(new Intent(MainActivity.this, MapsExtendedActivity.class), 2);
             }
         });
 
@@ -227,7 +237,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.llLogout.setOnClickListener(this);
         mBinding.llSignIn.setOnClickListener(this);
         mBinding.llHowtoUse.setOnClickListener(this);
-
     }
 
     private void setlocationInHader() {

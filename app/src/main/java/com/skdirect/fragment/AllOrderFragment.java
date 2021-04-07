@@ -2,6 +2,8 @@ package com.skdirect.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +31,7 @@ import com.skdirect.model.MyOrderModel;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.OrderModel;
+import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.MyOrderViewMode;
 import com.skdirect.viewmodel.PaymentViewMode;
@@ -51,9 +54,10 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     private int orderId = 0;
     private boolean loading = true;
     private MyOrderAdapter myOrderAdapter;
-
+    boolean handled = false;
     public AllOrderFragment(int type) {
         this.type = type;
+        handled = false;
     }
 
     @Override
@@ -74,11 +78,9 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initialization();
-
         mBinding.etSearchOrder.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     searchData();
                     handled = true;
@@ -86,11 +88,31 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
                 return handled;
             }
         });
+        mBinding.etSearchOrder.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0 && handled)
+                {
+                    orderId = 0;
+                    orderModelArrayList.clear();
+                    skipCount = 0;
+                    callMyOrder();
+
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+
     }
     private void searchData() {
-        orderId = Integer.parseInt(mBinding.etSearchOrder.getText().toString().trim());
-        skipCount = 0;
-        callMyOrder();
+        if(!TextUtils.isNullOrEmpty(mBinding.etSearchOrder.getText().toString()))
+        {
+            orderModelArrayList.clear();
+            orderId = Integer.parseInt(mBinding.etSearchOrder.getText().toString().trim());
+            skipCount = 0;
+            callMyOrder();
+        }
     }
     @Override
     public void onResume() {

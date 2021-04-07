@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityChnagePasswordBinding;
 import com.skdirect.model.ChangePasswordRequestModel;
+import com.skdirect.model.CommonResponseModel;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.ChangePasswordViewMode;
@@ -52,10 +53,14 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
     private void changePassword() {
         if (TextUtils.isNullOrEmpty(mBinding.etNewPassword.getText().toString().trim())) {
-            Utils.setToast(getApplicationContext(), "Please Enter New Password");
+            Utils.setLongToast(getApplicationContext(), "Please Enter New Password");
         } else if (TextUtils.isNullOrEmpty(mBinding.etConfirmPassword.getText().toString().trim())) {
-            Utils.setToast(getApplicationContext(), "Please Enter Confirm Password");
-        } else {
+            Utils.setLongToast(getApplicationContext(), "Please Enter Confirm Password");
+        }
+        else if (!mBinding.etConfirmPassword.getText().toString().trim().equalsIgnoreCase(mBinding.etNewPassword.getText().toString().trim())) {
+            Utils.setLongToast(getApplicationContext(), "Confirm Password does not match with New Password");
+        }
+        else {
             if (Utils.isNetworkAvailable(getApplicationContext())) {
                 Utils.showProgressDialog(ChangePasswordActivity.this);
                 changePasswordAPI();
@@ -70,13 +75,13 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         ChangePasswordRequestModel changePasswordRequestModel = new ChangePasswordRequestModel(mBinding.etNewPassword.getText().toString().trim(),mBinding.etConfirmPassword.getText().toString().trim());
 
         changePasswordViewMode.getChangePasswordRequest(changePasswordRequestModel);
-        changePasswordViewMode.getChangePasswordVM().observe(this, new Observer<Boolean>() {
+        changePasswordViewMode.getChangePasswordVM().observe(this, new Observer<CommonResponseModel>() {
             @Override
-            public void onChanged(Boolean aBoolean) {
+            public void onChanged(CommonResponseModel model) {
                 Utils.hideProgressDialog();
-                if (aBoolean != null) {
-                    if (aBoolean) {
-                        changePasswordDialog();
+                if (model != null) {
+                    if (model.isSuccess()) {
+                        changePasswordDialog(model.getSuccessMessage());
                     }
                 }
 
@@ -85,10 +90,10 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         });
     }
 
-    private void changePasswordDialog() {
+    private void changePasswordDialog(String successMessage) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Congratulation");
-        dialog.setMessage("Your Password has  been change Successfully");
+        dialog.setMessage(successMessage);
         dialog.setPositiveButton("OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

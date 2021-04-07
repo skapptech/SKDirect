@@ -48,10 +48,18 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
         holder.mBinding.tvMrp.setText("₹ " + model.getMrp());
         holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         holder.mBinding.tvSellingPrice.setText("₹ " + model.getSellingPrice());
-        holder.mBinding.tvTax.setText("Inclusive of all taxes");
         holder.mBinding.tvQuantity.setText("Quantity " + model.getMeasurement() + model.getUom());
 
-        if (model.getOffPercentage() != 0.0) {
+        if (model.getMrp() ==model.getSellingPrice()){
+            holder.mBinding.llSellingPrice.setVisibility(View.GONE);
+            holder.mBinding.tvMrp.setText("₹ " + model.getMrp());
+        }else {
+            holder.mBinding.tvMrp.setText("₹ " + model.getMrp());
+            holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.mBinding.tvSellingPrice.setText("₹ " + model.getSellingPrice());
+        }
+
+        if (model.getOffPercentage()!=0.0) {
             holder.mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
             holder.mBinding.tvMagrginOff.setText("" + model.getOffPercentage() + "%\n OFF");
         } else {

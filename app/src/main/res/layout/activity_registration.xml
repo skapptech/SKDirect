@@ -6,16 +6,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include
-            android:id="@+id/toolbar_tittle"
-            layout="@layout/toolbar_arrow" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/toolbar_tittle"
-            android:layout_marginTop="20dp"
             android:orientation="vertical">
 
 
@@ -25,17 +20,16 @@
                 android:layout_marginTop="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_new_password"
+                    android:id="@+id/et_name"
                     android:layout_width="match_parent"
                     android:layout_height="57dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:gravity="center_vertical"
-                    style="@style/font_normal"
-                    android:hint="Enter New Password"
+                    android:hint="Name"
                     android:imeOptions="actionNext"
-                    android:inputType="textPassword" />
+                    android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -43,32 +37,51 @@
 
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_Confirm_password"
+                android:id="@+id/et_email_id"
                 android:layout_width="match_parent"
                 android:layout_height="57dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:gravity="center_vertical"
-                style="@style/font_normal"
-                android:hint="Enter Confirm Password"
+                android:hint="Email is Optional"
+                android:textColorHint="@color/seller_button_color"
                 android:imeOptions="actionNext"
-                android:inputType="textPassword"
+                android:inputType="textEmailAddress"
                 />
 
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible">
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_pin_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="57dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="Pincode"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPostalAddress"
+
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
 
         </LinearLayout>
 
         <Button
-            android:id="@+id/bt_save_password"
+            android:id="@+id/bt_save_addresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@drawable/db_button_save"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            style="@style/font_normal_sami_bold"
             android:layout_alignParentBottom="true"
             android:text="Save"
             android:textColor="@color/seller_button_color"

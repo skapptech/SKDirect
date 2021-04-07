@@ -17,12 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.R;
 import com.skdirect.activity.MainActivity;
+import com.skdirect.activity.UpdateProfileActivity;
 import com.skdirect.adapter.CategoriesAdapter;
 import com.skdirect.adapter.SearchDataAdapter;
 import com.skdirect.databinding.FragmentProductBinding;
 import com.skdirect.databinding.FragmentShopBinding;
 import com.skdirect.model.SearchDataModel;
+import com.skdirect.model.SearchMainModel;
 import com.skdirect.model.SearchRequestModel;
+import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.SearchViewMode;
 
@@ -124,41 +127,43 @@ public class ProductFragment extends Fragment {
     }
 
     private void getSearchData(String searchSellerNam) {
-        SearchRequestModel searchRequestModel = new SearchRequestModel(0, 0, 0, skipCount, takeCount, 0.0, 0.0, "", "", "", 0, searchSellerNam,(String.valueOf(cateogryId).equals("0")) ? null : String.valueOf(cateogryId));
+        SearchRequestModel searchRequestModel = new SearchRequestModel((String.valueOf(cateogryId).equals("0")) ? null : String.valueOf(cateogryId), skipCount, takeCount , searchSellerNam, SharePrefs.getInstance(getActivity()).getString(SharePrefs.PIN_CODE));
         searchViewMode.getSearchRequest(searchRequestModel);
-        searchViewMode.getSearchViewModel().observe(this, new Observer<SearchDataModel>() {
+        searchViewMode.getSearchViewModel().observe(this, new Observer<SearchMainModel>() {
             @Override
-            public void onChanged(SearchDataModel searchDataList) {
+            public void onChanged(SearchMainModel searchDataList) {
                 Utils.hideProgressDialog();
-                if (searchDataList != null &&searchDataList.getTableOneModels()!=null &&searchDataList.getTableTwoModels()!=null) {
-                    if (searchDataList.getTableOneModels().size() > 0) {
-                        ArrayList<SearchDataModel.TableOneTwo> itemList = searchDataList.getTableTwoModels();
-                        for (int i = 0; i < itemList.size(); i++) {
-                            list.add(itemList.get(i));
-                            for (int j = 0; j < searchDataList.getTableOneModels().size(); j++) {
-                                if (list.get(i).getId() == searchDataList.getTableOneModels().get(j).getSellerId()) {
-                                    if (list.get(i).getProductList() == null) {
-                                        list.get(i).setProductList(new ArrayList<>());
+                if (searchDataList.isSuccess()) {
+                    if (searchDataList != null && searchDataList.getResultItem().getTableOneModels() != null && searchDataList.getResultItem().getTableTwoModels() != null) {
+                        if (searchDataList.getResultItem().getTableOneModels().size() > 0) {
+                            ArrayList<SearchDataModel.TableOneTwo> itemList = searchDataList.getResultItem().getTableTwoModels();
+                            for (int i = 0; i < itemList.size(); i++) {
+                                list.add(itemList.get(i));
+                                for (int j = 0; j < searchDataList.getResultItem().getTableOneModels().size(); j++) {
+                                    if (list.get(i).getId() == searchDataList.getResultItem().getTableOneModels().get(j).getSellerId()) {
+                                        if (list.get(i).getProductList() == null) {
+                                            list.get(i).setProductList(new ArrayList<>());
+                                        }
+                                        list.get(i).getProductList().add(searchDataList.getResultItem().getTableOneModels().get(j));
                                     }
-                                    list.get(i).getProductList().add(searchDataList.getTableOneModels().get(j));
                                 }
                             }
-                        }
-                        loading = true;
-                        searchDataAdapter.notifyDataSetChanged();
+                            loading = true;
+                            searchDataAdapter.notifyDataSetChanged();
 
                         /*mBinding.rvSearch.post(new Runnable() {
                             public void run() {
 
                             }
                         });*/
-                    }else {
+                        } else {
+                            mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
+                            mBinding.rvSearch.setVisibility(View.GONE);
+                        }
+                    } else {
                         mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
                         mBinding.rvSearch.setVisibility(View.GONE);
                     }
-                }else {
-                    mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
-                    mBinding.rvSearch.setVisibility(View.GONE);
                 }
             }
         });

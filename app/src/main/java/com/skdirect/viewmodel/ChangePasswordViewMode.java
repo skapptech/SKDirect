@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.ChangePasswordRequestModel;
+import com.skdirect.model.CommonResponseModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.utils.Utils;
 
@@ -21,9 +22,9 @@ import retrofit2.Response;
 public class ChangePasswordViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
 
-    private MutableLiveData<Boolean> changePasswordVM;
+    private MutableLiveData<CommonResponseModel> changePasswordVM;
 
-    public LiveData<Boolean> getChangePasswordVM() {
+    public LiveData<CommonResponseModel> getChangePasswordVM() {
         if(changePasswordVM==null)
         changePasswordVM = new MutableLiveData<>();
         if (changePasswordVM.getValue() != null)
@@ -33,10 +34,10 @@ public class ChangePasswordViewMode extends ViewModel {
         return changePasswordVM;
     }
 
-    public MutableLiveData<Boolean> getChangePasswordRequest(ChangePasswordRequestModel passwordRequestModel) {
-        RestClient.getInstance().getService().ChangePassword(passwordRequestModel).enqueue(new Callback<Boolean>() {
+    public MutableLiveData<CommonResponseModel> getChangePasswordRequest(ChangePasswordRequestModel passwordRequestModel) {
+        RestClient.getInstance().getService().ChangePassword(passwordRequestModel).enqueue(new Callback<CommonResponseModel>() {
             @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+            public void onResponse(Call<CommonResponseModel> call, Response<CommonResponseModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     changePasswordVM.setValue(response.body());
@@ -44,7 +45,7 @@ public class ChangePasswordViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
+            public void onFailure(Call<CommonResponseModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + call.toString());
                 Utils.hideProgressDialog();
             }
