@@ -229,8 +229,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                         startActivity(new Intent(GenerateOTPActivity.this, RegisterationActivity.class));
                     }
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN,true);
-
-                    //  finish();
+                    finish();
 
                 } else {
                     Binding.btLoddingOtp.setText("Next");
