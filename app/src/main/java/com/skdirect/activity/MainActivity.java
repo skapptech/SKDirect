@@ -29,6 +29,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonObject;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
+import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityMainBinding;
 import com.skdirect.fragment.BasketFragment;
@@ -55,11 +56,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SharedPreferences sharedPreferences;
     public boolean positionChanged = false;
     public Toolbar appBarLayout;
-    public TextView userNameTV, mobileNumberTV,setLocationTV;
+    public TextView userNameTV, mobileNumberTV, setLocationTV;
     private MainActivityViewMode mainActivityViewMode;
     public static CartItemModel cartItemModel;
-    private int  itemQuatntiy;
-
+    private int itemQuatntiy;
 
 
     @Override
@@ -103,8 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mobileNumberTV = mBinding.tvMobileName;
         setLocationTV = mBinding.toolbarId.tvLoction;
 
-        if(!TextUtils.isNullOrEmpty(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME)))
-        {
+        if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME))) {
             userNameTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME));
         }
         mobileNumberTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.MOBILE_NUMBER));
@@ -126,11 +125,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case R.id.nav_profile:
                     positionChanged = true;
-                    startActivity(new Intent(MainActivity.this,ProfileActivity.class));
+                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                     break;
                 case R.id.nav_my_order:
                     positionChanged = true;
-                    startActivity(new Intent(MainActivity.this,MyOrderActivity.class));
+                    startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
                     break;
                 case R.id.nav_basket:
                     positionChanged = true;
@@ -144,20 +143,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.toolbarId.notifictionCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,CartActivity.class));
+                startActivity(new Intent(MainActivity.this, CartActivity.class));
             }
         });
 
         setLocationTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(MainActivity.this,MapsExtendedActivity.class),2);
+                startActivityForResult(new Intent(MainActivity.this, MapsExtendedActivity.class), 2);
             }
         });
 
         if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.USER_IMAGE))) {
             Glide.with(this)
-                    .load( SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.USER_IMAGE))
+                    .load(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.USER_IMAGE))
                     .centerCrop()
                     .into(mBinding.profileImageNav);
         } else {
@@ -166,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setlocationInHader() {
-        setLocationTV.setText(Utils.getCityName(this,Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)), Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LON))));
+        setLocationTV.setText(Utils.getCityName(this, Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)), Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LON))));
     }
 
     @Override
@@ -208,17 +207,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_profile:
-                startActivity(new Intent(MainActivity.this,ProfileActivity.class));
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_chnage_password:
-                startActivity(new Intent(MainActivity.this,ChangePasswordActivity.class));
+                startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_chet:
                 Utils.setToast(getApplicationContext(), "Chet");
+                mBinding.drawer.closeDrawers();
+                break;
+            case R.id.ll_rate_this_app:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.playStoreURL)));
+                finish();
                 mBinding.drawer.closeDrawers();
                 break;
 
@@ -228,13 +232,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;
-                case  R.id.ll_sign_in:
+            case R.id.ll_sign_in:
                 startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
-                case R.id.ll_howto_use:
-                    Intent intent = new Intent(Intent.ACTION_VIEW , Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop"));
-                    startActivity(intent);
+            case R.id.ll_howto_use:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop")));
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;
@@ -246,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setupBadge() {
-       // int CartItemCount = SharePrefs.getInstance(MainActivity.this).getInt(SharePrefs.COUNT);
+        // int CartItemCount = SharePrefs.getInstance(MainActivity.this).getInt(SharePrefs.COUNT);
         if (itemQuatntiy == 0) {
             if (mBinding.toolbarId.cartBadge.getVisibility() != View.GONE) {
                 mBinding.toolbarId.cartBadge.setVisibility(View.GONE);
@@ -265,9 +268,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainActivityViewMode.getCartItemsVM().observe(this, new Observer<CartItemModel>() {
             @Override
             public void onChanged(CartItemModel model) {
-                itemQuatntiy =0;
+                itemQuatntiy = 0;
                 Utils.hideProgressDialog();
-                if (model != null && model.getCart()!=null) {
+                if (model != null && model.getCart() != null) {
                     cartItemModel = model;
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CART_ITEM_ID, model.getId());
                     for (int i = 0; i < model.getCart().size(); i++) {
@@ -281,17 +284,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
-        if(requestCode==2)
-        {
+        if (requestCode == 2) {
             if (requestCode == 2 && resultCode == RESULT_OK) {
-                Address address=data.getParcelableExtra("address");
+                Address address = data.getParcelableExtra("address");
                 double lat = address.getLatitude();
                 double log = address.getLongitude();
-                setLocationTV.setText(Utils.getCityName(this,lat,log));
+                setLocationTV.setText(Utils.getCityName(this, lat, log));
             }
 
         }
@@ -318,8 +319,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         e.printStackTrace();
                     }
                     String cityName = addresses.get(0).getLocality();
-                    Log.e("cityName", "cityName  "+cityName);
-                   setLocationTV.setText(cityName);
+                    Log.e("cityName", "cityName  " + cityName);
+                    setLocationTV.setText(cityName);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -337,9 +338,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onGranted() {
                 Log.e("onDenied", "onGranted");
-                GPSTracker  gpsTracker = new GPSTracker(getApplicationContext());
-                if (gpsTracker!=null){
-                    callLocationAPI(gpsTracker.getLatitude(),gpsTracker.getLongitude());
+                GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
+                if (gpsTracker != null) {
+                    callLocationAPI(gpsTracker.getLatitude(), gpsTracker.getLongitude());
                 }
             }
 
