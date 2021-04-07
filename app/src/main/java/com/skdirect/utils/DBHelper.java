@@ -47,9 +47,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public String getString(int key) {
         String value = "";
+        String stringKey = context.getResources().getResourceEntryName(key);
         try {
             SQLiteDatabase db = this.getReadableDatabase();
-            Cursor cur = db.rawQuery("select * from stringTable where keystring= '" + key + "'", null);
+            Cursor cur = db.rawQuery("select * from LanguageTable where keystring= '" + stringKey + "'", null);
             if (cur != null && cur.getCount() > 0) {
                 cur.moveToFirst();
                 value = cur.getString(cur.getColumnIndex(COLUMN_VALUE));

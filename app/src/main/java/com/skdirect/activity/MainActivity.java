@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -25,12 +26,14 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonObject;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityMainBinding;
+import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.fragment.BasketFragment;
 import com.skdirect.fragment.HomeFragment;
 import com.skdirect.utils.AppSignatureHelper;
@@ -78,7 +81,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setupBadge();
     }
 
-    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_FETCH_LANGUAGE)) {
+            new FirebaseLanguageFetch(getApplicationContext()).fetchLanguage();
+        }
+    }
+
+
+    private void clickListener() {
+        mBinding.llProfile.setOnClickListener(this);
+        mBinding.llChnagePassword.setOnClickListener(this);
+        mBinding.llChet.setOnClickListener(this);
+        mBinding.llLogout.setOnClickListener(this);
+        mBinding.llSignIn.setOnClickListener(this);
+        mBinding.llHowtoUse.setOnClickListener(this);
+        mBinding.llChangeLanguage.setOnClickListener(this);
+    }
     public void onBackPressed() {
         if (mBinding.drawer.isDrawerOpen(GravityCompat.START)) {
             mBinding.drawer.closeDrawer(GravityCompat.START);
@@ -102,47 +121,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     super.onBackPressed();
                 }
             }
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.ll_profile:
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                mBinding.drawer.closeDrawers();
-                break;
-
-            case R.id.ll_chnage_password:
-                startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
-                mBinding.drawer.closeDrawers();
-                break;
-
-            case R.id.ll_chet:
-                Utils.setToast(getApplicationContext(), "Chet");
-                mBinding.drawer.closeDrawers();
-                break;
-            case R.id.ll_rate_this_app:
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.playStoreURL)));
-                finish();
-                mBinding.drawer.closeDrawers();
-                break;
-
-            case R.id.ll_logout:
-                clearSharePrefs();
-                startActivity(new Intent(getApplicationContext(), PlaceSearchActivity.class));
-                finish();
-                mBinding.drawer.closeDrawers();
-                break;
-            case R.id.ll_sign_in:
-                startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
-                mBinding.drawer.closeDrawers();
-                break;
-            case R.id.ll_howto_use:
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop")));
-                finish();
-                mBinding.drawer.closeDrawers();
-                break;
         }
     }
 
@@ -229,15 +207,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getCartItemApi();
     }
 
-    private void clickListener() {
-        mBinding.llProfile.setOnClickListener(this);
-        mBinding.llChnagePassword.setOnClickListener(this);
-        mBinding.llChet.setOnClickListener(this);
-        mBinding.llLogout.setOnClickListener(this);
-        mBinding.llSignIn.setOnClickListener(this);
-        mBinding.llHowtoUse.setOnClickListener(this);
-    }
-
     private void setlocationInHader() {
         setLocationTV.setText(Utils.getCityName(this, Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)), Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LON))));
     }
@@ -249,6 +218,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         transaction.commit();
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ll_profile:
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                mBinding.drawer.closeDrawers();
+                break;
+
+            case R.id.ll_chnage_password:
+                startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
+                mBinding.drawer.closeDrawers();
+                break;
+
+            case R.id.ll_chet:
+                Utils.setToast(getApplicationContext(), "Chet");
+                mBinding.drawer.closeDrawers();
+                break;
+            case R.id.ll_rate_this_app:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.playStoreURL)));
+                finish();
+                mBinding.drawer.closeDrawers();
+                break;
+
+            case R.id.ll_logout:
+                clearSharePrefs();
+                startActivity(new Intent(getApplicationContext(), PlaceSearchActivity.class));
+                finish();
+                mBinding.drawer.closeDrawers();
+                break;
+            case R.id.ll_sign_in:
+                startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+                mBinding.drawer.closeDrawers();
+                break;
+            case R.id.ll_howto_use:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop")));
+                finish();
+                mBinding.drawer.closeDrawers();
+                break;
+            case R.id.llChangeLanguage:
+                startActivity(new Intent(getApplicationContext(), ChangeLanguageActivity.class));
+                mBinding.drawer.closeDrawers();
+                break;
+
+        }
+    }
     public void clearSharePrefs() {
         sharedPreferences.edit().clear().apply();
     }
