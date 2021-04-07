@@ -97,7 +97,28 @@ public class RestClient {
         }
     }
 
-
+    private static RestClient restClient1;
+    private static Retrofit retrofit1 = null;
+    public static RestClient getInstance1() {
+        if (restClient1 == null) {
+            restClient1 = new RestClient("abc");
+        }
+        return restClient1;
+    }
+    private RestClient(String url) {
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+            retrofit1 = new Retrofit.Builder()
+                    .baseUrl(BuildConfig.apiEndpoint)
+                    .addConverterFactory(GsonConverterFactory.create(new Gson()))
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .client(client)
+                    .build();
+        }
+    public APIServices getService1() {
+        return retrofit1.create(APIServices.class);
+    }
 
     public APIServices getService() {
         return retrofit.create(APIServices.class);

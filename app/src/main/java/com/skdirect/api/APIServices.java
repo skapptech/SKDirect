@@ -1,5 +1,7 @@
 package com.skdirect.api;
 
+import com.flipkart.android.proteus.value.Layout;
+import com.flipkart.android.proteus.value.ObjectValue;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -45,6 +47,7 @@ import com.skdirect.viewmodel.ReViewViewMode;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import retrofit2.Call;
@@ -56,11 +59,16 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface APIServices {
 
     @GET("api/App/GetAppInfo")
     Call<AppVersionModel> getAppversion();
+
+    @GET
+    Observable<Map<String, Layout>> getLayoutJsonData(@Url String Url);
+
 
     @POST("api/Notification/UpdateFcmId")
     Observable<JsonObject> getUpdateToken(@Body UpdateTokenModel updateTokenModel);

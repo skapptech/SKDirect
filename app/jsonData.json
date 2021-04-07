@@ -17,6 +17,14 @@
           "orientation": "vertical",
           "children": [
             {
+              "type": "include",
+              "layout": "AlertDialogLayout",
+              "padding": "16dp",
+              "background": "#000000",
+              "layout_margin": "10dp",
+              "paddingBottom": "0dp"
+            },
+            {
               "type": "ImageView",
               "layout_width": "wrap_content",
               "layout_height": "wrap_content",

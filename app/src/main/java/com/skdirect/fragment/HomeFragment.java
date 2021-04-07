@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.flipkart.android.proteus.LayoutManager;
 import com.flipkart.android.proteus.Proteus;
 import com.flipkart.android.proteus.ProteusBuilder;
 import com.flipkart.android.proteus.ProteusContext;
@@ -36,34 +38,48 @@ import com.flipkart.android.proteus.value.DrawableValue;
 import com.flipkart.android.proteus.value.Layout;
 import com.flipkart.android.proteus.value.ObjectValue;
 import com.flipkart.android.proteus.value.Value;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.skdirect.R;
 import com.skdirect.activity.CategoriesListActivity;
+import com.skdirect.activity.GenerateOTPActivity;
 import com.skdirect.activity.MainActivity;
 import com.skdirect.activity.NearByItemProductListActivity;
-import com.skdirect.activity.ProteusActivity;
+import com.skdirect.activity.PlaceSearchActivity;
 import com.skdirect.activity.SearchActivity;
 import com.skdirect.activity.SellerProductListActivity;
 import com.skdirect.adapter.AllCategoriesAdapter;
 import com.skdirect.adapter.MallCategorieBannerAdapter;
 import com.skdirect.adapter.TopNearByItemAdapter;
 import com.skdirect.adapter.TopSellerAdapter;
+import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.api.ImageLoaderTarget;
 import com.skdirect.databinding.FragmentHomeBinding;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.MallMainModel;
+import com.skdirect.model.OtpResponceModel;
+import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
+import com.skdirect.utils.JsonData;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.HomeViewModel;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import io.reactivex.observers.DisposableObserver;
 
 import static com.skdirect.utils.JsonData.DATA;
 import static com.skdirect.utils.JsonData.LAYOUT;
@@ -73,6 +89,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private MainActivity activity;
     private HomeViewModel homeViewModel;
     Proteus proteus;
+    private CommonClassForAPI commonClassForAPI;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -83,8 +100,9 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        commonClassForAPI = CommonClassForAPI.getInstance(getActivity());
         initViews();
-        getMall();
+        callGetLayoutJson();
         return mBinding.getRoot();
     }
 
@@ -101,7 +119,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             getSellerAPi();
             getAllCategoriesAPi();
         } else {
-           //mBinding.swiperefresh.setVisibility(View.GONE);
+            //mBinding.swiperefresh.setVisibility(View.GONE);
         }
 
 
@@ -143,16 +161,58 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
+
+    Map<String, Layout> layoutMain;
+    private LayoutManager layoutManager = new LayoutManager() {
+
+        @Nullable
+        @Override
+        protected Map<String, Layout> getLayouts() {
+
+          /*  Map<String, Layout> retMap = new Gson().fromJson(
+                    JsonData.TYPE_LAYOUT, new TypeToken<HashMap<String, Layout>>() {}.getType()
+            );*/
+
+            return layoutMain;
+        }
+    };
+
     private void getMallApiData() {
         homeViewModel.getMallData().observe(this, new Observer<MallMainModel>() {
             @Override
             public void onChanged(MallMainModel mallMainModel) {
                 Utils.hideProgressDialog();
                 if (mallMainModel.getResultItem() != null) {
-                    MallCategorieBannerAdapter mallCategorieBannerAdapter = new MallCategorieBannerAdapter(getActivity(),mallMainModel.getResultItem().getStoreCategoryList());
+                    try {
+                        Gson gson = new Gson();
+                        String json = gson.toJson(mallMainModel.getResultItem());
+                        JSONObject object = new JSONObject(json);
+                        JSONArray jsonArray = object.getJSONArray("StoreCategoryList");
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("StoreCategoryList", jsonArray);
+                        JSONObject jsonObject1 = new JSONObject();
+                        jsonObject1.put("data", jsonObject);
+                        DATA = String.valueOf(jsonObject1);
+                        ProteusTypeAdapterFactory adapter = new ProteusTypeAdapterFactory(getActivity());
+                        ProteusTypeAdapterFactory.PROTEUS_INSTANCE_HOLDER.setProteus(proteus);
+                        Layout layout;
+                        ObjectValue data;
+                        layout = adapter.LAYOUT_TYPE_ADAPTER.read(new JsonReader(new StringReader(LAYOUT)));
+                        data = adapter.OBJECT_TYPE_ADAPTER.read(new JsonReader(new StringReader(DATA)));
+
+                        ProteusContext context = proteus.createContextBuilder(getActivity()).setCallback(callback).setLayoutManager(layoutManager).setImageLoader(loader).build();
+                        ProteusLayoutInflater inflater = context.getInflater();
+                        ProteusView view = inflater.inflate(layout, data, mBinding.contentMain, 0);
+                        mBinding.contentMain.addView(view.getAsView());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    MallCategorieBannerAdapter mallCategorieBannerAdapter = new MallCategorieBannerAdapter(getActivity(), mallMainModel.getResultItem().getStoreCategoryList());
                     mBinding.rvStoreCategoryList.setAdapter(mallCategorieBannerAdapter);
                     mBinding.llMainAppHome.setVisibility(View.GONE);
                     mBinding.llMallHome.setVisibility(View.VISIBLE);
+
                 } else {
                     mBinding.llMainAppHome.setVisibility(View.VISIBLE);
                     mBinding.llMallHome.setVisibility(View.GONE);
@@ -206,7 +266,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         homeViewModel.getAllCategoriesLiveData().observe(this, new Observer<ArrayList<AllCategoriesModel>>() {
             @Override
             public void onChanged(ArrayList<AllCategoriesModel> allCategoriesList) {
-               // mBinding.swiperefresh.setRefreshing(false);
+                // mBinding.swiperefresh.setRefreshing(false);
                 if (allCategoriesList.size() > 0) {
                     AllCategoriesAdapter allCategoriesAdapter = new AllCategoriesAdapter(getActivity(), allCategoriesList);
                     mBinding.rvAllCetegory.setAdapter(allCategoriesAdapter);
@@ -229,22 +289,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 .register(CardViewModule.create())
                 .register(DesignModule.create())
                 .build();
-        ProteusTypeAdapterFactory adapter = new ProteusTypeAdapterFactory(getActivity());
-        ProteusTypeAdapterFactory.PROTEUS_INSTANCE_HOLDER.setProteus(proteus);
-
-        Layout layout;
-        ObjectValue data;
-        try {
-            layout = adapter.LAYOUT_TYPE_ADAPTER.read(new JsonReader(new StringReader(LAYOUT)));
-            data = adapter.OBJECT_TYPE_ADAPTER.read(new JsonReader(new StringReader(DATA)));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        ProteusContext context = proteus.createContextBuilder(getActivity()).setCallback(callback).setImageLoader(loader).build();
-        ProteusLayoutInflater inflater = context.getInflater();
-        ProteusView view = inflater.inflate(layout, data, mBinding.contentMain, 0);
-        mBinding.contentMain.addView(view.getAsView());
-
 
 
         //mBinding.swiperefresh.setOnRefreshListener(this);
@@ -368,20 +412,49 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         @Override
         public void onEvent(String event, Value value, ProteusView view) {
             ObjectValue objectValue = value.getAsObject();
-            Log.i("ProteusEvent", event+" - "+objectValue.get("type").getAsString());
+            Log.i("ProteusEvent", event + " - " + objectValue.get("type").getAsString());
             String type = objectValue.get("type").getAsString();
-            if (event.equalsIgnoreCase("onClick")){
-                if (type.equalsIgnoreCase("showToast")){
+            if (event.equalsIgnoreCase("onClick")) {
+                if (type.equalsIgnoreCase("showToast")) {
                     showToast();
                 }
             }
         }
     };
-    public void showToast(){
-        Utils.setToast(activity,"Showing Toast");
+
+    public void showToast() {
+        Utils.setToast(activity, "Showing Toast");
     }
 
+    private void callGetLayoutJson() {
+        if (Utils.isNetworkAvailable(getActivity())) {
+            if (commonClassForAPI!=null){
+                Utils.showProgressDialog(getActivity());
+                commonClassForAPI.getLayout(layoutObserver);
+            }
+        } else {
+            Utils.setToast(getActivity(), "No Internet Connection Please connect.");
+        }
+    }
 
+    private DisposableObserver<Map<String, Layout>> layoutObserver = new DisposableObserver<Map<String, Layout>>() {
+        @Override
+        public void onNext(Map<String, Layout> model) {
+            layoutMain = model;
+            Utils.hideProgressDialog();
+            getMall();
+        }
 
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+            Utils.hideProgressDialog();
+        }
+    };
 
 }
