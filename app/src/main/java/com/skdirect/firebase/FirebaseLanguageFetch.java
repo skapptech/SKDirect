@@ -49,8 +49,8 @@ public class FirebaseLanguageFetch {
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         String selectedLanguage = SharePrefs.getInstance(context).getString(SharePrefs.SELECTED_LANGUAGE);
                         if (selectedLanguage == null || selectedLanguage.equals("")) {
-                            if (postSnapshot.getKey().equals("Hindi")) {
-                                SharePrefs.getInstance(context).putString(SharePrefs.SELECTED_LANGUAGE, "Hindi");
+                            if (postSnapshot.getKey().equals("हिंदी")) {
+                                SharePrefs.getInstance(context).putString(SharePrefs.SELECTED_LANGUAGE, "हिंदी");
                                 for (DataSnapshot langSnapshot : postSnapshot.getChildren()) {
                                     MyApplication.getInstance().dbHelper.insertStrings(langSnapshot.getKey(), langSnapshot.getValue() + "");
                                 }

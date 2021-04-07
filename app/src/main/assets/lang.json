@@ -1,6 +1,6 @@
 {
   "Language": {
-    "Hindi": {
+    "हिंदी": {
       "guest_user":"गेस्ट यूजर",
       "logout":"लॉग आउट",
       "profile":"प्रोफ़ाइल",
@@ -48,7 +48,7 @@
       "txt_delivery": "Delivery options:",
       "change_language": "Change Language"
     },
-    "Gujarati": {
+    "ગુજરાતી": {
       "guest_user":"गेस्ट यूजर",
       "logout":"लॉग आउट",
       "profile":"प्रोफ़ाइल",
