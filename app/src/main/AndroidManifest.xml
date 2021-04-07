@@ -132,10 +132,11 @@
                 <data
                     android:host="directbuyer.er15.xyz"
                     android:scheme="https" />
-                <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".activity.MainActivity" />
+
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
         </activity>
         <activity
             android:name=".activity.ProfilePrimaryAddressActivity"
