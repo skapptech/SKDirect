@@ -21,7 +21,7 @@ public class MyApplication extends Application implements LifecycleObserver {
     private static MyApplication mInstance;
     public Activity activity;
     public CartRepository cartRepository;
-
+    public DBHelper dbHelper;
 
     public static synchronized MyApplication getInstance() {
         return mInstance;
@@ -34,6 +34,7 @@ public class MyApplication extends Application implements LifecycleObserver {
         appContext = this;
         mInstance = this;
         cartRepository = new CartRepository(getApplicationContext());
+        dbHelper = new DBHelper(this);
     }
 
     public void token() {
