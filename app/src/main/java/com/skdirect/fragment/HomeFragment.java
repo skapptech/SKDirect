@@ -137,7 +137,11 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         getAllCategoriesAPi();
                     }
                 }else {
-                    Utils.setToast(getActivity(),mallMainModel.getErrorMessage());
+                    mBinding.llMainAppHome.setVisibility(View.VISIBLE);
+                    mBinding.llMallHome.setVisibility(View.GONE);
+                    topNearByItem();
+                    getSellerAPi();
+                    getAllCategoriesAPi();
                 }
             }
         });
