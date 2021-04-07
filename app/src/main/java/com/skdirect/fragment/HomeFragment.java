@@ -35,6 +35,7 @@ import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.MallMainModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
+import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.HomeViewModel;
@@ -87,7 +88,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             Utils.showProgressDialog(activity);
             getTopSeller();
         } else {
-            Utils.setToast(activity, "No Internet Connection Please connect.");
+            Utils.setToast(activity, activity.dbHelper.getString(R.string.no_connection));
         }
     }
 
@@ -96,7 +97,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             Utils.showProgressDialog(activity);
             getAllCategories();
         } else {
-            Utils.setToast(activity, "No Internet Connection Please connect.");
+            Utils.setToast(activity, activity.dbHelper.getString(R.string.no_connection));
         }
     }
 
@@ -105,7 +106,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             Utils.showProgressDialog(activity);
             getNearByItem();
         } else {
-            Utils.setToast(activity, "No Internet Connection Please connect.");
+            Utils.setToast(activity, activity.dbHelper.getString(R.string.no_connection));
         }
     }
 
@@ -114,7 +115,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             Utils.showProgressDialog(activity);
             getMallApiData();
         } else {
-            Utils.setToast(activity, "No Internet Connection Please connect.");
+            Utils.setToast(activity, activity.dbHelper.getString(R.string.no_connection));
         }
     }
 

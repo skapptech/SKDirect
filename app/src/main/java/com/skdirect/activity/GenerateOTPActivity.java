@@ -27,6 +27,8 @@ import com.skdirect.model.GenerateOtpResponseModel;
 import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.OTPVerificationViewModel;
@@ -43,7 +45,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     private CommonClassForAPI commonClassForAPI;
     private String fcmToken;
     private EasyWayLocation easyWayLocation;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,10 +63,10 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     }
 
     private void initView() {
+        dbHelper = MyApplication.getInstance().dbHelper;
         commonClassForAPI = CommonClassForAPI.getInstance(this);
         Binding.btLoddingOtp.setOnClickListener(this);
-        Binding.tvVerifactionText.setText("Enter Verification code which we have\n" +
-                "send to XXXXX " + latsFiveNumber);
+        Binding.tvVerifactionText.setText(dbHelper.getString(R.string.enter_no_txt) + latsFiveNumber);
         startTimer(Binding.resendOtpTimer, Binding.resendotp);
         // init broadcast receiver
         mSmsBroadcastReceiver = new SmsBroadcastReceiver();
@@ -79,7 +81,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                 if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
                         || keyEvent.getAction() == KeyEvent.ACTION_DOWN || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
 
-                    Binding.btLoddingOtp.setText("Loading ...");
+                    Binding.btLoddingOtp.setText(dbHelper.getString(R.string.loading));
                     checkVerification();
 
                 }
@@ -104,7 +106,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
         cTimer = new CountDownTimer(30000, 1000) {
             public void onTick(long millisUntilFinished) {
                 //  Logger.logD("WelcomeActivity", "Timer:" + millisUntilFinished / 1000);
-                tvResendOtpTimer.setText("Resend OTP" + ":" + "" + millisUntilFinished / 1000);
+                tvResendOtpTimer.setText(dbHelper.getString(R.string.resend_otp) + ":" + "" + millisUntilFinished / 1000);
                 Binding.resendotp.setVisibility(View.GONE);
             }
 
@@ -150,7 +152,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_lodding_otp:
-                Binding.btLoddingOtp.setText("Loading ...");
+                Binding.btLoddingOtp.setText(dbHelper.getString(R.string.loading));
                 checkVerification();
 
                 break;
@@ -160,7 +162,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     private void checkVerification() {
         otpString = Binding.etOtp.getText().toString().trim();
         if (otpString.isEmpty()) {
-            Utils.setToast(this, "Please Enter OTP");
+            Utils.setToast(this, dbHelper.getString(R.string.enter_otp));
         } else {
             callOTPVerfiyAPI(otpString);
         }
@@ -173,7 +175,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                 commonClassForAPI.VerfiyOtp(OTPVerfiyData, new OtpVerificationModel(mobileNumber, otpString, Utils.getDeviceUniqueID(this)));
             }
         } else {
-            Utils.setToast(this, "No Internet Connection Please connect.");
+            Utils.setToast(this, dbHelper.getString(R.string.no_connection));
         }
     }
 
@@ -184,7 +186,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
             GenerateOtpModel model = new GenerateOtpModel(mobileNumberString, Utils.getDeviceUniqueID(this));
             getResendOTPData(model);
         } else {
-            Utils.setToast(this, "No Internet Connection Please connect.");
+            Utils.setToast(this, dbHelper.getString(R.string.no_connection));
         }
 
     }
@@ -232,11 +234,11 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     finish();
 
                 } else {
-                    Binding.btLoddingOtp.setText("Next");
-                    Utils.setToast(GenerateOTPActivity.this, "Please enter valid OTP.");
+                    Binding.btLoddingOtp.setText(dbHelper.getString(R.string.next));
+                    Utils.setToast(GenerateOTPActivity.this, dbHelper.getString(R.string.valid_otp));
                 }
             } else {
-                Utils.setToast(GenerateOTPActivity.this, "Please enter valid OTP.");
+                Utils.setToast(GenerateOTPActivity.this, dbHelper.getString(R.string.valid_otp));
             }
         }
 
@@ -268,14 +270,14 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                Utils.setToast(getApplicationContext(), "Invalid Password");
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
 
             }
         }
 
         @Override
         public void onError(Throwable e) {
-            Utils.setToast(getApplicationContext(), "Invalid Password");
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
             Utils.hideProgressDialog();
             e.printStackTrace();
         }

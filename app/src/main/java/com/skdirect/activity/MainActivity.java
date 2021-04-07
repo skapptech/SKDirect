@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public Toolbar appBarLayout;
     public TextView userNameTV, mobileNumberTV, setLocationTV;
     private MainActivityViewMode mainActivityViewMode;
-    DBHelper dbHelper;
+    public DBHelper dbHelper;
     public static CartItemModel cartItemModel;
     private int itemQuatntiy;
 
@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainActivityViewMode = ViewModelProviders.of(this).get(MainActivityViewMode.class);
-        dbHelper = MyApplication.getInstance().dbHelper;
         openFragment(new HomeFragment());
         Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
         initView();
@@ -124,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void initView() {
+        dbHelper = MyApplication.getInstance().dbHelper;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         appBarLayout = mBinding.toolbarId.toolbar;
         userNameTV = mBinding.navTop.tvUserName;

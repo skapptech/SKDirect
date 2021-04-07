@@ -36,4 +36,8 @@
     <string name="we_will_send_an_otp_to_nabove_number">We will send an OTP to \nabove Number</string>
     <string name="login_using_password">Login using Password</string>
     <string name="invalid_pass">Invalid Password</string>
+    <string name="enter_no_txt">\"Enter Verification code which we have send to XXXXX \"</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="valid_otp">Please enter valid OTP.</string>
+    <string name="enter_otp">Please Enter OTP</string>
 </resources>
