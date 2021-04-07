@@ -49,6 +49,7 @@ public class SharePrefs {
     public static final String LON ="Longitude";
     public static final String BUSINESS_TYPE ="BusinessType";
     public static final String DELIVERY ="delivery";
+    public static final String SELECTED_LANGUAGE ="selectedLanguage";
 
 
 

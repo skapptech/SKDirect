@@ -22,4 +22,5 @@
     <string name="txt_seller_details">Seller Detail</string>
     <string name="txt_shop_name">Shop Name</string>
     <string name="txt_delivery">Delivery options:</string>
+    <string name="change_language">Change Language</string>
 </resources>
