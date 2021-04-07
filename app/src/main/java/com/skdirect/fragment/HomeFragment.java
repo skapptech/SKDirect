@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             getSellerAPi();
             getAllCategoriesAPi();
         } else {
-           //mBinding.swiperefresh.setVisibility(View.GONE);
+            //mBinding.swiperefresh.setVisibility(View.GONE);
         }
 
 
@@ -123,17 +123,21 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             public void onChanged(MallMainModel mallMainModel) {
                 Utils.hideProgressDialog();
-                if (mallMainModel.getResultItem() != null) {
-                    MallCategorieBannerAdapter mallCategorieBannerAdapter = new MallCategorieBannerAdapter(getActivity(),mallMainModel.getResultItem().getStoreCategoryList());
-                    mBinding.rvStoreCategoryList.setAdapter(mallCategorieBannerAdapter);
-                    mBinding.llMainAppHome.setVisibility(View.GONE);
-                    mBinding.llMallHome.setVisibility(View.VISIBLE);
-                } else {
-                    mBinding.llMainAppHome.setVisibility(View.VISIBLE);
-                    mBinding.llMallHome.setVisibility(View.GONE);
-                    topNearByItem();
-                    getSellerAPi();
-                    getAllCategoriesAPi();
+                if (mallMainModel.isSuccess()) {
+                    if (mallMainModel.getResultItem() != null) {
+                        MallCategorieBannerAdapter mallCategorieBannerAdapter = new MallCategorieBannerAdapter(getActivity(), mallMainModel.getResultItem().getStoreCategoryList());
+                        mBinding.rvStoreCategoryList.setAdapter(mallCategorieBannerAdapter);
+                        mBinding.llMainAppHome.setVisibility(View.GONE);
+                        mBinding.llMallHome.setVisibility(View.VISIBLE);
+                    } else {
+                        mBinding.llMainAppHome.setVisibility(View.VISIBLE);
+                        mBinding.llMallHome.setVisibility(View.GONE);
+                        topNearByItem();
+                        getSellerAPi();
+                        getAllCategoriesAPi();
+                    }
+                }else {
+                    Utils.setToast(getActivity(),mallMainModel.getErrorMessage());
                 }
             }
         });
@@ -181,7 +185,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         homeViewModel.getAllCategoriesLiveData().observe(this, new Observer<ArrayList<AllCategoriesModel>>() {
             @Override
             public void onChanged(ArrayList<AllCategoriesModel> allCategoriesList) {
-               // mBinding.swiperefresh.setRefreshing(false);
+                // mBinding.swiperefresh.setRefreshing(false);
                 if (allCategoriesList.size() > 0) {
                     AllCategoriesAdapter allCategoriesAdapter = new AllCategoriesAdapter(getActivity(), allCategoriesList);
                     mBinding.rvAllCetegory.setAdapter(allCategoriesAdapter);
@@ -189,8 +193,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     mBinding.llAllCetegoryNotFound.setVisibility(View.VISIBLE);
                     mBinding.rvAllCetegory.setVisibility(View.GONE);
                 }
-
-
             }
         });
 
@@ -255,8 +257,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             public void onChanged(CustomerDataModel customerDataModel) {
                 Utils.hideProgressDialog();
                 if (customerDataModel != null) {
-
-
                     activity.mobileNumberTV.setText(customerDataModel.getMobileNo());
                     SharePrefs.getInstance(activity).putString(SharePrefs.FIRST_NAME, customerDataModel.getFirstName());
                     SharePrefs.getInstance(activity).putString(SharePrefs.MIDDLE_NAME, customerDataModel.getMiddleName());
@@ -286,11 +286,10 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                             SharePrefs.getInstance(activity).putString(SharePrefs.DELIVERY, customerDataModel.getUserDeliveryDC().get(i).getDelivery());
 
                         }
-                        if(customerDataModel.isRegistrationComplete()){
+                        if (customerDataModel.isRegistrationComplete()) {
                             activity.userNameTV.setText(customerDataModel.getFirstName());
                             activity.mBinding.llLogout.setVisibility(View.VISIBLE);
-                        }
-                        else{
+                        } else {
                             activity.userNameTV.setText(R.string.guest_user);
                             activity.mBinding.llSignIn.setVisibility(View.VISIBLE);
                         }

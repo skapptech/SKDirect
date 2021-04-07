@@ -54,6 +54,7 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
         }else {
             holder.mBinding.tvMrp.setText("₹ " + sellerProductModel.getMrp());
             holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.mBinding.llSellingPrice.setVisibility(View.VISIBLE);
             holder.mBinding.tvSellingPrice.setText("₹ " + sellerProductModel.getSellingPrice());
         }
 
@@ -63,8 +64,6 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
         }else {
             holder.mBinding.tvMagrginOff.setVisibility(View.GONE);
         }
-
-
 
         if (sellerProductModel.getNoofView()>0){
             holder.mBinding.llNoOfView.setVisibility(View.VISIBLE);
