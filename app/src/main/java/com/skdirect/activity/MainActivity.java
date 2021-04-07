@@ -37,6 +37,7 @@ import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.fragment.BasketFragment;
 import com.skdirect.fragment.HomeFragment;
 import com.skdirect.utils.AppSignatureHelper;
+import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
@@ -60,14 +61,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public Toolbar appBarLayout;
     public TextView userNameTV, mobileNumberTV, setLocationTV;
     private MainActivityViewMode mainActivityViewMode;
-
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainActivityViewMode = ViewModelProviders.of(this).get(MainActivityViewMode.class);
-
+        dbHelper = MyApplication.getInstance().dbHelper;
         openFragment(new HomeFragment());
         initView();
         setlocationInHader();
@@ -205,6 +206,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         getCartItemApi();
+
+
+        mBinding.tvProfileHead.setText(dbHelper.getString(R.string.profile));
+        mBinding.tvProfileTitle.setText(dbHelper.getString(R.string.profile));
+        mBinding.tvChangePassTitle.setText(dbHelper.getString(R.string.change_pass));
+        mBinding.tvChatTitle.setText(dbHelper.getString(R.string.chat));
+        mBinding.tvOtherSettingsHead.setText(dbHelper.getString(R.string.other_settings));
+        mBinding.tvChangeLangTitle.setText(dbHelper.getString(R.string.change_language));
+        mBinding.tvRateAppTitle.setText(dbHelper.getString(R.string.rate_app));
+        mBinding.tvPrivacyTitle.setText(dbHelper.getString(R.string.privacy_policy));
+        mBinding.tvAboutTitle.setText(dbHelper.getString(R.string.about_direct));
+        mBinding.tvHelpTitle.setText(dbHelper.getString(R.string.help));
+        mBinding.tvHowToTitle.setText(dbHelper.getString(R.string.how_to_use));
+        mBinding.tvLogoutTitle.setText(dbHelper.getString(R.string.logout));
+        mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
+
     }
 
     private void setlocationInHader() {
