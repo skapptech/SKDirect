@@ -210,6 +210,9 @@ public interface APIServices {
     @GET("api/NativeBuyer/MyOrder/CancelOrder")
     Call<MallMainModelBolleanResult> CancelOrder(@Query("OrderId") int OrderId);
 
+    @GET("/api/NativeBuyer/Location/SetLocation")
+    Call<CommonResponseModel> setLocation(@Query("latitude") double latitude,@Query("longitude") double longitude);
+
     @GET("api/NativeBuyer/Mall/GetMall")
     Call<MallMainModel> getMall();
 }

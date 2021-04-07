@@ -31,4 +31,9 @@
     <string name="enter_valid_mobno">Please enter Valid  Mobile Number.</string>
     <string name="loading">Loading ...</string>
     <string name="enter_mobno">Please Enter Mobile</string>
+    <string name="what_s_your_number">What\'s Your Number</string>
+    <string name="enter_phone_number">Enter phone number</string>
+    <string name="we_will_send_an_otp_to_nabove_number">We will send an OTP to \nabove Number</string>
+    <string name="login_using_password">Login using Password</string>
+    <string name="invalid_pass">Invalid Password</string>
 </resources>

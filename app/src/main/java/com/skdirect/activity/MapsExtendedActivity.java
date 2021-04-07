@@ -2,7 +2,6 @@ package com.skdirect.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,20 +12,14 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -46,11 +39,11 @@ import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityMapsExtendedBinding;
+import com.skdirect.model.CommonResponseModel;
 import com.skdirect.utils.GpsUtils;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.MapViewViewMode;
-
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -90,7 +83,6 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
     private MapViewViewMode mapViewViewMode;
 
 
-
     @Override
     public void applyOverrideConfiguration(Configuration overrideConfiguration) {
         if (overrideConfiguration != null) {
@@ -109,7 +101,6 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
             }
         }
     };
-
 
 
     @Override
@@ -142,6 +133,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
             if (Utils.isNetworkAvailable(getApplicationContext())) {
                 Utils.showProgressDialog(MapsExtendedActivity.this);
                 callLocationAPI(latitude, longitude);
+                setLocationAPI(latitude, longitude);
             } else {
                 Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
             }
@@ -157,8 +149,10 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
 
 
     }
+
     private void callLocationAPI(double latitude, double longitude) {
         mapViewViewMode.getMapViewModelRequest(latitude, longitude);
+
         mapViewViewMode.getMapViewModel().observe(this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject data) {
@@ -179,12 +173,11 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                         e.printStackTrace();
                     }
                     String cityName = addresses.get(0).getLocality();
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CITYNAME,cityName);
-                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LAT,String.valueOf(lat));
-                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LON, String.valueOf(lng));
-                    Log.e("cityName", "cityName  "+cityName);
-                    startActivity(new Intent(MapsExtendedActivity.this,MainActivity.class));
-                    finish();
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CITYNAME, cityName);
+                    SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LAT, String.valueOf(lat));
+                    SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LON, String.valueOf(lng));
+
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -194,6 +187,33 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
             }
         });
 
+
+    }
+
+    private void setLocationAPI(double latitude, double longitude) {
+        mapViewViewMode.setLocationViewModelRequest(latitude, longitude);
+        mapViewViewMode.setLocationViewModel().observe(this, new Observer<CommonResponseModel>() {
+            @Override
+            public void onChanged(CommonResponseModel data) {
+                Utils.hideProgressDialog();
+                try {
+                    if (data!=null){
+                        if(data.isSuccess()){
+                            Utils.setLongToast(MapsExtendedActivity.this,data.getSuccessMessage());
+                            startActivity(new Intent(MapsExtendedActivity.this, MainActivity.class));
+                            finish();
+                        }
+                        else{
+                            Utils.setLongToast(MapsExtendedActivity.this,data.getErrorMessage());
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
 
     }
 
@@ -235,7 +255,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             }
-            Toast.makeText(this,"Location", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Location", Toast.LENGTH_SHORT).show();
         } else if (isGPS) {
             buildGoogleApiClient();
         }

@@ -126,8 +126,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         appBarLayout = mBinding.toolbarId.toolbar;
-        userNameTV = mBinding.tvUserName;
-        mobileNumberTV = mBinding.tvMobileName;
+        userNameTV = mBinding.navTop.tvUserName;
+        mobileNumberTV = mBinding.navTop.tvMobileName;
         setLocationTV = mBinding.toolbarId.tvLoction;
 
         if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME))) {
@@ -192,9 +192,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Glide.with(this)
                     .load(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.USER_IMAGE))
                     .centerCrop()
-                    .into(mBinding.profileImageNav);
+                    .into(mBinding.navTop.profileImageNav);
         } else {
-            mBinding.profileImageNav.setImageDrawable(getResources().getDrawable(R.drawable.profile_round));
+            mBinding.navTop.profileImageNav.setImageDrawable(getResources().getDrawable(R.drawable.profile_round));
         }
 
         getCartItemApi();

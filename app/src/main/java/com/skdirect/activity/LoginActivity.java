@@ -18,6 +18,8 @@ import com.skdirect.databinding.ActivityLoginBinding;
 import com.skdirect.model.GenerateOtpModel;
 import com.skdirect.model.GenerateOtpResponseModel;
 import com.skdirect.model.TokenModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.LoginViewModel;
@@ -32,7 +34,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ActivityLoginBinding Binding;
     private String mobileNumberString;
     private LoginViewModel loginViewModel;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     private void initView() {
+        dbHelper = MyApplication.getInstance().dbHelper;
         Binding.btGetOtp.setOnClickListener(this);
         Binding.btLoginWithPassword.setOnClickListener(this);
         Binding.btSkip.setOnClickListener(this);
@@ -79,22 +82,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void loginWithPassword() {
         mobileNumberString = Binding.etMobileNumber.getText().toString().trim();
         if (mobileNumberString.isEmpty()) {
-            Utils.setToast(this, getString(R.string.enter_valid_mobno));
+            Utils.setToast(this,dbHelper.getString(R.string.enter_valid_mobno));
         } else{
             startActivity(new Intent(LoginActivity.this, LoginWithPasswordActivity.class).putExtra("MobileNumber",mobileNumberString));
         }
     }
 
     private void getOTP() {
-        Binding.btGetOtp.setText(getString(R.string.loading));
+        Binding.btGetOtp.setText(dbHelper.getString(R.string.loading));
         mobileNumberString = Binding.etMobileNumber.getText().toString().trim();
         if (mobileNumberString.isEmpty()) {
-            Utils.setToast(this, getString(R.string.enter_mobno));
-            Binding.btGetOtp.setText(getString(R.string.get_otp));
+            Utils.setToast(this, dbHelper.getString(R.string.enter_mobno));
+            Binding.btGetOtp.setText(dbHelper.getString(R.string.get_otp));
         } else if (Utils.isValidMobile(mobileNumberString)) {
             callOTPApi(mobileNumberString);
         } else {
-            Utils.setToast(this, getString(R.string.enter_valid_mobno));
+            Utils.setToast(this, dbHelper.getString(R.string.enter_valid_mobno));
         }
     }
 
@@ -104,7 +107,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             GenerateOtpModel model =new GenerateOtpModel(mobileNumberString,Utils.getDeviceUniqueID(this));
             getLoginData(model);
         } else {
-            Utils.setToast(this, getString(R.string.no_connection));
+            Utils.setToast(this, dbHelper.getString(R.string.no_connection));
         }
 
     }
@@ -133,14 +136,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                  }
              } catch (Exception e) {
                  e.printStackTrace();
-                 Utils.setToast(getApplicationContext(), "Invalid Password");
+                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
 
              }
          }
 
          @Override
          public void onError(Throwable e) {
-             Utils.setToast(getApplicationContext(), "Invalid Password");
+             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
              Utils.hideProgressDialog();
              e.printStackTrace();
          }
