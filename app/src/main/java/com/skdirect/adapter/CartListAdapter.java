@@ -2,7 +2,6 @@ package com.skdirect.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 
 public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHolder> {
     private final Context context;
-    private ArrayList<CartModel> cartItemList;
+    private final ArrayList<CartModel> cartItemList;
     private final CartItemInterface cartItemInterface;
 
 
@@ -43,7 +42,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         holder.mBinding.tvProductName.setText(cartModel.getProductName());
         holder.mBinding.tvSellerName.setText("Seller: " + cartModel.getShopName());
         holder.mBinding.tvMrp.setText("₹ " + cartModel.getPrice());
-        holder.mBinding.tvSelectedQty.setText(String.valueOf(cartModel.getQuantity()));
+        holder.mBinding.tvSelectedQty.setText("" + cartModel.getQuantity());
 
         if (cartModel.getImagePath() != null && !cartModel.getImagePath().contains("http")) {
             Picasso.get().load(BuildConfig.apiEndpoint + cartModel.getImagePath()).into(holder.mBinding.imItemImage);

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -110,7 +109,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.tvKeepShopping.setOnClickListener(this);
         mBinding.rlCheckOut.setOnClickListener(this);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         mBinding.rvCartItem.setLayoutManager(layoutManager);
 
         cartListAdapter = new CartListAdapter(getApplicationContext(), cartItemList, this);
