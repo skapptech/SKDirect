@@ -107,6 +107,14 @@ public class CartRepository {
         return cartDatabase.cartDaoAccess().isItemExist(id);
     }
 
+    public Integer getItemQty(int id) {
+        return cartDatabase.cartDaoAccess().getItemQty(id);
+    }
+
+    public Integer getCartSellerId() {
+        return cartDatabase.cartDaoAccess().getCartSellerId();
+    }
+
     public LiveData<Double> getCartValue() {
         return cartDatabase.cartDaoAccess().getCartValue();
     }

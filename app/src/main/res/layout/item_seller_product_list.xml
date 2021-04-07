@@ -156,7 +156,7 @@
                     style="@style/font_normal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="@string/txt_Inclusive"
                     android:textColor="@color/seller_button_color"
                     android:textSize="14dp"
                     android:textStyle="normal" />

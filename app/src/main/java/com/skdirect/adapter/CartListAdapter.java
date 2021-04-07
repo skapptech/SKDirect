@@ -19,9 +19,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHolder> {
-    private Context context;
-    ArrayList<CartModel> cartItemList;
-    private CartItemInterface cartItemInterface;
+    private final Context context;
+    private ArrayList<CartModel> cartItemList;
+    private final CartItemInterface cartItemInterface;
+
 
     public CartListAdapter(Context context, ArrayList<CartModel> cartItemList, CartItemInterface cartItemInter) {
         this.context = context;
@@ -41,7 +42,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         CartModel cartModel = cartItemList.get(position);
         holder.mBinding.tvProductName.setText(cartModel.getProductName());
         holder.mBinding.tvSellerName.setText("Seller: " + cartModel.getShopName());
-        holder.mBinding.tvMrp.setText("₹ " + String.valueOf(cartModel.getPrice()));
+        holder.mBinding.tvMrp.setText("₹ " + cartModel.getPrice());
         holder.mBinding.tvSelectedQty.setText(String.valueOf(cartModel.getQuantity()));
 
         if (cartModel.getImagePath() != null && !cartModel.getImagePath().contains("http")) {
@@ -50,26 +51,20 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
             Picasso.get().load(cartModel.getImagePath()).into(holder.mBinding.imItemImage);
         }
 
-        holder.mBinding.tvQtyPlus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cartItemInterface.plusButtonOnClick(cartModel, holder.mBinding.tvSelectedQty);
-            }
+        holder.mBinding.tvQtyPlus.setOnClickListener(view -> {
+            cartModel.setQuantity(cartModel.getQuantity() + 1);
+            holder.mBinding.tvSelectedQty.setText("" + cartModel.getQuantity());
+            cartItemInterface.plusButtonOnClick(cartModel);
         });
 
-        holder.mBinding.tvQtyMinus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cartItemInterface.minusButtonOnClick(cartModel, holder.mBinding.tvSelectedQty, holder.mBinding.LLPlusMinus);
-            }
+        holder.mBinding.tvQtyMinus.setOnClickListener(view -> {
+            cartModel.setQuantity(cartModel.getQuantity() - 1);
+            holder.mBinding.tvSelectedQty.setText("" + cartModel.getQuantity());
+            cartItemInterface.minusButtonOnClick(cartModel, holder.mBinding.LLPlusMinus);
         });
-        holder.mBinding.tvRomove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cartItemInterface.removeButtonOnClick(cartModel, position);
-            }
+        holder.mBinding.tvRomove.setOnClickListener(view -> {
+            cartItemInterface.removeButtonOnClick(cartModel, position);
         });
-
     }
 
     @Override
@@ -77,9 +72,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         return cartItemList == null ? 0 : cartItemList.size();
     }
 
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ItemCartListBinding mBinding;
-
 
         public ViewHolder(ItemCartListBinding Binding) {
             super(Binding.getRoot());

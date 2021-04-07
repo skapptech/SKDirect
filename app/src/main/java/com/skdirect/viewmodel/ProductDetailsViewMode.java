@@ -6,23 +6,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.AddViewMainModel;
-import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.MainSimilarTopSellerModel;
 import com.skdirect.model.MainTopSimilarSellerModel;
-import com.skdirect.model.PaginationModel;
 import com.skdirect.model.ProductDataModel;
-import com.skdirect.model.TopNearByItemModel;
-import com.skdirect.model.TopSellerModel;
 import com.skdirect.utils.Utils;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -231,12 +223,12 @@ public class ProductDetailsViewMode extends ViewModel {
         return addItemsInCardVM;
     }
 
-    public MutableLiveData<Object> getClearCartItemVMRequest(String id) {
+    public MutableLiveData<Object> getClearCartItemVMRequest(int id) {
         RestClient.getInstance().getService().ClearCart(id).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     clearCartItemVM.setValue(response.body());
                 }
             }

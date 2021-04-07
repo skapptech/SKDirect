@@ -9,8 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.JsonObject;
-import com.skdirect.activity.MainActivity;
+import com.google.gson.JsonElement;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.CartItemModel;
@@ -27,14 +26,13 @@ public class CartItemViewMode extends ViewModel {
 
     private MutableLiveData<CartItemModel> CartItemModelVM;
     private MutableLiveData<AddCartItemModel> addItemsInCardVM;
-    private MutableLiveData<JsonObject> removeItemFromCartVM;
+    private MutableLiveData<JsonElement> removeItemFromCartVM;
 
     public LiveData<CartItemModel> getCartItemModelVM() {
         if (CartItemModelVM == null) {
             CartItemModelVM = new MutableLiveData<>();
         }
-        if (CartItemModelVM.getValue() != null )
-        {
+        if (CartItemModelVM.getValue() != null) {
             CartItemModelVM.setValue(null);
         }
         return CartItemModelVM;
@@ -43,24 +41,22 @@ public class CartItemViewMode extends ViewModel {
     public LiveData<AddCartItemModel> getAddItemsInCardVM() {
         if (addItemsInCardVM == null)
             addItemsInCardVM = new MutableLiveData<>();
-        if (addItemsInCardVM.getValue() != null)
-        {
+        if (addItemsInCardVM.getValue() != null) {
             addItemsInCardVM.setValue(null);
         }
         return addItemsInCardVM;
     }
 
-    public LiveData<JsonObject> getRemoveItemFromCartVM() {
+    public LiveData<JsonElement> getRemoveItemFromCartVM() {
         if (removeItemFromCartVM == null)
             removeItemFromCartVM = new MutableLiveData<>();
-        if (removeItemFromCartVM.getValue() != null)
-        {
+        if (removeItemFromCartVM.getValue() != null) {
             removeItemFromCartVM.setValue(null);
         }
         return removeItemFromCartVM;
     }
 
-    public MutableLiveData<CartItemModel> getCartItemModelVMRequest(String id, RecyclerView rvCartItem, LinearLayout blankBasket) {
+    public MutableLiveData<CartItemModel> getCartItemModelVMRequest(int id, RecyclerView rvCartItem, LinearLayout blankBasket) {
         RestClient.getInstance().getService().CartItems(id).enqueue(new Callback<CartItemModel>() {
             @Override
             public void onResponse(Call<CartItemModel> call, Response<CartItemModel> response) {
@@ -106,10 +102,10 @@ public class CartItemViewMode extends ViewModel {
         return addItemsInCardVM;
     }
 
-    public MutableLiveData<JsonObject> getRemoveItemFromCartVMRequest(RemoveItemRequestModel itemRequestModel) {
-        RestClient.getInstance().getService().deleteCartItems(itemRequestModel).enqueue(new Callback<JsonObject>() {
+    public MutableLiveData<JsonElement> getRemoveItemFromCartVMRequest(RemoveItemRequestModel itemRequestModel) {
+        RestClient.getInstance().getService().deleteCartItems(itemRequestModel).enqueue(new Callback<JsonElement>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.e(TAG, "request response=" + response.body());
                     removeItemFromCartVM.setValue(response.body());
@@ -117,9 +113,8 @@ public class CartItemViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(Call<JsonElement> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + t.toString());
-                MainActivity.cartItemModel = null;
                 Utils.hideProgressDialog();
             }
         });

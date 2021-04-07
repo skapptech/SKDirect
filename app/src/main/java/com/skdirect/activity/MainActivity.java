@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -37,9 +36,9 @@ import com.skdirect.databinding.ActivityMainBinding;
 import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.fragment.BasketFragment;
 import com.skdirect.fragment.HomeFragment;
-import com.skdirect.model.CartItemModel;
 import com.skdirect.utils.AppSignatureHelper;
 import com.skdirect.utils.GPSTracker;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
@@ -61,8 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public Toolbar appBarLayout;
     public TextView userNameTV, mobileNumberTV, setLocationTV;
     private MainActivityViewMode mainActivityViewMode;
-    public static CartItemModel cartItemModel;
-    private int itemQuatntiy;
 
 
     @Override
@@ -70,17 +67,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainActivityViewMode = ViewModelProviders.of(this).get(MainActivityViewMode.class);
-        Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
+
         openFragment(new HomeFragment());
         initView();
         setlocationInHader();
         clickListener();
-        setupBadge();
         ///callRunTimePermissions();
-
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        setupBadge();
+    }
+
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_FETCH_LANGUAGE)) {
@@ -97,16 +97,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.llSignIn.setOnClickListener(this);
         mBinding.llHowtoUse.setOnClickListener(this);
         mBinding.llChangeLanguage.setOnClickListener(this);
-
     }
-
+    public void onBackPressed() {
+        if (mBinding.drawer.isDrawerOpen(GravityCompat.START)) {
+            mBinding.drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
+                if (doubleBackToExitPressedOnce) {
+                    super.onBackPressed();
+                    finishAffinity();
+                    return;
+                }
+                doubleBackToExitPressedOnce = true;
+                Snackbar.make(mBinding.drawer, "Please click back again to exit",
+                        Snackbar.LENGTH_SHORT).show();
+                new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
+            } else {
+                if (positionChanged) {
+                    positionChanged = false;
+                    mBinding.toolbarId.bottomNavigation.getMenu().getItem(0).setChecked(true);
+                    super.onBackPressed();
+                } else {
+                    super.onBackPressed();
+                }
+            }
+        }
+    }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        setupBadge();
-        getCartItemApi();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if (requestCode == 2) {
+            if (requestCode == 2 && resultCode == RESULT_OK) {
+                Address address = data.getParcelableExtra("address");
+                double lat = address.getLatitude();
+                double log = address.getLongitude();
+                setLocationTV.setText(Utils.getCityName(this, lat, log));
+            }
+
+        }
     }
+
 
     private void initView() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -120,13 +152,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         mobileNumberTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.MOBILE_NUMBER));
 
-//        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBinding.toolbarId.bottomNavigation.getLayoutParams();
-//        layoutParams.setBehavior(new BottomNavigationBehavior());
-
         mBinding.toolbarId.ivMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mBinding.drawer.openDrawer(Gravity.START);
+                mBinding.drawer.openDrawer(GravityCompat.START);
             }
         });
 
@@ -174,37 +203,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             mBinding.profileImageNav.setImageDrawable(getResources().getDrawable(R.drawable.profile_round));
         }
+
+        getCartItemApi();
     }
 
     private void setlocationInHader() {
         setLocationTV.setText(Utils.getCityName(this, Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)), Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LON))));
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mBinding.drawer.isDrawerOpen(GravityCompat.START)) {
-            mBinding.drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
-                if (doubleBackToExitPressedOnce) {
-                    super.onBackPressed();
-                    finishAffinity();
-                    return;
-                }
-                doubleBackToExitPressedOnce = true;
-                Snackbar.make(mBinding.drawer, "Please click back again to exit",
-                        Snackbar.LENGTH_SHORT).show();
-                new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
-            } else {
-                if (positionChanged) {
-                    positionChanged = false;
-                    mBinding.toolbarId.bottomNavigation.getMenu().getItem(0).setChecked(true);
-                    super.onBackPressed();
-                } else {
-                    super.onBackPressed();
-                }
-            }
-        }
     }
 
     public void openFragment(Fragment fragment) {
@@ -213,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //transaction.addToBackStack(null);
         transaction.commit();
     }
-
 
     @Override
     public void onClick(View view) {
@@ -260,59 +263,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
-
     public void clearSharePrefs() {
         sharedPreferences.edit().clear().apply();
     }
 
     private void setupBadge() {
-        // int CartItemCount = SharePrefs.getInstance(MainActivity.this).getInt(SharePrefs.COUNT);
-        if (itemQuatntiy == 0) {
-            if (mBinding.toolbarId.cartBadge.getVisibility() != View.GONE) {
-                mBinding.toolbarId.cartBadge.setVisibility(View.GONE);
-            }
+        int count = MyApplication.getInstance().cartRepository.getCartCount1();
+        if (count == 0) {
+            mBinding.toolbarId.cartBadge.setVisibility(View.GONE);
         } else {
-            mBinding.toolbarId.cartBadge.setText(String.valueOf(Math.min(itemQuatntiy, 99)));
-            if (mBinding.toolbarId.cartBadge.getVisibility() != View.VISIBLE) {
-                mBinding.toolbarId.cartBadge.setVisibility(View.VISIBLE);
-            }
+            mBinding.toolbarId.cartBadge.setVisibility(View.VISIBLE);
+            mBinding.toolbarId.cartBadge.setText(String.valueOf(Math.min(count, 99)));
         }
-
     }
 
     private void getCartItemApi() {
         mainActivityViewMode.getCartItemsRequest("123");
-        mainActivityViewMode.getCartItemsVM().observe(this, new Observer<CartItemModel>() {
-            @Override
-            public void onChanged(CartItemModel model) {
-                itemQuatntiy = 0;
-                Utils.hideProgressDialog();
-                if (model != null && model.getCart() != null) {
-                    cartItemModel = model;
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CART_ITEM_ID, model.getId());
-                    for (int i = 0; i < model.getCart().size(); i++) {
-                        itemQuatntiy += model.getCart().get(i).getQuantity();
-                    }
-                    setupBadge();
-                }
+        mainActivityViewMode.getCartItemsVM().observe(this, model -> {
+            System.out.println("SellerId " + model.getSellerId());
+            Utils.hideProgressDialog();
+            if (model != null && model.getCart() != null) {
+                MyApplication.getInstance().cartRepository.addToCart(model.getCart());
+            } else {
+                MyApplication.getInstance().cartRepository.truncateCart();
             }
+            setupBadge();
         });
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // check if the request code is same as what is passed  here it is 2
-        if (requestCode == 2) {
-            if (requestCode == 2 && resultCode == RESULT_OK) {
-                Address address = data.getParcelableExtra("address");
-                double lat = address.getLatitude();
-                double log = address.getLongitude();
-                setLocationTV.setText(Utils.getCityName(this, lat, log));
-            }
-
-        }
     }
 
     private void callLocationAPI(double latitude, double longitude) {
@@ -342,12 +318,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
         });
     }
-
 
     public void callRunTimePermissions() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
@@ -369,5 +342,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
-
 }

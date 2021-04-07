@@ -37,6 +37,13 @@ public interface CartDaoAccess {
     @Query("SELECT EXISTS(SELECT * FROM ShoppingCart WHERE Id = :id)")
     Boolean isItemExist(int id);
 
+    @Transaction
+    @Query("SELECT Quantity FROM ShoppingCart WHERE Id =:id")
+    Integer getItemQty(int id);
+
+    @Query("SELECT SellerId FROM ShoppingCart LIMIT 1")
+    Integer getCartSellerId();
+
     @Query("SELECT SUM(Mrp * Quantity) FROM ShoppingCart")
     LiveData<Double> getCartValue();
 
@@ -44,13 +51,13 @@ public interface CartDaoAccess {
     Double getCartValue1();
 
     @Query("SELECT SUM(Quantity) FROM ShoppingCart")
-    int getCartQtyCount();
+    Integer getCartQtyCount();
 
     @Query("SELECT COUNT(*) FROM ShoppingCart")
     LiveData<Integer> getCartCount();
 
     @Query("SELECT COUNT(*) FROM ShoppingCart")
-    int getCartCount1();
+    Integer getCartCount1();
 
     @Update
     void updateTask(CartModel model);
