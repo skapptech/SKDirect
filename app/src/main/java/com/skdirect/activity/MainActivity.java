@@ -11,10 +11,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -26,16 +26,19 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonObject;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
+import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityMainBinding;
+import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.fragment.BasketFragment;
 import com.skdirect.fragment.HomeFragment;
-import com.skdirect.model.CartItemModel;
 import com.skdirect.utils.AppSignatureHelper;
 import com.skdirect.utils.GPSTracker;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
@@ -55,11 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SharedPreferences sharedPreferences;
     public boolean positionChanged = false;
     public Toolbar appBarLayout;
-    public TextView userNameTV, mobileNumberTV,setLocationTV;
+    public TextView userNameTV, mobileNumberTV, setLocationTV;
     private MainActivityViewMode mainActivityViewMode;
-    public static CartItemModel cartItemModel;
-    private int  itemQuatntiy;
-
 
 
     @Override
@@ -67,14 +67,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainActivityViewMode = ViewModelProviders.of(this).get(MainActivityViewMode.class);
-        Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
+
         openFragment(new HomeFragment());
         initView();
         setlocationInHader();
         clickListener();
-        setupBadge();
         ///callRunTimePermissions();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setupBadge();
+    }
+
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_FETCH_LANGUAGE)) {
+            new FirebaseLanguageFetch(getApplicationContext()).fetchLanguage();
+        }
     }
 
 
@@ -85,91 +96,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.llLogout.setOnClickListener(this);
         mBinding.llSignIn.setOnClickListener(this);
         mBinding.llHowtoUse.setOnClickListener(this);
-
+        mBinding.llChangeLanguage.setOnClickListener(this);
     }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setupBadge();
-        getCartItemApi();
-    }
-
-    private void initView() {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        appBarLayout = mBinding.toolbarId.toolbar;
-        userNameTV = mBinding.tvUserName;
-        mobileNumberTV = mBinding.tvMobileName;
-        setLocationTV = mBinding.toolbarId.tvLoction;
-
-        if(!TextUtils.isNullOrEmpty(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME)))
-        {
-            userNameTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME));
-        }
-        mobileNumberTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.MOBILE_NUMBER));
-
-//        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBinding.toolbarId.bottomNavigation.getLayoutParams();
-//        layoutParams.setBehavior(new BottomNavigationBehavior());
-
-        mBinding.toolbarId.ivMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mBinding.drawer.openDrawer(Gravity.START);
-            }
-        });
-
-        mBinding.toolbarId.bottomNavigation.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id._nav_home:
-                    openFragment(new HomeFragment());
-                    break;
-                case R.id.nav_profile:
-                    positionChanged = true;
-                    startActivity(new Intent(MainActivity.this,ProfileActivity.class));
-                    break;
-                case R.id.nav_my_order:
-                    positionChanged = true;
-                    startActivity(new Intent(MainActivity.this,MyOrderActivity.class));
-                    break;
-                case R.id.nav_basket:
-                    positionChanged = true;
-                    openFragment(new BasketFragment());
-                    break;
-
-            }
-            return true;
-        });
-
-        mBinding.toolbarId.notifictionCount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,CartActivity.class));
-            }
-        });
-
-        setLocationTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(new Intent(MainActivity.this,MapsExtendedActivity.class),2);
-            }
-        });
-
-        if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.USER_IMAGE))) {
-            Glide.with(this)
-                    .load( SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.USER_IMAGE))
-                    .centerCrop()
-                    .into(mBinding.profileImageNav);
-        } else {
-            mBinding.profileImageNav.setImageDrawable(getResources().getDrawable(R.drawable.profile_round));
-        }
-    }
-
-    private void setlocationInHader() {
-        setLocationTV.setText(Utils.getCityName(this,Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)), Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LON))));
-    }
-
-    @Override
     public void onBackPressed() {
         if (mBinding.drawer.isDrawerOpen(GravityCompat.START)) {
             mBinding.drawer.closeDrawer(GravityCompat.START);
@@ -196,6 +124,93 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if (requestCode == 2) {
+            if (requestCode == 2 && resultCode == RESULT_OK) {
+                Address address = data.getParcelableExtra("address");
+                double lat = address.getLatitude();
+                double log = address.getLongitude();
+                setLocationTV.setText(Utils.getCityName(this, lat, log));
+            }
+
+        }
+    }
+
+
+    private void initView() {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        appBarLayout = mBinding.toolbarId.toolbar;
+        userNameTV = mBinding.tvUserName;
+        mobileNumberTV = mBinding.tvMobileName;
+        setLocationTV = mBinding.toolbarId.tvLoction;
+
+        if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME))) {
+            userNameTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME));
+        }
+        mobileNumberTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.MOBILE_NUMBER));
+
+        mBinding.toolbarId.ivMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBinding.drawer.openDrawer(GravityCompat.START);
+            }
+        });
+
+        mBinding.toolbarId.bottomNavigation.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id._nav_home:
+                    openFragment(new HomeFragment());
+                    break;
+                case R.id.nav_profile:
+                    positionChanged = true;
+                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                    break;
+                case R.id.nav_my_order:
+                    positionChanged = true;
+                    startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
+                    break;
+                case R.id.nav_basket:
+                    positionChanged = true;
+                    openFragment(new BasketFragment());
+                    break;
+
+            }
+            return true;
+        });
+
+        mBinding.toolbarId.notifictionCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, CartActivity.class));
+            }
+        });
+
+        setLocationTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(MainActivity.this, MapsExtendedActivity.class), 2);
+            }
+        });
+
+        if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.USER_IMAGE))) {
+            Glide.with(this)
+                    .load(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.USER_IMAGE))
+                    .centerCrop()
+                    .into(mBinding.profileImageNav);
+        } else {
+            mBinding.profileImageNav.setImageDrawable(getResources().getDrawable(R.drawable.profile_round));
+        }
+
+        getCartItemApi();
+    }
+
+    private void setlocationInHader() {
+        setLocationTV.setText(Utils.getCityName(this, Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)), Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LON))));
+    }
+
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.home_frame, fragment);
@@ -203,22 +218,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         transaction.commit();
     }
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_profile:
-                startActivity(new Intent(MainActivity.this,ProfileActivity.class));
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_chnage_password:
-                startActivity(new Intent(MainActivity.this,ChangePasswordActivity.class));
+                startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_chet:
                 Utils.setToast(getApplicationContext(), "Chet");
+                mBinding.drawer.closeDrawers();
+                break;
+            case R.id.ll_rate_this_app:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.playStoreURL)));
+                finish();
                 mBinding.drawer.closeDrawers();
                 break;
 
@@ -228,73 +247,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;
-                case  R.id.ll_sign_in:
+            case R.id.ll_sign_in:
                 startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
-                case R.id.ll_howto_use:
-                    Intent intent = new Intent(Intent.ACTION_VIEW , Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop"));
-                    startActivity(intent);
+            case R.id.ll_howto_use:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop")));
                 finish();
+                mBinding.drawer.closeDrawers();
+                break;
+            case R.id.llChangeLanguage:
+                startActivity(new Intent(getApplicationContext(), ChangeLanguageActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
         }
     }
-
     public void clearSharePrefs() {
         sharedPreferences.edit().clear().apply();
     }
 
     private void setupBadge() {
-       // int CartItemCount = SharePrefs.getInstance(MainActivity.this).getInt(SharePrefs.COUNT);
-        if (itemQuatntiy == 0) {
-            if (mBinding.toolbarId.cartBadge.getVisibility() != View.GONE) {
-                mBinding.toolbarId.cartBadge.setVisibility(View.GONE);
-            }
+        int count = MyApplication.getInstance().cartRepository.getCartCount1();
+        if (count == 0) {
+            mBinding.toolbarId.cartBadge.setVisibility(View.GONE);
         } else {
-            mBinding.toolbarId.cartBadge.setText(String.valueOf(Math.min(itemQuatntiy, 99)));
-            if (mBinding.toolbarId.cartBadge.getVisibility() != View.VISIBLE) {
-                mBinding.toolbarId.cartBadge.setVisibility(View.VISIBLE);
-            }
+            mBinding.toolbarId.cartBadge.setVisibility(View.VISIBLE);
+            mBinding.toolbarId.cartBadge.setText(String.valueOf(Math.min(count, 99)));
         }
-
     }
 
     private void getCartItemApi() {
         mainActivityViewMode.getCartItemsRequest("123");
-        mainActivityViewMode.getCartItemsVM().observe(this, new Observer<CartItemModel>() {
-            @Override
-            public void onChanged(CartItemModel model) {
-                itemQuatntiy =0;
-                Utils.hideProgressDialog();
-                if (model != null && model.getCart()!=null) {
-                    cartItemModel = model;
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CART_ITEM_ID, model.getId());
-                    for (int i = 0; i < model.getCart().size(); i++) {
-                        itemQuatntiy += model.getCart().get(i).getQuantity();
-                    }
-                    setupBadge();
-                }
+        mainActivityViewMode.getCartItemsVM().observe(this, model -> {
+            System.out.println("SellerId " + model.getSellerId());
+            Utils.hideProgressDialog();
+            if (model != null && model.getCart() != null) {
+                MyApplication.getInstance().cartRepository.addToCart(model.getCart());
+            } else {
+                MyApplication.getInstance().cartRepository.truncateCart();
             }
+            setupBadge();
         });
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        // check if the request code is same as what is passed  here it is 2
-        if(requestCode==2)
-        {
-            if (requestCode == 2 && resultCode == RESULT_OK) {
-                Address address=data.getParcelableExtra("address");
-                double lat = address.getLatitude();
-                double log = address.getLongitude();
-                setLocationTV.setText(Utils.getCityName(this,lat,log));
-            }
-
-        }
     }
 
     private void callLocationAPI(double latitude, double longitude) {
@@ -318,18 +311,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         e.printStackTrace();
                     }
                     String cityName = addresses.get(0).getLocality();
-                    Log.e("cityName", "cityName  "+cityName);
-                   setLocationTV.setText(cityName);
+                    Log.e("cityName", "cityName  " + cityName);
+                    setLocationTV.setText(cityName);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
         });
     }
-
 
     public void callRunTimePermissions() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
@@ -337,9 +327,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onGranted() {
                 Log.e("onDenied", "onGranted");
-                GPSTracker  gpsTracker = new GPSTracker(getApplicationContext());
-                if (gpsTracker!=null){
-                    callLocationAPI(gpsTracker.getLatitude(),gpsTracker.getLongitude());
+                GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
+                if (gpsTracker != null) {
+                    callLocationAPI(gpsTracker.getLatitude(), gpsTracker.getLongitude());
                 }
             }
 
@@ -351,5 +341,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
-
 }

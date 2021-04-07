@@ -6,16 +6,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
+import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.AddViewModel;
-import com.skdirect.model.AddCartItemModel;
-import com.skdirect.model.CartItemModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.SellerDetailsModel;
 import com.skdirect.model.SellerProductMainModel;
-import com.skdirect.model.SellerProductModel;
 import com.skdirect.model.SellerProfileDataModel;
 import com.skdirect.utils.Utils;
 
@@ -146,12 +143,12 @@ public class SellerProfileViewMode extends ViewModel {
         return addItemsInCardVM;
     }
 
-    public MutableLiveData<Object> getClearCartItemVMRequest(String id) {
+    public MutableLiveData<Object> getClearCartItemVMRequest(int id) {
         RestClient.getInstance().getService().ClearCart(id).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     clearCartItemVM.setValue(response.body());
                 }
             }
@@ -165,6 +162,4 @@ public class SellerProfileViewMode extends ViewModel {
 
         return clearCartItemVM;
     }
-
-
 }

@@ -22,7 +22,7 @@ import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CartModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.RemoveItemRequestModel;
-import com.skdirect.utils.SharePrefs;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.CartItemViewMode;
 
@@ -48,8 +48,6 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_cart);
         cartItemViewMode = ViewModelProviders.of(this).get(CartItemViewMode.class);
         initView();
-        callCartList();
-
     }
 
     @Override
@@ -69,31 +67,29 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void plusButtonOnClick(CartModel cartModel, TextView tvSelectedQty) {
-        int increaseCount = Integer.parseInt(tvSelectedQty.getText().toString().trim());
-        increaseCount++;
-        tvSelectedQty.setText("" + increaseCount);
-        addItemInCart(increaseCount, cartModel);
+    public void plusButtonOnClick(CartModel cartModel) {
+        int qty = cartModel.getQuantity();
         totalAmount = totalAmount + cartModel.getPrice();
         mBinding.tvTotalAmount.setText("₹ " + totalAmount);
+        MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
+        addItemInCart(qty, cartModel);
     }
 
     @Override
-    public void minusButtonOnClick(CartModel cartModel, TextView selectedQty, LinearLayout LLPlusMinus) {
-        int decreaseCount = Integer.parseInt(selectedQty.getText().toString().trim());
-        decreaseCount--;
-        if (decreaseCount >= 1) {
-            selectedQty.setText("" + decreaseCount);
-            addItemInCart(decreaseCount, cartModel);
+    public void minusButtonOnClick(CartModel cartModel, LinearLayout LLPlusMinus) {
+        int qty = cartModel.getQuantity();
+        if (qty >= 1) {
             totalAmount = totalAmount - cartModel.getPrice();
             mBinding.tvTotalAmount.setText("₹ " + totalAmount);
+            MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
+            addItemInCart(qty, cartModel);
         } else {
             cartItemList.remove(cartModel);
-            cartListAdapter.notifyDataSetChanged();
-            MainActivity.cartItemModel = null;
-            addItemInCart(decreaseCount, cartModel);
             totalAmount = totalAmount - cartModel.getPrice();
             mBinding.tvTotalAmount.setText("₹ " + totalAmount);
+            cartListAdapter.notifyDataSetChanged();
+            addItemInCart(qty, cartModel);
+            MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
 
             if (totalAmount == 0) {
                 mBinding.rlCheckOut.setVisibility(View.GONE);
@@ -145,11 +141,13 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         cartItemList.clear();
+
+        callCartList();
     }
 
     private void callCartList() {
         if (Utils.isNetworkAvailable(getApplicationContext())) {
-            Utils.showProgressDialog(CartActivity.this);
+            Utils.showProgressDialog(this);
             cartItemsAPI();
         } else {
             Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
@@ -157,7 +155,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void cartItemsAPI() {
-        String cartID = SharePrefs.getInstance(CartActivity.this).getString(SharePrefs.CART_ITEM_ID);
+        Integer cartID = MyApplication.getInstance().cartRepository.getCartSellerId();
         cartItemViewMode.getCartItemModelVMRequest(cartID, mBinding.rvCartItem, mBinding.blankBasket);
         cartItemViewMode.getCartItemModelVM().observe(this, cartItemModel -> {
             Utils.hideProgressDialog();
@@ -165,32 +163,28 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 cartItemDataModel = cartItemModel;
                 if (cartItemModel.getCart().size() > 0) {
                     mBinding.rlCheckOut.setVisibility(View.VISIBLE);
-                    mBinding.rvCartItem.post(new Runnable() {
-                        public void run() {
-                            for (int i = 0; i < cartItemModel.getCart().size(); i++) {
-                                totalAmount += totalAmount = cartItemModel.getCart().get(i).getQuantity() * cartItemModel.getCart().get(i).getPrice();
-                                mBinding.tvTotalAmount.setText("₹ " + totalAmount);
-                            }
-                            cartItemList.addAll(cartItemModel.getCart());
-                            cartListAdapter.notifyDataSetChanged();
-
-                            loading = true;
+                    mBinding.rvCartItem.post(() -> {
+                        for (int i = 0; i < cartItemModel.getCart().size(); i++) {
+                            totalAmount += totalAmount = cartItemModel.getCart().get(i).getQuantity() * cartItemModel.getCart().get(i).getPrice();
+                            mBinding.tvTotalAmount.setText("₹ " + totalAmount);
                         }
-                    });
+                        cartItemList.addAll(cartItemModel.getCart());
+                        cartListAdapter.notifyDataSetChanged();
 
+                        loading = true;
+                    });
                 } else {
                     loading = false;
                     mBinding.rvCartItem.setVisibility(View.GONE);
                     mBinding.blankBasket.setVisibility(View.VISIBLE);
                     mBinding.rlCheckOut.setVisibility(View.GONE);
-
                 }
             }
         });
-
     }
 
     private void addItemInCart(int QTY, CartModel sellerProductModel) {
+        MyApplication.getInstance().cartRepository.updateCartItem(sellerProductModel);
         ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(), 0, 0);
         cartItemViewMode.getAddItemsInCardVMRequest(paginationModel);
         cartItemViewMode.getAddItemsInCardVM().observe(this, sellerProdList -> {
@@ -212,16 +206,16 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
         AlertDialog dialog = builder.create();
         dialog.show();
-
     }
 
     private void removeItemFromCart(CartModel cartModel, int position) {
         RemoveItemRequestModel itemRequestModel = new RemoveItemRequestModel("123", cartModel.getId());
         cartItemViewMode.getRemoveItemFromCartVMRequest(itemRequestModel);
-        cartItemViewMode.getRemoveItemFromCartVM().observe(this, jsonObject -> {
+        cartItemViewMode.getRemoveItemFromCartVM().observe(this, jsonElement -> {
             Utils.hideProgressDialog();
             try {
-                if (jsonObject != null) {
+                if (jsonElement != null || cartItemList.size() == 1) {
+                    MyApplication.getInstance().cartRepository.deleteCartItem(cartModel);
                     cartItemList.remove(position);
                     cartListAdapter.notifyDataSetChanged();
                 }
@@ -229,7 +223,6 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 e.printStackTrace();
                 cartItemList.remove(position);
                 cartListAdapter.notifyDataSetChanged();
-                MainActivity.cartItemModel = null;
             }
         });
     }

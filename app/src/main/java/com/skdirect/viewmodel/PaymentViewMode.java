@@ -6,15 +6,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
-import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.DeliveryOptionModel;
 import com.skdirect.model.OrderPlaceMainModel;
-import com.skdirect.model.OrderPlaceModel;
 import com.skdirect.model.OrderPlaceRequestModel;
-import com.skdirect.model.PaginationModel;
 import com.skdirect.model.UserLocationModel;
 import com.skdirect.utils.Utils;
 
@@ -170,12 +166,12 @@ public class PaymentViewMode extends ViewModel {
         return orderPlaceVM;
     }
 
-    public MutableLiveData<Object> getClearCartDataRequest(String id) {
+    public MutableLiveData<Object> getClearCartDataRequest(int id) {
         RestClient.getInstance().getService().ClearCart(id).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     clearCartDataVM.setValue(response.body());
                 }
             }

@@ -3,7 +3,7 @@ package com.skdirect.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public  class ProfileResponseModel {
+public  class CommonResponseModel {
     @Expose
     @SerializedName("ErrorMessage")
     private String ErrorMessage;

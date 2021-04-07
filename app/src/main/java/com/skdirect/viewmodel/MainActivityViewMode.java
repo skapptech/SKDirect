@@ -8,12 +8,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
-import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.CartItemModel;
-import com.skdirect.model.PaginationModel;
 import com.skdirect.utils.Utils;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,14 +22,14 @@ public class MainActivityViewMode extends ViewModel {
     private MutableLiveData<JsonObject> mapViewModel;
 
     public LiveData<CartItemModel> getCartItemsVM() {
-        CardItemVM=null;
+        CardItemVM = null;
         CardItemVM = new MutableLiveData<>();
         return CardItemVM;
     }
 
 
     public LiveData<JsonObject> getMapViewModel() {
-        mapViewModel=null;
+        mapViewModel = null;
         mapViewModel = new MutableLiveData<>();
         return mapViewModel;
     }
@@ -42,8 +38,8 @@ public class MainActivityViewMode extends ViewModel {
         RestClient.getInstance().getService().GetCartItem(CooKiValue).enqueue(new Callback<CartItemModel>() {
             @Override
             public void onResponse(Call<CartItemModel> call, Response<CartItemModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     CardItemVM.setValue(response.body());
                 }
             }
@@ -58,12 +54,12 @@ public class MainActivityViewMode extends ViewModel {
         return CardItemVM;
     }
 
-    public MutableLiveData<JsonObject> getMapViewModelRequest(double lat,double log) {
-           RestClient.getInstance().getService().GetLocation(lat,log).enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            if (response.isSuccessful() && response.body()!=null ) {
-                                Log.e(TAG, "request response="+response.body());
+    public MutableLiveData<JsonObject> getMapViewModelRequest(double lat, double log) {
+        RestClient.getInstance().getService().GetLocation(lat, log).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     mapViewModel.setValue(response.body());
                 }
             }
@@ -77,7 +73,6 @@ public class MainActivityViewMode extends ViewModel {
 
         return mapViewModel;
     }
-
 
 
 }

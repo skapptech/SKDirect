@@ -6,16 +6,12 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityRegistrationBinding;
-import com.skdirect.databinding.ActivityUpdateProfileBinding;
-import com.skdirect.model.ProfileResponseModel;
+import com.skdirect.model.CommonResponseModel;
 import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
@@ -76,9 +72,9 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
 
     }
 
-    private DisposableObserver<ProfileResponseModel> updateprofile = new DisposableObserver<ProfileResponseModel>() {
+    private DisposableObserver<CommonResponseModel> updateprofile = new DisposableObserver<CommonResponseModel>() {
         @Override
-        public void onNext(ProfileResponseModel model) {
+        public void onNext(CommonResponseModel model) {
             try {
                 Utils.hideProgressDialog();
                 if (model != null) {

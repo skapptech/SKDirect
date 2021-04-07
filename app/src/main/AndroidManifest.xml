@@ -155,6 +155,9 @@
             android:hardwareAccelerated="false"
             android:label=""
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.ChangeLanguageActivity"
+            android:screenOrientation="portrait"
+            android:label=""/>
 
         <service
             android:name=".firebase.MyFirebaseMessagingService"

@@ -68,20 +68,28 @@ public class ProductResultModel {
     public int ProductMasterId;
     @SerializedName("Id")
     public int Id;
-
     @SerializedName("AddressOne")
     public String AddressOne;
-
     @SerializedName("AddressTwo")
     public String AddressTwo;
-
     @SerializedName("Pincode")
     public String Pincode;
-
     @SerializedName("State")
     public String State;
     @SerializedName("DiscountAmount")
     public double DiscountAmount;
+    @SerializedName("ShopName")
+    public String ShopName;
+    public int qty;
+
+
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
+    }
 
     public String getState() {
         return State;
@@ -90,8 +98,6 @@ public class ProductResultModel {
     public void setState(String state) {
         State = state;
     }
-
-
 
     public String getAddressOne() {
         return AddressOne;
@@ -117,8 +123,6 @@ public class ProductResultModel {
         Pincode = pincode;
     }
 
-
-
     public double getDiscountAmount() {
         return DiscountAmount;
     }
@@ -126,9 +130,6 @@ public class ProductResultModel {
     public void setDiscountAmount(double discountAmount) {
         DiscountAmount = discountAmount;
     }
-
-    @SerializedName("ShopName")
-    public String ShopName;
 
     public String getShopName() {
         return ShopName;
@@ -377,6 +378,7 @@ public class ProductResultModel {
     public void setId(int id) {
         Id = id;
     }
+
     public ArrayList<DeliveryOptionModel> getDeliveryOptionDC() {
         return DeliveryOptionDC;
     }
