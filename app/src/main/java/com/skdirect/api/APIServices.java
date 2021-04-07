@@ -115,7 +115,7 @@ public interface APIServices {
 
 
     @GET("api/buyer/Seller/GetTopSeller")
-    Call<ArrayList<TopSellerModel>> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword,@Query("categoryId") int categoryId);
+    Call<ArrayList<TopSellerModel>> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword,@Query("categoryId") String categoryId);
 
     @GET("api/NativeProductDetail/GetSellerProductById/{GetSellerProductById}")
     Call<ProductDataModel> GetSellerProductById(@Path("GetSellerProductById") int GetSellerProductById);

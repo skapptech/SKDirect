@@ -58,7 +58,7 @@ public class SellerShopListAdapter extends RecyclerView.Adapter<SellerShopListAd
             @Override
             public void onClick(View view) {
                 Intent menuIntent = new Intent(context, SellerProfileActivity.class);
-                menuIntent.putExtra("ID",topSellerModel.getEncryptedId());
+                menuIntent.putExtra("ID",topSellerModel.getId());
                 context.startActivity(menuIntent);
             }
         });

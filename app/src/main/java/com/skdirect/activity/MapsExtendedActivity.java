@@ -257,8 +257,6 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "OnMapReady");
@@ -460,7 +458,6 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
             mGoogleApiClient.disconnect();
         }
     }
-
 
     @Override
     protected void onDestroy() {
