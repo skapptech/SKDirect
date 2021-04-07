@@ -50,7 +50,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private BottomSheetDialog bottomSheetDialog;
     private int SellerItemID;
     private ProductResultModel resultModel = new ProductResultModel();
-
+    private String shopName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -350,124 +350,76 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                     if (productDataModel.getResultItem() != null) {
                         resultModel = productDataModel.getResultItem();
                         SellerItemID = productDataModel.getResultItem().getId();
-                        checkAddButtonValidaction();
-                        if (productDataModel.getResultItem().getVariationModelList() != null && productDataModel.getResultItem().getVariationModelList().size() > 0) {
-                            variationList = productDataModel.getResultItem().getVariationModelList();
-                            for (int i = 0; i < productDataModel.getResultItem().getVariationModelList().size(); i++) {
-                                mBinding.tvVarientButton.setVisibility(View.VISIBLE);
-                                if (productDataModel.getResultItem().getVariationModelList().get(i).getImageList() != null && productDataModel.getResultItem().getVariationModelList().get(i).getImageList().size() > 0) {
-                                    imageListModels = productDataModel.getResultItem().getVariationModelList().get(i).getImageList();
-                                }
-
-                                if (productDataModel.getResultItem().getVariationModelList().get(i).getDiscountAmount() == 0.0) {
-                                    mBinding.tvDiscount.setVisibility(View.VISIBLE);
-                                    double DiscountAmount = productDataModel.getResultItem().getVariationModelList().get(i).getSellingPrice() - productDataModel.getResultItem().getVariationModelList().get(i).getDiscountAmount();
-                                    mBinding.tvDiscount.setText("" + DiscountAmount + "OFF");
-                                    //mBinding.tvItemMrpOff.setPaintFlags(mBinding.tvItemMrpOff.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                                }
-
-                                if (productDataModel.getResultItem().getVariationModelList().get(i).getOffPercentage() != 0.0) {
-                                    mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
-                                    mBinding.tvMagrginOff.setText(productDataModel.getResultItem().getVariationModelList().get(i).getOffPercentage() + "%\n OFF");
-                                } else {
-                                    mBinding.tvMagrginOff.setVisibility(View.GONE);
-                                }
-
-                                mBinding.tvItemName.setText(productDataModel.getResultItem().getVariationModelList().get(i).getProductName());
-                                if (productDataModel.getResultItem().getVariationModelList().get(i).getMrp() == productDataModel.getResultItem().getVariationModelList().get(i).getSellingPrice()) {
-                                    mBinding.llSellingPrice.setVisibility(View.GONE);
-                                    mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getVariationModelList().get(i).getMrp());
-                                } else {
-                                    mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getVariationModelList().get(i).getMrp());
-                                    mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                                    mBinding.tvSellingPrice.setText(String.valueOf(productDataModel.getResultItem().getVariationModelList().get(i).getSellingPrice()));
-                                }
-
-                                mBinding.tvQuantity.setText("Quantity " + productDataModel.getResultItem().getVariationModelList().get(i).getMeasurement() + productDataModel.getResultItem().getVariationModelList().get(i).getUomValue());
-                                mBinding.tvShopName.setText(productDataModel.getResultItem().getShopName());
-                                String varientName = "";
-                                if (productDataModel.getResultItem().getVariationModelList().get(i).getProductVariantAttributeDC() != null && productDataModel.getResultItem().getVariationModelList().get(i).getProductVariantAttributeDC().size() > 0) {
-                                    for (int j = 0; j < productDataModel.getResultItem().getVariationModelList().get(i).getProductVariantAttributeDC().size(); j++) {
-                                        variantAttributeDCModels = productDataModel.getResultItem().getVariationModelList().get(j).getProductVariantAttributeDC();
-                                        varientName = varientName + variantAttributeDCModels.get(j).getAttributeName() + " :" + variantAttributeDCModels.get(j).getAttributeValue() + " ";
-                                    }
-                                }
-                                mBinding.tvItemColor.setText(varientName);
-
-                                if (productDataModel.getResultItem().getVariationModelList().get(0).getProductVariantSpecification() != null && productDataModel.getResultItem().getVariationModelList().get(0).getProductVariantSpecification().size() > 0) {
-                               /* mBinding.tvVarient.setText(productDataModel.getResultItem().getVariationModelList().get(0).getProductVariantSpecification().get(0).getAttributeName());
-                                mBinding.tvDiscripction.setText(productDataModel.getResultItem().getVariationModelList().get(0).getProductVariantSpecification().get(0).getAttributeValue());*/
-                                }
+                        shopName = productDataModel.getResultItem().getShopName();
+                        if (productDataModel.getResultItem().getMrp() == productDataModel.getResultItem().getSellingPrice()) {
+                            mBinding.llSellingPrice.setVisibility(View.GONE);
+                            mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getMrp());
+                        } else {
+                            mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getMrp());
+                            mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                            mBinding.tvSellingPrice.setText(String.valueOf(productDataModel.getResultItem().getSellingPrice()));
+                            mBinding.tvAddresh.setText(productDataModel.getResultItem().getAddressOne() + " " + productDataModel.getResultItem().getAddressTwo() + "\n- " + productDataModel.getResultItem().getPincode() + "(" + productDataModel.getResultItem().getState() + ")");
+                        }
+                        if (productDataModel.getResultItem().getDeliveryOptionDC().size() > 0) {
+                            mBinding.llDeliverOption.setVisibility(View.VISIBLE);
+                            String deliveryOption = "";
+                            for (int j = 0; j < productDataModel.getResultItem().getDeliveryOptionDC().size(); j++) {
+                                deliveryOption = deliveryOption + " " + productDataModel.getResultItem().getDeliveryOptionDC().get(j).getDelivery();
                             }
-                            mBinding.pager.setAdapter(new ShowImagesAdapter(ProductDetailsActivity.this, imageListModels));
-                            mBinding.indicator.setViewPager(mBinding.pager);
+                            mBinding.tvDeliveryOption.setText(deliveryOption);
+                        }
+                        if (productDataModel.getResultItem().getDiscountAmount() == 0.0) {
+                            double DiscountAmount = productDataModel.getResultItem().getSellingPrice() - productDataModel.getResultItem().getDiscountAmount();
+                            mBinding.tvDiscount.setText("" + DiscountAmount + "OFF");
+                        }
+                        if (productDataModel.getResultItem().getOffPercentage() != 0.0) {
+                            mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
+                            mBinding.tvMagrginOff.setText(productDataModel.getResultItem().getOffPercentage() + "%\n OFF");
+                        } else {
+                            mBinding.tvMagrginOff.setVisibility(View.GONE);
+                        }
+                        mBinding.tvQuantity.setText("Quantity " + productDataModel.getResultItem().getMeasurement() + " " + productDataModel.getResultItem().getUomValue());
+                        mBinding.tvShopName.setText(productDataModel.getResultItem().getShopName());
+                        if (productDataModel.getResultItem().getProductVariantSpecification() != null && productDataModel.getResultItem().getProductVariantSpecification().size() > 0) {
+                            for (int i = 0; i < productDataModel.getResultItem().getProductVariantSpecification().size(); i++) {
+
+                                TextView tv = new TextView(getApplicationContext());
+                                TextView textView = new TextView(getApplicationContext());
+
+                                LinearLayout linearLayout = new LinearLayout(getApplicationContext());
+                                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                                tv.setText(productDataModel.getResultItem().getProductVariantSpecification().get(i).getAttributeName());
+                                textView.setText(productDataModel.getResultItem().getProductVariantSpecification().get(i).getAttributeValue());
+                                tv.setTextColor(getResources().getColor(R.color.seller_button_color));
+                                textView.setTextColor(getResources().getColor(R.color.black));
+
+                                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                params.setMargins(10, 0, 10, 0);
+                                tv.setLayoutParams(params);
+
+                                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                params1.setMargins(10, 0, 10, 0);
+                                textView.setLayoutParams(params);
+
+                                linearLayout.addView(tv);
+                                linearLayout.addView(textView);
+                                mBinding.llDiscr.addView(linearLayout);
+                            }
+                        }
+                        if (productDataModel.getResultItem().getImageList() != null && productDataModel.getResultItem().getImageList().size() > 0) {
+                            imageListModels = productDataModel.getResultItem().getImageList();
+                        }
+                        mBinding.tvItemName.setText(productDataModel.getResultItem().getProductName());
+
+                        mBinding.pager.setAdapter(new ShowImagesAdapter(ProductDetailsActivity.this, imageListModels));
+                        mBinding.indicator.setViewPager(mBinding.pager);
+                        checkAddButtonValidaction();
+
+                        if (productDataModel.getResultItem().getVariationModelList() != null && productDataModel.getResultItem().getVariationModelList().size() > 0) {
+                            setVariation(productDataModel.getResultItem().getVariationModelList(), 0);
                         } else {
                             mBinding.tvVarientButton.setVisibility(View.GONE);
-                            if (productDataModel.getResultItem().getImageList() != null && productDataModel.getResultItem().getImageList().size() > 0) {
-                                imageListModels = productDataModel.getResultItem().getImageList();
-                            }
-                            mBinding.tvItemName.setText(productDataModel.getResultItem().getProductName());
 
-                            if (productDataModel.getResultItem().getMrp() == productDataModel.getResultItem().getSellingPrice()) {
-                                mBinding.llSellingPrice.setVisibility(View.GONE);
-                                mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getMrp());
-                            } else {
-                                mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getMrp());
-                                mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                                mBinding.tvSellingPrice.setText(String.valueOf(productDataModel.getResultItem().getSellingPrice()));
-                                mBinding.tvAddresh.setText(productDataModel.getResultItem().getAddressOne() + " " + productDataModel.getResultItem().getAddressTwo() + "\n- " + productDataModel.getResultItem().getPincode() + "(" + productDataModel.getResultItem().getState() + ")");
-                            }
-
-
-                            if (productDataModel.getResultItem().getDeliveryOptionDC().size() > 0) {
-                                mBinding.llDeliverOption.setVisibility(View.VISIBLE);
-                                String deliveryOption = "";
-                                for (int j = 0; j < productDataModel.getResultItem().getDeliveryOptionDC().size(); j++) {
-                                    deliveryOption = deliveryOption + " " + productDataModel.getResultItem().getDeliveryOptionDC().get(j).getDelivery();
-                                }
-                                mBinding.tvDeliveryOption.setText(deliveryOption);
-                            }
-
-                            if (productDataModel.getResultItem().getDiscountAmount() == 0.0) {
-                                double DiscountAmount = productDataModel.getResultItem().getSellingPrice() - productDataModel.getResultItem().getDiscountAmount();
-                                mBinding.tvDiscount.setText("" + DiscountAmount + "OFF");
-                            }
-                            if (productDataModel.getResultItem().getOffPercentage() != 0.0) {
-                                mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
-                                mBinding.tvMagrginOff.setText(productDataModel.getResultItem().getOffPercentage() + "%\n OFF");
-                            } else {
-                                mBinding.tvMagrginOff.setVisibility(View.GONE);
-                            }
-                            mBinding.tvQuantity.setText("Quantity " + productDataModel.getResultItem().getMeasurement() + " " + productDataModel.getResultItem().getUomValue());
-                            mBinding.tvShopName.setText(productDataModel.getResultItem().getShopName());
-                            if (productDataModel.getResultItem().getProductVariantSpecification() != null && productDataModel.getResultItem().getProductVariantSpecification().size() > 0) {
-                                for (int i = 0; i < productDataModel.getResultItem().getProductVariantSpecification().size(); i++) {
-
-                                    TextView tv = new TextView(getApplicationContext());
-                                    TextView textView = new TextView(getApplicationContext());
-
-                                    LinearLayout linearLayout = new LinearLayout(getApplicationContext());
-                                    linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-                                    tv.setText(productDataModel.getResultItem().getProductVariantSpecification().get(i).getAttributeName());
-                                    textView.setText(productDataModel.getResultItem().getProductVariantSpecification().get(i).getAttributeValue());
-                                    tv.setTextColor(getResources().getColor(R.color.seller_button_color));
-                                    textView.setTextColor(getResources().getColor(R.color.black));
-
-                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                                    params.setMargins(10, 0, 10, 0);
-                                    tv.setLayoutParams(params);
-
-                                    LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                                    params1.setMargins(10, 0, 10, 0);
-                                    textView.setLayoutParams(params);
-
-                                    linearLayout.addView(tv);
-                                    linearLayout.addView(textView);
-                                    mBinding.llDiscr.addView(linearLayout);
-                                }
-                            }
-                            mBinding.pager.setAdapter(new ShowImagesAdapter(ProductDetailsActivity.this, imageListModels));
-                            mBinding.indicator.setViewPager(mBinding.pager);
                         }
                     }
                 }
@@ -475,15 +427,66 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         });
     }
 
-
     @Override
-    public void onOnClick(VariationListModel variationListModel) {
+    public void onOnClick(ArrayList<VariationListModel> variationList, int position) {
         if (bottomSheetDialog != null) {
             bottomSheetDialog.dismiss();
         }
-        productID = variationListModel.getId();
-        callProductData();
+        productID = variationList.get(position).getId();
+        setVariation(variationList, position);
 
+
+    }
+
+    public void setVariation(ArrayList<VariationListModel> variationListMain, int position) {
+        variationList = variationListMain;
+        VariationListModel variationListModel = variationList.get(position);
+        mBinding.tvVarientButton.setVisibility(View.VISIBLE);
+        if (variationListModel.getImageList() != null && variationListModel.getImageList().size() > 0) {
+            imageListModels = variationListModel.getImageList();
+        }
+
+        if (variationListModel.getDiscountAmount() == 0.0) {
+            mBinding.tvDiscount.setVisibility(View.VISIBLE);
+            double DiscountAmount = variationListModel.getSellingPrice() - variationListModel.getDiscountAmount();
+            mBinding.tvDiscount.setText("" + DiscountAmount + "OFF");
+            //mBinding.tvItemMrpOff.setPaintFlags(mBinding.tvItemMrpOff.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+
+        if (variationListModel.getOffPercentage() != 0.0) {
+            mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
+            mBinding.tvMagrginOff.setText(variationListModel.getOffPercentage() + "%\n OFF");
+        } else {
+            mBinding.tvMagrginOff.setVisibility(View.GONE);
+        }
+
+        mBinding.tvItemName.setText(variationListModel.getProductName());
+        if (variationListModel.getMrp() == variationListModel.getSellingPrice()) {
+            mBinding.llSellingPrice.setVisibility(View.GONE);
+            mBinding.tvItemMrp.setText("₹ " + variationListModel.getMrp());
+        } else {
+            mBinding.tvItemMrp.setText("₹ " + variationListModel.getMrp());
+            mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            mBinding.tvSellingPrice.setText(String.valueOf(variationListModel.getSellingPrice()));
+        }
+
+        mBinding.tvQuantity.setText("Quantity " + variationListModel.getMeasurement() + variationListModel.getUomValue());
+        mBinding.tvShopName.setText(shopName);
+        String varientName = "";
+        if (variationListModel.getProductVariantAttributeDC() != null && variationListModel.getProductVariantAttributeDC().size() > 0) {
+            for (int j = 0; j < variationListModel.getProductVariantAttributeDC().size(); j++) {
+                variantAttributeDCModels = variationListModel.getProductVariantAttributeDC();
+                varientName = varientName + variantAttributeDCModels.get(j).getAttributeName() + " :" + variantAttributeDCModels.get(j).getAttributeValue() + " ";
+            }
+        }
+        mBinding.tvItemColor.setText(varientName);
+
+        if (variationList.get(0).getProductVariantSpecification() != null && variationList.get(0).getProductVariantSpecification().size() > 0) {
+                               /* mBinding.tvVarient.setText(productDataModel.getResultItem().getVariationModelList().get(0).getProductVariantSpecification().get(0).getAttributeName());
+                                mBinding.tvDiscripction.setText(productDataModel.getResultItem().getVariationModelList().get(0).getProductVariantSpecification().get(0).getAttributeValue());*/
+        }
+        mBinding.pager.setAdapter(new ShowImagesAdapter(ProductDetailsActivity.this, imageListModels));
+        mBinding.indicator.setViewPager(mBinding.pager);
     }
 
     private void addItemInCart(int QTY, int sellerItemID) {

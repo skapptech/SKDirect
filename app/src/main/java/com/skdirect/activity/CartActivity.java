@@ -55,7 +55,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.iv_back_press:
                 onBackPressed();
                 break;
-            case R.id.rl_check_out:
+            case R.id.tv_add:
                 startActivity(new Intent(getApplicationContext(), PaymentActivity.class).putExtra("cartItemSize", cartItemDataModel).putExtra("totalAmount", totalAmount));
                 break;
             case R.id.tv_keep_shopping:
@@ -107,7 +107,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.toolbarTittle.tvTittle.setText("Shopping Bag");
         mBinding.tvKeepShopping.setOnClickListener(this);
-        mBinding.rlCheckOut.setOnClickListener(this);
+        mBinding.tvAdd.setOnClickListener(this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         mBinding.rvCartItem.setLayoutManager(layoutManager);

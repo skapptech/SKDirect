@@ -2,6 +2,7 @@ package com.skdirect.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,9 +44,31 @@ public class NearProductListAdapter extends RecyclerView.Adapter<NearProductList
     public void onBindViewHolder(@NonNull NearProductListAdapter.ViewHolder holder, int position) {
         NearProductListModel nearProductListModel = nearProductListList.get(position);
         holder.mBinding.tvItemName.setText(nearProductListModel.getProductName());
-        holder.mBinding.tvShopName.setText(nearProductListModel.getShopName());
-        holder.mBinding.tvMpr.setText("₹ "+String.valueOf(nearProductListModel.getMrp()));
-        holder.mBinding.tvTax.setText("Inclusive of all taxes");
+
+        if (nearProductListModel.getMrp() == nearProductListModel.getSellingPrice()) {
+            holder.mBinding.llSellingPrice.setVisibility(View.GONE);
+            holder.mBinding.tvMrp.setText("₹ " + nearProductListModel.getMrp());
+        } else {
+            holder.mBinding.tvMrp.setText("₹ " + nearProductListModel.getMrp());
+            holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.mBinding.llSellingPrice.setVisibility(View.VISIBLE);
+            holder.mBinding.tvSellingPrice.setText("₹ " + nearProductListModel.getSellingPrice());
+        }
+
+        if (nearProductListModel.getOffPercentage() != 0.0) {
+            holder.mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
+            holder.mBinding.tvMagrginOff.setText("" + nearProductListModel.getOffPercentage() + "%\n OFF");
+        } else {
+            holder.mBinding.tvMagrginOff.setVisibility(View.GONE);
+        }
+
+
+        if (nearProductListModel.getNoofView() > 0) {
+            holder.mBinding.llNoOfView.setVisibility(View.VISIBLE);
+            holder.mBinding.tvItemView.setText(String.valueOf(nearProductListModel.getNoofView()));
+        } else {
+            holder.mBinding.llNoOfView.setVisibility(View.INVISIBLE);
+        }
 
         if (nearProductListModel.getImagePath()!=null && !nearProductListModel.getImagePath().contains("http")) {
             Picasso.get().load(BuildConfig.apiEndpoint+nearProductListModel.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.imItemImage);
