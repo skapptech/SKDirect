@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer"
@@ -24,66 +24,13 @@
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="110dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/profile_image_nav"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:padding="5dp"
-                        android:visibility="visible"
-                        app:civ_border_color="@color/colorPrimaryDark"
-                        app:civ_border_width="1dp"
-                        android:src="@drawable/profile_round"  />
-               <!--     <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:padding="5dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/profile_round" />-->
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="vertical">
-
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/tv_user_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="30dp"
-                            android:text=""
-                            android:textColor="@color/colorAccent"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/tv_mobile_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="30dp"
-                            android:layout_marginTop="5dp"
-                            android:text=""
-                            android:textColor="@color/colorAccent"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
-
-
-                    </LinearLayout>
-                </LinearLayout>
+                <include
+                    android:id="@+id/nav_top"
+                    layout="@layout/navigation_top" />
 
                 <View
                     android:layout_width="match_parent"
@@ -93,8 +40,8 @@
                 <ScrollView
                     android:id="@+id/scroll_body"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fillViewport="true"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:scrollbars="vertical">
 
                     <LinearLayout
@@ -109,6 +56,7 @@
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="10dp"
                             android:text="@string/profile"
+                            android:id="@+id/tvProfileHead"
                             android:textColor="@color/colorAccent"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -133,8 +81,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
-                                android:layout_marginTop="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:text="@string/profile"
+                                android:id="@+id/tvProfileTitle"
                                 android:textColor="@color/colorAccent"
                                 android:textSize="16sp"
                                 android:textStyle="normal" />
@@ -165,8 +114,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
-                                android:layout_marginTop="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:text="@string/change_pass"
+                                android:id="@+id/tvChangePassTitle"
                                 android:textColor="@color/colorAccent"
                                 android:textSize="16sp"
                                 android:textStyle="normal" />
@@ -197,8 +147,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
-                                android:layout_marginTop="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:text="@string/chat"
+                                android:id="@+id/tvChatTitle"
                                 android:textColor="@color/colorAccent"
                                 android:textSize="18sp"
                                 android:textStyle="normal" />
@@ -210,12 +161,45 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="10dp"
                             android:text="@string/other_settings"
+                            android:id="@+id/tvOtherSettingsHead"
                             android:textColor="@color/colorAccent"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
+                        <LinearLayout
+                            android:id="@+id/llChangeLanguage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_star" />
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/font_normal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/change_language"
+                                android:id="@+id/tvChangeLangTitle"
+                                android:textColor="@color/colorAccent"
+                                android:textSize="16sp"
+                                android:textStyle="normal" />
+
+                        </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/divider" />
                         <LinearLayout
                             android:id="@+id/ll_rate_this_app"
                             android:layout_width="match_parent"
@@ -235,8 +219,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
-                                android:layout_marginTop="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:text="@string/rate_app"
+                                android:id="@+id/tvRateAppTitle"
                                 android:textColor="@color/colorAccent"
                                 android:textSize="16sp"
                                 android:textStyle="normal" />
@@ -267,8 +252,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
-                                android:layout_marginTop="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:text="@string/privacy_policy"
+                                android:id="@+id/tvPrivacyTitle"
                                 android:textColor="@color/colorAccent"
                                 android:textSize="16sp"
                                 android:textStyle="normal" />
@@ -299,8 +285,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
-                                android:layout_marginTop="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:text="@string/about_direct"
+                                android:id="@+id/tvAboutTitle"
                                 android:textColor="@color/colorAccent"
                                 android:textSize="16sp"
                                 android:textStyle="normal" />
@@ -312,8 +299,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="10dp"
                             android:text="@string/help"
+                            android:id="@+id/tvHelpTitle"
                             android:textColor="@color/colorAccent"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -337,8 +325,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
-                                android:layout_marginTop="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:text="@string/how_to_use"
+                                android:id="@+id/tvHowToTitle"
                                 android:textColor="@color/colorAccent"
                                 android:textSize="16sp"
                                 android:textStyle="normal" />
@@ -350,74 +339,71 @@
                             android:layout_height="1dp"
                             android:background="@color/divider" />
 
+                        <LinearLayout
+                            android:id="@+id/ll_logout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:visibility="gone"
+                            android:orientation="horizontal"
+                            >
 
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_logout" />
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/font_normal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/logout"
+                                android:id="@+id/tvLogoutTitle"
+                                android:textColor="@color/seller_button_color"
+                                android:textSize="18sp"
+                                android:textStyle="normal" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_sign_in"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:orientation="horizontal"
+                            android:visibility="invisible">
+
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_logout" />
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/font_normal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/sign_in"
+                                android:id="@+id/tvSigninTitle"
+                                android:textColor="@color/seller_button_color"
+                                android:textSize="18sp"
+                                android:textStyle="normal" />
+
+                        </LinearLayout>
                     </LinearLayout>
+
                 </ScrollView>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:id="@+id/ll_logout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="10dp"
-                    android:visibility="invisible"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_logout" />
-
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        style="@style/font_normal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/logout"
-                        android:textColor="@color/seller_button_color"
-                        android:textSize="18sp"
-                        android:textStyle="normal" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_sign_in"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_alignParentBottom="true"
-                    android:visibility="invisible"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_logout" />
-
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        style="@style/font_normal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/sign_in"
-                        android:textColor="@color/seller_button_color"
-                        android:textSize="18sp"
-                        android:textStyle="normal" />
-
-                </LinearLayout>
-            </RelativeLayout>
         </com.google.android.material.navigation.NavigationView>
 
     </androidx.drawerlayout.widget.DrawerLayout>

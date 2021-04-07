@@ -49,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorAccent"
                 app:tabGravity="fill"
+                app:tabTextColor="@color/white"
                 app:tabMode="fixed"
                 app:tabSelectedTextColor="@color/seller_button_color"
                />

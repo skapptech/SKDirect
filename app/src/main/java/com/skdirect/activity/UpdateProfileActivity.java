@@ -35,10 +35,10 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
     private void initView() {
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.btSaveAddresh.setOnClickListener(this);
-        mBinding.toolbarTittle.tvTittle.setText("Update Profile");
+        mBinding.toolbarTittle.tvTittle.setText(getString(R.string.update_profile));
         mBinding.etName.setText(SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.FIRST_NAME));
         mBinding.etEmailId.setText(SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.EMAIL_ID));
-        mBinding.etPinCode.setText(SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.PIN_CODE));
+        mBinding.etPinCode.setText(SharePrefs.getStringSharedPreferences(UpdateProfileActivity.this,SharePrefs.PIN_CODE));
     }
 
     @Override
@@ -55,16 +55,16 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
 
     private void upDateProfile() {
         if (TextUtils.isNullOrEmpty(mBinding.etName.getText().toString().trim())) {
-            Utils.setToast(getApplicationContext(), "Please Enter Name");
+            Utils.setToast(getApplicationContext(), getString(R.string.please_enter_name));
         } else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString().trim())) {
-            Utils.setToast(getApplicationContext(), "Please Enter PinCode");
+            Utils.setToast(getApplicationContext(), getString(R.string.please_enter_pincode));
         } else {
             if (Utils.isNetworkAvailable(getApplicationContext())) {
                 Utils.showProgressDialog(UpdateProfileActivity.this);
                 updateUserData();
 
             } else {
-                Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+                Utils.setToast(getApplicationContext(), getString(R.string.no_connection));
             }
         }
 
@@ -108,7 +108,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         object.addProperty("State", SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.STATE));
         object.addProperty("City", SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.CITYNAME));
         object.addProperty("UserName", SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.USER_NAME));
-        object.addProperty("IsRegistrationComplete", SharePrefs.getInstance(UpdateProfileActivity.this).getBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE));
+        object.addProperty("IsRegistrationComplete", SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE));
         object.addProperty("EncryptedId", SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.ENCRIPTED_ID));
 
         JsonArray jsonArray = new JsonArray();

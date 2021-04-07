@@ -2,6 +2,7 @@ package com.skdirect.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class BottomListAdapter extends RecyclerView.Adapter<BottomListAdapter.Vi
         holder.mBinding.tvItemPrice.setText("₹ " + variationListModel.getMrp());
         holder.mBinding.tvItemPriceOff.setText("₹ " + variationListModel.getSellingPrice());
         holder.mBinding.tvPercent.setText("( " + variationListModel.getOffPercentage() + ")" + "%  Off");
+        holder.mBinding.tvItemPrice.setPaintFlags(holder.mBinding.tvItemPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         if (variationListModel.getProductVariantAttributeDC() != null && variationListModel.getProductVariantAttributeDC().size() > 0) {
             for (int i = 0; i < variationListModel.getProductVariantAttributeDC().size(); i++) {
                 varientName = varientName + variationListModel.getProductVariantAttributeDC().get(i).getAttributeValue() + " ";
@@ -54,12 +56,17 @@ public class BottomListAdapter extends RecyclerView.Adapter<BottomListAdapter.Vi
         }
         holder.mBinding.tvItemName.setText(varientName);
         if (variationListModel.getImageList() != null && variationListModel.getImageList().size() > 0) {
-            Picasso.get().load(""+variationListModel.getImageList()).into(holder.mBinding.ivImage);
+
+            if (variationListModel.getImageList().get(position).getImagePath() != null && !variationListModel.getImageList().get(position).getImagePath().contains("http")) {
+                Picasso.get().load(BuildConfig.apiEndpoint+variationListModel.getImageList().get(position).getImagePath()).into(holder.mBinding.ivImage);
+            }else {
+                Picasso.get().load(variationListModel.getImageList().get(position).getImagePath()).into(holder.mBinding.ivImage);
+            }
         }
         holder.mBinding.llTopNearBySeller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bottomBarInterface.onOnClick(variationListModel);
+                bottomBarInterface.onOnClick(variationList,position);
             }
         });
     }

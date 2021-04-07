@@ -1,13 +1,14 @@
 package com.skdirect.api;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.AddReviewModel;
 import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.AddViewModel;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.AppVersionModel;
-import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.ChangePasswordRequestModel;
 import com.skdirect.model.CustomerDataModel;
@@ -43,7 +44,6 @@ import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.UserLocationModel;
-
 
 import java.util.ArrayList;
 
@@ -88,7 +88,6 @@ public interface APIServices {
     @GET("api/buyer/SkAppHome/GetTopNearByItem")
     Call<ArrayList<TopNearByItemModel>> GetTopNearByItem();
 
-
     @GET("api/buyer/SkAppHome/GetTopSeller")
     Call<ArrayList<TopSellerModel>> GetTopSeller();
 
@@ -110,7 +109,7 @@ public interface APIServices {
 
 
     @GET("api/buyer/Seller/GetTopSeller")
-    Call<ArrayList<TopSellerModel>> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword,@Query("categoryId") int categoryId);
+    Call<ArrayList<TopSellerModel>> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword,@Query("categoryId") String categoryId);
 
     @GET("api/NativeProductDetail/GetSellerProductById/{GetSellerProductById}")
     Call<ProductDataModel> GetSellerProductById(@Path("GetSellerProductById") int GetSellerProductById);
@@ -146,14 +145,14 @@ public interface APIServices {
     @GET("api/Buyer/SellerProfile/GetCartItems")
     Call<CartItemModel> GetCartItem(@Query("CookieValue") String CookieValue);
 
-    @GET("api/NativeBuyer/SellerProfile/ClearCart")
-    Call<Object> ClearCart(@Query("Id") String id);
+    @POST("api/NativeBuyer/SellerProfile/ClearCart")
+    Call<Object> ClearCart(@Query("Id") int id);
 
     @GET("api/Buyer/CartOverview/GetCartItems/{GetCartItems}")
-    Call<CartItemModel> CartItems(@Path("GetCartItems") String GetCartItems);
+    Call<CartItemModel> CartItems(@Path("GetCartItems") int GetCartItems);
 
     @POST("api/Buyer/SellerProfile/DeleteCartItems")
-    Call<JsonObject> deleteCartItems(@Body RemoveItemRequestModel itemRequestModel);
+    Call<JsonElement> deleteCartItems(@Body RemoveItemRequestModel itemRequestModel);
 
     @GET("api/buyer/Profile/GetLocation")
     Call<JsonObject> GetLocation(@Query("lat") double lat,@Query("lng") double log );
@@ -184,6 +183,7 @@ public interface APIServices {
     @POST("api/NativeBuyer/BuyerProfile/UpdateBuyerProfile")
     Observable<CommonResponseModel> UpdateProfile(@Body UpdateProfilePostModel updateProfilePostModel );
 
+
     @GET("api/buyer/Profile/MakeDefaultAddress/{MakeDefaultAddress}")
     Call<Boolean> MakeDefaultAddress(@Path("MakeDefaultAddress") int UserDetailId);
 
@@ -210,12 +210,9 @@ public interface APIServices {
     @GET("api/NativeBuyer/MyOrder/CancelOrder")
     Call<MallMainModelBolleanResult> CancelOrder(@Query("OrderId") int OrderId);
 
+    @GET("/api/NativeBuyer/Location/SetLocation")
+    Call<CommonResponseModel> setLocation(@Query("latitude") double latitude,@Query("longitude") double longitude);
+
     @GET("api/NativeBuyer/Mall/GetMall")
     Call<MallMainModel> getMall();
-
-
-
-
-
-
 }

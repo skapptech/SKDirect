@@ -11,10 +11,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -26,17 +26,21 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonObject;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityMainBinding;
+import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.fragment.BasketFragment;
 import com.skdirect.fragment.HomeFragment;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.utils.AppSignatureHelper;
+import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.GPSTracker;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
@@ -58,23 +62,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public Toolbar appBarLayout;
     public TextView userNameTV, mobileNumberTV, setLocationTV;
     private MainActivityViewMode mainActivityViewMode;
+    public DBHelper dbHelper;
     public static CartItemModel cartItemModel;
     private int itemQuatntiy;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainActivityViewMode = ViewModelProviders.of(this).get(MainActivityViewMode.class);
-        Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
         openFragment(new HomeFragment());
+        Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
         initView();
+        openFragment(new HomeFragment());
         setlocationInHader();
         clickListener();
         setupBadge();
         ///callRunTimePermissions();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setupBadge();
+    }
+
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_FETCH_LANGUAGE)) {
+            new FirebaseLanguageFetch(getApplicationContext()).fetchLanguage();
+        }
     }
 
 
@@ -85,22 +102,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.llLogout.setOnClickListener(this);
         mBinding.llSignIn.setOnClickListener(this);
         mBinding.llHowtoUse.setOnClickListener(this);
-
+        mBinding.llChangeLanguage.setOnClickListener(this);
     }
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        setupBadge();
-        getCartItemApi();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if (requestCode == 2) {
+            if (requestCode == 2 && resultCode == RESULT_OK) {
+                Address address = data.getParcelableExtra("address");
+                double lat = address.getLatitude();
+                double log = address.getLongitude();
+                setLocationTV.setText(Utils.getCityName(this, lat, log));
+            }
+
+        }
     }
 
+
     private void initView() {
+        dbHelper = MyApplication.getInstance().dbHelper;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         appBarLayout = mBinding.toolbarId.toolbar;
-        userNameTV = mBinding.tvUserName;
-        mobileNumberTV = mBinding.tvMobileName;
+        userNameTV = mBinding.navTop.tvUserName;
+        mobileNumberTV = mBinding.navTop.tvMobileName;
         setLocationTV = mBinding.toolbarId.tvLoction;
 
         if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME))) {
@@ -108,13 +135,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         mobileNumberTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.MOBILE_NUMBER));
 
-//        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBinding.toolbarId.bottomNavigation.getLayoutParams();
-//        layoutParams.setBehavior(new BottomNavigationBehavior());
-
         mBinding.toolbarId.ivMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mBinding.drawer.openDrawer(Gravity.START);
+                mBinding.drawer.openDrawer(GravityCompat.START);
             }
         });
 
@@ -125,11 +149,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case R.id.nav_profile:
                     positionChanged = true;
-                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                    break;
+                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                    }
+                    else{
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    }                    break;
                 case R.id.nav_my_order:
                     positionChanged = true;
-                    startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
+                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                        startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
+                    }
+                    else{
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    }
+
                     break;
                 case R.id.nav_basket:
                     positionChanged = true;
@@ -158,14 +192,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Glide.with(this)
                     .load(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.USER_IMAGE))
                     .centerCrop()
-                    .into(mBinding.profileImageNav);
+                    .into(mBinding.navTop.profileImageNav);
         } else {
-            mBinding.profileImageNav.setImageDrawable(getResources().getDrawable(R.drawable.profile_round));
+            mBinding.navTop.profileImageNav.setImageDrawable(getResources().getDrawable(R.drawable.profile_round));
         }
+
+        getCartItemApi();
+        mBinding.tvProfileHead.setText(dbHelper.getString(R.string.profile));
+        mBinding.tvProfileTitle.setText(dbHelper.getString(R.string.profile));
+        mBinding.tvChangePassTitle.setText(dbHelper.getString(R.string.change_pass));
+        mBinding.tvChatTitle.setText(dbHelper.getString(R.string.chat));
+        mBinding.tvOtherSettingsHead.setText(dbHelper.getString(R.string.other_settings));
+        mBinding.tvChangeLangTitle.setText(dbHelper.getString(R.string.change_language));
+        mBinding.tvRateAppTitle.setText(dbHelper.getString(R.string.rate_app));
+        mBinding.tvPrivacyTitle.setText(dbHelper.getString(R.string.privacy_policy));
+        mBinding.tvAboutTitle.setText(dbHelper.getString(R.string.about_direct));
+        mBinding.tvHelpTitle.setText(dbHelper.getString(R.string.help));
+        mBinding.tvHowToTitle.setText(dbHelper.getString(R.string.how_to_use));
+        mBinding.tvLogoutTitle.setText(dbHelper.getString(R.string.logout));
+        mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
+
     }
 
     private void setlocationInHader() {
-        setLocationTV.setText(Utils.getCityName(this, Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)), Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LON))));
+        setLocationTV.setText(Utils.getCityName(this, Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)), Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON))));
     }
 
     @Override
@@ -180,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     return;
                 }
                 doubleBackToExitPressedOnce = true;
-                Snackbar.make(mBinding.drawer, "Please click back again to exit",
+                Snackbar.make(mBinding.drawer, getString(R.string.back_again),
                         Snackbar.LENGTH_SHORT).show();
                 new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
             } else {
@@ -202,22 +252,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         transaction.commit();
     }
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_profile:
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                }
+                else{
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_chnage_password:
-                startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                    startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
+                }
+                else{
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_chet:
-                Utils.setToast(getApplicationContext(), "Chet");
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_rate_this_app:
@@ -227,75 +285,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.ll_logout:
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 clearSharePrefs();
-                startActivity(new Intent(getApplicationContext(), PlaceSearchActivity.class));
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_sign_in:
-                startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_howto_use:
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop")));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop"));
+                startActivity(intent);
                 finish();
+                mBinding.drawer.closeDrawers();
+                break;
+            case R.id.llChangeLanguage:
+                startActivity(new Intent(getApplicationContext(), ChangeLanguageActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
         }
     }
-
     public void clearSharePrefs() {
         sharedPreferences.edit().clear().apply();
     }
 
     private void setupBadge() {
-        // int CartItemCount = SharePrefs.getInstance(MainActivity.this).getInt(SharePrefs.COUNT);
-        if (itemQuatntiy == 0) {
-            if (mBinding.toolbarId.cartBadge.getVisibility() != View.GONE) {
-                mBinding.toolbarId.cartBadge.setVisibility(View.GONE);
-            }
+        int count = MyApplication.getInstance().cartRepository.getCartCount1();
+        if (count == 0) {
+            mBinding.toolbarId.cartBadge.setVisibility(View.GONE);
         } else {
-            mBinding.toolbarId.cartBadge.setText(String.valueOf(Math.min(itemQuatntiy, 99)));
-            if (mBinding.toolbarId.cartBadge.getVisibility() != View.VISIBLE) {
-                mBinding.toolbarId.cartBadge.setVisibility(View.VISIBLE);
-            }
+            mBinding.toolbarId.cartBadge.setVisibility(View.VISIBLE);
+            mBinding.toolbarId.cartBadge.setText(String.valueOf(Math.min(count, 99)));
         }
-
     }
 
     private void getCartItemApi() {
         mainActivityViewMode.getCartItemsRequest("123");
-        mainActivityViewMode.getCartItemsVM().observe(this, new Observer<CartItemModel>() {
-            @Override
-            public void onChanged(CartItemModel model) {
-                itemQuatntiy = 0;
-                Utils.hideProgressDialog();
-                if (model != null && model.getCart() != null) {
-                    cartItemModel = model;
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CART_ITEM_ID, model.getId());
-                    for (int i = 0; i < model.getCart().size(); i++) {
-                        itemQuatntiy += model.getCart().get(i).getQuantity();
-                    }
-                    setupBadge();
-                }
+        mainActivityViewMode.getCartItemsVM().observe(this, model -> {
+            System.out.println("SellerId " + model.getSellerId());
+            Utils.hideProgressDialog();
+            if (model != null && model.getCart() != null) {
+                MyApplication.getInstance().cartRepository.addToCart(model.getCart());
+            } else {
+                MyApplication.getInstance().cartRepository.truncateCart();
             }
+            setupBadge();
         });
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // check if the request code is same as what is passed  here it is 2
-        if (requestCode == 2) {
-            if (requestCode == 2 && resultCode == RESULT_OK) {
-                Address address = data.getParcelableExtra("address");
-                double lat = address.getLatitude();
-                double log = address.getLongitude();
-                setLocationTV.setText(Utils.getCityName(this, lat, log));
-            }
-
-        }
     }
 
     private void callLocationAPI(double latitude, double longitude) {
@@ -325,12 +361,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
         });
     }
-
 
     public void callRunTimePermissions() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
@@ -352,5 +385,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
-
 }

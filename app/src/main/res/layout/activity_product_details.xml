@@ -42,6 +42,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="180dp"
                             android:layout_marginTop="4dp" />
+
                         <com.viewpagerindicator.CirclePageIndicator
                             android:id="@+id/indicator"
                             android:layout_width="match_parent"
@@ -49,36 +50,35 @@
                             android:layout_alignBottom="@+id/pager"
                             android:layout_marginBottom="5dp"
                             android:padding="5dp" />
+
                         <TextView
                             android:id="@+id/tv_varient_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
                             android:layout_above="@+id/indicator"
+                            android:layout_alignParentStart="true"
+                            android:layout_margin="10dp"
                             android:background="@drawable/rounded_drawer"
                             android:padding="5dp"
-                            android:visibility="gone"
-                            android:layout_margin="10dp"
                             android:text="Variants"
                             android:textColor="@color/seller_button_color"
                             android:textSize="10sp"
-                            android:textStyle="normal" />
+                            android:textStyle="normal"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/tv_magrgin_off"
+                            style="@style/font_normal"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:background="@drawable/ic_off"
-                            android:textColor="@color/white"
-                            android:layout_marginTop="5dp"
                             android:layout_marginStart="5dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/ic_off"
                             android:gravity="center"
-                            android:visibility="gone"
                             android:text=""
+                            android:textColor="@color/white"
                             android:textSize="8dp"
-                            style="@style/font_normal"
-                            />
-
+                            android:visibility="gone" />
 
 
                     </RelativeLayout>
@@ -90,21 +90,39 @@
                         android:orientation="vertical"
                         android:weightSum="1">
 
-                        <TextView
-                            android:id="@+id/tv_item_name"
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginEnd="10dp"
-                            style="@style/font_normal"
-                            android:layout_weight=".5"
-                            android:ellipsize="end"
-                            android:maxLines="2"
-                            android:padding="2dp"
-                            android:text=""
-                            android:textColor="@color/black"
-                            android:textSize="18sp" />
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/tv_item_name"
+                                style="@style/font_normal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:ellipsize="end"
+                                android:maxLines="2"
+                                android:padding="2dp"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/tv_item_color"
+                                style="@style/font_normal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:ellipsize="end"
+                                android:maxLines="2"
+                                android:padding="2dp"
+                                android:text=""
+                                android:textColor="@color/grid_divder"
+                                android:textSize="18sp" />
+                        </LinearLayout>
 
 
                         <LinearLayout
@@ -119,6 +137,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    style="@style/font_normal"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="10dp"
@@ -127,7 +146,6 @@
                                     android:ellipsize="end"
                                     android:maxLines="1"
                                     android:padding="2dp"
-                                    style="@style/font_normal"
                                     android:text="@string/txt_mrp"
                                     android:textColor="@color/black"
                                     android:textSize="10dp"
@@ -135,6 +153,7 @@
 
                                 <TextView
                                     android:id="@+id/tv_item_mrp"
+                                    style="@style/font_normal"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="10dp"
@@ -143,33 +162,32 @@
                                     android:ellipsize="end"
                                     android:maxLines="1"
                                     android:padding="2dp"
-                                    style="@style/font_normal"
                                     android:text=""
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
                                     android:id="@+id/tv_tax"
+                                    style="@style/font_normal"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="10dp"
                                     android:layout_marginTop="5dp"
                                     android:layout_marginEnd="10dp"
                                     android:text="@string/txt_Inclusive"
-                                    style="@style/font_normal"
                                     android:textColor="@color/seller_button_color"
                                     android:textSize="11dp"
                                     android:textStyle="normal" />
 
                                 <TextView
                                     android:id="@+id/tv_quantity"
+                                    style="@style/font_normal"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="10dp"
                                     android:layout_marginTop="5dp"
                                     android:layout_marginEnd="10dp"
                                     android:text="@string/txt_Inclusive"
-                                    style="@style/font_normal"
                                     android:textSize="13dp"
                                     android:textStyle="normal" />
 
@@ -183,13 +201,13 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    style="@style/font_normal"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="10dp"
                                     android:layout_marginTop="5dp"
                                     android:layout_marginEnd="10dp"
                                     android:ellipsize="end"
-                                    style="@style/font_normal"
                                     android:maxLines="1"
                                     android:padding="2dp"
                                     android:text="@string/txt_selling_price"
@@ -199,13 +217,13 @@
 
                                 <TextView
                                     android:id="@+id/tv_selling_price"
+                                    style="@style/font_normal"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="10dp"
                                     android:layout_marginTop="5dp"
                                     android:layout_marginEnd="10dp"
                                     android:ellipsize="end"
-                                    style="@style/font_normal"
                                     android:maxLines="1"
                                     android:padding="2dp"
                                     android:text=""
@@ -218,30 +236,30 @@
 
                             <TextView
                                 android:id="@+id/tv_discount"
+                                style="@style/font_normal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginEnd="10dp"
                                 android:ellipsize="end"
-                                android:visibility="gone"
-                                style="@style/font_normal"
                                 android:maxLines="1"
                                 android:padding="2dp"
                                 android:text=""
                                 android:textColor="@color/black"
                                 android:textSize="10dp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:visibility="gone" />
                         </LinearLayout>
 
                         <TextView
                             android:id="@+id/tv_seller_deatil"
+                            style="@style/font_normal_sami_bold"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="10dp"
-                            style="@style/font_normal_sami_bold"
                             android:ellipsize="end"
                             android:maxLines="2"
                             android:padding="2dp"
@@ -255,12 +273,12 @@
                             android:orientation="horizontal">
 
                             <TextView
+                                style="@style/font_normal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="10dp"
                                 android:ellipsize="end"
-                                style="@style/font_normal"
                                 android:maxLines="1"
                                 android:padding="2dp"
                                 android:text="@string/txt_shop_name"
@@ -270,12 +288,12 @@
 
                             <TextView
                                 android:id="@+id/tv_shop_name"
+                                style="@style/font_normal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="10dp"
                                 android:ellipsize="end"
-                                style="@style/font_normal"
                                 android:maxLines="1"
                                 android:padding="2dp"
                                 android:text=""
@@ -287,12 +305,12 @@
 
                         <TextView
                             android:id="@+id/tv_addresh"
+                            style="@style/font_normal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
                             android:layout_marginEnd="10dp"
-                            style="@style/font_normal"
                             android:ellipsize="end"
                             android:maxLines="2"
                             android:padding="2dp"
@@ -304,16 +322,16 @@
                             android:id="@+id/ll_deliver_option"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <TextView
+                                style="@style/font_normal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="10dp"
                                 android:ellipsize="end"
-                                style="@style/font_normal"
                                 android:maxLines="1"
                                 android:padding="2dp"
                                 android:text="@string/txt_delivery"
@@ -323,12 +341,12 @@
 
                             <TextView
                                 android:id="@+id/tv_delivery_option"
+                                style="@style/font_normal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="10dp"
                                 android:ellipsize="end"
-                                style="@style/font_normal"
                                 android:maxLines="1"
                                 android:padding="2dp"
                                 android:text=""
@@ -345,7 +363,6 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp"
                             android:orientation="vertical">
-
 
 
                             <!--<TextView
@@ -375,43 +392,25 @@
 
                         </LinearLayout>
 
-
-                        <TextView
-                            android:id="@+id/tv_item_color"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginEnd="10dp"
-                            android:layout_weight=".5"
-                            style="@style/font_normal"
-                            android:ellipsize="end"
-                            android:maxLines="2"
-                            android:padding="2dp"
-                            android:text=""
-                            android:textColor="@color/grid_divder"
-                            android:textSize="15sp" />
-
-
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginEnd="10dp">
+                        android:layout_marginEnd="10dp"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/tv_deatils"
+                            style="@style/font_normal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:padding="2dp"
                             android:text=""
-                            style="@style/font_normal"
                             android:textColor="@color/black"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -439,15 +438,15 @@
                     android:id="@+id/ll_similar_product"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
+                        style="@style/font_normal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:padding="5dp"
-                        style="@style/font_normal"
                         android:text="Similar Products"
                         android:textColor="@color/seller_button_color"
                         android:textStyle="bold" />
@@ -466,16 +465,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:visibility="gone"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
+                        style="@style/font_normal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:padding="5dp"
                         android:text="Other Sellers"
-                        style="@style/font_normal"
                         android:textColor="@color/seller_button_color"
                         android:textStyle="bold" />
 
@@ -493,15 +492,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:visibility="gone"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
+                        style="@style/font_normal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:padding="5dp"
-                        style="@style/font_normal"
                         android:text="Seller's others product"
                         android:textColor="@color/seller_button_color"
                         android:textStyle="bold" />
@@ -514,8 +513,6 @@
                         android:scrollbars="horizontal" />
 
                 </LinearLayout>
-
-
 
 
             </LinearLayout>
@@ -532,6 +529,7 @@
 
             <Button
                 android:id="@+id/bt_add_to_cart"
+                style="@style/font_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -539,7 +537,6 @@
                 android:drawableRight="@drawable/ic_basket_un"
                 android:drawablePadding="10dp"
                 android:padding="5dp"
-                style="@style/font_normal"
                 android:text="Add to Cart"
                 android:textAllCaps="true"
                 android:textColor="@color/seller_button_color"

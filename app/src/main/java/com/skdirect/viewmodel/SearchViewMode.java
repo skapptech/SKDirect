@@ -70,7 +70,7 @@ public class SearchViewMode extends ViewModel {
     }
 
 
-    public MutableLiveData<ArrayList<TopSellerModel>> getShopDataViewModelRequest(int skipCount, int takeCount, String s, int cateogryId) {
+    public MutableLiveData<ArrayList<TopSellerModel>> getShopDataViewModelRequest(int skipCount, int takeCount, String s, String cateogryId) {
         RestClient.getInstance().getService().GetTopSellerItem(skipCount,takeCount,s,cateogryId).enqueue(new Callback<ArrayList<TopSellerModel>>() {
             @Override
             public void onResponse(Call<ArrayList<TopSellerModel>> call, Response<ArrayList<TopSellerModel>> response) {

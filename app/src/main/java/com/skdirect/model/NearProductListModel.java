@@ -99,12 +99,22 @@ public class NearProductListModel {
     @SerializedName("Stock")
     private int Stock;
 
-
     @SerializedName("IsStockRequired")
     private boolean IsStockRequired;
 
     @SerializedName("ShopName")
     private String ShopName;
+
+    @SerializedName("NoofView")
+    private int NoofView;
+
+    public int getNoofView() {
+        return NoofView;
+    }
+
+    public void setNoofView(int noofView) {
+        NoofView = noofView;
+    }
 
     public int getId() {
         return Id;

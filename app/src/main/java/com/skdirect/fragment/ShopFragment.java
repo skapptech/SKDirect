@@ -117,7 +117,7 @@ public class ShopFragment extends Fragment {
     }
 
     private void getShopData() {
-        searchViewMode.getShopDataViewModelRequest(skipCount, takeCount, searchSellerName,cateogryId);
+        searchViewMode.getShopDataViewModelRequest(skipCount, takeCount, searchSellerName,(String.valueOf(cateogryId).equals("0")) ? null : String.valueOf(cateogryId));
         searchViewMode.getShopDataViewModel().observe(this, new Observer<ArrayList<TopSellerModel>>() {
             @Override
             public void onChanged(ArrayList<TopSellerModel> topSellerModels) {

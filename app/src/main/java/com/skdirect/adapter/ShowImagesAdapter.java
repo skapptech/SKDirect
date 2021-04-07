@@ -43,6 +43,7 @@ public class ShowImagesAdapter extends PagerAdapter {
 
         assert imageLayout != null;
         final ImageView imageView = imageLayout.findViewById(R.id.iv_item_image);
+
         if (imageListModels.get(position).getImagePath() != null && !imageListModels.get(position).getImagePath().contains("http")) {
             Picasso.get().load(BuildConfig.apiEndpoint+imageListModels.get(position).getImagePath()).into(imageView);
         }else {
