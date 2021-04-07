@@ -142,7 +142,7 @@ public class SplashActivity extends AppCompatActivity {
 
                 }
             } else {
-                startActivity(new Intent(activity, PlaceSearchActivity.class));
+                startActivity(new Intent(activity, IntroActivity.class));
             }
 
 

@@ -62,17 +62,17 @@ public class IntroActivity extends AppCompatActivity {
         mBinding.tvBuyer.setOnClickListener(view -> {
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SELLER, false);
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SHOW_INTRO, true);
-            Intent i = new Intent(activity, MainActivity.class);
+            Intent i = new Intent(activity, PlaceSearchActivity.class);
             startActivity(i);
             finish();
         });
-        mBinding.tvSeller.setOnClickListener(view -> {
+       /* mBinding.tvSeller.setOnClickListener(view -> {
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SELLER, true);
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SHOW_INTRO, true);
             Intent i = new Intent(activity, MainActivity.class);
             startActivity(i);
             finish();
-        });
+        });*/
         mBinding.tvNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
