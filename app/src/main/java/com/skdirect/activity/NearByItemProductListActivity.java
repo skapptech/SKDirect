@@ -1,5 +1,6 @@
 package com.skdirect.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,10 +21,14 @@ import com.skdirect.databinding.ActivityProductListBinding;
 import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.TopNearByItemModel;
+import com.skdirect.utils.Constant;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.HomeViewModel;
 import com.skdirect.viewmodel.LoginViewModel;
 import com.skdirect.viewmodel.NearProductListViewMode;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -38,7 +43,7 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
     private int totalItemCount = 0;
     private boolean loading = true;
     private NearProductListAdapter nearProductListAdapter;
-
+    private final int  REQUEST = 100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +97,33 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
             }
         });
         nearProductList.clear();
+
+        mBinding.llFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), FilterActivity.class);
+                startActivityForResult(intent, REQUEST);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST) {
+            if (data != null && resultCode == RESULT_OK) {
+                String category = data.getExtras().getString(Constant.Category);
+                String price = data.getExtras().getString(Constant.Price);
+                String brand = data.getExtras().getString(Constant.Brands);
+                String discount = data.getExtras().getString(Constant.Discount);
+                System.out.println("Category::"+category);
+            }else
+            {
+                System.out.println("Canceld by user");
+            }
+
+        }
     }
     @Override
     public void onClick(View view) {

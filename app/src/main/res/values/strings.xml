@@ -22,4 +22,9 @@
     <string name="txt_seller_details">Seller Detail</string>
     <string name="txt_shop_name">Shop Name</string>
     <string name="txt_delivery">Delivery options:</string>
+    <string name="apply">Apply</string>
+    <string name="cancel">Cancel</string>
+    <string name="sort">SORT</string>
+    <string name="filter">FILTER</string>
+    <string name="select_price_range">Select Price Range</string>
 </resources>

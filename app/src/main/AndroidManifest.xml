@@ -12,7 +12,6 @@
     <uses-permission android:name="android.Manifest.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-
     <application
         android:name=".utils.MyApplication"
         android:allowBackup="false"
@@ -28,49 +27,33 @@
         android:usesCleartextTraffic="true"
         android:windowDisablePreview="true"
         android:windowSoftInputMode="adjustResize">
+        <activity android:name=".activity.FilterActivity"></activity>
         <activity
-            android:name="com.skdirect.activity.MainActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.IntroActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
-
+            android:name=".activity.IntroActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.PlaceSearchActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.PlaceSearchActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.UserLocationActvity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.UserLocationActvity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.WelcomeActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.WelcomeActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.RegisterationActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.RegisterationActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.MapsExtendedActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.MapsExtendedActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.PlacesActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.PlacesActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.SplashActivity"
+            android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -78,7 +61,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait" />
@@ -88,19 +70,15 @@
         <activity
             android:name=".activity.LoginWithPasswordActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.NearByItemProductListActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.SellerProductListActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.CategoriesListActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.SearchActivity"
             android:screenOrientation="portrait"
@@ -143,13 +121,10 @@
             android:name=".activity.CartActivity"
             android:label=""
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.PaymentActivity"
             android:label=""
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".activity.MapsActivity"
             android:hardwareAccelerated="false"
@@ -175,7 +150,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/logo" />
