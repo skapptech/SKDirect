@@ -175,14 +175,14 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
                 if (model != null) {
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
-                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE, model.getIsRegistrationComplete());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAT, model.getLatitiute());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LON, model.getLongitude());
+                    SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE, model.getIsRegistrationComplete());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LAT,model.getLatitiute());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LON, model.getLongitude());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
                     commonClassForAPI.getUpdateToken(updatecallToken, fcmToken);
-                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
+                    SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.Is_First_Time,true);
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
 

@@ -279,7 +279,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     SharePrefs.getInstance(activity).putInt(SharePrefs.PIN_CODE_master, customerDataModel.getPinCodeMasterId());
                     SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_ACTIVE, customerDataModel.isActive());
                     SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_DELETE, customerDataModel.isDelete());
-                    SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE, customerDataModel.isRegistrationComplete());
+                    SharePrefs.setSharedPreference(activity, SharePrefs.IS_REGISTRATIONCOMPLETE, customerDataModel.isRegistrationComplete());
 
                     if (customerDataModel.getUserDeliveryDC() != null && customerDataModel.getUserDeliveryDC().size() > 0) {
                         for (int i = 0; i < customerDataModel.getUserDeliveryDC().size(); i++) {
@@ -288,9 +288,10 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                             SharePrefs.getInstance(activity).putInt(SharePrefs.USER_DC_ID, customerDataModel.getUserDeliveryDC().get(i).getId());
                             SharePrefs.getInstance(activity).putInt(SharePrefs.USER_DC_USER_ID, customerDataModel.getUserDeliveryDC().get(i).getUserId());
                             SharePrefs.getInstance(activity).putString(SharePrefs.DELIVERY, customerDataModel.getUserDeliveryDC().get(i).getDelivery());
-
                         }
-                        if (customerDataModel.isRegistrationComplete()) {
+
+
+                        if (customerDataModel.isRegistrationComplete() && SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_LOGIN)) {
                             activity.userNameTV.setText(customerDataModel.getFirstName());
                             activity.mBinding.llLogout.setVisibility(View.VISIBLE);
                         } else {

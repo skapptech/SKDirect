@@ -37,7 +37,7 @@ public class MyApplication extends Application implements LifecycleObserver {
         dbHelper = new DBHelper(this);
     }
 
-    public void token() {
+   /* public void token() {
         new CommonClassForAPI().getToken(callToken, "password", Utils.getDeviceUniqueID(activity),
                 "", true, true, "BUYERAPP", true,
                 Utils.getDeviceUniqueID(activity), 28.0, 72.00, "452011");
@@ -52,14 +52,14 @@ public class MyApplication extends Application implements LifecycleObserver {
                 if (model != null) {
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
-                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE, model.getIsRegistrationComplete());
+                    SharePrefs.setSharedPreference(activity, SharePrefs.IS_REGISTRATIONCOMPLETE, model.getIsRegistrationComplete());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAT, model.getLatitiute());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LON, model.getLongitude());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
                     new CommonClassForAPI().getUpdateToken(updatecallToken, Utils.getFcmToken());
-                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
+                    SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.IS_LOGIN,true);
                     if (activity != null)
                         activity.recreate();
                 }
@@ -82,7 +82,7 @@ public class MyApplication extends Application implements LifecycleObserver {
             Utils.hideProgressDialog();
         }
     };
-
+*/
     private final DisposableObserver<JsonObject> updatecallToken = new DisposableObserver<JsonObject>() {
         @Override
         public void onNext(JsonObject model) {

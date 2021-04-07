@@ -36,6 +36,7 @@ import com.skdirect.databinding.ActivityMainBinding;
 import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.fragment.BasketFragment;
 import com.skdirect.fragment.HomeFragment;
+import com.skdirect.model.CartItemModel;
 import com.skdirect.utils.AppSignatureHelper;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.GPSTracker;
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public TextView userNameTV, mobileNumberTV, setLocationTV;
     private MainActivityViewMode mainActivityViewMode;
     DBHelper dbHelper;
+    public static CartItemModel cartItemModel;
+    private int itemQuatntiy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +73,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainActivityViewMode = ViewModelProviders.of(this).get(MainActivityViewMode.class);
         dbHelper = MyApplication.getInstance().dbHelper;
         openFragment(new HomeFragment());
+        Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
         initView();
+        openFragment(new HomeFragment());
         setlocationInHader();
         clickListener();
+        setupBadge();
         ///callRunTimePermissions();
     }
 
@@ -99,31 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.llHowtoUse.setOnClickListener(this);
         mBinding.llChangeLanguage.setOnClickListener(this);
     }
-    public void onBackPressed() {
-        if (mBinding.drawer.isDrawerOpen(GravityCompat.START)) {
-            mBinding.drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
-                if (doubleBackToExitPressedOnce) {
-                    super.onBackPressed();
-                    finishAffinity();
-                    return;
-                }
-                doubleBackToExitPressedOnce = true;
-                Snackbar.make(mBinding.drawer, "Please click back again to exit",
-                        Snackbar.LENGTH_SHORT).show();
-                new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
-            } else {
-                if (positionChanged) {
-                    positionChanged = false;
-                    mBinding.toolbarId.bottomNavigation.getMenu().getItem(0).setChecked(true);
-                    super.onBackPressed();
-                } else {
-                    super.onBackPressed();
-                }
-            }
-        }
-    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -167,11 +149,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case R.id.nav_profile:
                     positionChanged = true;
-                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                    break;
+                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                    }
+                    else{
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    }                    break;
                 case R.id.nav_my_order:
                     positionChanged = true;
-                    startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
+                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                        startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
+                    }
+                    else{
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    }
+
                     break;
                 case R.id.nav_basket:
                     positionChanged = true;
@@ -206,8 +198,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         getCartItemApi();
-
-
         mBinding.tvProfileHead.setText(dbHelper.getString(R.string.profile));
         mBinding.tvProfileTitle.setText(dbHelper.getString(R.string.profile));
         mBinding.tvChangePassTitle.setText(dbHelper.getString(R.string.change_pass));
@@ -225,7 +215,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setlocationInHader() {
-        setLocationTV.setText(Utils.getCityName(this, Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LAT)), Double.parseDouble(SharePrefs.getInstance(this).getString(SharePrefs.LON))));
+        setLocationTV.setText(Utils.getCityName(this, Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)), Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON))));
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mBinding.drawer.isDrawerOpen(GravityCompat.START)) {
+            mBinding.drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
+                if (doubleBackToExitPressedOnce) {
+                    super.onBackPressed();
+                    finishAffinity();
+                    return;
+                }
+                doubleBackToExitPressedOnce = true;
+                Snackbar.make(mBinding.drawer, getString(R.string.back_again),
+                        Snackbar.LENGTH_SHORT).show();
+                new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
+            } else {
+                if (positionChanged) {
+                    positionChanged = false;
+                    mBinding.toolbarId.bottomNavigation.getMenu().getItem(0).setChecked(true);
+                    super.onBackPressed();
+                } else {
+                    super.onBackPressed();
+                }
+            }
+        }
     }
 
     public void openFragment(Fragment fragment) {
@@ -239,17 +256,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_profile:
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                }
+                else{
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_chnage_password:
-                startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                    startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
+                }
+                else{
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_chet:
-                Utils.setToast(getApplicationContext(), "Chet");
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_rate_this_app:
@@ -259,17 +285,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.ll_logout:
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 clearSharePrefs();
-                startActivity(new Intent(getApplicationContext(), PlaceSearchActivity.class));
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_sign_in:
-                startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_howto_use:
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop")));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop"));
+                startActivity(intent);
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;

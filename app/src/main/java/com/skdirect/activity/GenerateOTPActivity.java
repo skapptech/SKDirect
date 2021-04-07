@@ -15,7 +15,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.auth.api.phone.SmsRetriever;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
@@ -28,7 +27,6 @@ import com.skdirect.model.GenerateOtpResponseModel;
 import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
-import com.skdirect.model.UpdateTokenModel;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.OTPVerificationViewModel;
@@ -39,7 +37,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     final String TAG = getClass().getSimpleName();
     private ActivityGenerateOtpBinding Binding;
     private SmsBroadcastReceiver mSmsBroadcastReceiver;
-    private String latsFiveNumber,otpString,mobileNumber;
+    private String latsFiveNumber, otpString, mobileNumber;
     private OTPVerificationViewModel otpVerificationViewModel;
     private CountDownTimer cTimer = null;
     private CommonClassForAPI commonClassForAPI;
@@ -58,7 +56,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
 
     private void getIntentData() {
         mobileNumber = getIntent().getStringExtra("MobileNumber");
-        latsFiveNumber = mobileNumber.substring(mobileNumber.length()-5);
+        latsFiveNumber = mobileNumber.substring(mobileNumber.length() - 5);
         fcmToken = Utils.getFcmToken();
     }
 
@@ -66,7 +64,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
         commonClassForAPI = CommonClassForAPI.getInstance(this);
         Binding.btLoddingOtp.setOnClickListener(this);
         Binding.tvVerifactionText.setText("Enter Verification code which we have\n" +
-                "send to XXXXX "+latsFiveNumber);
+                "send to XXXXX " + latsFiveNumber);
         startTimer(Binding.resendOtpTimer, Binding.resendotp);
         // init broadcast receiver
         mSmsBroadcastReceiver = new SmsBroadcastReceiver();
@@ -78,8 +76,8 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
         Binding.etOtp.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent keyEvent) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
-                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
+                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
 
                     Binding.btLoddingOtp.setText("Loading ...");
                     checkVerification();
@@ -109,6 +107,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                 tvResendOtpTimer.setText("Resend OTP" + ":" + "" + millisUntilFinished / 1000);
                 Binding.resendotp.setVisibility(View.GONE);
             }
+
             public void onFinish() {
                 resendotp.setEnabled(true);
                 resendotp.setBackgroundResource(R.drawable.rectangle);
@@ -162,7 +161,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
         otpString = Binding.etOtp.getText().toString().trim();
         if (otpString.isEmpty()) {
             Utils.setToast(this, "Please Enter OTP");
-        }else {
+        } else {
             callOTPVerfiyAPI(otpString);
         }
 
@@ -170,8 +169,8 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
 
     private void callOTPVerfiyAPI(String otpString) {
         if (Utils.isNetworkAvailable(this)) {
-            if (commonClassForAPI!=null){
-                commonClassForAPI.VerfiyOtp(OTPVerfiyData, new OtpVerificationModel(mobileNumber,otpString,Utils.getDeviceUniqueID(this)));
+            if (commonClassForAPI != null) {
+                commonClassForAPI.VerfiyOtp(OTPVerfiyData, new OtpVerificationModel(mobileNumber, otpString, Utils.getDeviceUniqueID(this)));
             }
         } else {
             Utils.setToast(this, "No Internet Connection Please connect.");
@@ -179,11 +178,10 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     }
 
 
-
     private void callResendOTPApi(String mobileNumberString) {
         if (Utils.isNetworkAvailable(this)) {
             Utils.showProgressDialog(this);
-            GenerateOtpModel model =new GenerateOtpModel(mobileNumberString,Utils.getDeviceUniqueID(this));
+            GenerateOtpModel model = new GenerateOtpModel(mobileNumberString, Utils.getDeviceUniqueID(this));
             getResendOTPData(model);
         } else {
             Utils.setToast(this, "No Internet Connection Please connect.");
@@ -196,14 +194,13 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
             @Override
             public void onChanged(GenerateOtpResponseModel model) {
                 Utils.hideProgressDialog();
-                if (model!=null){
-                    if (model.isSuccess()){
+                if (model != null) {
+                    if (model.isSuccess()) {
                         SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, model.getResultItem().isUserExists());
                         SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.RESULT, model.getResultItem().isResult());
                         startTimer(Binding.resendOtpTimer, Binding.resendotp);
-                    }
-                    else{
-                        Utils.setToast(GenerateOTPActivity.this,model.getErrorMessage());
+                    } else {
+                        Utils.setToast(GenerateOTPActivity.this, model.getErrorMessage());
                     }
                 }
             }
@@ -215,33 +212,33 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
         @Override
         public void onNext(OtpResponceModel model) {
             Utils.hideProgressDialog();
-                if (model!=null){
-                    if (model.isSuccess()) {
-                        SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, model.getResultItem().getIsUserExist());
-                        SharePrefs.getInstance(GenerateOTPActivity.this).putString(SharePrefs.USER_ID, model.getResultItem().getUserid());
-                      /*  commonClassForAPI.getToken(callToken, "password", mobileNumber, otpString, true, true, "BUYERAPP",true,Utils.getDeviceUniqueID(GenerateOTPActivity.this),);*/
+            if (model != null) {
+                if (model.isSuccess()) {
+                    SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, model.getResultItem().getIsUserExist());
+                    SharePrefs.getInstance(GenerateOTPActivity.this).putString(SharePrefs.USER_ID, model.getResultItem().getUserid());
+                    /*  commonClassForAPI.getToken(callToken, "password", mobileNumber, otpString, true, true, "BUYERAPP",true,Utils.getDeviceUniqueID(GenerateOTPActivity.this),);*/
 
                         /*if (SharePrefs.getInstance(GenerateOTPActivity.this).getBoolean(SharePrefs.IS_LOGIN)){
 
                         }else {
                             startActivity(new Intent(GenerateOTPActivity.this,PlaceSearchActivity.class));
-                        }*/  if (SharePrefs.getInstance(GenerateOTPActivity.this).getBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE))
-                        {
-                            startActivity(new Intent(GenerateOTPActivity.this,MainActivity.class));
-                        }
-                        else{
-                            startActivity(new Intent(GenerateOTPActivity.this,RegisterationActivity.class));
-                        }
-
-                      //  finish();
-
-                    }else {
-                        Binding.btLoddingOtp.setText("Next");
-                        Utils.setToast(GenerateOTPActivity.this, "Please enter valid OTP.");
+                        }*/
+                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)) {
+                        startActivity(new Intent(GenerateOTPActivity.this, MainActivity.class));
+                    } else {
+                        startActivity(new Intent(GenerateOTPActivity.this, RegisterationActivity.class));
                     }
-                }else {
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN,true);
+
+                    //  finish();
+
+                } else {
+                    Binding.btLoddingOtp.setText("Next");
                     Utils.setToast(GenerateOTPActivity.this, "Please enter valid OTP.");
                 }
+            } else {
+                Utils.setToast(GenerateOTPActivity.this, "Please enter valid OTP.");
+            }
         }
 
         @Override
@@ -264,10 +261,9 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                 if (model != null) {
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
-                   // commonClassForAPI.getUpdateToken(updatecallToken,new UpdateTokenModel(fcmToken));
+                    // commonClassForAPI.getUpdateToken(updatecallToken,new UpdateTokenModel(fcmToken));
 
-                    commonClassForAPI.getUpdateToken(updatecallToken,fcmToken);
-
+                    commonClassForAPI.getUpdateToken(updatecallToken, fcmToken);
 
 
                 }
