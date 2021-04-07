@@ -181,7 +181,7 @@ public interface APIServices {
     Call<Boolean> UpdateUserDetail(@Body JsonObject jsonObject );
 
 
-    @POST("api/Native/BuyerProfile/UpdateBuyerProfile")
+    @POST("api/NativeBuyer/BuyerProfile/UpdateBuyerProfile")
     Observable<CommonResponseModel> UpdateProfile(@Body UpdateProfilePostModel updateProfilePostModel );
 
     @GET("api/buyer/Profile/MakeDefaultAddress/{MakeDefaultAddress}")
