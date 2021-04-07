@@ -49,7 +49,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private ArrayList<ProductVariantAttributeDCModel> variantAttributeDCModels = new ArrayList<>();
     private BottomSheetDialog bottomSheetDialog;
     private int SellerItemID;
-    private ProductResultModel resultModel;
+    private ProductResultModel resultModel = new ProductResultModel();
 
 
     @Override
@@ -76,6 +76,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 onBackPressed();
                 break;
             case R.id.bt_add_to_cart:
+                resultModel.setQty(1);
+                mBinding.tvSelectedQty.setText("" + resultModel.getQty());
                 addToCart();
                 break;
             case R.id.tvQtyPlus:
@@ -244,6 +246,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         } else {
             mBinding.btAddToCart.setVisibility(View.GONE);
             mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
+            CartModel cartModel = new CartModel(null, 0, null, resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(), resultModel.getUom(), "", 0, resultModel.getProductName(), 0, 0, resultModel.IsDelete, resultModel.getOffPercentage(), 0, 0, 1, 0, null, resultModel.getSellerId(), 0, 0, 0, resultModel.getMrp(), 0, resultModel.getId());
+            MyApplication.getInstance().cartRepository.addToCart(cartModel);
+            addItemInCart(1, SellerItemID);
         }
     }
 
@@ -312,14 +317,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         mBinding.llOtherSellar.setVisibility(View.VISIBLE);
                         TopSellerAdapter topSellerAdapter = new TopSellerAdapter(ProductDetailsActivity.this, topSimilarSellerModel.getResultItem());
                         mBinding.rvOtherSellars.setAdapter(topSellerAdapter);
-
                     } else {
                         mBinding.llOtherSellar.setVisibility(View.GONE);
                     }
                 } else {
                     Utils.setToast(ProductDetailsActivity.this, topSimilarSellerModel.getErrorMessage());
                 }
-
             }
         });
     }
@@ -363,7 +366,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                                     //mBinding.tvItemMrpOff.setPaintFlags(mBinding.tvItemMrpOff.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                                 }
 
-
                                 if (productDataModel.getResultItem().getVariationModelList().get(i).getOffPercentage() != 0.0) {
                                     mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
                                     mBinding.tvMagrginOff.setText(productDataModel.getResultItem().getVariationModelList().get(i).getOffPercentage() + "%\n OFF");
@@ -399,14 +401,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                             }
                             mBinding.pager.setAdapter(new ShowImagesAdapter(ProductDetailsActivity.this, imageListModels));
                             mBinding.indicator.setViewPager(mBinding.pager);
-
                         } else {
                             mBinding.tvVarientButton.setVisibility(View.GONE);
                             if (productDataModel.getResultItem().getImageList() != null && productDataModel.getResultItem().getImageList().size() > 0) {
                                 imageListModels = productDataModel.getResultItem().getImageList();
                             }
                             mBinding.tvItemName.setText(productDataModel.getResultItem().getProductName());
-
 
                             if (productDataModel.getResultItem().getMrp() == productDataModel.getResultItem().getSellingPrice()) {
                                 mBinding.llSellingPrice.setVisibility(View.GONE);
@@ -464,18 +464,14 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                                     linearLayout.addView(tv);
                                     linearLayout.addView(textView);
                                     mBinding.llDiscr.addView(linearLayout);
-
                                 }
                             }
                             mBinding.pager.setAdapter(new ShowImagesAdapter(ProductDetailsActivity.this, imageListModels));
                             mBinding.indicator.setViewPager(mBinding.pager);
-
                         }
                     }
                 }
-
             }
-
         });
     }
 
@@ -495,16 +491,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         productDetailsViewMode.getAddItemsInCardVMRequest(paginationModel);
         productDetailsViewMode.getAddItemsInCardVM().observe(this, sellerProdList -> {
             Utils.hideProgressDialog();
-            if (sellerProdList != null) {
-                if (sellerProdList.getShoppingCartItem().size() > 0) {
-                    for (int i = 0; i < sellerProdList.getShoppingCartItem().size(); i++) {
-                        mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
-                        mBinding.tvSelectedQty.setText(String.valueOf(sellerProdList.getShoppingCartItem().get(i).getQuantity()));
-                    }
-                } else {
-                    mBinding.toolbarTittle.notifictionCount.setVisibility(View.GONE);
-                }
-            }
         });
     }
 
@@ -553,6 +539,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         } else {
             mBinding.btAddToCart.setVisibility(View.VISIBLE);
             mBinding.LLPlusMinus.setVisibility(View.GONE);
+            resultModel.setQty(0);
         }
     }
 
@@ -565,5 +552,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 mBinding.toolbarTittle.cartBadge.setText(String.valueOf(Math.min(count, 99)));
             }
         });
+        checkAddButtonValidaction();
     }
 }
