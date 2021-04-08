@@ -36,6 +36,7 @@ import com.skdirect.model.MallMainModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.HomeViewModel;
@@ -48,6 +49,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private FragmentHomeBinding mBinding;
     private MainActivity activity;
     private HomeViewModel homeViewModel;
+    public DBHelper dbHelper;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -204,6 +206,15 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void initViews() {
+        dbHelper = MyApplication.getInstance().dbHelper;
+        mBinding.etSearchSeller.setText(dbHelper.getString(R.string.search_seller));
+        mBinding.tvNearByViewAll.setText(dbHelper.getString(R.string.view_more));
+        mBinding.tvNearItem.setText(dbHelper.getString(R.string.near_by_item));
+        mBinding.tvLoNotFound.setText(dbHelper.getString(R.string.no_loction_found));
+        mBinding.tvNearSellar.setText(dbHelper.getString(R.string.near_by_seller));
+        mBinding.tvNearBySellar.setText(dbHelper.getString(R.string.view_more));
+
+
         //mBinding.swiperefresh.setOnRefreshListener(this);
         mBinding.rvNearByItem.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         mBinding.rvTopSeller.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));

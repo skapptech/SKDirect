@@ -29,7 +29,7 @@
     <string name="no_connection">No Internet Connection Please connect.</string>
     <string name="back_again">Please click back again to exit</string>
     <string name="enter_valid_mobno">Please enter Valid  Mobile Number.</string>
-    <string name="loading">Loading ...</string>
+    <string name="loading">Loading …</string>
     <string name="enter_mobno">Please Enter Mobile</string>
     <string name="what_s_your_number">What\'s Your Number</string>
     <string name="enter_phone_number">Enter phone number</string>
@@ -40,6 +40,9 @@
     <string name="resend_otp">Resend OTP</string>
     <string name="valid_otp">Please enter valid OTP.</string>
     <string name="enter_otp">Please Enter OTP</string>
+    <string name="home">होम</string>
+    <string name="my_order">मेरा आदेश</string>
+    <string name="basket">Basket</string>
     <string name="filter">FILTER</string>
     <string name="select_price_range">Select Price Range</string>
     <string name="cancel">Cancel</string>
@@ -48,4 +51,14 @@
     <string name="whatsapp">Whatsapp</string>
     <string name="whatsapp_business">Whatsapp Business</string>
     <string name="share">Share</string>
+    <string name="search_seller">नाम या उत्पाद से विक्रेता खोजें</string>
+    <string name="near_by_item">पास की वस्तुएँ</string>
+    <string name="view_more">और देखें</string>
+    <string name="no_item_found">कोई आइटम नहीं मिला</string>
+
+    <string name="no_loction_found">आपके स्थान के लिए कोई विक्रेता सक्रिय नहीं है, कृपया भविष्य में</string>
+    <string name="near_by_seller">पास का विक्रेता</string>
+    <string name="all_categories">सब श्रेणियां</string>
+
+
 </resources>

@@ -13,6 +13,7 @@ import com.google.gson.JsonElement;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.CartItemModel;
+import com.skdirect.model.CartMainModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.RemoveItemRequestModel;
 import com.skdirect.utils.Utils;
@@ -24,11 +25,11 @@ import retrofit2.Response;
 public class CartItemViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
 
-    private MutableLiveData<CartItemModel> CartItemModelVM;
+    private MutableLiveData<CartMainModel> CartItemModelVM;
     private MutableLiveData<AddCartItemModel> addItemsInCardVM;
     private MutableLiveData<JsonElement> removeItemFromCartVM;
 
-    public LiveData<CartItemModel> getCartItemModelVM() {
+    public LiveData<CartMainModel> getCartItemModelVM() {
         if (CartItemModelVM == null) {
             CartItemModelVM = new MutableLiveData<>();
         }
@@ -56,10 +57,10 @@ public class CartItemViewMode extends ViewModel {
         return removeItemFromCartVM;
     }
 
-    public MutableLiveData<CartItemModel> getCartItemModelVMRequest(int id, RecyclerView rvCartItem, LinearLayout blankBasket) {
-        RestClient.getInstance().getService().CartItems(id).enqueue(new Callback<CartItemModel>() {
+    public MutableLiveData<CartMainModel> getCartItemModelVMRequest(RecyclerView rvCartItem, LinearLayout blankBasket) {
+        RestClient.getInstance().getService().CartItems().enqueue(new Callback<CartMainModel>() {
             @Override
-            public void onResponse(Call<CartItemModel> call, Response<CartItemModel> response) {
+            public void onResponse(Call<CartMainModel> call, Response<CartMainModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.e(TAG, "request response=" + response.body());
                     CartItemModelVM.setValue(response.body());
@@ -71,7 +72,7 @@ public class CartItemViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<CartItemModel> call, Throwable t) {
+            public void onFailure(Call<CartMainModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + t.toString());
                 rvCartItem.setVisibility(View.GONE);
                 blankBasket.setVisibility(View.VISIBLE);

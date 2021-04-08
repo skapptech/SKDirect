@@ -18,6 +18,7 @@ import com.skdirect.adapter.CartListAdapter;
 import com.skdirect.databinding.ActivityCartBinding;
 import com.skdirect.interfacee.CartItemInterface;
 import com.skdirect.model.CartItemModel;
+import com.skdirect.model.CartMainModel;
 import com.skdirect.model.CartModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.RemoveItemRequestModel;
@@ -89,11 +90,6 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             cartListAdapter.notifyDataSetChanged();
             addItemInCart(qty, cartModel);
             MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
-
-            if (totalAmount == 0) {
-                mBinding.rlCheckOut.setVisibility(View.GONE);
-                mBinding.blankBasket.setVisibility(View.VISIBLE);
-            }
         }
     }
 
@@ -154,30 +150,34 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void cartItemsAPI() {
-        Integer cartID = MyApplication.getInstance().cartRepository.getCartSellerId();
-        cartItemViewMode.getCartItemModelVMRequest(cartID, mBinding.rvCartItem, mBinding.blankBasket);
-        cartItemViewMode.getCartItemModelVM().observe(this, cartItemModel -> {
+        cartItemViewMode.getCartItemModelVMRequest(mBinding.rvCartItem, mBinding.blankBasket);
+        cartItemViewMode.getCartItemModelVM().observe(this, (CartMainModel cartMainModel) -> {
             Utils.hideProgressDialog();
-            if (cartItemModel != null) {
-                cartItemDataModel = cartItemModel;
-                if (cartItemModel.getCart().size() > 0) {
-                    mBinding.rlCheckOut.setVisibility(View.VISIBLE);
-                    mBinding.rvCartItem.post(() -> {
-                        for (int i = 0; i < cartItemModel.getCart().size(); i++) {
-                            totalAmount += totalAmount = cartItemModel.getCart().get(i).getQuantity() * cartItemModel.getCart().get(i).getPrice();
-                            mBinding.tvTotalAmount.setText("₹ " + totalAmount);
-                        }
-                        cartItemList.addAll(cartItemModel.getCart());
-                        cartListAdapter.notifyDataSetChanged();
+            if (cartMainModel.isSuccess()) {
+                if (cartMainModel.getResultItem() != null) {
+                    cartItemDataModel = cartMainModel.getResultItem();
+                    if (cartMainModel.getResultItem().getCart().size() > 0) {
+                        mBinding.rlCheckOut.setVisibility(View.VISIBLE);
+                        mBinding.rvCartItem.post(() -> {
+                            for (int i = 0; i < cartMainModel.getResultItem().getCart().size(); i++) {
+                                totalAmount += totalAmount = cartMainModel.getResultItem().getCart().get(i).getQuantity() * cartMainModel.getResultItem().getCart().get(i).getPrice();
+                                mBinding.tvTotalAmount.setText("₹ " + totalAmount);
+                            }
+                            cartItemList.addAll(cartMainModel.getResultItem().getCart());
+                            cartListAdapter.notifyDataSetChanged();
 
-                        loading = true;
-                    });
-                } else {
-                    loading = false;
-                    mBinding.rvCartItem.setVisibility(View.GONE);
-                    mBinding.blankBasket.setVisibility(View.VISIBLE);
-                    mBinding.rlCheckOut.setVisibility(View.GONE);
+                            loading = true;
+                        });
+                    } else {
+                        loading = false;
+                        mBinding.rvCartItem.setVisibility(View.GONE);
+                        mBinding.blankBasket.setVisibility(View.VISIBLE);
+                        mBinding.rlCheckOut.setVisibility(View.GONE);
+                        MyApplication.getInstance().cartRepository.truncateCart();
+                    }
                 }
+            }else {
+                Utils.setToast(this,cartMainModel.getErrorMessage());
             }
         });
     }
