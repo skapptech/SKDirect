@@ -47,6 +47,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private int deliveryOption, UserLocationId;
     private double totalAmount;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,44 +58,20 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         callUserLocation();
     }
 
-    private void getSharedData() {
-        cartItemModel = (CartItemModel) getIntent().getSerializableExtra("cartItemSize");
-        totalAmount = getIntent().getDoubleExtra("totalAmount", 0);
-
-        Log.e("Total Amount ","##### "+cartItemModel.getTotalAmount());
-
-        mBinding.tvItemPrice.setText("Price Details ( " + (itemSize = cartItemModel.getCart().size()) + " items)");
-        mBinding.tvOrderValue.setText("₹ " + totalAmount);
-        mBinding.tvTotalAmount.setText("₹ " + totalAmount);
-        mBinding.tvAmountTotal.setText("₹ " + totalAmount);
-
-
-    }
-
-    private void initView() {
-        mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
-        mBinding.tvPlaceOrder.setOnClickListener(this);
-        mBinding.toolbarTittle.tvTittle.setText("Payment ");
-        mBinding.rlChnage.setOnClickListener(this);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
-        mBinding.rvDeliveryOption.setLayoutManager(layoutManager);
-
-
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back_press:
                 onBackPressed();
                 break;
-
+            case R.id.btnOffer:
+                startActivityForResult(new Intent(getApplicationContext(), OfferActivity.class), 9);
+                break;
             case R.id.tv_place_order:
                 if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
                     OrderPlaceAlertDialog();
                 } else {
-                    startActivity(new Intent(this,LoginActivity.class));
+                    startActivity(new Intent(this, LoginActivity.class));
                 }
                 break;
             case R.id.rl_chnage:
@@ -102,6 +79,43 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         PrimaryAddressActivity.class).putExtra("UserLocationId", UserLocationId), 2);
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if (requestCode == 2 && resultCode == RESULT_OK) {
+            UserLocationModel userLocationModel = (UserLocationModel) data.getSerializableExtra("address");
+            UserLocationId = userLocationModel.getId();
+            mBinding.tvShopName.setText(userLocationModel.getAddressOne());
+            mBinding.tvAddresh.setText(userLocationModel.getAddressTwo());
+            mBinding.tvAddreshTree.setText(userLocationModel.getAddressThree());
+            mBinding.tvCityName.setText(userLocationModel.getCity() + " - " + userLocationModel.getPincode() + " (" + userLocationModel.getState() + ")");
+        }
+    }
+
+    private void getSharedData() {
+        cartItemModel = (CartItemModel) getIntent().getSerializableExtra("cartItemSize");
+        totalAmount = getIntent().getDoubleExtra("totalAmount", 0);
+
+        Log.e("Total Amount ", "##### " + cartItemModel.getTotalAmount());
+
+        mBinding.tvItemPrice.setText("Price Details ( " + (itemSize = cartItemModel.getCart().size()) + " items)");
+        mBinding.tvOrderValue.setText("₹ " + totalAmount);
+        mBinding.tvTotalAmount.setText("₹ " + totalAmount);
+        mBinding.tvAmountTotal.setText("₹ " + totalAmount);
+    }
+
+    private void initView() {
+        mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
+        mBinding.btnOffer.setOnClickListener(this);
+        mBinding.tvPlaceOrder.setOnClickListener(this);
+        mBinding.toolbarTittle.tvTittle.setText("Payment ");
+        mBinding.rlChnage.setOnClickListener(this);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
+        mBinding.rvDeliveryOption.setLayoutManager(layoutManager);
     }
 
     private void callUserLocation() {
@@ -295,21 +309,5 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
-    }
-
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // check if the request code is same as what is passed  here it is 2
-        if (requestCode == 2 && resultCode == RESULT_OK) {
-            UserLocationModel userLocationModel = (UserLocationModel) data.getSerializableExtra("address");
-            UserLocationId = userLocationModel.getId();
-            mBinding.tvShopName.setText(userLocationModel.getAddressOne());
-            mBinding.tvAddresh.setText(userLocationModel.getAddressTwo());
-            mBinding.tvAddreshTree.setText(userLocationModel.getAddressThree());
-            mBinding.tvCityName.setText(userLocationModel.getCity() + " - " + userLocationModel.getPincode() + " (" + userLocationModel.getState() + ")");
-        }
     }
 }

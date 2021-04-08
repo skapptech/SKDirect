@@ -6,12 +6,14 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.google.gson.JsonObject;
+import com.skdirect.model.CommonResponseModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
-import com.skdirect.model.CommonResponseModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.utils.MyApplication;
+
+import org.jetbrains.annotations.NotNull;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -41,8 +43,8 @@ public class CommonClassForAPI {
 
     }
 
-    public void getToken(final DisposableObserver observer,String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp,boolean isDevice,String deviceID,double lat,double log,String pincode) {
-        RestClient.getInstance().getService().getToken(password, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp,isDevice,deviceID,lat,log ,pincode)
+    public void getToken(final DisposableObserver observer, String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp, boolean isDevice, String deviceID, double lat, double log, String pincode) {
+        RestClient.getInstance().getService().getToken(password, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp, isDevice, deviceID, lat, log, pincode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<TokenModel>() {
@@ -67,7 +69,7 @@ public class CommonClassForAPI {
                 });
     }
 
-    public void getUpdateToken(final DisposableObserver observer,String fcmId) {
+    public void getUpdateToken(final DisposableObserver observer, String fcmId) {
         RestClient.getInstance().getService().getUpdateToken(fcmId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -118,6 +120,7 @@ public class CommonClassForAPI {
                     }
                 });
     }
+
     public void UpdateUserProfile(final DisposableObserver observer, UpdateProfilePostModel updateProfilePostModel) {
         RestClient.getInstance().getService().UpdateProfile(updateProfilePostModel)
                 .subscribeOn(Schedulers.io())
@@ -144,6 +147,55 @@ public class CommonClassForAPI {
                 });
     }
 
+    public void getCouponList(final DisposableObserver observer, int sellerId) {
+        RestClient.getInstance().getService().getCouponList(sellerId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CommonResponseModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
 
+                    @Override
+                    public void onNext(@NotNull CommonResponseModel o) {
+                        observer.onNext(o);
+                    }
 
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void applyCoupon(final DisposableObserver observer, int couponId) {
+        RestClient.getInstance().getService().applyCoupon(couponId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CommonResponseModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull CommonResponseModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
 }

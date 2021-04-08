@@ -32,54 +32,36 @@
         android:usesCleartextTraffic="true"
         android:windowDisablePreview="true"
         android:windowSoftInputMode="adjustResize">
-        <activity
-            android:name="com.skdirect.activity.MainActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
-        <activity
-            android:name="com.skdirect.activity.IntroActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
 
         <activity
-            android:name="com.skdirect.activity.PlaceSearchActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.UserLocationActvity"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:name=".activity.IntroActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.FilterActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.PlaceSearchActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.WelcomeActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.UserLocationActvity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.RegisterationActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.FilterActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.MapsExtendedActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.WelcomeActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.PlacesActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".activity.RegisterationActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.skdirect.activity.SplashActivity"
+            android:name=".activity.MapsExtendedActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.PlacesActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -87,7 +69,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait" />
@@ -97,19 +78,15 @@
         <activity
             android:name=".activity.LoginWithPasswordActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.NearByItemProductListActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.SellerProductListActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.CategoriesListActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.SearchActivity"
             android:screenOrientation="portrait"
@@ -133,16 +110,16 @@
                     android:scheme="https" />
                 <data
                     android:host="virtualstockuat.shopkirana.in"
-                    android:scheme="https"
-                    android:pathPrefix="/product"/>
+                    android:pathPrefix="/product"
+                    android:scheme="https" />
                 <data
                     android:host="directbuyer.er15.xyz"
                     android:scheme="http" />
                 <data
                     android:host="directbuyer.er15.xyz"
                     android:scheme="https" />
-
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
@@ -193,16 +170,16 @@
                     android:scheme="https" />
                 <data
                     android:host="virtualstockuat.shopkirana.in"
-                    android:scheme="https"
-                    android:pathPrefix="/seller"/>
+                    android:pathPrefix="/seller"
+                    android:scheme="https" />
                 <data
                     android:host="directbuyer.er15.xyz"
                     android:scheme="http" />
                 <data
                     android:host="directbuyer.er15.xyz"
                     android:scheme="https" />
-
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
@@ -211,13 +188,10 @@
             android:name=".activity.CartActivity"
             android:label=""
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.PaymentActivity"
             android:label=""
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".activity.MapsActivity"
             android:hardwareAccelerated="false"
@@ -227,6 +201,9 @@
             android:name=".activity.ChangeLanguageActivity"
             android:label=""
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.OfferActivity"
+            android:theme="@style/AppTheme" />
 
         <service
             android:name=".firebase.MyFirebaseMessagingService"
@@ -247,7 +224,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/logo" />

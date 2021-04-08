@@ -13,9 +13,9 @@ import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CartMainModel;
 import com.skdirect.model.ChangePasswordRequestModel;
+import com.skdirect.model.CommonResponseModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.DeliveryMainModel;
-import com.skdirect.model.DeliveryOptionModel;
 import com.skdirect.model.GenerateOtpModel;
 import com.skdirect.model.GenerateOtpResponseModel;
 import com.skdirect.model.ItemAddModel;
@@ -37,7 +37,6 @@ import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.ProductDataModel;
-import com.skdirect.model.CommonResponseModel;
 import com.skdirect.model.RemoveItemRequestModel;
 import com.skdirect.model.SearchMainModel;
 import com.skdirect.model.SearchRequestModel;
@@ -121,7 +120,7 @@ public interface APIServices {
     @POST("/api/NativeBuyer/ItemList/GetSellerListWithItem")
     Call<SearchMainModel> GetSellerListWithItem(@Body SearchRequestModel paginationModel);
 
-
+    
     @GET("api/NativeProductDetail/GetSellerProductById/{GetSellerProductById}")
     Call<ProductDataModel> GetSellerProductById(@Path("GetSellerProductById") int GetSellerProductById);
 
@@ -166,7 +165,7 @@ public interface APIServices {
     Call<JsonElement> deleteCartItems(@Body RemoveItemRequestModel itemRequestModel);
 
     @GET("api/buyer/Profile/GetLocation")
-    Call<JsonObject> GetLocation(@Query("lat") double lat,@Query("lng") double log );
+    Call<JsonObject> GetLocation(@Query("lat") double lat, @Query("lng") double log);
 
     @GET("api/NativeBuyer/Address/GetAddress")
     Call<MainLocationModel> GetUserLocation();
@@ -188,11 +187,11 @@ public interface APIServices {
 
 
     @POST("api/buyer/Profile/UpdateUserDetail")
-    Call<Boolean> UpdateUserDetail(@Body JsonObject jsonObject );
+    Call<Boolean> UpdateUserDetail(@Body JsonObject jsonObject);
 
 
     @POST("api/NativeBuyer/BuyerProfile/UpdateBuyerProfile")
-    Observable<CommonResponseModel> UpdateProfile(@Body UpdateProfilePostModel updateProfilePostModel );
+    Observable<CommonResponseModel> UpdateProfile(@Body UpdateProfilePostModel updateProfilePostModel);
 
 
     @GET("api/buyer/Profile/MakeDefaultAddress/{MakeDefaultAddress}")
@@ -222,8 +221,14 @@ public interface APIServices {
     Call<MallMainModelBolleanResult> CancelOrder(@Query("OrderId") int OrderId);
 
     @GET("/api/NativeBuyer/Location/SetLocation")
-    Call<CommonResponseModel> setLocation(@Query("latitude") double latitude,@Query("longitude") double longitude);
+    Call<CommonResponseModel> setLocation(@Query("latitude") double latitude, @Query("longitude") double longitude);
 
     @GET("api/NativeBuyer/Mall/GetMall")
     Call<MallMainModel> getMall();
+
+    @GET("api/NativeBuyer/Mall/GetMall")
+    Observable<CommonResponseModel> getCouponList(@Query("sellerid") int sellerId);
+
+    @GET("/api/NativeBuyer/SellerCoupon/ApplyCoupon/{couponId}")
+    Observable<CommonResponseModel> applyCoupon(@Path("couponId") int couponId);
 }

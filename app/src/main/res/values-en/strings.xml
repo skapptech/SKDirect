@@ -75,5 +75,9 @@
     <string name="add_review">Add Review</string>
     <string name="text_on">" on "</string>
     <string name="text_order_number">"Order No#: "</string>
+    <string name="enter_promo_code">Enter promo code</string>
+    <string name="apply_coupon">Apply Coupon</string>
+    <string name="available_offers">Available Offers</string>
+    <string name="no_offer_found">No offer found</string>
 
 </resources>
