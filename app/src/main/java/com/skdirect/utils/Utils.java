@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -263,6 +264,13 @@ public class Utils {
         dialog.setCanceledOnTouchOutside(true);
         LinearLayout llWhatsapp = dialog.findViewById(R.id.llWhatsapp);
         LinearLayout llWhatsappBusiness = dialog.findViewById(R.id.llWhatsappBusiness);
+        TextView tvSharewith = dialog.findViewById(R.id.tvSharewith);
+        TextView tvWhasapp = dialog.findViewById(R.id.tvWhasapp);
+        TextView tvWhasappBusiness = dialog.findViewById(R.id.tvWhasappBusiness);
+        tvSharewith.setText(MyApplication.getInstance().dbHelper.getString(R.string.share_with));
+        tvWhasapp.setText(MyApplication.getInstance().dbHelper.getString(R.string.whatsapp));
+        tvWhasappBusiness.setText(MyApplication.getInstance().dbHelper.getString(R.string.whatsapp_business));
+
         if (appInstalledOrNot(context,"com.whatsapp") && appInstalledOrNot(context,"com.whatsapp.w4b")) {
             dialog.show();
         } else shareOnWhatsapp(context, textMsg, number, !appInstalledOrNot(context,"com.whatsapp"));
