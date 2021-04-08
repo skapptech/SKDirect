@@ -16,6 +16,7 @@ import com.skdirect.model.DeliveryOptionModel;
 import com.skdirect.model.GenerateOtpModel;
 import com.skdirect.model.GenerateOtpResponseModel;
 import com.skdirect.model.ItemAddModel;
+import com.skdirect.model.MainLocationModel;
 import com.skdirect.model.MainSimilarTopSellerModel;
 import com.skdirect.model.MainTopSimilarSellerModel;
 import com.skdirect.model.MallMainModel;
@@ -157,8 +158,8 @@ public interface APIServices {
     @GET("api/buyer/Profile/GetLocation")
     Call<JsonObject> GetLocation(@Query("lat") double lat,@Query("lng") double log );
 
-    @GET("api/Buyer/Order/GetUserLocation")
-    Call<ArrayList<UserLocationModel>> GetUserLocation();
+    @GET("api/NativeBuyer/Address/GetAddress")
+    Call<MainLocationModel> GetUserLocation();
 
     @GET("api/Buyer/Order/GetDeliveryOption")
     Call<ArrayList<DeliveryOptionModel>> GetDeliveryOption(@Query("SellerId") String SellerId);

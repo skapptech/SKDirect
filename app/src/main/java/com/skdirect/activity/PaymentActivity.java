@@ -25,6 +25,7 @@ import com.skdirect.adapter.DeliveryOptionAdapter;
 import com.skdirect.databinding.ActivityPaymentBinding;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.DeliveryOptionModel;
+import com.skdirect.model.MainLocationModel;
 import com.skdirect.model.OrderPlaceMainModel;
 import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.UserLocationModel;
@@ -53,7 +54,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         getSharedData();
         initView();
         callUserLocation();
-        callRunTimePermissions();
     }
 
     private void getSharedData() {
@@ -183,19 +183,19 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     private void userLocationAPI() {
         paymentViewMode.getUserLocationVMRequest();
-        paymentViewMode.getUserLocationVM().observe(this, new Observer<ArrayList<UserLocationModel>>() {
+        paymentViewMode.getUserLocationVM().observe(this, new Observer<MainLocationModel>() {
             @Override
-            public void onChanged(ArrayList<UserLocationModel> locationModel) {
+            public void onChanged(MainLocationModel locationModel) {
                 Utils.hideProgressDialog();
-                if (locationModel != null) {
-                    if (locationModel.size() > 0) {
-                        for (int i = 0; i < locationModel.size(); i++) {
-                            if (locationModel.get(i).isPrimaryAddress()) {
-                                UserLocationId = locationModel.get(i).getId();
-                                mBinding.tvShopName.setText(locationModel.get(i).getAddressOne());
-                                mBinding.tvAddresh.setText(locationModel.get(i).getAddressTwo());
-                                mBinding.tvAddreshTree.setText(locationModel.get(i).getAddressThree());
-                                mBinding.tvCityName.setText(locationModel.get(i).getCity() + " - " + locationModel.get(i).getPincode() + " (" + locationModel.get(i).getState() + ")");
+                if (locationModel.isSuccess()){
+                    if (locationModel.getResultItem().size() > 0) {
+                        for (int i = 0; i < locationModel.getResultItem().size(); i++) {
+                            if (locationModel.getResultItem().get(i).isPrimaryAddress()) {
+                                UserLocationId = locationModel.getResultItem().get(i).getId();
+                                mBinding.tvShopName.setText(locationModel.getResultItem().get(i).getAddressOne());
+                                mBinding.tvAddresh.setText(locationModel.getResultItem().get(i).getAddressTwo());
+                                mBinding.tvAddreshTree.setText(locationModel.getResultItem().get(i).getAddressThree());
+                                mBinding.tvCityName.setText(locationModel.getResultItem().get(i).getCity() + " - " + locationModel.getResultItem().get(i).getPincode() + " (" + locationModel.getResultItem().get(i).getState() + ")");
 
                             }
 

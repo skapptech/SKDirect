@@ -35,4 +35,12 @@
     <string name="cancel">Cancel</string>
     <string name="apply">Apply</string>
     <string name="sort">SORT</string>
+    <string name="search_seller">Search seller by name or product</string>
+    <string name="near_by_item">Nearby Items</string>
+    <string name="view_more">View More</string>
+    <string name="no_item_found">No Item Found</string>
+    <string name="no_loction_found">For your Location there is no  seller active,please in  future ं</string>
+    <string name="near_by_seller">Nearby Seller</string>
+    <string name="all_categories">All Categories</string>
+
 </resources>

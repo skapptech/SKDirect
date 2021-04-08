@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.DeliveryOptionModel;
+import com.skdirect.model.MainLocationModel;
 import com.skdirect.model.OrderPlaceMainModel;
 import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.UserLocationModel;
@@ -22,14 +23,14 @@ import retrofit2.Response;
 
 public class PaymentViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
-    private MutableLiveData<ArrayList<UserLocationModel>> userLocationVM;
+    private MutableLiveData<MainLocationModel> userLocationVM;
     private MutableLiveData<ArrayList<DeliveryOptionModel>> DeliveryOptionVM;
     private MutableLiveData<JsonObject> checkOutItemVM;
     private MutableLiveData<JsonObject> mapViewModel;
     private MutableLiveData<OrderPlaceMainModel> orderPlaceVM;
     private MutableLiveData<Object> clearCartDataVM;
 
-    public LiveData<ArrayList<UserLocationModel>> getUserLocationVM() {
+    public LiveData<MainLocationModel> getUserLocationVM() {
         userLocationVM=null;
         userLocationVM = new MutableLiveData<>();
         return userLocationVM;
@@ -65,10 +66,10 @@ public class PaymentViewMode extends ViewModel {
         return clearCartDataVM;
     }
 
-    public MutableLiveData<ArrayList<UserLocationModel>> getUserLocationVMRequest() {
-        RestClient.getInstance().getService().GetUserLocation().enqueue(new Callback<ArrayList<UserLocationModel>>() {
+    public MutableLiveData<MainLocationModel> getUserLocationVMRequest() {
+        RestClient.getInstance().getService().GetUserLocation().enqueue(new Callback<MainLocationModel>() {
             @Override
-            public void onResponse(Call<ArrayList<UserLocationModel>> call, Response<ArrayList<UserLocationModel>> response) {
+            public void onResponse(Call<MainLocationModel> call, Response<MainLocationModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     userLocationVM.setValue(response.body());
@@ -76,7 +77,7 @@ public class PaymentViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<UserLocationModel>> call, Throwable t) {
+            public void onFailure(Call<MainLocationModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + call.toString());
                 Utils.hideProgressDialog();
             }

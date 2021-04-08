@@ -45,4 +45,15 @@
     <string name="cancel">Cancel</string>
     <string name="apply">Apply</string>
     <string name="sort">SORT</string>
+    <string name="search_seller">नाम या उत्पाद से विक्रेता खोजें</string>
+    <string name="near_by_item">पास की वस्तुएँ</string>
+    <string name="view_more">और देखें</string>
+    <string name="no_item_found">कोई आइटम नहीं मिला</string>
+
+    <string name="no_loction_found">आपके स्थान के लिए कोई विक्रेता सक्रिय नहीं है, कृपया भविष्य में</string>
+    <string name="near_by_seller">पास का विक्रेता</string>
+    <string name="all_categories">सब श्रेणियां</string>
+
+
+
 </resources>

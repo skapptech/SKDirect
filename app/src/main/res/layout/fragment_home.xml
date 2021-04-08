@@ -37,7 +37,7 @@
                     android:background="@drawable/bg_white_rounded"
                     android:drawableLeft="@drawable/ic_search"
                     android:drawablePadding="10dp"
-                    android:hint="Search seller by name or product"
+                    android:hint="@string/search_seller"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:maxLines="1"
@@ -99,12 +99,13 @@
                     android:layout_margin="10dp">
 
                     <TextView
+                        android:id="@+id/tv_near_item"
                         style="@style/font_normal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:padding="5dp"
-                        android:text="Nearby Items"
+                        android:text="@string/near_by_item"
                         android:textColor="@color/seller_button_color"
                         android:textStyle="bold" />
 
@@ -116,7 +117,7 @@
                         android:layout_alignParentRight="true"
                         android:background="@drawable/rounded_drawer"
                         android:padding="5dp"
-                        android:text="View More"
+                        android:text="@string/view_more"
                         android:textColor="@color/seller_button_color"
                         android:textSize="10sp"
                         android:textStyle="normal" />
@@ -147,18 +148,19 @@
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:padding="5dp"
-                            android:text="No Item Found"
+                            android:text="@string/no_item_found"
                             android:textColor="@color/red"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tv_lo_not_found"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:text="For your Location there is no  seller active,please in \n future  "
+                            android:text="@string/no_loction_found"
                             android:textColor="@color/grid_divder"
                             android:textStyle="bold" />
 
@@ -176,12 +178,13 @@
                     android:layout_marginEnd="10dp">
 
                     <TextView
+                        android:id="@+id/tv_near_sellar"
                         style="@style/font_normal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:padding="5dp"
-                        android:text="Nearby Seller"
+                        android:text="@string/near_by_seller"
                         android:textColor="@color/seller_button_color"
                         android:textStyle="bold" />
 
@@ -193,7 +196,7 @@
                         android:layout_alignParentRight="true"
                         android:background="@drawable/rounded_drawer"
                         android:padding="5dp"
-                        android:text="View More"
+                        android:text="@string/view_more"
                         android:textColor="@color/seller_button_color"
                         android:textSize="10sp"
                         android:textStyle="normal" />
@@ -223,7 +226,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:padding="5dp"
-                            android:text="No Item Found"
+                            android:text="@string/no_item_found"
                             android:textColor="@color/red"
                             android:textStyle="bold" />
 
@@ -234,7 +237,7 @@
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:text="For your Location there is no  seller active,please in \n future  "
+                            android:text="@string/no_loction_found"
                             android:textColor="@color/grid_divder"
                             android:textStyle="bold" />
 
@@ -257,7 +260,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:padding="5dp"
-                        android:text="All Categories"
+                        android:text="@string/all_categories"
                         android:textColor="@color/seller_button_color"
                         android:textStyle="bold" />
 
@@ -269,7 +272,7 @@
                         android:layout_alignParentRight="true"
                         android:background="@drawable/rounded_drawer"
                         android:padding="5dp"
-                        android:text="View More"
+                        android:text="@string/view_more"
                         android:textColor="@color/seller_button_color"
                         android:textSize="10sp"
                         android:textStyle="normal" />
@@ -299,7 +302,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:padding="5dp"
-                            android:text="No Item Found"
+                            android:text="@string/no_item_found"
                             android:textColor="@color/red"
                             android:textStyle="bold" />
 
@@ -310,7 +313,7 @@
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:text="For your Location there is no  seller active,please in \n future  "
+                            android:text="@string/no_loction_found"
                             android:textColor="@color/grid_divder"
                             android:textStyle="bold" />
 

@@ -18,6 +18,7 @@ import com.skdirect.R;
 import com.skdirect.adapter.ProfileUserLocationAdapter;
 import com.skdirect.databinding.ActivityProfilePrimaryAddressBinding;
 import com.skdirect.interfacee.MakeDefaultInterface;
+import com.skdirect.model.MainLocationModel;
 import com.skdirect.model.UserLocationModel;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.PrimaryAddressViewMode;
@@ -84,14 +85,14 @@ public class ProfilePrimaryAddressActivity extends AppCompatActivity implements 
 
     private void userLocationAPI() {
         primaryAddressViewMode.getUserLocationVMRequest();
-        primaryAddressViewMode.getUserLocationVM().observe(this, new Observer<ArrayList<UserLocationModel>>() {
+        primaryAddressViewMode.getUserLocationVM().observe(this, new Observer<MainLocationModel>() {
             @Override
-            public void onChanged(ArrayList<UserLocationModel> locationModel) {
+            public void onChanged(MainLocationModel locationModel) {
                 Utils.hideProgressDialog();
-                if (locationModel != null) {
-                    if (locationModel.size() > 0) {
+                if (locationModel.isSuccess()) {
+                    if (locationModel.getResultItem().size() > 0) {
                         locationModelArrayList.clear();
-                        locationModelArrayList.addAll(locationModel);
+                        locationModelArrayList.addAll(locationModel.getResultItem());
                         int position = 0;
                         for (int i = 0; i < locationModelArrayList.size(); i++) {
                             if (locationModelArrayList.get(i).isPrimaryAddress()) {

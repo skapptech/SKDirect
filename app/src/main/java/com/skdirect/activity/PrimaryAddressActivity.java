@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.skdirect.R;
 import com.skdirect.adapter.UserLocationAdapter;
 import com.skdirect.databinding.ActivityPrimaryAddressBinding;
+import com.skdirect.model.MainLocationModel;
 import com.skdirect.model.UserLocationModel;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.PrimaryAddressViewMode;
@@ -91,24 +92,24 @@ public class PrimaryAddressActivity extends AppCompatActivity implements View.On
 
     private void userLocationAPI() {
         primaryAddressViewMode.getUserLocationVMRequest();
-        primaryAddressViewMode.getUserLocationVM().observe(this, new Observer<ArrayList<UserLocationModel>>() {
+        primaryAddressViewMode.getUserLocationVM().observe(this, new Observer<MainLocationModel>() {
             @Override
-            public void onChanged(ArrayList<UserLocationModel> locationModel) {
+            public void onChanged(MainLocationModel locationModel) {
                 Utils.hideProgressDialog();
                 locationModelArrayList.clear();
-                if (locationModel != null) {
-                    if (locationModel.size() > 0) {
-                        locationModelArrayList.addAll(locationModel);
-                        int position = 0;
-                        for (int i = 0; i < locationModelArrayList.size(); i++) {
-                            if (locationModelArrayList.get(i).isPrimaryAddress()) {
-                                position = i;
-                                break;
+                if (locationModel.isSuccess()) {
+                        if (locationModel.getResultItem().size() > 0) {
+                            locationModelArrayList.addAll(locationModel.getResultItem());
+                            int position = 0;
+                            for (int i = 0; i < locationModelArrayList.size(); i++) {
+                                if (locationModelArrayList.get(i).isPrimaryAddress()) {
+                                    position = i;
+                                    break;
+                                }
                             }
+                            userLocationAdapter = new UserLocationAdapter(PrimaryAddressActivity.this, locationModelArrayList, position);
+                            mBinding.rvUserLocation.setAdapter(userLocationAdapter);
                         }
-                        userLocationAdapter = new UserLocationAdapter(PrimaryAddressActivity.this, locationModelArrayList, position);
-                        mBinding.rvUserLocation.setAdapter(userLocationAdapter);
-                    }
 
                 }
             }
