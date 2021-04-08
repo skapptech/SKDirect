@@ -23,6 +23,7 @@
     <string name="txt_shop_name">Shop Name</string>
     <string name="txt_delivery">Delivery options:</string>
     <string name="change_language">Change Language</string>
+
     <string name="update_profile">Update Profile</string>
     <string name="please_enter_name">Please Enter Name</string>
     <string name="please_enter_pincode">Please Enter PinCode</string>
@@ -54,5 +55,6 @@
     <string name="no_loction_found">For your Location there is no  seller active,please in  future ं</string>
     <string name="near_by_seller">Nearby Seller</string>
     <string name="all_categories">All Categories</string>
+    <string name="filter">FILTER</string>
 
 </resources>
