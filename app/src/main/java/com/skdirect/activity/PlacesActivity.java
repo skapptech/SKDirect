@@ -46,7 +46,10 @@ public class PlacesActivity extends AppCompatActivity implements PlacesAutoCompl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_places);
-        binding.llGps.setOnClickListener(V -> onBackPressed());
+        binding.llGps.setOnClickListener(V -> {
+            startActivityForResult(new Intent(PlacesActivity.this, MapsExtendedActivity.class),2000);
+            finish();
+        });
         binding.ivBack.setOnClickListener(V -> finish());
         initPlaces();
     }
