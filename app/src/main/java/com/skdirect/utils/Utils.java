@@ -3,17 +3,22 @@ package com.skdirect.utils;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
+import android.telephony.PhoneNumberUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.skdirect.BuildConfig;
@@ -244,4 +249,60 @@ public class Utils {
         return (rad * 180.0 / Math.PI);
     }
 
+    public static void shareProduct(Context context, String text) {
+        Intent sendInt = new Intent(Intent.ACTION_SEND);
+        sendInt.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name));
+        sendInt.putExtra(Intent.EXTRA_TEXT, text);
+        sendInt.setType("text/plain");
+        context.startActivity(Intent.createChooser(sendInt, "Share"));
+    }
+
+    public static void showShareWhatsappDialog(Context context, String textMsg, String number) {
+        BottomSheetDialog dialog = new BottomSheetDialog(context, R.style.BottomTheme);
+        dialog.setContentView(R.layout.dialog_whatsapp_share);
+        dialog.setCanceledOnTouchOutside(true);
+        LinearLayout llWhatsapp = dialog.findViewById(R.id.llWhatsapp);
+        LinearLayout llWhatsappBusiness = dialog.findViewById(R.id.llWhatsappBusiness);
+        if (appInstalledOrNot(context,"com.whatsapp") && appInstalledOrNot(context,"com.whatsapp.w4b")) {
+            dialog.show();
+        } else shareOnWhatsapp(context, textMsg, number, !appInstalledOrNot(context,"com.whatsapp"));
+        llWhatsapp.setOnClickListener(view -> {
+            shareOnWhatsapp(context, textMsg, number, false);
+            dialog.dismiss();
+        });
+        llWhatsappBusiness.setOnClickListener(view -> {
+            shareOnWhatsapp(context, textMsg, number, true);
+            dialog.dismiss();
+        });
+    }
+
+    public static void shareOnWhatsapp(Context context, String textMsg, String number, boolean isWB) {
+        Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+        whatsappIntent.setType("text/plain");
+        if (isWB) {
+            whatsappIntent.setPackage("com.whatsapp.w4b");
+        } else {
+            whatsappIntent.setPackage("com.whatsapp");
+        }
+        if (number != null && !number.equals("")) {
+            whatsappIntent.putExtra("jid", PhoneNumberUtils.stripSeparators("91" + number) + "@s.whatsapp.net");
+        }
+        whatsappIntent.putExtra(Intent.EXTRA_TEXT, textMsg);
+        try {
+            context.startActivity(whatsappIntent);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Utils.setToast(context, "Whatsapp not installed.");
+        }
+    }
+
+    public static boolean appInstalledOrNot(Context context, String packageManager) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(packageManager, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

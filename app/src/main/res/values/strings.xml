@@ -41,6 +41,7 @@
     <string name="valid_otp">कृपया मान्य OTP दर्ज करें।</string>
     <string name="enter_otp"> कृपया ओटीपी डालें</string>
     <string name="home">होम</string>
+
     <string name="my_order">मेरे आर्डर</string>
     <string name="basket">बास्केट</string>
     <string name="filter">फ़िल्टर</string>
@@ -48,6 +49,9 @@
     <string name="cancel">रद्द करना</string>
     <string name="apply">लागू</string>
     <string name="sort">SORT</string>
+    <string name="whatsapp">Whatsapp</string>
+    <string name="whatsapp_business">Whatsapp Business</string>
+    <string name="share">Share</string>
     <string name="search_seller">नाम या उत्पाद से विक्रेता खोजें</string>
     <string name="near_by_item">पास की वस्तुएँ</string>
     <string name="view_more">और देखें</string>
@@ -55,4 +59,19 @@
     <string name="no_loction_found">आपके स्थान के लिए कोई विक्रेता सक्रिय नहीं है, कृपया भविष्य में</string>
     <string name="near_by_seller">पास का विक्रेता</string>
     <string name="all_categories">सब श्रेणियां</string>
+
+    <string name="clear_all">CLEAR ALL</string>
+    <string name="order_tab_all">All</string>
+    <string name="order_tab_pending">Pending</string>
+    <string name="order_tab_accept">Accepted</string>
+    <string name="order_tab_shiped">Shipped</string>
+    <string name="order_tab_delivered">Delivered</string>
+    <string name="order_tab_cancelled">Cancelled</string>
+    <string name="search_order_by_order_id">Search Order by Order Id</string>
+    <string name="no_data_found">NO Data Found</string>
+    <string name="add_review">Add Review</string>
+    <string name="text_on">" on "</string>
+    <string name="text_order_number">"Order No#: "</string>
+
+>>>>>>> 51d381ea07afc8789b258517f30ea301ba37f589
 </resources>

@@ -38,8 +38,8 @@ public class MallCategorieBannerAdapter extends RecyclerView.Adapter<MallCategor
         StoreCategoryListModel storeCategoryListModel = storeCategoryList.get(position);
         holder.mBinding.tvMallCategoryName.setText(storeCategoryListModel.getCategoryName());
 
-        LinearSnapHelper linearSnapHelper = new SnapHelperOneByOne();
-        linearSnapHelper.attachToRecyclerView( holder.mBinding.rvStoreList);
+       /* LinearSnapHelper linearSnapHelper = new SnapHelperOneByOne();
+        linearSnapHelper.attachToRecyclerView( holder.mBinding.rvStoreList);*/
         StoreListAdapter storeListAdapter = new StoreListAdapter(context,storeCategoryListModel.getStoreList());
         holder.mBinding.rvStoreList.setAdapter(storeListAdapter);
     }
