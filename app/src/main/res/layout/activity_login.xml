@@ -26,6 +26,7 @@
 
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_yourno"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
@@ -56,6 +57,7 @@
                 android:paddingLeft="15dp" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_otp_msg"
                 style="@style/font_normal_sami_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userNameTV = mBinding.navTop.tvUserName;
         mobileNumberTV = mBinding.navTop.tvMobileName;
         setLocationTV = mBinding.toolbarId.tvLoction;
-
         if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME))) {
             userNameTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME));
         }
@@ -142,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mBinding.toolbarId.bottomNavigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id._nav_home:
+                case R.id.nav_home:
                     openFragment(new HomeFragment());
                     break;
                 case R.id.nav_profile:
