@@ -29,7 +29,7 @@
     <string name="no_connection">No Internet Connection Please connect.</string>
     <string name="back_again">Please click back again to exit</string>
     <string name="enter_valid_mobno">Please enter Valid  Mobile Number.</string>
-    <string name="loading">Loading ...</string>
+    <string name="loading">Loading …</string>
     <string name="enter_mobno">Please Enter Mobile</string>
     <string name="what_s_your_number">What\'s Your Number</string>
     <string name="enter_phone_number">Enter phone number</string>
@@ -40,4 +40,7 @@
     <string name="resend_otp">Resend OTP</string>
     <string name="valid_otp">Please enter valid OTP.</string>
     <string name="enter_otp">Please Enter OTP</string>
+    <string name="home">होम</string>
+    <string name="my_order">मेरा आदेश</string>
+    <string name="basket">Basket</string>
 </resources>
