@@ -326,7 +326,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     }
 
     private void cartItemsAPI() {
-        productDetailsViewMode.getCartItemsVMRequest("123");
+        productDetailsViewMode.getCartItemsVMRequest();
         productDetailsViewMode.getCartItemsVM().observe(this, model -> {
             Utils.hideProgressDialog();
             Utils.hideProgressDialog();

@@ -317,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getCartItemApi() {
-        mainActivityViewMode.getCartItemsRequest("123");
+        mainActivityViewMode.getCartItemsRequest();
         mainActivityViewMode.getCartItemsVM().observe(this, model -> {
             System.out.println("SellerId " + model.getSellerId());
             Utils.hideProgressDialog();

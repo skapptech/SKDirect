@@ -10,8 +10,10 @@ import com.skdirect.model.AddViewModel;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.CartItemModel;
+import com.skdirect.model.CartMainModel;
 import com.skdirect.model.ChangePasswordRequestModel;
 import com.skdirect.model.CustomerDataModel;
+import com.skdirect.model.DeliveryMainModel;
 import com.skdirect.model.DeliveryOptionModel;
 import com.skdirect.model.GenerateOtpModel;
 import com.skdirect.model.GenerateOtpResponseModel;
@@ -125,8 +127,8 @@ public interface APIServices {
     @GET("api/NativeProductDetail/GetMoreSimilarSellerProduct/{GetMoreSimilarSellerProduct}")
     Call<MainTopSimilarSellerModel> GetMoreSimilarSellerProduct(@Path("GetMoreSimilarSellerProduct") int GetSellerProductById);
 
-    @GET("api/Buyer/CartOverview/GetCartItems/{GetCartItems}")
-    Call<CartItemModel> GetCartItems(@Path("GetCartItems") String GetSellerProductById);
+    @GET("api/NativeBuyer/CartOverview/GetCartItems")
+    Call<CartItemModel> GetCartItems();
 
     @GET("api/NativeBuyer/SellerProfile/AddProductView")
     Call<AddViewMainModel> AddProductView(@Query("productId") int productID);
@@ -143,14 +145,14 @@ public interface APIServices {
     @POST("api/NativeBuyer/SellerProfile/AddCart")
     Call<AddCartItemModel> AddCart(@Body ItemAddModel itemAddModel);
 
-    @GET("api/Buyer/SellerProfile/GetCartItems")
-    Call<CartItemModel> GetCartItem(@Query("CookieValue") String CookieValue);
+    @GET("api/NativeBuyer/SellerProfile/GetCartItems")
+    Call<CartItemModel> GetCartItem();
 
     @POST("api/NativeBuyer/SellerProfile/ClearCart")
     Call<Object> ClearCart(@Query("Id") int id);
 
-    @GET("api/Buyer/CartOverview/GetCartItems/{GetCartItems}")
-    Call<CartItemModel> CartItems(@Path("GetCartItems") int GetCartItems);
+    @GET("api/NativeBuyer/CartOverview/GetCartItems")
+    Call<CartMainModel> CartItems();
 
     @POST("api/Buyer/SellerProfile/DeleteCartItems")
     Call<JsonElement> deleteCartItems(@Body RemoveItemRequestModel itemRequestModel);
@@ -161,11 +163,11 @@ public interface APIServices {
     @GET("api/NativeBuyer/Address/GetAddress")
     Call<MainLocationModel> GetUserLocation();
 
-    @GET("api/Buyer/Order/GetDeliveryOption")
-    Call<ArrayList<DeliveryOptionModel>> GetDeliveryOption(@Query("SellerId") String SellerId);
+    @GET("api/NativeBuyer/Order/GetDeliveryOption")
+    Call<DeliveryMainModel> GetDeliveryOption(@Query("SellerId") int SellerId);
 
-    @GET("api/Buyer/Order/GetCheckOutItem")
-    Call<JsonObject> GetCheckOutItem(@Query("CookieValue") String CookieValue);
+    @GET("api/NativeBuyer/Order/GetCheckOutItem")
+    Call<JsonObject> GetCheckOutItem();
 
     @POST("api/NativeBuyer/Order/PlaceOrder")
     Call<OrderPlaceMainModel> PlaceOrder(@Body OrderPlaceRequestModel placeRequestModel);
