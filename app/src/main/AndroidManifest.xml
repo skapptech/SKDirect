@@ -51,6 +51,11 @@
         <activity
             android:name="com.skdirect.activity.UserLocationActvity"
             android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="com.skdirect.activity.FilterActivity"
+            android:screenOrientation="portrait">
 
         </activity>
         <activity
