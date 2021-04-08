@@ -46,8 +46,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_margin="10dp"
+                android:id="@+id/btShare"
                 android:background="@drawable/button_drawer_li"
-                android:text="Share" />
+                android:text="@string/share" />
 
         </RelativeLayout>
 

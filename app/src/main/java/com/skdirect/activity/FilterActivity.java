@@ -2,6 +2,8 @@ package com.skdirect.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -19,7 +21,14 @@ import com.skdirect.adapter.FilterTypeAdapter;
 import com.skdirect.databinding.ActivityFilterBinding;
 import com.skdirect.interfacee.FilterCategoryInterface;
 import com.skdirect.interfacee.FilterTypeInterface;
+import com.skdirect.model.NearProductListModel;
+import com.skdirect.model.PaginationModel;
 import com.skdirect.utils.Constant;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
+import com.skdirect.utils.Utils;
+import com.skdirect.viewmodel.FilterViewModel;
+import com.skdirect.viewmodel.NearProductListViewMode;
 
 import java.util.ArrayList;
 
@@ -28,11 +37,24 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     ArrayList<String> filterCateDataList = new ArrayList<>();
     FilterCategoryAdapter filterCategoryAdapter;
     private int maxprice = 10000, minprice = 1;
+    private FilterViewModel filterViewModel;
+    public DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_filter);
-       initView();
+        filterViewModel = ViewModelProviders.of(this).get(FilterViewModel.class);
+        initView();
+        setString();
+    }
+
+    private void setString() {
+        dbHelper = MyApplication.getInstance().dbHelper;
+        mBinding.tvFilter.setText(dbHelper.getString(R.string.filter));
+        mBinding.tvClearAll.setText(dbHelper.getString(R.string.clear_all));
+        mBinding.tvFilterType.setText(dbHelper.getString(R.string.select_price_range));
+        mBinding.tvCancel.setText(dbHelper.getString(R.string.cancel));
+        mBinding.tvApply.setText(dbHelper.getString(R.string.apply));
     }
 
     private void initView() {
@@ -77,6 +99,8 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         });
         setRangeSeekbar();
     }
+
+
     private void setRangeSeekbar() {
         mBinding.tvMinMaxRange.setText("₹" + 1+"- ₹" + 10000);
         mBinding.rangeSeekbar.setMax(10000);
@@ -96,6 +120,8 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
             }
         });
     }
+
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -109,6 +135,29 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         filterCateDataList.clear();
         switch(position) {
             case 0:
+              /*  if (Utils.isNetworkAvailable(getApplicationContext())) {
+                    //PaginationModel paginationModel = new PaginationModel(0,0,0,skipCount,takeCount,0.0,0.0,0,"");
+                    // filterViewModel.getFilterListRequest(paginationModel);
+                    filterViewModel.getFilterList().observe(this, new Observer<ArrayList<NearProductListModel>>() {
+                        @Override
+                        public void onChanged(ArrayList<NearProductListModel> nearProductListList) {
+                            if (nearProductListList.size()>0){
+                                mBinding.rvFilterData.post(new Runnable() {
+                                    public void run() {
+                                        // nearProductList.addAll(nearProductListList);
+                                        filterCategoryAdapter.notifyDataSetChanged();
+                                    }
+                                });
+
+                            }else
+                            {
+
+                            }
+                        }
+                    });
+                } else {
+                    Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+                }*/
                 mBinding.rvFilterData.setVisibility(View.VISIBLE);
                 mBinding.priceFilter.setVisibility(View.GONE);
                 filterCateDataList.add("Apparels");
@@ -147,4 +196,5 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     public void clickFilterCategoryInterface(String name, int position) {
         System.out.println("Filter Category Data>>>."+position);
     }
+
 }

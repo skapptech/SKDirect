@@ -22,6 +22,8 @@ import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.utils.Constant;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.HomeViewModel;
 import com.skdirect.viewmodel.LoginViewModel;
@@ -44,6 +46,7 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
     private boolean loading = true;
     private NearProductListAdapter nearProductListAdapter;
     private final int  REQUEST = 100;
+    public DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +54,13 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
         nearProductListViewMode = ViewModelProviders.of(this).get(NearProductListViewMode.class);
         initView();
         callProductList();
+        setString();
     }
-
+    private void setString() {
+        dbHelper = MyApplication.getInstance().dbHelper;
+        mBinding.tvSort.setText(dbHelper.getString(R.string.sort));
+        mBinding.tvFilter.setText(dbHelper.getString(R.string.filter));
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -138,7 +146,7 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
         if (Utils.isNetworkAvailable(getApplicationContext())) {
             getProductListAPI();
         } else {
-            Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+            Utils.setToast(getApplicationContext(), getString(R.string.no_connection));
         }
     }
 

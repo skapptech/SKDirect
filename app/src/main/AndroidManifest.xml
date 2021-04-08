@@ -132,6 +132,10 @@
                     android:host="skdirectbuyer.shopkirana.in"
                     android:scheme="https" />
                 <data
+                    android:host="virtualstockuat.shopkirana.in"
+                    android:scheme="https"
+                    android:pathPrefix="/product"/>
+                <data
                     android:host="directbuyer.er15.xyz"
                     android:scheme="http" />
                 <data
@@ -172,8 +176,37 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SellerProfileActivity"
-            android:label=""
-            android:screenOrientation="portrait" />
+            android:launchMode="singleTask"
+            android:parentActivityName=".activity.MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="skdirectbuyer.shopkirana.in"
+                    android:scheme="http" />
+                <data
+                    android:host="skdirectbuyer.shopkirana.in"
+                    android:scheme="https" />
+                <data
+                    android:host="virtualstockuat.shopkirana.in"
+                    android:scheme="https"
+                    android:pathPrefix="/seller"/>
+                <data
+                    android:host="directbuyer.er15.xyz"
+                    android:scheme="http" />
+                <data
+                    android:host="directbuyer.er15.xyz"
+                    android:scheme="https" />
+
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
         <activity
             android:name=".activity.CartActivity"
             android:label=""

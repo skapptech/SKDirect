@@ -90,6 +90,10 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             case R.id.notifiction_count:
                 startActivity(new Intent(getApplicationContext(), CartActivity.class));
                 break;
+            case R.id.btShare:
+                Utils.showShareWhatsappDialog(this,BuildConfig.apiEndpoint+"/seller/"+sellerID,"");
+                break;
+
         }
     }
 
@@ -105,7 +109,13 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     }
 
     private void getIntentData() {
-        sellerID = getIntent().getIntExtra("ID", 0);
+        if (getIntent().getData()!=null){
+            String sharedUrl = getIntent().getData().toString();
+            sharedUrl = sharedUrl.substring(sharedUrl.lastIndexOf("/")+1);
+            sellerID = Integer.parseInt(sharedUrl);
+        }else {
+            sellerID = getIntent().getIntExtra("ID", 0);
+        }
     }
 
     private void initView() {
@@ -113,6 +123,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         mBinding.toolbarTittle.tvTittle.setText("Seller Items");
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.toolbarTittle.notifictionCount.setOnClickListener(this);
+        mBinding.btShare.setOnClickListener(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         mBinding.rvCategories.setLayoutManager(layoutManager);
 

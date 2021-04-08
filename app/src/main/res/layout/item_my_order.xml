@@ -116,7 +116,7 @@
                         android:layout_marginTop="5dp"
                         android:gravity="center"
                         style="@style/font_normal_sami_lite"
-                        android:text="Add Review"
+                        android:text="@string/add_review"
                         android:textColor="@color/seller_button_color"
                         android:textSize="15sp"
                         android:textStyle="normal" />
