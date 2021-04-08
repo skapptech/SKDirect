@@ -27,7 +27,7 @@
                 android:padding="10dp" />
 
             <Button
-                android:id="@+id/btnOffer"
+                android:id="@+id/btnApply"
                 style="@style/font_normal_sami_bold"
                 android:layout_width="60dp"
                 android:layout_height="30dp"

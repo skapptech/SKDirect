@@ -11,6 +11,7 @@ import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateProfilePostModel;
+import com.skdirect.model.response.CouponResponse;
 import com.skdirect.utils.MyApplication;
 
 import org.jetbrains.annotations.NotNull;
@@ -147,17 +148,17 @@ public class CommonClassForAPI {
                 });
     }
 
-    public void getCouponList(final DisposableObserver observer, int sellerId) {
+    public void getCouponList(final DisposableObserver<CouponResponse> observer, int sellerId) {
         RestClient.getInstance().getService().getCouponList(sellerId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<CommonResponseModel>() {
+                .subscribe(new Observer<CouponResponse>() {
                     @Override
                     public void onSubscribe(@NotNull Disposable d) {
                     }
 
                     @Override
-                    public void onNext(@NotNull CommonResponseModel o) {
+                    public void onNext(@NotNull CouponResponse o) {
                         observer.onNext(o);
                     }
 

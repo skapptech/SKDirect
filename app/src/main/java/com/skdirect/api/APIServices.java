@@ -49,6 +49,7 @@ import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.UserLocationModel;
+import com.skdirect.model.response.CouponResponse;
 
 import java.util.ArrayList;
 
@@ -153,7 +154,7 @@ public interface APIServices {
     Call<AddCartItemModel> AddCart(@Body ItemAddModel itemAddModel);
 
     @GET("api/NativeBuyer/SellerProfile/GetCartItems")
-    Call<CartItemModel> GetCartItem();
+    Call<CartMainModel> GetCartItem();
 
     @POST("api/NativeBuyer/SellerProfile/ClearCart")
     Call<Object> ClearCart(@Query("Id") int id);
@@ -226,8 +227,8 @@ public interface APIServices {
     @GET("api/NativeBuyer/Mall/GetMall")
     Call<MallMainModel> getMall();
 
-    @GET("api/NativeBuyer/Mall/GetMall")
-    Observable<CommonResponseModel> getCouponList(@Query("sellerid") int sellerId);
+    @GET("api/NativeBuyer/SellerCoupon/GetCouponList")
+    Observable<CouponResponse> getCouponList(@Query("sellerid") int sellerId);
 
     @GET("/api/NativeBuyer/SellerCoupon/ApplyCoupon/{couponId}")
     Observable<CommonResponseModel> applyCoupon(@Path("couponId") int couponId);

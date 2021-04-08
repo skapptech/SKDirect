@@ -318,10 +318,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void getCartItemApi() {
         mainActivityViewMode.getCartItemsRequest();
         mainActivityViewMode.getCartItemsVM().observe(this, model -> {
-            System.out.println("SellerId " + model.getSellerId());
             Utils.hideProgressDialog();
-            if (model != null && model.getCart() != null) {
-                MyApplication.getInstance().cartRepository.addToCart(model.getCart());
+            if (model.isSuccess() && model.getResultItem().getCart() != null) {
+                System.out.println("HomeSellerId " + model.getResultItem().getSellerId());
+                MyApplication.getInstance().cartRepository.addToCart(model.getResultItem().getCart());
             } else {
                 MyApplication.getInstance().cartRepository.truncateCart();
             }

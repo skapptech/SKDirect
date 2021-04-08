@@ -8,8 +8,10 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
-import com.skdirect.model.CartItemModel;
+import com.skdirect.model.CartMainModel;
 import com.skdirect.utils.Utils;
+
+import org.jetbrains.annotations.NotNull;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -18,10 +20,10 @@ import retrofit2.Response;
 public class MainActivityViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
 
-    private MutableLiveData<CartItemModel> CardItemVM;
+    private MutableLiveData<CartMainModel> CardItemVM;
     private MutableLiveData<JsonObject> mapViewModel;
 
-    public LiveData<CartItemModel> getCartItemsVM() {
+    public LiveData<CartMainModel> getCartItemsVM() {
         CardItemVM = null;
         CardItemVM = new MutableLiveData<>();
         return CardItemVM;
@@ -34,10 +36,10 @@ public class MainActivityViewMode extends ViewModel {
         return mapViewModel;
     }
 
-    public MutableLiveData<CartItemModel> getCartItemsRequest() {
-        RestClient.getInstance().getService().GetCartItem().enqueue(new Callback<CartItemModel>() {
+    public MutableLiveData<CartMainModel> getCartItemsRequest() {
+        RestClient.getInstance().getService().GetCartItem().enqueue(new Callback<CartMainModel>() {
             @Override
-            public void onResponse(Call<CartItemModel> call, Response<CartItemModel> response) {
+            public void onResponse(@NotNull Call<CartMainModel> call, @NotNull Response<CartMainModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.e(TAG, "request response=" + response.body());
                     CardItemVM.setValue(response.body());
@@ -45,7 +47,7 @@ public class MainActivityViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<CartItemModel> call, Throwable t) {
+            public void onFailure(@NotNull Call<CartMainModel> call, @NotNull Throwable t) {
                 Log.e(TAG, "onFailure Responce" + t.toString());
                 Utils.hideProgressDialog();
             }
@@ -57,7 +59,7 @@ public class MainActivityViewMode extends ViewModel {
     public MutableLiveData<JsonObject> getMapViewModelRequest(double lat, double log) {
         RestClient.getInstance().getService().GetLocation(lat, log).enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(Call<JsonObject> call, @NotNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.e(TAG, "request response=" + response.body());
                     mapViewModel.setValue(response.body());

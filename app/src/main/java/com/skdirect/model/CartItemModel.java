@@ -4,10 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 public class CartItemModel implements Serializable {
-
     @SerializedName("Cart")
     private ArrayList<CartModel> Cart;
     @SerializedName("EncryptSellerId")
@@ -36,10 +34,6 @@ public class CartItemModel implements Serializable {
     private String Id;
 
     public CartItemModel() {
-    }
-
-    public CartItemModel(ArrayList<CartModel> cart) {
-        Cart = cart;
     }
 
     public ArrayList<CartModel> getCart() {

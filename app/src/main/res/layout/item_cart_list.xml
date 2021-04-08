@@ -13,17 +13,13 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-           >
-
+            android:layout_gravity="center">
 
             <ImageView
                 android:id="@+id/imItemImage"
                 android:layout_width="120dp"
                 android:layout_height="135dp"
-                android:padding="10dp"
-                />
-
+                android:padding="10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,49 +30,43 @@
 
                 <TextView
                     android:id="@+id/tv_product_name"
+                    style="@style/font_normal_sami_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
                     android:ellipsize="end"
-                    style="@style/font_normal_sami_bold"
+                    android:maxLines="1"
                     android:textColor="@color/black"
-                    android:textSize="13dp"
-                    />
-
+                    android:textSize="13dp" />
 
                 <TextView
                     android:id="@+id/tv_seller_name"
+                    style="@style/font_normal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:padding="2dp"
                     android:text=""
-                    style="@style/font_normal"
                     android:textColor="@color/grid_divder"
                     android:textSize="13dp"
                     android:textStyle="normal" />
 
-
                 <TextView
                     android:id="@+id/tv_mrp"
+                    style="@style/font_normal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text=""
                     android:padding="2dp"
-                    style="@style/font_normal"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="13dp"
                     android:textStyle="bold" />
 
-
-
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_gravity="end"
-                    >
+                    android:layout_marginTop="10dp">
 
                     <LinearLayout
                         android:id="@+id/LLPlusMinus"
@@ -125,15 +115,7 @@
                             android:textSize="15dp"
                             android:textStyle="bold" />
                     </LinearLayout>
-
-
                 </RelativeLayout>
-
-
-
-
-
-
             </LinearLayout>
 
             <View
@@ -142,31 +124,22 @@
                 android:layout_height="1dp"
                 android:layout_below="@+id/imItemImage"
                 android:layout_marginTop="10dp"
-                android:background="@color/divider"/>
-
+                android:background="@color/divider" />
 
             <TextView
                 android:id="@+id/tv_romove"
+                style="@style/font_normal_sami_lite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view_divider"
-                android:padding="5dp"
+                android:layout_centerHorizontal="true"
                 android:drawableLeft="@drawable/ic_remove"
                 android:drawablePadding="5dp"
-                android:layout_centerHorizontal="true"
+                android:padding="5dp"
                 android:text="Remove"
-                style="@style/font_normal_sami_lite"
                 android:textColor="@color/seller_button_color"
                 android:textSize="15dp"
                 android:textStyle="normal" />
-
-
-
         </RelativeLayout>
-
-
-
-
     </LinearLayout>
-
 </layout>
