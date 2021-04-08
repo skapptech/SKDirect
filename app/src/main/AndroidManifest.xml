@@ -12,6 +12,10 @@
     <uses-permission android:name="android.Manifest.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <queries>
+        <package android:name="com.whatsapp" />
+        <package android:name="com.whatsapp.w4b" />
+    </queries>
 
     <application
         android:name=".utils.MyApplication"
@@ -46,6 +50,11 @@
         </activity>
         <activity
             android:name="com.skdirect.activity.UserLocationActvity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="com.skdirect.activity.FilterActivity"
             android:screenOrientation="portrait">
 
         </activity>
@@ -107,7 +116,33 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.ProductDetailsActivity"
-            android:screenOrientation="portrait" />
+            android:launchMode="singleTask"
+            android:parentActivityName=".activity.MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="skdirectbuyer.shopkirana.in"
+                    android:scheme="http" />
+                <data
+                    android:host="skdirectbuyer.shopkirana.in"
+                    android:scheme="https" />
+                <data
+                    android:host="directbuyer.er15.xyz"
+                    android:scheme="http" />
+                <data
+                    android:host="directbuyer.er15.xyz"
+                    android:scheme="https" />
+
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
         <activity
             android:name=".activity.ProfilePrimaryAddressActivity"
             android:screenOrientation="portrait" />
@@ -155,9 +190,10 @@
             android:hardwareAccelerated="false"
             android:label=""
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.ChangeLanguageActivity"
-            android:screenOrientation="portrait"
-            android:label=""/>
+        <activity
+            android:name=".activity.ChangeLanguageActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".firebase.MyFirebaseMessagingService"

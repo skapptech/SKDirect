@@ -13,21 +13,28 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.skdirect.R;
+import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityLoginBinding;
 import com.skdirect.model.GenerateOtpModel;
 import com.skdirect.model.GenerateOtpResponseModel;
+import com.skdirect.model.TokenModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.LoginViewModel;
 import com.skdirect.viewmodel.OTPVerificationViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
+import io.reactivex.observers.DisposableObserver;
 import okhttp3.internal.Util;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityLoginBinding Binding;
     private String mobileNumberString;
     private LoginViewModel loginViewModel;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     private void initView() {
+        dbHelper = MyApplication.getInstance().dbHelper;
         Binding.btGetOtp.setOnClickListener(this);
         Binding.btLoginWithPassword.setOnClickListener(this);
         Binding.btSkip.setOnClickListener(this);
@@ -50,6 +58,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 return false;
             }
         });
+        if(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.TOKEN).isEmpty()){
+            Gettoken();
+        }
     }
 
     @Override
@@ -71,22 +82,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void loginWithPassword() {
         mobileNumberString = Binding.etMobileNumber.getText().toString().trim();
         if (mobileNumberString.isEmpty()) {
-            Utils.setToast(this, "Please enter Valid  Mobile Number.");
+            Utils.setToast(this,dbHelper.getString(R.string.enter_valid_mobno));
         } else{
             startActivity(new Intent(LoginActivity.this, LoginWithPasswordActivity.class).putExtra("MobileNumber",mobileNumberString));
         }
     }
 
     private void getOTP() {
-        Binding.btGetOtp.setText("Loading ...");
+        Binding.btGetOtp.setText(dbHelper.getString(R.string.loading));
         mobileNumberString = Binding.etMobileNumber.getText().toString().trim();
         if (mobileNumberString.isEmpty()) {
-            Utils.setToast(this, "Please Enter Mobile");
-            Binding.btGetOtp.setText(" Get OTP");
+            Utils.setToast(this, dbHelper.getString(R.string.enter_mobno));
+            Binding.btGetOtp.setText(dbHelper.getString(R.string.get_otp));
         } else if (Utils.isValidMobile(mobileNumberString)) {
             callOTPApi(mobileNumberString);
         } else {
-            Utils.setToast(this, "Please enter Valid  Mobile Number.");
+            Utils.setToast(this, dbHelper.getString(R.string.enter_valid_mobno));
         }
     }
 
@@ -96,11 +107,52 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             GenerateOtpModel model =new GenerateOtpModel(mobileNumberString,Utils.getDeviceUniqueID(this));
             getLoginData(model);
         } else {
-            Utils.setToast(this, "No Internet Connection Please connect.");
+            Utils.setToast(this, dbHelper.getString(R.string.no_connection));
         }
 
     }
+     public void Gettoken() {
+         new CommonClassForAPI().getToken(callToken, "password", Utils.getDeviceUniqueID(this),
+                 "", true, true, "BUYERAPP", true,
+                 Utils.getDeviceUniqueID(this), Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)),Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON)), SharePrefs.getInstance(LoginActivity.this).getString(SharePrefs.PIN_CODE));
+     }
 
+
+     private final DisposableObserver<TokenModel> callToken = new DisposableObserver<TokenModel>() {
+         @Override
+         public void onNext(@NotNull TokenModel model) {
+             try {
+                 Utils.hideProgressDialog();
+                 if (model != null) {
+                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
+                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
+                     SharePrefs.setSharedPreference(LoginActivity.this, SharePrefs.IS_REGISTRATIONCOMPLETE, model.getIsRegistrationComplete());
+                     SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LAT, model.getLatitiute());
+                     SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LON, model.getLongitude());
+                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
+                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
+                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
+
+                 }
+             } catch (Exception e) {
+                 e.printStackTrace();
+                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
+
+             }
+         }
+
+         @Override
+         public void onError(Throwable e) {
+             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
+             Utils.hideProgressDialog();
+             e.printStackTrace();
+         }
+
+         @Override
+         public void onComplete() {
+             Utils.hideProgressDialog();
+         }
+     };
     private void getLoginData( GenerateOtpModel model) {
         loginViewModel.getLogin(model).observe(this, new Observer<GenerateOtpResponseModel>() {
             @Override

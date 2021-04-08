@@ -69,7 +69,6 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
 
 
         if (model.getNoofView() > 0) {
-
             holder.mBinding.llNoOfView.setVisibility(View.VISIBLE);
             holder.mBinding.tvItemView.setText(String.valueOf(model.getNoofView()));
         } else {

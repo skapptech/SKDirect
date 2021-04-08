@@ -90,10 +90,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.tv_place_order:
-                if (SharePrefs.getInstance(PaymentActivity.this).getBoolean(SharePrefs.IS_REGISTRATIONCOMPLETE)) {
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
                     OrderPlaceAlertDialog();
                 } else {
-                    Toast.makeText(this, "Complete Your Profile", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(this,LoginActivity.class));
                 }
 
 
@@ -156,14 +156,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 Utils.hideProgressDialog();
                 if (response.isSuccess()) {
                     orderPlaceDialog();
-                    clearCartItem(cartItemModel.getSellerId());
                 }else
                 {
                   Toast.makeText(PaymentActivity.this, response.getErrorMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
 
     }
 
@@ -295,21 +293,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-
-    private void clearCartItem(int id) {
-        paymentViewMode.getClearCartDataRequest(id);
-        paymentViewMode.getClearCartData().observe(this, new Observer<Object>() {
-            @Override
-            public void onChanged(Object object) {
-                Utils.hideProgressDialog();
-//                if (object != null) {
-//                    if (object.equals(true)) {
-//                        MainActivity.cartItemModel.getCart().clear();
-//                    }
-//                }
-            }
-        });
-    }
 
 
     @Override

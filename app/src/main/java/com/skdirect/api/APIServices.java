@@ -88,7 +88,6 @@ public interface APIServices {
     @GET("api/buyer/SkAppHome/GetTopNearByItem")
     Call<ArrayList<TopNearByItemModel>> GetTopNearByItem();
 
-
     @GET("api/buyer/SkAppHome/GetTopSeller")
     Call<ArrayList<TopSellerModel>> GetTopSeller();
 
@@ -184,6 +183,7 @@ public interface APIServices {
     @POST("api/NativeBuyer/BuyerProfile/UpdateBuyerProfile")
     Observable<CommonResponseModel> UpdateProfile(@Body UpdateProfilePostModel updateProfilePostModel );
 
+
     @GET("api/buyer/Profile/MakeDefaultAddress/{MakeDefaultAddress}")
     Call<Boolean> MakeDefaultAddress(@Path("MakeDefaultAddress") int UserDetailId);
 
@@ -209,6 +209,9 @@ public interface APIServices {
 
     @GET("api/NativeBuyer/MyOrder/CancelOrder")
     Call<MallMainModelBolleanResult> CancelOrder(@Query("OrderId") int OrderId);
+
+    @GET("/api/NativeBuyer/Location/SetLocation")
+    Call<CommonResponseModel> setLocation(@Query("latitude") double latitude,@Query("longitude") double longitude);
 
     @GET("api/NativeBuyer/Mall/GetMall")
     Call<MallMainModel> getMall();

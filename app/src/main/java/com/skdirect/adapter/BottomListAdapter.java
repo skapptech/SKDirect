@@ -66,7 +66,7 @@ public class BottomListAdapter extends RecyclerView.Adapter<BottomListAdapter.Vi
         holder.mBinding.llTopNearBySeller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bottomBarInterface.onOnClick(variationListModel);
+                bottomBarInterface.onOnClick(variationList,position);
             }
         });
     }
