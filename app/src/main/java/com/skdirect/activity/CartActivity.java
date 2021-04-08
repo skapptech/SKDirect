@@ -170,14 +170,14 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                         });
                     } else {
                         loading = false;
-                        mBinding.rvCartItem.setVisibility(View.GONE);
-                        mBinding.blankBasket.setVisibility(View.VISIBLE);
-                        mBinding.rlCheckOut.setVisibility(View.GONE);
-                        MyApplication.getInstance().cartRepository.truncateCart();
                     }
                 }
             }else {
                 Utils.setToast(this,cartMainModel.getErrorMessage());
+                mBinding.rvCartItem.setVisibility(View.GONE);
+                mBinding.blankBasket.setVisibility(View.VISIBLE);
+                mBinding.rlCheckOut.setVisibility(View.GONE);
+                MyApplication.getInstance().cartRepository.truncateCart();
             }
         });
     }
