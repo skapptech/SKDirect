@@ -11,7 +11,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Share with"
+        android:text="@string/share_with"
+        android:id="@+id/tvSharewith"
         android:layout_margin="10dp"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -43,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/whatsapp"
+                android:id="@+id/tvWhasapp"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
@@ -69,6 +71,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:text="@string/whatsapp_business"
+                android:id="@+id/tvWhasappBusiness"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 

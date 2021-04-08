@@ -58,6 +58,7 @@
     <string name="no_loction_found">आपके स्थान के लिए कोई विक्रेता सक्रिय नहीं है, कृपया भविष्य में</string>
     <string name="near_by_seller">पास का विक्रेता</string>
     <string name="all_categories">सब श्रेणियां</string>
+    <string name="share_with">Share with</string>
     <string name="clear_all">CLEAR ALL</string>
     <string name="order_tab_all">All</string>
     <string name="order_tab_pending">Pending</string>

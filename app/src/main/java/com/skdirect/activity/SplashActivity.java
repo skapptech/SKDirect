@@ -125,7 +125,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void launchHomeScreen() {
-        if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)) {
+      /*  if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)) {
             if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
                 startActivity(new Intent(activity, MainActivity.class));
             } else {
@@ -146,6 +146,11 @@ public class SplashActivity extends AppCompatActivity {
             }
 
 
+        }*/
+        if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.Is_First_Time)) {
+            startActivity(new Intent(activity, MainActivity.class));
+        } else {
+            startActivity(new Intent(activity, IntroActivity.class));
         }
     }
 

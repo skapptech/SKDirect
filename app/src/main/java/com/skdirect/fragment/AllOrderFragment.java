@@ -140,7 +140,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
         dbHelper = MyApplication.getInstance().dbHelper;
         mBinding.etSearchOrder.setHint(dbHelper.getString(R.string.search_order_by_order_id));
         mBinding.tvNoData.setHint(dbHelper.getString(R.string.no_data_found));
-        mBinding.swiperefresh.setOnRefreshListener(this);
+       // mBinding.swiperefresh.setOnRefreshListener(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, RecyclerView.VERTICAL,false);
         mBinding.rMyOrder.setLayoutManager(layoutManager);
         myOrderAdapter = new MyOrderAdapter(activity, orderModelArrayList);
@@ -192,7 +192,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
         myOrderViewMode.getCategoriesViewModel().observe(this, new Observer<OrderModel>() {
             @Override
             public void onChanged(OrderModel response) {
-                mBinding.swiperefresh.setRefreshing(false);
+                //mBinding.swiperefresh.setRefreshing(false);
                 mBinding.shimmerViewContainer.stopShimmer();
                 mBinding.shimmerViewContainer.setVisibility(View.GONE);
                 mBinding.tlEmptyView.setVisibility(View.GONE);
@@ -216,8 +216,11 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }else
                 {
                     loading = false;
-                    mBinding.tlEmptyView.setVisibility(View.VISIBLE);
-                    mBinding.rMyOrder.setVisibility(View.GONE);
+                    if (orderModelArrayList.size()==0){
+                        mBinding.tlEmptyView.setVisibility(View.VISIBLE);
+                        mBinding.rMyOrder.setVisibility(View.GONE);
+                    }
+
                 }
 
 
