@@ -23,7 +23,7 @@
             android:background="@drawable/bg_white_rounded"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="10dp"
-            android:hint="Search Order by Order Id"
+            android:hint="@string/search_order_by_order_id"
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:maxLines="1"
@@ -49,11 +49,12 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/tv_no_data"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:layout_centerVertical="true"
-                    android:text="NO Data Found "
+                    android:text="@string/no_data_found"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 

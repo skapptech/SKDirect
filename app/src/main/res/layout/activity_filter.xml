@@ -42,7 +42,7 @@
                     android:layout_weight="0.5"
                     android:drawablePadding="4dp"
                     android:gravity="center"
-                    android:text="CLEAR ALL"
+                    android:text="@string/clear_all"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold" />
