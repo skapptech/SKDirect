@@ -30,11 +30,11 @@ import com.skdirect.adapter.MallCategorieBannerAdapter;
 import com.skdirect.adapter.TopNearByItemAdapter;
 import com.skdirect.adapter.TopSellerAdapter;
 import com.skdirect.databinding.FragmentHomeBinding;
-import com.skdirect.model.AllCategoriesModel;
+import com.skdirect.model.AllCategoresMainModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.MallMainModel;
-import com.skdirect.model.TopNearByItemModel;
-import com.skdirect.model.TopSellerModel;
+import com.skdirect.model.NearByMainModel;
+import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
@@ -42,8 +42,6 @@ import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.HomeViewModel;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private FragmentHomeBinding mBinding;
@@ -112,6 +110,33 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
+    private void nearBySeller() {
+        if (Utils.isNetworkAvailable(activity)) {
+            Utils.showProgressDialog(activity);
+            getNearBySeller();
+        } else {
+            Utils.setToast(activity, activity.dbHelper.getString(R.string.no_connection));
+        }
+    }
+
+    private void mostVisitedSeller() {
+        if (Utils.isNetworkAvailable(activity)) {
+            Utils.showProgressDialog(activity);
+            getMostVisitedSeller();
+        } else {
+            Utils.setToast(activity, activity.dbHelper.getString(R.string.no_connection));
+        }
+    }
+
+    private void newSeller() {
+        if (Utils.isNetworkAvailable(activity)) {
+            Utils.showProgressDialog(activity);
+            getNewSeller();
+        } else {
+            Utils.setToast(activity, activity.dbHelper.getString(R.string.no_connection));
+        }
+    }
+
     private void getMall() {
         if (Utils.isNetworkAvailable(activity)) {
             Utils.showProgressDialog(activity);
@@ -139,67 +164,126 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         getSellerAPi();
                         getAllCategoriesAPi();
                     }
-                }else {
+                } else {
                     mBinding.llMainAppHome.setVisibility(View.VISIBLE);
                     mBinding.llMallHome.setVisibility(View.GONE);
                     topNearByItem();
                     getSellerAPi();
                     getAllCategoriesAPi();
+                    nearBySeller();
+                    mostVisitedSeller();
+                    newSeller();
                 }
             }
         });
     }
 
     private void getNearByItem() {
-        homeViewModel.GetTopNearByItem().observe(this, new Observer<ArrayList<TopNearByItemModel>>() {
+        homeViewModel.GetTopNearByItem().observe(this, new Observer<NearByMainModel>() {
             @Override
-            public void onChanged(ArrayList<TopNearByItemModel> topNearByItemList) {
+            public void onChanged(NearByMainModel nearByMainModel) {
                 Utils.hideProgressDialog();
-                //mBinding.swiperefresh.setRefreshing(false);
-                if (topNearByItemList.size() > 0) {
-                    TopNearByItemAdapter topNearByItemAdapter = new TopNearByItemAdapter(getActivity(), topNearByItemList);
-                    mBinding.rvNearByItem.setAdapter(topNearByItemAdapter);
+                if (nearByMainModel.isSuccess()) {
+                    if (nearByMainModel.getResultItem().size() > 0) {
+                        TopNearByItemAdapter topNearByItemAdapter = new TopNearByItemAdapter(getActivity(), nearByMainModel.getResultItem());
+                        mBinding.rvNearByItem.setAdapter(topNearByItemAdapter);
 
-                } else {
-                    mBinding.llNearByNotFound.setVisibility(View.VISIBLE);
-                    mBinding.rvNearByItem.setVisibility(View.GONE);
+                    } else {
+                        mBinding.llNearByNotFound.setVisibility(View.VISIBLE);
+                        mBinding.rvNearByItem.setVisibility(View.GONE);
+                    }
                 }
             }
         });
     }
 
     private void getTopSeller() {
-        homeViewModel.GetTopSellerLiveData().observe(this, new Observer<ArrayList<TopSellerModel>>() {
+        homeViewModel.GetTopSellerLiveData().observe(this, new Observer<TopSellerMainModel>() {
             @Override
-            public void onChanged(ArrayList<TopSellerModel> topSellerList) {
-                //mBinding.swiperefresh.setRefreshing(false);
+            public void onChanged(TopSellerMainModel topSellerList) {
                 Utils.hideProgressDialog();
-                if (topSellerList.size() > 0) {
-                    TopSellerAdapter topSellerAdapter = new TopSellerAdapter(getActivity(), topSellerList);
-                    mBinding.rvTopSeller.setAdapter(topSellerAdapter);
-
-                } else {
-                    mBinding.llTopSellerNotFound.setVisibility(View.VISIBLE);
-                    mBinding.rvTopSeller.setVisibility(View.GONE);
+                if (topSellerList.isSuccess()) {
+                    if (topSellerList.getResultItem().size() > 0) {
+                        TopSellerAdapter topSellerAdapter = new TopSellerAdapter(getActivity(), topSellerList.getResultItem());
+                        mBinding.rvTopSeller.setAdapter(topSellerAdapter);
+                    } else {
+                        mBinding.llTopSellerNotFound.setVisibility(View.VISIBLE);
+                        mBinding.rvTopSeller.setVisibility(View.GONE);
+                    }
                 }
-
             }
         });
     }
 
+    private void getNearBySeller() {
+        homeViewModel.GetNearSellerLiveData().observe(this, new Observer<TopSellerMainModel>() {
+            @Override
+            public void onChanged(TopSellerMainModel topSellerList) {
+                Utils.hideProgressDialog();
+                if (topSellerList.isSuccess()) {
+                    if (topSellerList.getResultItem().size() > 0) {
+                        TopSellerAdapter topSellerAdapter = new TopSellerAdapter(getActivity(), topSellerList.getResultItem());
+                        mBinding.rvNearBySeller.setAdapter(topSellerAdapter);
+                    } else {
+                        mBinding.llNearBySeller.setVisibility(View.VISIBLE);
+                        mBinding.rvNearBySeller.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+    }
+
+    private void getMostVisitedSeller() {
+        homeViewModel.GetMostVisitedSellerLiveData().observe(this, new Observer<TopSellerMainModel>() {
+            @Override
+            public void onChanged(TopSellerMainModel topSellerList) {
+                Utils.hideProgressDialog();
+                if (topSellerList.isSuccess()) {
+                    if (topSellerList.getResultItem().size() > 0) {
+                        TopSellerAdapter topSellerAdapter = new TopSellerAdapter(getActivity(), topSellerList.getResultItem());
+                        mBinding.rvMostVisitedSeller.setAdapter(topSellerAdapter);
+                    } else {
+                        mBinding.llMostVisitedSeller.setVisibility(View.VISIBLE);
+                        mBinding.rvMostVisitedSeller.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+    }
+
+    private void getNewSeller() {
+        homeViewModel.GetNewSellerLiveData().observe(this, new Observer<TopSellerMainModel>() {
+            @Override
+            public void onChanged(TopSellerMainModel topSellerList) {
+                Utils.hideProgressDialog();
+                if (topSellerList.isSuccess()) {
+                    if (topSellerList.getResultItem().size() > 0) {
+                        TopSellerAdapter topSellerAdapter = new TopSellerAdapter(getActivity(), topSellerList.getResultItem());
+                        mBinding.rvNewSeller.setAdapter(topSellerAdapter);
+                    } else {
+                        mBinding.llNewSeller.setVisibility(View.VISIBLE);
+                        mBinding.rvNewSeller.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+    }
 
     private void getAllCategories() {
-        homeViewModel.getAllCategoriesLiveData().observe(this, new Observer<ArrayList<AllCategoriesModel>>() {
+        homeViewModel.getAllCategoriesLiveData().observe(this, new Observer<AllCategoresMainModel>() {
             @Override
-            public void onChanged(ArrayList<AllCategoriesModel> allCategoriesList) {
-                // mBinding.swiperefresh.setRefreshing(false);
-                if (allCategoriesList.size() > 0) {
-                    AllCategoriesAdapter allCategoriesAdapter = new AllCategoriesAdapter(getActivity(), allCategoriesList);
-                    mBinding.rvAllCetegory.setAdapter(allCategoriesAdapter);
-                } else {
-                    mBinding.llAllCetegoryNotFound.setVisibility(View.VISIBLE);
-                    mBinding.rvAllCetegory.setVisibility(View.GONE);
+            public void onChanged(AllCategoresMainModel allCategoriesList) {
+                if (allCategoriesList.isSuccess()) {
+                    if (allCategoriesList.getResultItem().size() > 0) {
+                        AllCategoriesAdapter allCategoriesAdapter = new AllCategoriesAdapter(getActivity(), allCategoriesList.getResultItem());
+                        mBinding.rvAllCetegory.setAdapter(allCategoriesAdapter);
+                    } else {
+                        mBinding.llAllCetegoryNotFound.setVisibility(View.VISIBLE);
+                        mBinding.rvAllCetegory.setVisibility(View.GONE);
+                    }
                 }
+
+
             }
         });
 

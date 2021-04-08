@@ -2,6 +2,7 @@ package com.skdirect.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,25 @@ public class TopNearByItemAdapter extends RecyclerView.Adapter<TopNearByItemAdap
         TopNearByItemModel topNearByItemModel = topNearByItemList.get(position);
         holder.mBinding.tvItemName.setText(topNearByItemModel.getProductName());
         holder.mBinding.tvItemPrice.setText("MRP "+String.valueOf(topNearByItemModel.getMrp()));
+        holder.mBinding.tvMesserment.setText("("+topNearByItemModel.getMeasurement()+" "+topNearByItemModel.getUOM()+" )");
+
+        if (topNearByItemModel.getMrp()==topNearByItemModel.getSellingPrice()){
+            holder.mBinding.tvMrp.setVisibility(View.GONE);
+            holder.mBinding.tvSellingPrice.setText("₹ "+String.format("%.2f", topNearByItemModel.getSellingPrice()));
+        }else {
+            holder.mBinding.tvMrp.setText("₹ "+Math.round(topNearByItemModel.getMrp()));
+            holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.mBinding.tvSellingPrice.setText("₹ "+Math.round(topNearByItemModel.getSellingPrice()));
+        }
+
+        if (topNearByItemModel.getNoofView()>0){
+            holder.mBinding.llNoOfView.setVisibility(View.VISIBLE);
+            holder.mBinding.tvItemView.setText(String.valueOf(topNearByItemModel.getNoofView()));
+
+        }else
+        {
+
+        }
 
         if(topNearByItemModel.getImagePath()!=null && !topNearByItemModel.getImagePath().contains("http")) {
             Picasso.get().load(BuildConfig.apiEndpoint+topNearByItemModel.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.ivImage);

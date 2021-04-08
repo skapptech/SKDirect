@@ -13,10 +13,10 @@ public class TopNearByItemModel implements Serializable {
     private String ProductName;
 
     @SerializedName("SellingPrice")
-    private Double SellingPrice;
+    private double SellingPrice;
 
     @SerializedName("Mrp")
-    private Double Mrp;
+    private double Mrp;
 
     @SerializedName("ImagePath")
     private String ImagePath;
@@ -24,17 +24,60 @@ public class TopNearByItemModel implements Serializable {
     @SerializedName("SellerName")
     private String SellerName;
 
+    @SerializedName("UOM")
+    private String UOM;
 
-    public String getMeasurement() {
+    @SerializedName("Measurement")
+    private int Measurement;
+
+    @SerializedName("NoofView")
+    private int NoofView;
+
+    @SerializedName("OffPercentage")
+    private double OffPercentage;
+
+    @SerializedName("DiscountAmount")
+    private double DiscountAmount;
+
+    public String getUOM() {
+        return UOM;
+    }
+
+    public void setUOM(String UOM) {
+        this.UOM = UOM;
+    }
+
+    public int getMeasurement() {
         return Measurement;
     }
 
-    public void setMeasurement(String measurement) {
+    public void setMeasurement(int measurement) {
         Measurement = measurement;
     }
 
-    @SerializedName("Measurement")
-    private String Measurement;
+    public int getNoofView() {
+        return NoofView;
+    }
+
+    public void setNoofView(int noofView) {
+        NoofView = noofView;
+    }
+
+    public double getOffPercentage() {
+        return OffPercentage;
+    }
+
+    public void setOffPercentage(double offPercentage) {
+        OffPercentage = offPercentage;
+    }
+
+    public double getDiscountAmount() {
+        return DiscountAmount;
+    }
+
+    public void setDiscountAmount(double discountAmount) {
+        DiscountAmount = discountAmount;
+    }
 
     public int getId() {
         return Id;
@@ -52,19 +95,19 @@ public class TopNearByItemModel implements Serializable {
         ProductName = productName;
     }
 
-    public Double getSellingPrice() {
+    public double getSellingPrice() {
         return SellingPrice;
     }
 
-    public void setSellingPrice(Double sellingPrice) {
+    public void setSellingPrice(double sellingPrice) {
         SellingPrice = sellingPrice;
     }
 
-    public Double getMrp() {
+    public double getMrp() {
         return Mrp;
     }
 
-    public void setMrp(Double mrp) {
+    public void setMrp(double mrp) {
         Mrp = mrp;
     }
 

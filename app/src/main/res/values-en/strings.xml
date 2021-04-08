@@ -55,9 +55,12 @@
     <string name="view_more">View More</string>
     <string name="no_item_found">No Item Found</string>
     <string name="no_loction_found">For your Location there is no  seller active,please in  future ं</string>
-    <string name="near_by_seller">Nearby Seller</string>
+    <string name="near_by_seller">Top Seller</string>
     <string name="all_categories">All Categories</string>
     <string name="filter">FILTER</string>
+    <string name="by_seller">Near By Seller</string>
+    <string name="most_visted_seller">Most Visited Seller</string>
+    <string name="new_seller">New Seller</string>
 
     <string name="clear_all">CLEAR ALL</string>
     <string name="my_order">My Order</string>

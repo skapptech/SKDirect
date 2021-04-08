@@ -6,18 +6,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
-import com.skdirect.model.AllCategoriesModel;
-import com.skdirect.model.CartItemModel;
+import com.skdirect.model.AllCategoresMainModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.MallMainModel;
-import com.skdirect.model.TopNearByItemModel;
-import com.skdirect.model.TopSellerModel;
+import com.skdirect.model.NearByMainModel;
+import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.utils.Utils;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,24 +21,26 @@ import retrofit2.Response;
 public class HomeViewModel extends ViewModel {
     final String TAG = getClass().getSimpleName();
     private MutableLiveData<CustomerDataModel> userDetailViewModel;
-    private MutableLiveData<ArrayList<TopNearByItemModel>> topNearByItem;
-    private MutableLiveData<ArrayList<TopSellerModel>> topSellerLiveData;
-    private MutableLiveData<ArrayList<AllCategoriesModel>> allCategoriesLiveData;
+    private MutableLiveData<NearByMainModel> topNearByItem;
+    private MutableLiveData<TopSellerMainModel> topSellerLiveData;
+    private MutableLiveData<TopSellerMainModel> nearBySellerLiveData;
+    private MutableLiveData<TopSellerMainModel> mostVisitedSellerLiveData;
+    private MutableLiveData<TopSellerMainModel> newSellerLiveData;
+    private MutableLiveData<AllCategoresMainModel> allCategoriesLiveData;
 
     private MutableLiveData<MallMainModel> mallDataViewModel;
 
 
-
     public LiveData<CustomerDataModel> GetUserDetail() {
-        if(userDetailViewModel==null){
+        if (userDetailViewModel == null) {
             userDetailViewModel = new MutableLiveData<>();
         }
         userDetailViewModel = getUserDetailRequest();
         return userDetailViewModel;
     }
 
-    public LiveData<ArrayList<TopNearByItemModel>> GetTopNearByItem() {
-        if(topNearByItem==null){
+    public LiveData<NearByMainModel> GetTopNearByItem() {
+        if (topNearByItem == null) {
             topNearByItem = new MutableLiveData<>();
         }
         topNearByItem = getGetTopNearByItemRequest();
@@ -51,8 +48,8 @@ public class HomeViewModel extends ViewModel {
     }
 
 
-    public LiveData<ArrayList<TopSellerModel>> GetTopSellerLiveData() {
-        if(topSellerLiveData==null){
+    public LiveData<TopSellerMainModel> GetTopSellerLiveData() {
+        if (topSellerLiveData == null) {
             topSellerLiveData = new MutableLiveData<>();
 
         }
@@ -60,8 +57,35 @@ public class HomeViewModel extends ViewModel {
         return topSellerLiveData;
     }
 
-    public LiveData<ArrayList<AllCategoriesModel>> getAllCategoriesLiveData() {
-        if(allCategoriesLiveData==null){
+    public LiveData<TopSellerMainModel> GetNearSellerLiveData() {
+        if (nearBySellerLiveData == null) {
+            nearBySellerLiveData = new MutableLiveData<>();
+
+        }
+        nearBySellerLiveData = GetNearBYSellerLiveRequest();
+        return nearBySellerLiveData;
+    }
+
+    public LiveData<TopSellerMainModel> GetMostVisitedSellerLiveData() {
+        if (mostVisitedSellerLiveData == null) {
+            mostVisitedSellerLiveData = new MutableLiveData<>();
+
+        }
+        mostVisitedSellerLiveData = GetMostVisitedSellerLiveRequest();
+        return mostVisitedSellerLiveData;
+    }
+
+    public LiveData<TopSellerMainModel> GetNewSellerLiveData() {
+        if (newSellerLiveData == null) {
+            newSellerLiveData = new MutableLiveData<>();
+
+        }
+        newSellerLiveData = GetSellerSellerLiveRequest();
+        return newSellerLiveData;
+    }
+
+    public LiveData<AllCategoresMainModel> getAllCategoriesLiveData() {
+        if (allCategoriesLiveData == null) {
             allCategoriesLiveData = new MutableLiveData<>();
 
         }
@@ -70,7 +94,7 @@ public class HomeViewModel extends ViewModel {
     }
 
     public LiveData<MallMainModel> getMallData() {
-        if(mallDataViewModel==null){
+        if (mallDataViewModel == null) {
             mallDataViewModel = new MutableLiveData<>();
         }
         mallDataViewModel = getMallDataRequest();
@@ -78,13 +102,12 @@ public class HomeViewModel extends ViewModel {
     }
 
 
-
     public MutableLiveData<CustomerDataModel> getUserDetailRequest() {
         RestClient.getInstance().getService().GetUserDetail().enqueue(new Callback<CustomerDataModel>() {
             @Override
             public void onResponse(Call<CustomerDataModel> call, Response<CustomerDataModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     userDetailViewModel.setValue(response.body());
                 }
             }
@@ -99,18 +122,18 @@ public class HomeViewModel extends ViewModel {
         return userDetailViewModel;
     }
 
-    public MutableLiveData<ArrayList<TopNearByItemModel>> getGetTopNearByItemRequest() {
-        RestClient.getInstance().getService().GetTopNearByItem().enqueue(new Callback<ArrayList<TopNearByItemModel>>() {
+    public MutableLiveData<NearByMainModel> getGetTopNearByItemRequest() {
+        RestClient.getInstance().getService().GetTopNearByItem().enqueue(new Callback<NearByMainModel>() {
             @Override
-            public void onResponse(Call<ArrayList<TopNearByItemModel>> call, Response<ArrayList<TopNearByItemModel>> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+            public void onResponse(Call<NearByMainModel> call, Response<NearByMainModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     topNearByItem.setValue(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<TopNearByItemModel>> call, Throwable t) {
+            public void onFailure(Call<NearByMainModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + call.toString());
                 Utils.hideProgressDialog();
             }
@@ -119,18 +142,18 @@ public class HomeViewModel extends ViewModel {
         return topNearByItem;
     }
 
-    public MutableLiveData<ArrayList<TopSellerModel>> GetTopSellerLiveRequest() {
-        RestClient.getInstance().getService().GetTopSeller().enqueue(new Callback<ArrayList<TopSellerModel>>() {
+    public MutableLiveData<TopSellerMainModel> GetTopSellerLiveRequest() {
+        RestClient.getInstance().getService().GetTopSeller().enqueue(new Callback<TopSellerMainModel>() {
             @Override
-            public void onResponse(Call<ArrayList<TopSellerModel>> call, Response<ArrayList<TopSellerModel>> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+            public void onResponse(Call<TopSellerMainModel> call, Response<TopSellerMainModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     topSellerLiveData.setValue(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<TopSellerModel>> call, Throwable t) {
+            public void onFailure(Call<TopSellerMainModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + call.toString());
                 Utils.hideProgressDialog();
             }
@@ -139,18 +162,78 @@ public class HomeViewModel extends ViewModel {
         return topSellerLiveData;
     }
 
-    public MutableLiveData<ArrayList<AllCategoriesModel>> getAllCategoriesRequest() {
-        RestClient.getInstance().getService().GetTopCategory().enqueue(new Callback<ArrayList<AllCategoriesModel>>() {
+    public MutableLiveData<TopSellerMainModel> GetNearBYSellerLiveRequest() {
+        RestClient.getInstance().getService().GetNearBySeller().enqueue(new Callback<TopSellerMainModel>() {
             @Override
-            public void onResponse(Call<ArrayList<AllCategoriesModel>> call, Response<ArrayList<AllCategoriesModel>> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+            public void onResponse(Call<TopSellerMainModel> call, Response<TopSellerMainModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
+                    nearBySellerLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TopSellerMainModel> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + call.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return nearBySellerLiveData;
+    }
+
+    public MutableLiveData<TopSellerMainModel> GetMostVisitedSellerLiveRequest() {
+        RestClient.getInstance().getService().GetMostVisitedSeller().enqueue(new Callback<TopSellerMainModel>() {
+            @Override
+            public void onResponse(Call<TopSellerMainModel> call, Response<TopSellerMainModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
+                    mostVisitedSellerLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TopSellerMainModel> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + call.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return mostVisitedSellerLiveData;
+    }
+
+    public MutableLiveData<TopSellerMainModel> GetSellerSellerLiveRequest() {
+        RestClient.getInstance().getService().GetNewSeller().enqueue(new Callback<TopSellerMainModel>() {
+            @Override
+            public void onResponse(Call<TopSellerMainModel> call, Response<TopSellerMainModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
+                    newSellerLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TopSellerMainModel> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + call.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return newSellerLiveData;
+    }
+
+    public MutableLiveData<AllCategoresMainModel> getAllCategoriesRequest() {
+        RestClient.getInstance().getService().GetTopCategory().enqueue(new Callback<AllCategoresMainModel>() {
+            @Override
+            public void onResponse(Call<AllCategoresMainModel> call, Response<AllCategoresMainModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     allCategoriesLiveData.setValue(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<AllCategoriesModel>> call, Throwable t) {
+            public void onFailure(Call<AllCategoresMainModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + call.toString());
                 Utils.hideProgressDialog();
             }
@@ -163,8 +246,8 @@ public class HomeViewModel extends ViewModel {
         RestClient.getInstance().getService().getMall().enqueue(new Callback<MallMainModel>() {
             @Override
             public void onResponse(Call<MallMainModel> call, Response<MallMainModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     mallDataViewModel.setValue(response.body());
                 }
             }
@@ -178,7 +261,6 @@ public class HomeViewModel extends ViewModel {
 
         return mallDataViewModel;
     }
-
 
 
 }

@@ -123,4 +123,5 @@ dependencies {
     implementation 'com.github.MohammedAlaaMorsi:RangeSeekBar:1.0.6'
     implementation 'com.github.Innovattic:range-seek-bar:v1.0.6'
     testImplementation 'com.facebook.litho:litho-testing:0.40.0'
+    implementation "de.hdodenhof:circleimageview:3.1.0"
 }

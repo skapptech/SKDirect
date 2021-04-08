@@ -7,6 +7,7 @@ import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.AddReviewModel;
 import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.AddViewModel;
+import com.skdirect.model.AllCategoresMainModel;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.CartItemModel;
@@ -24,6 +25,7 @@ import com.skdirect.model.MainTopSimilarSellerModel;
 import com.skdirect.model.MallMainModel;
 import com.skdirect.model.MallMainModelBolleanResult;
 import com.skdirect.model.MyOrderRequestModel;
+import com.skdirect.model.NearByMainModel;
 import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.OrderDetailsModel;
@@ -44,6 +46,7 @@ import com.skdirect.model.SellerProductMainModel;
 import com.skdirect.model.SellerProfileDataModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.TopNearByItemModel;
+import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.UserLocationModel;
@@ -69,12 +72,6 @@ public interface APIServices {
     @GET("api/NativeBuyer/Common/UpdateFcmId")
     Observable<JsonObject> getUpdateToken(@Query("fcmId") String fcmId);
 
-    /*@GET("api/Buyer/Registration/GenerateOtp/{GenerateOtp}")
-    Call<LoginResponseModel> GenerateOtp(@Path("GenerateOtp") String GenerateOtp);*/
-
-/*    @POST("api/Buyer/Registration/VerfiyOtp")
-    Call<OtpResponceModel> getVerfiyOtp(@Body OtpVerificationModel OtpVerificationModel);*/
-
     @POST("/api/NativeBuyer/Login/verifyOtp")
     Observable<OtpResponceModel> getVerfiyOtp(@Body OtpVerificationModel OtpVerificationModel);
 
@@ -88,21 +85,35 @@ public interface APIServices {
     @GET("api/buyer/Profile/GetUserDetail")
     Call<CustomerDataModel> GetUserDetail();
 
-    @GET("api/buyer/SkAppHome/GetTopNearByItem")
-    Call<ArrayList<TopNearByItemModel>> GetTopNearByItem();
+    /*Home Page APi*/
+    @GET("api/NativeBuyer/AppHome/GetNearByItem")
+    Call<NearByMainModel> GetTopNearByItem();
 
-    @GET("api/buyer/SkAppHome/GetTopSeller")
-    Call<ArrayList<TopSellerModel>> GetTopSeller();
+    @GET("api/NativeBuyer/AppHome/GetTopSeller")
+    Call<TopSellerMainModel> GetTopSeller();
 
-    @GET("api/buyer/SkAppHome/GetTopCategory")
-    Call<ArrayList<AllCategoriesModel>> GetTopCategory();
+    @GET("api/NativeBuyer/AppHome/GetNearBySeller")
+    Call<TopSellerMainModel> GetNearBySeller();
 
-    @POST("api/Buyer/Item/GetItem")
+    @GET("api/NativeBuyer/AppHome/GetMostVisitedSeller")
+    Call<TopSellerMainModel> GetMostVisitedSeller();
+
+    @GET("api/NativeBuyer/AppHome/GetNewSeller")
+    Call<TopSellerMainModel> GetNewSeller();
+
+    @GET("api/NativeBuyer/AppHome/GetTopCategory")
+    Call<AllCategoresMainModel> GetTopCategory();
+
+
+
+    @POST("api/NativeBuyer/AppHomeFilter/GetNearByItemFilter")
     Call<ArrayList<NearProductListModel>> getNearItem(@Body PaginationModel paginationModel);
 
     @GET("api/buyer/Seller/GetSellerListForBuyer")
     Call<ArrayList<NearBySallerModel>> GetSellerListForBuyer(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword);
 
+    @GET("api/buyer/Seller/GetTopSeller")
+    Call<ArrayList<TopSellerModel>> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword,@Query("categoryId") String categoryId);
 
     @POST("api/Buyer/cateogry/GetCategorybyfilter")
     Call<ArrayList<AllCategoriesModel>> GetCategorybyfilter(@Body PaginationModel paginationModel);
@@ -110,9 +121,6 @@ public interface APIServices {
     @POST("/api/NativeBuyer/ItemList/GetSellerListWithItem")
     Call<SearchMainModel> GetSellerListWithItem(@Body SearchRequestModel paginationModel);
 
-
-    @GET("api/buyer/Seller/GetTopSeller")
-    Call<ArrayList<TopSellerModel>> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword,@Query("categoryId") String categoryId);
 
     @GET("api/NativeProductDetail/GetSellerProductById/{GetSellerProductById}")
     Call<ProductDataModel> GetSellerProductById(@Path("GetSellerProductById") int GetSellerProductById);

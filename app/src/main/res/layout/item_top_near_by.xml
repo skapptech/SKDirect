@@ -5,7 +5,7 @@
     <LinearLayout
         android:id="@+id/ll_top_near_by_seller"
         android:layout_width="150dp"
-        android:layout_height="175dp"
+        android:layout_height="wrap_content"
         android:layout_margin="3dp"
         android:background="@drawable/bg_cardview">
 
@@ -15,16 +15,46 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/iv_image"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="110dp"
-                android:layout_gravity="center"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:layout_marginTop="5dp"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/app_name" />
+                android:layout_height="130dp">
+
+                <ImageView
+                    android:id="@+id/iv_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_top_seller" />
+
+                <LinearLayout
+                    android:id="@+id/ll_no_of_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:visibility="visible"
+                    android:background="@drawable/bg_item_view">
+
+                    <TextView
+                        android:id="@+id/tv_item_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="2dp"
+                        android:drawablePadding="5dp"
+                        android:maxLines="1"
+                        android:text=""
+                        android:textSize="10dp"
+                        android:drawableLeft="@drawable/ic_item_eye" />
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/tv_item_name"
@@ -48,10 +78,52 @@
                 android:maxLines="1"
                 android:padding="2dp"
                 style="@style/font_normal_sami_lite"
-                android:layout_marginBottom="5dp"
+
                 android:text=""
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_messerment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="2dp"
+                style="@style/font_normal_sami_lite"
+
+                android:text=""
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/tv_mrp"
+                    style="@style/font_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12dp" />
+
+
+                <TextView
+                    android:id="@+id/tv_selling_price"
+                    style="@style/font_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    android:textSize="12dp" />
+
+
+            </LinearLayout>
 
         </LinearLayout>
 
