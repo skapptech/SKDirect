@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                     break;
-                case R.id.nav_basket:
+                case R.id.nav_chat:
                     positionChanged = true;
                     openFragment(new BasketFragment());
                     break;

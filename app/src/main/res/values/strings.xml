@@ -41,7 +41,6 @@
     <string name="valid_otp">कृपया मान्य OTP दर्ज करें।</string>
     <string name="enter_otp"> कृपया ओटीपी डालें</string>
     <string name="home">होम</string>
-
     <string name="my_order">मेरे आर्डर</string>
     <string name="basket">बास्केट</string>
     <string name="filter">फ़िल्टर</string>
@@ -62,7 +61,7 @@
     <string name="by_seller">पास का विक्रेता</string>
     <string name="most_visted_seller">सर्वाधिक देखे गए विक्रेता</string>
     <string name="new_seller">नया विक्रेता</string>
-
+    <string name="share_with">Share with</string>
     <string name="clear_all">CLEAR ALL</string>
     <string name="order_tab_all">All</string>
     <string name="order_tab_pending">Pending</string>
