@@ -16,6 +16,8 @@ import com.skdirect.activity.OrderDetailActivity;
 import com.skdirect.activity.ReviewActivity;
 import com.skdirect.databinding.ItemMyOrderBinding;
 import com.skdirect.model.MyOrderModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -25,11 +27,12 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
 
     private final Context context;
     private final ArrayList<MyOrderModel> orderModelArrayList;
-
+    public DBHelper dbHelper;
 
     public MyOrderAdapter(Context context, ArrayList<MyOrderModel> deliveryOptionList) {
         this.context = context;
         this.orderModelArrayList = deliveryOptionList;
+        dbHelper = MyApplication.getInstance().dbHelper;
     }
 
     @NonNull
@@ -41,10 +44,13 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MyOrderAdapter.ViewHolder holder, int position) {
+
+        holder.mBinding.tvAddReview.setHint(dbHelper.getString(R.string.add_review));
+
         MyOrderModel myOrderModel = orderModelArrayList.get(position);
-        holder.mBinding.tvOrderStatus.setText(myOrderModel.getOrderStatus() + " on " + Utils.getDateFormate(myOrderModel.getCreatedDate()));
+        holder.mBinding.tvOrderStatus.setText(myOrderModel.getOrderStatus() + dbHelper.getString(R.string.text_on) + Utils.getDateFormate(myOrderModel.getCreatedDate()));
         holder.mBinding.tvProductName.setText(myOrderModel.getProductName());
-        holder.mBinding.tvOrderNumber.setText("Order No#: " + myOrderModel.getId());
+        holder.mBinding.tvOrderNumber.setText(dbHelper.getString(R.string.text_order_number) + myOrderModel.getId());
         holder.mBinding.tvSaller.setText(myOrderModel.getShopName());
         holder.mBinding.ratingbar.setVisibility(View.GONE);
 

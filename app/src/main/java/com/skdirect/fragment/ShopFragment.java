@@ -131,10 +131,10 @@ public class ShopFragment extends Fragment {
                         }
                     });
                 } else {
-                    loading = false;
-                    mBinding.rvSearch.setVisibility(View.GONE);
-                    mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
-
+                    if (sallerShopList.size() == 0) {
+                        mBinding.rvSearch.setVisibility(View.GONE);
+                        mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });

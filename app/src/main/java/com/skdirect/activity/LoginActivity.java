@@ -49,6 +49,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Binding.btGetOtp.setOnClickListener(this);
         Binding.btLoginWithPassword.setOnClickListener(this);
         Binding.btSkip.setOnClickListener(this);
+        Binding.tvYourno.setText(dbHelper.getString(R.string.what_s_your_number));
+        Binding.etMobileNumber.setHint(dbHelper.getString(R.string.enter_phone_number));
+        Binding.tvOtpMsg.setText(dbHelper.getString(R.string.we_will_send_an_otp_to_nabove_number));
+        Binding.btGetOtp.setText(dbHelper.getString(R.string.get_otp));
+        Binding.btSkip.setText(dbHelper.getString(R.string.skip));
+        Binding.btLoginWithPassword.setText(dbHelper.getString(R.string.login_using_password));
         Binding.etMobileNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent keyEvent) {

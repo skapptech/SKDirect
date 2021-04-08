@@ -23,6 +23,7 @@
     <string name="txt_shop_name">Shop Name</string>
     <string name="txt_delivery">Delivery options:</string>
     <string name="change_language">Change Language</string>
+
     <string name="update_profile">Update Profile</string>
     <string name="please_enter_name">Please Enter Name</string>
     <string name="please_enter_pincode">Please Enter PinCode</string>
@@ -41,7 +42,6 @@
     <string name="valid_otp">Please enter valid OTP.</string>
     <string name="enter_otp">Please Enter OTP</string>
     <string name="home">Home</string>
-    <string name="my_order">My Order</string>
     <string name="basket">Basket</string>
     <string name="select_price_range">Select Price Range</string>
     <string name="cancel">Cancel</string>
@@ -58,5 +58,19 @@
     <string name="near_by_seller">Nearby Seller</string>
     <string name="all_categories">All Categories</string>
     <string name="share_with">Share with</string>
+    <string name="filter">FILTER</string>
+    <string name="clear_all">CLEAR ALL</string>
+    <string name="my_order">My Order</string>
+    <string name="order_tab_all">All</string>
+    <string name="order_tab_pending">Pending</string>
+    <string name="order_tab_accept">Accepted</string>
+    <string name="order_tab_shiped">Shipped</string>
+    <string name="order_tab_delivered">Delivered</string>
+    <string name="order_tab_cancelled">Cancelled</string>
+    <string name="search_order_by_order_id">Search Order by Order Id</string>
+    <string name="no_data_found">NO Data Found</string>
+    <string name="add_review">Add Review</string>
+    <string name="text_on">" on "</string>
+    <string name="text_order_number">"Order No#: "</string>
 
 </resources>

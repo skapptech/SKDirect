@@ -31,6 +31,8 @@ import com.skdirect.model.MyOrderModel;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.OrderModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.MyOrderViewMode;
@@ -55,6 +57,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     private boolean loading = true;
     private MyOrderAdapter myOrderAdapter;
     boolean handled = false;
+    public DBHelper dbHelper;
     public AllOrderFragment(int type) {
         this.type = type;
         handled = false;
@@ -134,7 +137,10 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void initialization() {
-        mBinding.swiperefresh.setOnRefreshListener(this);
+        dbHelper = MyApplication.getInstance().dbHelper;
+        mBinding.etSearchOrder.setHint(dbHelper.getString(R.string.search_order_by_order_id));
+        mBinding.tvNoData.setHint(dbHelper.getString(R.string.no_data_found));
+       // mBinding.swiperefresh.setOnRefreshListener(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, RecyclerView.VERTICAL,false);
         mBinding.rMyOrder.setLayoutManager(layoutManager);
         myOrderAdapter = new MyOrderAdapter(activity, orderModelArrayList);
@@ -186,7 +192,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
         myOrderViewMode.getCategoriesViewModel().observe(this, new Observer<OrderModel>() {
             @Override
             public void onChanged(OrderModel response) {
-                mBinding.swiperefresh.setRefreshing(false);
+                //mBinding.swiperefresh.setRefreshing(false);
                 mBinding.shimmerViewContainer.stopShimmer();
                 mBinding.shimmerViewContainer.setVisibility(View.GONE);
                 mBinding.tlEmptyView.setVisibility(View.GONE);
@@ -210,8 +216,11 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }else
                 {
                     loading = false;
-                    mBinding.tlEmptyView.setVisibility(View.VISIBLE);
-                    mBinding.rMyOrder.setVisibility(View.GONE);
+                    if (orderModelArrayList.size()==0){
+                        mBinding.tlEmptyView.setVisibility(View.VISIBLE);
+                        mBinding.rMyOrder.setVisibility(View.GONE);
+                    }
+
                 }
 
 
