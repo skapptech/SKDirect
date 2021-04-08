@@ -163,8 +163,8 @@ public class ProductDetailsViewMode extends ViewModel {
     }
 
 
-    public MutableLiveData<CartItemModel> getCartItemsVMRequest(String productID) {
-        RestClient.getInstance().getService().GetCartItems(productID).enqueue(new Callback<CartItemModel>() {
+    public MutableLiveData<CartItemModel> getCartItemsVMRequest() {
+        RestClient.getInstance().getService().GetCartItems().enqueue(new Callback<CartItemModel>() {
             @Override
             public void onResponse(Call<CartItemModel> call, Response<CartItemModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {

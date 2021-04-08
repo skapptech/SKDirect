@@ -207,7 +207,7 @@
                             android:maxLength="3"
                             android:padding="5dp"
                             android:text="0"
-                            android:textColor="@color/black"
+                            android:textColor="@color/seller_button_color"
                             android:textSize="15dp"
                             android:textStyle="bold" />
 

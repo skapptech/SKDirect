@@ -237,15 +237,19 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             if (cartSellerId == resultModel.getSellerId()) {
                 mBinding.btAddToCart.setVisibility(View.GONE);
                 mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
+                // add item in cart
                 CartModel cartModel = new CartModel(null, 0, null, resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(), resultModel.getUom(), "", 0, resultModel.getProductName(), 0, 0, resultModel.IsDelete, resultModel.getOffPercentage(), 0, 0, 1, 0, null, resultModel.getSellerId(), 0, 0, 0, resultModel.getMrp(), 0, resultModel.getId());
-                addItemInCart(1, SellerItemID);
                 MyApplication.getInstance().cartRepository.addToCart(cartModel);
+                addItemInCart(1, SellerItemID);
             } else {
                 checkCustomerAlertDialog(cartSellerId);
             }
         } else {
             mBinding.btAddToCart.setVisibility(View.GONE);
             mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
+            // clear cart
+            MyApplication.getInstance().cartRepository.truncateCart();
+            // add item in cart
             CartModel cartModel = new CartModel(null, 0, null, resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(), resultModel.getUom(), "", 0, resultModel.getProductName(), 0, 0, resultModel.IsDelete, resultModel.getOffPercentage(), 0, 0, 1, 0, null, resultModel.getSellerId(), 0, 0, 0, resultModel.getMrp(), 0, resultModel.getId());
             MyApplication.getInstance().cartRepository.addToCart(cartModel);
             addItemInCart(1, SellerItemID);
@@ -273,7 +277,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                     } else {
                         mBinding.llSellarsOtherProducs.setVisibility(View.GONE);
                     }
-                } else {
                 }
             }
         });
@@ -290,18 +293,13 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         mBinding.llSimilarProduct.setVisibility(View.VISIBLE);
                         TopSimilarSellerAdapter topSellerAdapter = new TopSimilarSellerAdapter(ProductDetailsActivity.this, topNearSimilarProduct.getResultItem());
                         mBinding.rvNearByItem.setAdapter(topSellerAdapter);
-
                     } else {
-
                         mBinding.llSimilarProduct.setVisibility(View.GONE);
                     }
                 } else {
-                    Utils.setToast(ProductDetailsActivity.this, topNearSimilarProduct.getErrorMessage());
+                    Utils.setToast(getApplicationContext(), topNearSimilarProduct.getErrorMessage());
                 }
-
-
             }
-
         });
 
     }
@@ -328,7 +326,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     }
 
     private void cartItemsAPI() {
-        productDetailsViewMode.getCartItemsVMRequest("123");
+        productDetailsViewMode.getCartItemsVMRequest();
         productDetailsViewMode.getCartItemsVM().observe(this, model -> {
             Utils.hideProgressDialog();
             Utils.hideProgressDialog();

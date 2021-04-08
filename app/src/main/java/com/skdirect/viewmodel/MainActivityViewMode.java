@@ -34,8 +34,8 @@ public class MainActivityViewMode extends ViewModel {
         return mapViewModel;
     }
 
-    public MutableLiveData<CartItemModel> getCartItemsRequest(String CooKiValue) {
-        RestClient.getInstance().getService().GetCartItem(CooKiValue).enqueue(new Callback<CartItemModel>() {
+    public MutableLiveData<CartItemModel> getCartItemsRequest() {
+        RestClient.getInstance().getService().GetCartItem().enqueue(new Callback<CartItemModel>() {
             @Override
             public void onResponse(Call<CartItemModel> call, Response<CartItemModel> response) {
                 if (response.isSuccessful() && response.body() != null) {

@@ -45,7 +45,7 @@ public class DeliveryOptionAdapter extends RecyclerView.Adapter<DeliveryOptionAd
         if (selectedPosition == position) {
             holder.mBinding.ivSelectOpction.setBackground(context.getResources().getDrawable(R.drawable.correct));
         } else {
-            holder.mBinding.ivSelectOpction.setBackground(context.getResources().getDrawable(R.drawable.ic_right));
+            holder.mBinding.ivSelectOpction.setBackground(context.getResources().getDrawable(R.drawable.ic_un_select));
         }
 
     }
@@ -62,7 +62,7 @@ public class DeliveryOptionAdapter extends RecyclerView.Adapter<DeliveryOptionAd
             super(Binding.getRoot());
             this.mBinding = Binding;
 
-            mBinding.ivSelectOpction.setOnClickListener(new View.OnClickListener() {
+            mBinding.rlChangeDeliveryOpction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int copyOfLastCheckedPosition = selectedPosition;

@@ -8,7 +8,9 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
+import com.skdirect.model.DeliveryMainModel;
 import com.skdirect.model.DeliveryOptionModel;
+import com.skdirect.model.MainLocationModel;
 import com.skdirect.model.OrderPlaceMainModel;
 import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.UserLocationModel;
@@ -22,20 +24,20 @@ import retrofit2.Response;
 
 public class PaymentViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
-    private MutableLiveData<ArrayList<UserLocationModel>> userLocationVM;
-    private MutableLiveData<ArrayList<DeliveryOptionModel>> DeliveryOptionVM;
+    private MutableLiveData<MainLocationModel> userLocationVM;
+    private MutableLiveData<DeliveryMainModel> DeliveryOptionVM;
     private MutableLiveData<JsonObject> checkOutItemVM;
     private MutableLiveData<JsonObject> mapViewModel;
     private MutableLiveData<OrderPlaceMainModel> orderPlaceVM;
     private MutableLiveData<Object> clearCartDataVM;
 
-    public LiveData<ArrayList<UserLocationModel>> getUserLocationVM() {
+    public LiveData<MainLocationModel> getUserLocationVM() {
         userLocationVM=null;
         userLocationVM = new MutableLiveData<>();
         return userLocationVM;
     }
 
-    public LiveData<ArrayList<DeliveryOptionModel>> getDeliveryOptionVM() {
+    public LiveData<DeliveryMainModel> getDeliveryOptionVM() {
         DeliveryOptionVM=null;
         DeliveryOptionVM = new MutableLiveData<>();
         return DeliveryOptionVM;
@@ -65,10 +67,10 @@ public class PaymentViewMode extends ViewModel {
         return clearCartDataVM;
     }
 
-    public MutableLiveData<ArrayList<UserLocationModel>> getUserLocationVMRequest() {
-        RestClient.getInstance().getService().GetUserLocation().enqueue(new Callback<ArrayList<UserLocationModel>>() {
+    public MutableLiveData<MainLocationModel> getUserLocationVMRequest() {
+        RestClient.getInstance().getService().GetUserLocation().enqueue(new Callback<MainLocationModel>() {
             @Override
-            public void onResponse(Call<ArrayList<UserLocationModel>> call, Response<ArrayList<UserLocationModel>> response) {
+            public void onResponse(Call<MainLocationModel> call, Response<MainLocationModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     userLocationVM.setValue(response.body());
@@ -76,7 +78,7 @@ public class PaymentViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<UserLocationModel>> call, Throwable t) {
+            public void onFailure(Call<MainLocationModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + call.toString());
                 Utils.hideProgressDialog();
             }
@@ -85,10 +87,10 @@ public class PaymentViewMode extends ViewModel {
         return userLocationVM;
     }
 
-    public MutableLiveData<ArrayList<DeliveryOptionModel>> getDeliveryOptionVMRequest(String sellerID) {
-        RestClient.getInstance().getService().GetDeliveryOption(sellerID).enqueue(new Callback<ArrayList<DeliveryOptionModel>>() {
+    public MutableLiveData<DeliveryMainModel> getDeliveryOptionVMRequest(int sellerID) {
+        RestClient.getInstance().getService().GetDeliveryOption(sellerID).enqueue(new Callback<DeliveryMainModel>() {
             @Override
-            public void onResponse(Call<ArrayList<DeliveryOptionModel>> call, Response<ArrayList<DeliveryOptionModel>> response) {
+            public void onResponse(Call<DeliveryMainModel> call, Response<DeliveryMainModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     DeliveryOptionVM.setValue(response.body());
@@ -96,7 +98,7 @@ public class PaymentViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<DeliveryOptionModel>> call, Throwable t) {
+            public void onFailure(Call<DeliveryMainModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + t.toString());
                 Utils.hideProgressDialog();
             }
@@ -105,8 +107,8 @@ public class PaymentViewMode extends ViewModel {
         return DeliveryOptionVM;
     }
 
-    public MutableLiveData<JsonObject> getCheckOutItemVMRequest(String sellerID) {
-        RestClient.getInstance().getService().GetCheckOutItem(sellerID).enqueue(new Callback<JsonObject>() {
+    public MutableLiveData<JsonObject> getCheckOutItemVMRequest() {
+        RestClient.getInstance().getService().GetCheckOutItem().enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body()!=null ) {

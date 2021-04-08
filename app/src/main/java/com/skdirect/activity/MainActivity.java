@@ -26,7 +26,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonObject;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
@@ -36,7 +35,6 @@ import com.skdirect.databinding.ActivityMainBinding;
 import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.fragment.BasketFragment;
 import com.skdirect.fragment.HomeFragment;
-import com.skdirect.model.CartItemModel;
 import com.skdirect.utils.AppSignatureHelper;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.GPSTracker;
@@ -63,8 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public TextView userNameTV, mobileNumberTV, setLocationTV;
     private MainActivityViewMode mainActivityViewMode;
     public DBHelper dbHelper;
-    public static CartItemModel cartItemModel;
-    private int itemQuatntiy;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setupBadge();
     }
 
+    @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_FETCH_LANGUAGE)) {
@@ -149,18 +147,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case R.id.nav_profile:
                     positionChanged = true;
-                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
                         startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                    }
-                    else{
+                    } else {
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    }                    break;
+                    }
+                    break;
                 case R.id.nav_my_order:
                     positionChanged = true;
-                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
                         startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
-                    }
-                    else{
+                    } else {
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     }
 
@@ -215,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setlocationInHader() {
-        setLocationTV.setText(Utils.getCityName(this, Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)), Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON))));
+        setLocationTV.setText(Utils.getCityName(this, Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LAT)), Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LON))));
     }
 
     @Override
@@ -256,20 +253,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_profile:
-                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
                     startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                }
-                else{
+                } else {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_chnage_password:
-                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)&&SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
                     startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
-                }
-                else{
+                } else {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
                 mBinding.drawer.closeDrawers();
@@ -306,6 +301,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
     public void clearSharePrefs() {
         sharedPreferences.edit().clear().apply();
     }
@@ -321,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getCartItemApi() {
-        mainActivityViewMode.getCartItemsRequest("123");
+        mainActivityViewMode.getCartItemsRequest();
         mainActivityViewMode.getCartItemsVM().observe(this, model -> {
             System.out.println("SellerId " + model.getSellerId());
             Utils.hideProgressDialog();

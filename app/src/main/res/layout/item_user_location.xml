@@ -17,8 +17,20 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
             android:text=""
-            style="@style/font_normal"
+            style="@style/font_normal_sami_bold"
             android:textColor="@color/black"
+            android:textSize="16dp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/tv_addresh_tree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
+            style="@style/font_normal"
+            android:text=""
+            android:textColor="@color/grid_divder"
             android:textSize="16dp"
             android:textStyle="normal" />
 
@@ -34,17 +46,6 @@
             android:textSize="16dp"
             android:textStyle="normal" />
 
-        <TextView
-            android:id="@+id/tv_addresh_tree"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="5dp"
-            style="@style/font_normal"
-            android:text=""
-            android:textColor="@color/grid_divder"
-            android:textSize="16dp"
-            android:textStyle="normal" />
 
 
 
