@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.adapter.BottomListAdapter;
 import com.skdirect.adapter.ShowImagesAdapter;
@@ -99,6 +100,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             case R.id.tv_shop_name:
                 startActivity(new Intent(getApplicationContext(), SellerProfileActivity.class).putExtra("ID", resultModel.getEncryptSellerId()));
                 break;
+            case R.id.imShare:
+                Utils.shareProduct(this, BuildConfig.apiEndpoint+"/product/"+productID);
+                break;
+
         }
     }
 
@@ -159,7 +164,13 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     }
 
     private void getIntentData() {
-        productID = getIntent().getIntExtra("ID", 0);
+        if (getIntent().getData()!=null){
+            String sharedUrl = getIntent().getData().toString();
+            sharedUrl = sharedUrl.substring(sharedUrl.lastIndexOf("/")+1);
+            productID = Integer.parseInt(sharedUrl);
+        }else{
+            productID = getIntent().getIntExtra("ID", 0);
+        }
     }
 
     private void callProductData() {
@@ -191,6 +202,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private void ClickListener() {
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.toolbarTittle.notifictionCount.setOnClickListener(this);
+        mBinding.toolbarTittle.imShare.setOnClickListener(this);
+        mBinding.toolbarTittle.imShare.setVisibility(View.VISIBLE);
         mBinding.btAddToCart.setOnClickListener(this);
         mBinding.tvQtyPlus.setOnClickListener(this);
         mBinding.tvQtyMinus.setOnClickListener(this);

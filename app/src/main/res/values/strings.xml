@@ -45,4 +45,7 @@
     <string name="cancel">Cancel</string>
     <string name="apply">Apply</string>
     <string name="sort">SORT</string>
+    <string name="whatsapp">Whatsapp</string>
+    <string name="whatsapp_business">Whatsapp Business</string>
+    <string name="share">Share</string>
 </resources>
