@@ -11,18 +11,14 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.JsonArray;
 import com.skdirect.R;
 import com.skdirect.adapter.CategoriesAdapter;
-import com.skdirect.adapter.NearSellerListAdapter;
 import com.skdirect.databinding.ActivityCategoriesListBinding;
-import com.skdirect.databinding.ActivitySallerProductListBinding;
+import com.skdirect.model.AllCategoresMainModel;
 import com.skdirect.model.AllCategoriesModel;
-import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.CategoriesViewMode;
-import com.skdirect.viewmodel.SellerProductListViewMode;
 
 import java.util.ArrayList;
 
@@ -37,6 +33,7 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
     private int totalItemCount = 0;
     private boolean loading = true;
     private CategoriesAdapter categoriesAdapter;
+    private String searchKeybord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,20 +47,21 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
     @Override
     protected void onResume() {
         super.onResume();
-        if (categoriesAdapter!=null){
-            categoriesAdapter = new CategoriesAdapter(getApplicationContext(),allCategoriesList);
+        if (categoriesAdapter != null) {
+            categoriesAdapter = new CategoriesAdapter(getApplicationContext(), allCategoriesList);
             mBinding.rvCategories.setAdapter(categoriesAdapter);
             categoriesAdapter.notifyDataSetChanged();
         }
     }
+
     private void initView() {
         mBinding.toolbarTittle.tvTittle.setText("Categories List");
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.shimmerViewContainer.startShimmer();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL,false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         mBinding.rvCategories.setLayoutManager(layoutManager);
-        categoriesAdapter = new CategoriesAdapter(getApplicationContext(),allCategoriesList);
+        categoriesAdapter = new CategoriesAdapter(getApplicationContext(), allCategoriesList);
         mBinding.rvCategories.setAdapter(categoriesAdapter);
 
         mBinding.rvCategories.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -82,8 +80,8 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
                     if (loading) {
                         if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
                             loading = false;
-                            skipCount=skipCount+10;
-                           // mBinding.progressBar.setVisibility(View.VISIBLE);
+                            skipCount = skipCount + 10;
+                            // mBinding.progressBar.setVisibility(View.VISIBLE);
                             callProductList();
                         }
                     }
@@ -93,6 +91,7 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
         allCategoriesList.clear();
 
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -112,26 +111,28 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
 
 
     private void getProductListAPI() {
-        PaginationModel paginationModel = new PaginationModel(skipCount,takeCount,0,"",true);
+        PaginationModel paginationModel = new PaginationModel(skipCount, takeCount, true);
         categoriesViewMode.getCategoriesViewModelRequest(paginationModel);
-        categoriesViewMode.getCategoriesViewModel().observe(this, new Observer<ArrayList<AllCategoriesModel>>() {
+        categoriesViewMode.getCategoriesViewModel().observe(this, new Observer<AllCategoresMainModel>() {
             @Override
-            public void onChanged(ArrayList<AllCategoriesModel> CategoriesList) {
-                mBinding.shimmerViewContainer.stopShimmer();
-                mBinding.shimmerViewContainer.setVisibility(View.GONE);
-                if (CategoriesList.size()>0){
+            public void onChanged(AllCategoresMainModel allCategoresMainModel) {
+                if (allCategoresMainModel!= null && allCategoresMainModel.isSuccess()) {
+                    mBinding.shimmerViewContainer.stopShimmer();
+                    mBinding.shimmerViewContainer.setVisibility(View.GONE);
+                    if (allCategoresMainModel.getResultItem() != null && allCategoresMainModel.getResultItem().size() > 0) {
+                        mBinding.rvCategories.post(new Runnable() {
+                            public void run() {
+                                allCategoriesList.addAll(allCategoresMainModel.getResultItem());
+                                categoriesAdapter.notifyDataSetChanged();
+                                loading = true;
+                            }
+                        });
+                    } else {
+                        loading = false;
+                        if (allCategoriesList.size() == 0) {
 
-                    mBinding.rvCategories.post(new Runnable() {
-                        public void run() {
-                            allCategoriesList.addAll(CategoriesList);
-                            categoriesAdapter.notifyDataSetChanged();
-                            loading = true;
                         }
-                    });
-
-                }else
-                {
-                    loading = false;
+                    }
                 }
             }
         });
