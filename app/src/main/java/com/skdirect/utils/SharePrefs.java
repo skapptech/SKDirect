@@ -53,6 +53,7 @@ public class SharePrefs {
     public static final String SELECTED_LANGUAGE ="selectedLanguage";
     public static final String IS_FETCH_LANGUAGE = "is_fetch_language";
     public static final String LAST_LANGUAGE_UPDATE_DATE = "last_language_update_date";
+    public static final String FILTER_CATEGORY_LIST = "filter_category_list";
 
 
     private Context ctx;

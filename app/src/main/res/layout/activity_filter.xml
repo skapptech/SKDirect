@@ -76,7 +76,20 @@
                 android:background="@color/white"
                 android:visibility="gone"
                 android:layout_weight="0.6" />
-
+            <TextView
+                android:id="@+id/tv_no_data"
+                style="@style/font_normal_sami_bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="0.6"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:visibility="visible"
+                android:padding="2dp"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
             <LinearLayout
                 android:id="@+id/price_filter"
                 android:layout_width="0dp"
@@ -86,7 +99,7 @@
                 android:orientation="vertical"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_filter_type"

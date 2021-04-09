@@ -7,20 +7,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.skdirect.api.RestClient;
-import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.NearBySellerMainModel;
-import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.PaginationModel;
-import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.utils.Utils;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SellerProductListViewMode extends ViewModel {
+public class MostVisitedViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
 
     private MutableLiveData<NearBySellerMainModel> sellerProductListVM;
@@ -32,7 +27,7 @@ public class SellerProductListViewMode extends ViewModel {
     }
 
     public MutableLiveData<NearBySellerMainModel> getSellerProductListRequest(PaginationModel paginationModel) {
-        RestClient.getInstance().getService().GetSellerListForBuyer(paginationModel).enqueue(new Callback<NearBySellerMainModel>() {
+        RestClient.getInstance().getService().GetMostVisitedSellerFilter(paginationModel).enqueue(new Callback<NearBySellerMainModel>() {
             @Override
             public void onResponse(Call<NearBySellerMainModel> call, Response<NearBySellerMainModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {

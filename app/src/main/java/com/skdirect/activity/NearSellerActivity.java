@@ -12,34 +12,36 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.R;
-import com.skdirect.adapter.CategoriesAdapter;
-import com.skdirect.databinding.ActivityCategoriesListBinding;
-import com.skdirect.model.AllCategoresMainModel;
-import com.skdirect.model.AllCategoriesModel;
+import com.skdirect.adapter.NearSellerListAdapter;
+import com.skdirect.databinding.ActivityNearSalleBinding;
+import com.skdirect.databinding.ActivitySallerProductListBinding;
+import com.skdirect.model.NearBySallerModel;
+import com.skdirect.model.NearBySellerMainModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.utils.Utils;
-import com.skdirect.viewmodel.CategoriesViewMode;
+import com.skdirect.viewmodel.NearSellerViewMode;
+import com.skdirect.viewmodel.SellerProductListViewMode;
 
 import java.util.ArrayList;
 
-public class CategoriesListActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivityCategoriesListBinding mBinding;
-    private CategoriesViewMode categoriesViewMode;
-    private final ArrayList<AllCategoriesModel> allCategoriesList = new ArrayList<>();
+public class NearSellerActivity extends AppCompatActivity implements View.OnClickListener {
+    private ActivityNearSalleBinding mBinding;
+    private NearSellerViewMode NearSellerViewMode;
+    private final ArrayList<NearBySallerModel> nearBySallerList = new ArrayList<>();
     private int skipCount = 0;
     private int takeCount = 10;
     private int pastVisiblesItems = 0;
     private int visibleItemCount = 0;
     private int totalItemCount = 0;
     private boolean loading = true;
-    private CategoriesAdapter categoriesAdapter;
-    private String searchKeybord;
+    private String SearchKeybard;
+    private NearSellerListAdapter nearSellerListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_categories_list);
-        categoriesViewMode = ViewModelProviders.of(this).get(CategoriesViewMode.class);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_near_salle);
+        NearSellerViewMode = ViewModelProviders.of(this).get(NearSellerViewMode.class);
         initView();
         callProductList();
     }
@@ -47,24 +49,23 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
     @Override
     protected void onResume() {
         super.onResume();
-        if (categoriesAdapter != null) {
-            categoriesAdapter = new CategoriesAdapter(getApplicationContext(), allCategoriesList);
-            mBinding.rvCategories.setAdapter(categoriesAdapter);
-            categoriesAdapter.notifyDataSetChanged();
+        if (nearSellerListAdapter!=null){
+            nearSellerListAdapter = new NearSellerListAdapter(this,nearBySallerList);
+            mBinding.rvSellerProduct.setAdapter(nearSellerListAdapter);
+            nearSellerListAdapter.notifyDataSetChanged();
         }
     }
-
     private void initView() {
-        mBinding.toolbarTittle.tvTittle.setText("Categories List");
-        mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.shimmerViewContainer.startShimmer();
+        mBinding.toolbarTittle.tvTittle.setText("Seller List");
+        mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
-        mBinding.rvCategories.setLayoutManager(layoutManager);
-        categoriesAdapter = new CategoriesAdapter(getApplicationContext(), allCategoriesList);
-        mBinding.rvCategories.setAdapter(categoriesAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL,false);
+        mBinding.rvSellerProduct.setLayoutManager(layoutManager);
+        nearSellerListAdapter = new NearSellerListAdapter(getApplicationContext(),nearBySallerList);
+        mBinding.rvSellerProduct.setAdapter(nearSellerListAdapter);
 
-        mBinding.rvCategories.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mBinding.rvSellerProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -80,18 +81,17 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
                     if (loading) {
                         if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
                             loading = false;
-                            skipCount = skipCount + 10;
-                            // mBinding.progressBar.setVisibility(View.VISIBLE);
+                            skipCount=skipCount+10;
+                           // mBinding.progressBar.setVisibility(View.VISIBLE);
                             callProductList();
                         }
                     }
                 }
             }
         });
-        allCategoriesList.clear();
+        nearBySallerList.clear();
 
     }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -111,29 +111,27 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
 
 
     private void getProductListAPI() {
-        PaginationModel paginationModel = new PaginationModel(skipCount, takeCount, true);
-        categoriesViewMode.getCategoriesViewModelRequest(paginationModel);
-        categoriesViewMode.getCategoriesViewModel().observe(this, new Observer<AllCategoresMainModel>() {
+        NearSellerViewMode.getSellerProductListRequest(new PaginationModel(skipCount,takeCount,SearchKeybard));
+        NearSellerViewMode.getSellerProductListVM().observe(this, new Observer<NearBySellerMainModel>() {
             @Override
-            public void onChanged(AllCategoresMainModel allCategoresMainModel) {
-                if (allCategoresMainModel!= null && allCategoresMainModel.isSuccess()) {
+            public void onChanged(NearBySellerMainModel nearBySaller) {
+                if (nearBySaller.isSuccess()){
                     mBinding.shimmerViewContainer.stopShimmer();
                     mBinding.shimmerViewContainer.setVisibility(View.GONE);
-                    if (allCategoresMainModel.getResultItem() != null && allCategoresMainModel.getResultItem().size() > 0) {
-                        mBinding.rvCategories.post(new Runnable() {
+                    if (nearBySaller.getResultItem().size()>0){
+                        mBinding.rvSellerProduct.post(new Runnable() {
                             public void run() {
-                                allCategoriesList.addAll(allCategoresMainModel.getResultItem());
-                                categoriesAdapter.notifyDataSetChanged();
+                                nearBySallerList.addAll(nearBySaller.getResultItem());
+                                nearSellerListAdapter.notifyDataSetChanged();
                                 loading = true;
                             }
                         });
-                    } else {
+                    }else
+                    {
                         loading = false;
-                        if (allCategoriesList.size() == 0) {
-
-                        }
                     }
                 }
+
             }
         });
     }

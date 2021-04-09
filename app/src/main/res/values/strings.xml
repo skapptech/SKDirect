@@ -79,5 +79,8 @@
     <string name="available_offers">Available Offers</string>
     <string name="no_offer_found">No offer found</string>
     <string name="enter_your_mobno">Enter Your Mobile Number</string>
-
+    <string name="no_filter_categories">No Category</string>
+    <string name="no_filter_price">No Price</string>
+    <string name="no_filter_brands">No Brands</string>
+    <string name="no_filter_discount">No Discount</string>
 </resources>
