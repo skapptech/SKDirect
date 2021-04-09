@@ -22,7 +22,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.skdirect.R;
 import com.skdirect.activity.CategoriesListActivity;
 import com.skdirect.activity.MainActivity;
+import com.skdirect.activity.MostVisitedSellerActivity;
 import com.skdirect.activity.NearByItemProductListActivity;
+import com.skdirect.activity.NearSellerActivity;
+import com.skdirect.activity.NewSellerActivity;
 import com.skdirect.activity.SearchActivity;
 import com.skdirect.activity.SellerProductListActivity;
 import com.skdirect.adapter.AllCategoriesAdapter;
@@ -311,6 +314,23 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             Utils.setToast(activity, "No Internet Connection Please connect.");
         }
 
+        viewAllButtonClick();
+
+        mBinding.etSearchSeller.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    searchData();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
+    }
+
+    private void viewAllButtonClick() {
         mBinding.tvNearByViewAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -332,18 +352,26 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         });
 
-        mBinding.etSearchSeller.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mBinding.tvNearSellerTwo.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    searchData();
-                    handled = true;
-                }
-                return handled;
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), NearSellerActivity.class));
             }
         });
 
+        mBinding.tvMostVisitedSeller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), MostVisitedSellerActivity.class));
+            }
+        });
+
+        mBinding.tvNewSeller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), NewSellerActivity.class));
+            }
+        });
     }
 
     private void searchData() {

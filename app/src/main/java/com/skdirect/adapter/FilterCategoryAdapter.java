@@ -16,16 +16,17 @@ import com.skdirect.databinding.ItemsFilterCategoryBinding;
 import com.skdirect.databinding.ItemsFilterTypeBinding;
 import com.skdirect.interfacee.FilterCategoryInterface;
 import com.skdirect.interfacee.FilterTypeInterface;
+import com.skdirect.model.FilterCategoryDetails;
 
 import java.util.ArrayList;
 
 public class FilterCategoryAdapter extends RecyclerView.Adapter<FilterCategoryAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<String>filterTypelist;
+    private ArrayList<FilterCategoryDetails>filterTypelist;
     private int lastSelectedPosition = 0;
     private final FilterCategoryInterface filterCategoryInterface;
-    public FilterCategoryAdapter(Context context, ArrayList<String> filterTypelist,FilterCategoryInterface filterCategoryInterface) {
+    public FilterCategoryAdapter(Context context, ArrayList<FilterCategoryDetails> filterTypelist,FilterCategoryInterface filterCategoryInterface) {
         this.context = context;
         this.filterTypelist = filterTypelist;
         this.filterCategoryInterface = filterCategoryInterface;
@@ -40,11 +41,11 @@ public class FilterCategoryAdapter extends RecyclerView.Adapter<FilterCategoryAd
 
     @Override
     public void onBindViewHolder(@NonNull FilterCategoryAdapter.ViewHolder holder, int position) {
-        holder.mBinding.tvFilterCategoryName.setText(filterTypelist.get(position));
+        holder.mBinding.tvFilterCategoryName.setText(filterTypelist.get(position).getLabel());
         holder.mBinding.itemSelect.setChecked(lastSelectedPosition == position);
         if(position == lastSelectedPosition){
             holder.mBinding.itemSelect.setChecked(true);
-            filterCategoryInterface.clickFilterCategoryInterface(filterTypelist.get(position),position);
+            filterCategoryInterface.clickFilterCategoryInterface(filterTypelist.get(position).getValue(),position);
         }
         else {
             holder.mBinding.itemSelect.setChecked(false);

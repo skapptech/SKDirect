@@ -12,26 +12,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.R;
-import com.skdirect.adapter.NearProductListAdapter;
 import com.skdirect.adapter.NearSellerListAdapter;
-import com.skdirect.databinding.ActivityProductListBinding;
-import com.skdirect.databinding.ActivitySallerProductListBinding;
+import com.skdirect.databinding.ActivityMostVisitedSalleBinding;
+import com.skdirect.databinding.ActivityNearSalleBinding;
+import com.skdirect.databinding.ActivityNewSalleBinding;
 import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.NearBySellerMainModel;
-import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.PaginationModel;
-import com.skdirect.utils.DBHelper;
-import com.skdirect.utils.MyApplication;
-import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.utils.Utils;
-import com.skdirect.viewmodel.NearProductListViewMode;
-import com.skdirect.viewmodel.SellerProductListViewMode;
+import com.skdirect.viewmodel.MostVisitedViewMode;
+import com.skdirect.viewmodel.NewSellerViewMode;
 
 import java.util.ArrayList;
 
-public class SellerProductListActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivitySallerProductListBinding mBinding;
-    private SellerProductListViewMode sellerProductListViewMode;
+public class NewSellerActivity extends AppCompatActivity implements View.OnClickListener {
+    private ActivityNewSalleBinding mBinding;
+    private NewSellerViewMode newSellerViewMode;
     private final ArrayList<NearBySallerModel> nearBySallerList = new ArrayList<>();
     private int skipCount = 0;
     private int takeCount = 10;
@@ -41,13 +37,12 @@ public class SellerProductListActivity extends AppCompatActivity implements View
     private boolean loading = true;
     private String SearchKeybard;
     private NearSellerListAdapter nearSellerListAdapter;
-    DBHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_saller_product_list);
-        sellerProductListViewMode = ViewModelProviders.of(this).get(SellerProductListViewMode.class);
-        dbHelper = MyApplication.getInstance().dbHelper;
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_new_salle);
+        newSellerViewMode = ViewModelProviders.of(this).get(NewSellerViewMode.class);
         initView();
         callProductList();
     }
@@ -63,7 +58,7 @@ public class SellerProductListActivity extends AppCompatActivity implements View
     }
     private void initView() {
         mBinding.shimmerViewContainer.startShimmer();
-        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.seller_list));
+        mBinding.toolbarTittle.tvTittle.setText("Seller List");
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL,false);
@@ -111,14 +106,14 @@ public class SellerProductListActivity extends AppCompatActivity implements View
         if (Utils.isNetworkAvailable(getApplicationContext())) {
             getProductListAPI();
         } else {
-            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
+            Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
         }
     }
 
 
     private void getProductListAPI() {
-        sellerProductListViewMode.getSellerProductListRequest(new PaginationModel(skipCount,takeCount,SearchKeybard));
-        sellerProductListViewMode.getSellerProductListVM().observe(this, new Observer<NearBySellerMainModel>() {
+        newSellerViewMode.getSellerProductListRequest(new PaginationModel(skipCount,takeCount,SearchKeybard));
+        newSellerViewMode.getSellerProductListVM().observe(this, new Observer<NearBySellerMainModel>() {
             @Override
             public void onChanged(NearBySellerMainModel nearBySaller) {
                 if (nearBySaller.isSuccess()){

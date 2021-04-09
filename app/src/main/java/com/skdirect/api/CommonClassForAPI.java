@@ -7,6 +7,8 @@ import androidx.annotation.RequiresApi;
 
 import com.google.gson.JsonObject;
 import com.skdirect.model.CommonResponseModel;
+import com.skdirect.model.MallMainModelListResult;
+import com.skdirect.model.MallMainPriceModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.TokenModel;
@@ -174,6 +176,8 @@ public class CommonClassForAPI {
                 });
     }
 
+
+
     public void applyCoupon(final DisposableObserver observer, int couponId) {
         RestClient.getInstance().getService().applyCoupon(couponId)
                 .subscribeOn(Schedulers.io())
@@ -185,6 +189,58 @@ public class CommonClassForAPI {
 
                     @Override
                     public void onNext(@NotNull CommonResponseModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void getFilterCategoryResult(final DisposableObserver<MallMainModelListResult> observer) {
+        RestClient.getInstance().getService().getFilterCategory()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MallMainModelListResult>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull MallMainModelListResult o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void getFilterPriceRangeResult(final DisposableObserver<MallMainPriceModel> observer,int CategoryId) {
+        RestClient.getInstance().getService().getFilterPriceRange(CategoryId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MallMainPriceModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull MallMainPriceModel o) {
                         observer.onNext(o);
                     }
 
