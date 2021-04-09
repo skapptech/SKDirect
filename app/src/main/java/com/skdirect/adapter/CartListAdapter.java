@@ -13,6 +13,7 @@ import com.skdirect.R;
 import com.skdirect.databinding.ItemCartListBinding;
 import com.skdirect.interfacee.CartItemInterface;
 import com.skdirect.model.CartModel;
+import com.skdirect.utils.MyApplication;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -40,9 +41,10 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
     public void onBindViewHolder(@NonNull CartListAdapter.ViewHolder holder, int position) {
         CartModel cartModel = cartItemList.get(position);
         holder.mBinding.tvProductName.setText(cartModel.getProductName());
-        holder.mBinding.tvSellerName.setText("Seller: " + cartModel.getShopName());
+        holder.mBinding.tvSellerName.setText(MyApplication.getInstance().dbHelper.getString(R.string.seller_a)+" "+ cartModel.getShopName());
         holder.mBinding.tvMrp.setText("₹ " + cartModel.getPrice());
         holder.mBinding.tvSelectedQty.setText("" + cartModel.getQuantity());
+        holder.mBinding.tvRomove.setText(MyApplication.getInstance().dbHelper.getString(R.string.remove));
 
         if (cartModel.getImagePath() != null && !cartModel.getImagePath().contains("http")) {
             Picasso.get().load(BuildConfig.apiEndpoint + cartModel.getImagePath()).into(holder.mBinding.imItemImage);

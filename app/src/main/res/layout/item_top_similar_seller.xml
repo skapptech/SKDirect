@@ -60,7 +60,7 @@
             android:gravity="center"
             android:maxLines="1"
             android:padding="2dp"
-            android:text="bhagwan"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="11sp" />
 
@@ -89,7 +89,7 @@
                 style="@style/font_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="599"
+                android:text=""
                 android:textSize="12dp" />
 
 
@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="599"
+                android:text=""
                 android:textSize="12dp" />
 
 
