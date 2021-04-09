@@ -17,8 +17,10 @@ import com.skdirect.adapter.NearSellerListAdapter;
 import com.skdirect.databinding.ActivityProductListBinding;
 import com.skdirect.databinding.ActivitySallerProductListBinding;
 import com.skdirect.model.NearBySallerModel;
+import com.skdirect.model.NearBySellerMainModel;
 import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.PaginationModel;
+import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.NearProductListViewMode;
 import com.skdirect.viewmodel.SellerProductListViewMode;
@@ -35,6 +37,7 @@ public class SellerProductListActivity extends AppCompatActivity implements View
     private int visibleItemCount = 0;
     private int totalItemCount = 0;
     private boolean loading = true;
+    private String SearchKeybard;
     private NearSellerListAdapter nearSellerListAdapter;
 
     @Override
@@ -111,25 +114,27 @@ public class SellerProductListActivity extends AppCompatActivity implements View
 
 
     private void getProductListAPI() {
-        sellerProductListViewMode.getSellerProductListRequest(skipCount,takeCount,"");
-        sellerProductListViewMode.getSellerProductListVM().observe(this, new Observer<ArrayList<NearBySallerModel>>() {
+        sellerProductListViewMode.getSellerProductListRequest(new PaginationModel(skipCount,takeCount,SearchKeybard));
+        sellerProductListViewMode.getSellerProductListVM().observe(this, new Observer<NearBySellerMainModel>() {
             @Override
-            public void onChanged(ArrayList<NearBySallerModel> nearBySaller) {
-                mBinding.shimmerViewContainer.stopShimmer();
-                mBinding.shimmerViewContainer.setVisibility(View.GONE);
-                if (nearBySaller.size()>0){
-
-                    mBinding.rvSellerProduct.post(new Runnable() {
-                        public void run() {
-                            nearBySallerList.addAll(nearBySaller);
-                            nearSellerListAdapter.notifyDataSetChanged();
-                            loading = true;
-                        }
-                    });
-                }else
-                {
-                    loading = false;
+            public void onChanged(NearBySellerMainModel nearBySaller) {
+                if (nearBySaller.isSuccess()){
+                    mBinding.shimmerViewContainer.stopShimmer();
+                    mBinding.shimmerViewContainer.setVisibility(View.GONE);
+                    if (nearBySaller.getResultItem().size()>0){
+                        mBinding.rvSellerProduct.post(new Runnable() {
+                            public void run() {
+                                nearBySallerList.addAll(nearBySaller.getResultItem());
+                                nearSellerListAdapter.notifyDataSetChanged();
+                                loading = true;
+                            }
+                        });
+                    }else
+                    {
+                        loading = false;
+                    }
                 }
+
             }
         });
     }

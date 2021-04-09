@@ -18,6 +18,7 @@ import com.skdirect.R;
 import com.skdirect.adapter.NearProductListAdapter;
 import com.skdirect.adapter.TopNearByItemAdapter;
 import com.skdirect.databinding.ActivityProductListBinding;
+import com.skdirect.model.NearProductListMainModel;
 import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.TopNearByItemModel;
@@ -47,6 +48,7 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
     private NearProductListAdapter nearProductListAdapter;
     private final int  REQUEST = 100;
     public DBHelper dbHelper;
+    public String searchKeyBord;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,25 +154,26 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
 
 
     private void getProductListAPI() {
-        PaginationModel paginationModel = new PaginationModel(0,0,0,skipCount,takeCount,0.0,0.0,0,"");
+        PaginationModel paginationModel = new PaginationModel(skipCount,takeCount,searchKeyBord);
         nearProductListViewMode.getNearProductListRequest(paginationModel);
-        nearProductListViewMode.getNearProductList().observe(this, new Observer<ArrayList<NearProductListModel>>() {
+        nearProductListViewMode.getNearProductList().observe(this, new Observer<NearProductListMainModel>() {
             @Override
-            public void onChanged(ArrayList<NearProductListModel> nearProductListList) {
-                mBinding.shimmerViewContainer.stopShimmer();
-                mBinding.shimmerViewContainer.setVisibility(View.GONE);
-                if (nearProductListList.size()>0){
-                    mBinding.rvNearByProduct.post(new Runnable() {
-                        public void run() {
-                            nearProductList.addAll(nearProductListList);
-                            nearProductListAdapter.notifyDataSetChanged();
-                            loading = true;
-                        }
-                    });
+            public void onChanged(NearProductListMainModel nearProductListList) {
+                if (nearProductListList.isSuccess()) {
+                    mBinding.shimmerViewContainer.stopShimmer();
+                    mBinding.shimmerViewContainer.setVisibility(View.GONE);
+                    if (nearProductListList.getResultItem().size() > 0) {
+                        mBinding.rvNearByProduct.post(new Runnable() {
+                            public void run() {
+                                nearProductList.addAll(nearProductListList.getResultItem());
+                                nearProductListAdapter.notifyDataSetChanged();
+                                loading = true;
+                            }
+                        });
 
-                }else
-                {
-                    loading = false;
+                    } else {
+                        loading = false;
+                    }
                 }
             }
         });

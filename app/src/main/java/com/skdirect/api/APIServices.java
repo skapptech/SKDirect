@@ -8,7 +8,6 @@ import com.skdirect.model.AddReviewModel;
 import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.AddViewModel;
 import com.skdirect.model.AllCategoresMainModel;
-import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.AppVersionModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CartMainModel;
@@ -28,8 +27,8 @@ import com.skdirect.model.MallMainModelListResult;
 import com.skdirect.model.MallMainPriceModel;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.NearByMainModel;
-import com.skdirect.model.NearBySallerModel;
-import com.skdirect.model.NearProductListModel;
+import com.skdirect.model.NearBySellerMainModel;
+import com.skdirect.model.NearProductListMainModel;
 import com.skdirect.model.OrderDetailsModel;
 import com.skdirect.model.OrderItemModel;
 import com.skdirect.model.OrderModel;
@@ -46,7 +45,6 @@ import com.skdirect.model.SellerDetailsModel;
 import com.skdirect.model.SellerProductMainModel;
 import com.skdirect.model.SellerProfileDataModel;
 import com.skdirect.model.TokenModel;
-import com.skdirect.model.TopNearByItemModel;
 import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.UpdateProfilePostModel;
@@ -106,24 +104,34 @@ public interface APIServices {
     @GET("api/NativeBuyer/AppHome/GetTopCategory")
     Call<AllCategoresMainModel> GetTopCategory();
 
-
+    /*APP Home Filter*/
 
     @POST("api/NativeBuyer/AppHomeFilter/GetNearByItemFilter")
-    Call<ArrayList<NearProductListModel>> getNearItem(@Body PaginationModel paginationModel);
+    Call<NearProductListMainModel> getNearItem(@Body PaginationModel paginationModel);
 
-    @GET("api/buyer/Seller/GetSellerListForBuyer")
-    Call<ArrayList<NearBySallerModel>> GetSellerListForBuyer(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword);
+    @POST("api/NativeBuyer/AppHomeFilter/GetTopSellerFilter")
+    Call<NearBySellerMainModel> GetSellerListForBuyer(@Body PaginationModel paginationModel);
+
+    @POST("api/NativeBuyer/AppHomeFilter/GetCategorybyfilter")
+    Call<AllCategoresMainModel> GetCategorybyfilter(@Body PaginationModel paginationModel);
+
+    @POST("api/NativeBuyer/AppHomeFilter/GetNearBySellerFilter")
+    Call<NearBySellerMainModel> GetNearBySellerFilter(@Body PaginationModel paginationModel);
+
+    @POST("api/NativeBuyer/AppHomeFilter/GetMostVisitedSellerFilter")
+    Call<NearBySellerMainModel> GetMostVisitedSellerFilter(@Body PaginationModel paginationModel);
+
+    @POST("api/NativeBuyer/AppHomeFilter/GetNewSellerFilter")
+    Call<NearBySellerMainModel> GetNewSellerFilter(@Body PaginationModel paginationModel);
+
 
     @GET("api/buyer/Seller/GetTopSeller")
-    Call<ArrayList<TopSellerModel>> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword,@Query("categoryId") String categoryId);
-
-    @POST("api/Buyer/cateogry/GetCategorybyfilter")
-    Call<ArrayList<AllCategoriesModel>> GetCategorybyfilter(@Body PaginationModel paginationModel);
+    Call<ArrayList<TopSellerModel>> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword, @Query("categoryId") String categoryId);
 
     @POST("/api/NativeBuyer/ItemList/GetSellerListWithItem")
     Call<SearchMainModel> GetSellerListWithItem(@Body SearchRequestModel paginationModel);
 
-    
+
     @GET("api/NativeProductDetail/GetSellerProductById/{GetSellerProductById}")
     Call<ProductDataModel> GetSellerProductById(@Path("GetSellerProductById") int GetSellerProductById);
 

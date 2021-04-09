@@ -41,9 +41,9 @@ public class NearSellerListAdapter extends RecyclerView.Adapter<NearSellerListAd
     @Override
     public void onBindViewHolder(@NonNull NearSellerListAdapter.ViewHolder holder, int position) {
         NearBySallerModel  nearBySallerModel = nearBySallerList.get(position);
-        holder.mBinding.tvSallerName.setText(nearBySallerModel.getFirstName());
+        holder.mBinding.tvSallerName.setText(nearBySallerModel.getShopName());
         holder.mBinding.tvSallerCity.setText(nearBySallerModel.getCity());
-        holder.mBinding.tvSallerState.setText(nearBySallerModel.getState());
+        holder.mBinding.tvSallerState.setText(nearBySallerModel.getState()+" "+nearBySallerModel.getPincode());
 
 
         if (nearBySallerModel.getImagePath()!=null && !nearBySallerModel.getImagePath().contains("http")) {
@@ -56,7 +56,7 @@ public class NearSellerListAdapter extends RecyclerView.Adapter<NearSellerListAd
             @Override
             public void onClick(View view) {
                 Intent menuIntent = new Intent(context, SellerProfileActivity.class);
-                menuIntent.putExtra("ID",nearBySallerModel.getEncryptedId());
+                menuIntent.putExtra("ID",nearBySallerModel.getId());
                 context.startActivity(menuIntent);
             }
         });
