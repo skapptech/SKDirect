@@ -203,4 +203,5 @@
     <string name="detail">Detail</string>
     <string name="qty">Qty :</string>
     <string name="no_record_found">No Record Found</string>
+    <string name="language_code">hi</string>
 </resources>

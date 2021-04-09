@@ -6,6 +6,7 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.google.gson.JsonObject;
+import com.skdirect.R;
 import com.skdirect.model.CommonResponseModel;
 import com.skdirect.model.MallMainModelListResult;
 import com.skdirect.model.MallMainPriceModel;
@@ -48,7 +49,8 @@ public class CommonClassForAPI {
     }
 
     public void getToken(final DisposableObserver observer, String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp, boolean isDevice, String deviceID, double lat, double log, String pincode) {
-        RestClient.getInstance().getService().getToken(password, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp, isDevice, deviceID, lat, log, pincode)
+        RestClient.getInstance().getService().getToken(password, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp, isDevice, deviceID, lat, log, pincode,
+                MyApplication.getInstance().dbHelper.getString(R.string.language_code))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<TokenModel>() {

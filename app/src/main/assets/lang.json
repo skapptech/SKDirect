@@ -1,6 +1,7 @@
 {
   "Language": {
     "हिंदी": {
+      "language_code": "hi",
       "guest_user": "गेस्ट यूजर",
       "logout": "लॉग आउट",
       "profile": "प्रोफ़ाइल",
@@ -205,6 +206,7 @@
       "no_record_found": "No Record Found"
     },
     "English": {
+      "language_code": "en",
       "guest_user": "Guest User",
       "logout": "Log Out",
       "profile": "Profile",
