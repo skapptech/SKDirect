@@ -193,4 +193,14 @@
     <string name="no_filter_price">No Price</string>
     <string name="no_filter_brands">No Brands</string>
     <string name="no_filter_discount">No Discount</string>
+    <string name="location">Location</string>
+    <string name="remove">Remove</string>
+    <string name="seller_a">Seller:</string>
+    <string name="inr">INR</string>
+    <string name="off_upto_inr">OFF upto INR</string>
+    <string name="on_order_of">"on order of "</string>
+    <string name="or_above">or above</string>
+    <string name="detail">Detail</string>
+    <string name="qty">Qty :</string>
+    <string name="no_record_found">No Record Found</string>
 </resources>

@@ -18,6 +18,7 @@ import com.skdirect.databinding.ItemCategoriesBinding;
 import com.skdirect.databinding.ItemSearchBinding;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.SearchDataModel;
+import com.skdirect.utils.MyApplication;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class SearchDataAdapter extends RecyclerView.Adapter<SearchDataAdapter.Vi
     public void onBindViewHolder(@NonNull SearchDataAdapter.ViewHolder holder, int position) {
         SearchDataModel.TableOneTwo model = list.get(position);
         holder.mBinding.tvSaller.setText(model.getShopName());
+        holder.mBinding.tvViewMore.setText(MyApplication.getInstance().dbHelper.getString(R.string.view_more));
         holder.mBinding.tvCityName.setText(model.getCityName()+" - "+ model.getPinCode());
 
         if (model.getDistance()!=0.0) {

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.skdirect.R;
 import com.skdirect.databinding.ItemCouponListBinding;
 import com.skdirect.model.response.CouponResponse;
+import com.skdirect.utils.MyApplication;
 
 import java.util.ArrayList;
 
@@ -34,9 +35,10 @@ public class CouponListAdapter extends RecyclerView.Adapter<CouponListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull CouponListAdapter.ViewHolder holder, int position) {
         CouponResponse.Coupon model = list.get(position);
+        holder.mBinding.btnApply.setText(MyApplication.getInstance().dbHelper.getString(R.string.apply));
         holder.mBinding.tvName.setText(model.getCouponName());
-        holder.mBinding.tvDes.setText("INR " + model.getAmount() + "OFF upto INR " + model.getMaxAmount());
-        holder.mBinding.tvTerms.setText("INR " + model.getAmount() + "OFF upto INR " + model.getMaxAmount() + " on order of " + model.getMaxAmount() + " or above");
+        holder.mBinding.tvDes.setText(MyApplication.getInstance().dbHelper.getString(R.string.inr) +" "+ model.getAmount() + " "+ MyApplication.getInstance().dbHelper.getString(R.string.off_upto_inr) +" "+ model.getMaxAmount());
+        holder.mBinding.tvTerms.setText(MyApplication.getInstance().dbHelper.getString(R.string.inr) +" "+ model.getAmount() + " "+ MyApplication.getInstance().dbHelper.getString(R.string.off_upto_inr) +" "+  model.getMaxAmount() + " "+ MyApplication.getInstance().dbHelper.getString(R.string.on_order_of) + model.getMaxAmount() + " "+MyApplication.getInstance().dbHelper.getString(R.string.or_above));
         holder.mBinding.tvCouponCode.setText("" + model.getCouponCode());
     }
 

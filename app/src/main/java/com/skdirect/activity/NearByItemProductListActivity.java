@@ -1,6 +1,7 @@
 package com.skdirect.activity;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -169,12 +170,14 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST) {
             if (data != null && resultCode == RESULT_OK) {
-                String category = data.getExtras().getString(Constant.Category);
-                String price = data.getExtras().getString(Constant.Price);
+                int category = data.getExtras().getInt(Constant.Category);
+                int priceMin = data.getExtras().getInt(Constant.PriceMin);
+                int priceMax = data.getExtras().getInt(Constant.PriceMax);
                 String brand = data.getExtras().getString(Constant.Brands);
                 String discount = data.getExtras().getString(Constant.Discount);
                 System.out.println("Category::" + category);
-            } else {
+            } else
+            {
                 System.out.println("Canceld by user");
             }
 
@@ -223,7 +226,5 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
                 }
             }
         });
-
-
     }
 }

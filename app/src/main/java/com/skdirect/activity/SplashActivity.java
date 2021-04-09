@@ -2,9 +2,11 @@ package com.skdirect.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -148,6 +150,11 @@ public class SplashActivity extends AppCompatActivity {
 
 
         }*/
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor prefEditor = prefs.edit();
+        prefEditor.remove(SharePrefs.FILTER_CATEGORY_LIST);
+        prefEditor.apply();
+        prefEditor.clear();
         if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.Is_First_Time)) {
             startActivity(new Intent(activity, MainActivity.class));
         } else {

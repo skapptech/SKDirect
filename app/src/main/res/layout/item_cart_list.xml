@@ -136,7 +136,7 @@
                 android:drawableLeft="@drawable/ic_remove"
                 android:drawablePadding="5dp"
                 android:padding="5dp"
-                android:text="Remove"
+                android:text="@string/remove"
                 android:textColor="@color/seller_button_color"
                 android:textSize="15dp"
                 android:textStyle="normal" />
