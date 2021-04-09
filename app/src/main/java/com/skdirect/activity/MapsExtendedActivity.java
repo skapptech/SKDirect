@@ -247,7 +247,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                     finish();
                 }
             } catch (Exception e) {
-                e.printStaSckTrace();
+                e.printStackTrace();
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
 
             }
