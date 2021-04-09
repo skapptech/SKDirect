@@ -12,6 +12,11 @@ public class FilterCategoryDetails {
     @SerializedName("label")
     private String label;
 
+    public FilterCategoryDetails(int value, String label) {
+        this.value = value;
+        this.label = label;
+    }
+
     public int getValue() {
         return value;
     }
