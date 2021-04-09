@@ -3,8 +3,13 @@ package com.skdirect.activity;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,7 +44,7 @@ import java.util.ArrayList;
 public class NearByItemProductListActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityProductListBinding mBinding;
     private NearProductListViewMode nearProductListViewMode;
-    private  ArrayList<NearProductListModel> nearProductList = new ArrayList<>();
+    private ArrayList<NearProductListModel> nearProductList = new ArrayList<>();
     private int skipCount = 0;
     private int takeCount = 10;
     private int pastVisiblesItems = 0;
@@ -47,9 +52,10 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
     private int totalItemCount = 0;
     private boolean loading = true;
     private NearProductListAdapter nearProductListAdapter;
-    private final int  REQUEST = 100;
+    private final int REQUEST = 100;
     public DBHelper dbHelper;
-    public String searchKeyBord;
+    public String searchString;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,27 +66,30 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
         callProductList();
         setString();
     }
+
     private void setString() {
         mBinding.tvSort.setText(dbHelper.getString(R.string.sort));
         mBinding.tvFilter.setText(dbHelper.getString(R.string.filter));
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-        if (nearProductListAdapter!=null){
-            nearProductListAdapter = new NearProductListAdapter(getApplicationContext(),nearProductList);
+        if (nearProductListAdapter != null) {
+            nearProductListAdapter = new NearProductListAdapter(getApplicationContext(), nearProductList);
             mBinding.rvNearByProduct.setAdapter(nearProductListAdapter);
             nearProductListAdapter.notifyDataSetChanged();
         }
     }
+
     private void initView() {
         mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.product_list));
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.shimmerViewContainer.startShimmer();
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL,false);
+        nearProductList.clear();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         mBinding.rvNearByProduct.setLayoutManager(layoutManager);
-        nearProductListAdapter = new NearProductListAdapter(getApplicationContext(),nearProductList);
+        nearProductListAdapter = new NearProductListAdapter(getApplicationContext(), nearProductList);
         mBinding.rvNearByProduct.setAdapter(nearProductListAdapter);
 
         mBinding.rvNearByProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -99,16 +108,53 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
                     if (loading) {
                         if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
                             loading = false;
-                            skipCount=skipCount+10;
-                           // mBinding.progressBar.setVisibility(View.VISIBLE);
+                            skipCount = skipCount + 10;
+                            // mBinding.progressBar.setVisibility(View.VISIBLE);
                             callProductList();
                         }
                     }
                 }
             }
         });
-        nearProductList.clear();
+        mBinding.etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                searchString = editable.toString().trim();
+                if (searchString.length() == 0) {
+                    skipCount = 0;
+                    takeCount = 10;
+                    nearProductList.clear();
+                    callProductList();
+
+                }
+            }
+        });
+
+        mBinding.etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
+                    if (!searchString.isEmpty()) {
+                        skipCount = 0;
+                        takeCount = 10;
+                        nearProductList.clear();
+                        callProductList();
+                        return true;
+                    } else {
+                        Utils.setLongToast(NearByItemProductListActivity.this, "Please enter Item Name");
+                    }
+                }
+                return false;
+            }
+        });
         mBinding.llFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,15 +175,15 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
                 int priceMax = data.getExtras().getInt(Constant.PriceMax);
                 String brand = data.getExtras().getString(Constant.Brands);
                 String discount = data.getExtras().getString(Constant.Discount);
-                Log.e("ProductList","Cate>>"+category+"\n Price Min>>"+priceMin+
-                        "\n Price Max>>"+priceMax+"\n Brand>>"+brand+"\n Discount>>"+discount);
-            }else
+                System.out.println("Category::" + category);
+            } else
             {
                 System.out.println("Canceld by user");
             }
 
         }
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -157,7 +203,7 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
 
 
     private void getProductListAPI() {
-        PaginationModel paginationModel = new PaginationModel(skipCount,takeCount,searchKeyBord);
+        PaginationModel paginationModel = new PaginationModel(skipCount, takeCount, searchString);
         nearProductListViewMode.getNearProductListRequest(paginationModel);
         nearProductListViewMode.getNearProductList().observe(this, new Observer<NearProductListMainModel>() {
             @Override
