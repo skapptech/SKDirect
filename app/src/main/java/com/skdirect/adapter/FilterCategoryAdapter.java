@@ -26,12 +26,20 @@ public class FilterCategoryAdapter extends RecyclerView.Adapter<FilterCategoryAd
     private ArrayList<FilterCategoryDetails>filterTypelist;
     private int lastSelectedPosition = 0;
     private final FilterCategoryInterface filterCategoryInterface;
+    String filterType = "";
     public FilterCategoryAdapter(Context context, ArrayList<FilterCategoryDetails> filterTypelist,FilterCategoryInterface filterCategoryInterface) {
         this.context = context;
         this.filterTypelist = filterTypelist;
         this.filterCategoryInterface = filterCategoryInterface;
     }
 
+    public void setDataAdapter(ArrayList<FilterCategoryDetails> filterTypelist,String filterType)
+    {
+        this.filterType = filterType;
+        lastSelectedPosition = 0;
+        this.filterTypelist = filterTypelist;
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public FilterCategoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,7 +53,7 @@ public class FilterCategoryAdapter extends RecyclerView.Adapter<FilterCategoryAd
         holder.mBinding.itemSelect.setChecked(lastSelectedPosition == position);
         if(position == lastSelectedPosition){
             holder.mBinding.itemSelect.setChecked(true);
-            filterCategoryInterface.clickFilterCategoryInterface(filterTypelist.get(position).getValue(),position);
+            filterCategoryInterface.clickFilterCategoryInterface(filterTypelist.get(position).getValue(),filterTypelist.get(position).getLabel(),filterType);
         }
         else {
             holder.mBinding.itemSelect.setChecked(false);

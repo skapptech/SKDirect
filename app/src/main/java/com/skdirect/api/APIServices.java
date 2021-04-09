@@ -37,6 +37,7 @@ import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PaginationModel;
+import com.skdirect.model.PostBrandModel;
 import com.skdirect.model.ProductDataModel;
 import com.skdirect.model.RemoveItemRequestModel;
 import com.skdirect.model.SearchMainModel;
@@ -244,9 +245,12 @@ public interface APIServices {
     Observable<CommonResponseModel> applyCoupon(@Path("couponId") int couponId);
 
     @GET("api/NativeBuyer/GlobalFilter/GetCategoryList")
-    Observable<MallMainModelListResult> getFilterCategory();
+    Observable<JsonObject> getFilterCategory();
 
     @GET("api/NativeBuyer/GlobalFilter/GetPriceRangeAsync")
     Observable<MallMainPriceModel> getFilterPriceRange(@Query("categoryid") int categoryId);
+
+    @POST("api/NativeBuyer/GlobalFilter/GetBrandListAsync")
+    Observable<JsonObject> getFilterBrandList(@Body PostBrandModel postBrandModel);
 
 }

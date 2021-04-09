@@ -11,6 +11,7 @@ import com.skdirect.model.MallMainModelListResult;
 import com.skdirect.model.MallMainPriceModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
+import com.skdirect.model.PostBrandModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.response.CouponResponse;
@@ -204,17 +205,17 @@ public class CommonClassForAPI {
                 });
     }
 
-    public void getFilterCategoryResult(final DisposableObserver<MallMainModelListResult> observer) {
+    public void getFilterCategoryResult(final DisposableObserver<JsonObject> observer) {
         RestClient.getInstance().getService().getFilterCategory()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<MallMainModelListResult>() {
+                .subscribe(new Observer<JsonObject>() {
                     @Override
                     public void onSubscribe(@NotNull Disposable d) {
                     }
 
                     @Override
-                    public void onNext(@NotNull MallMainModelListResult o) {
+                    public void onNext(@NotNull JsonObject o) {
                         observer.onNext(o);
                     }
 
@@ -255,4 +256,31 @@ public class CommonClassForAPI {
                     }
                 });
     }
+
+    public void getFilterBrandsListResult(final DisposableObserver<JsonObject> observer, PostBrandModel postBrandModel) {
+        RestClient.getInstance().getService().getFilterBrandList(postBrandModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JsonObject>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull JsonObject o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
 }
