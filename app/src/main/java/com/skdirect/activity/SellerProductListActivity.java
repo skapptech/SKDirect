@@ -19,6 +19,8 @@ import com.skdirect.databinding.ActivitySallerProductListBinding;
 import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.PaginationModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.NearProductListViewMode;
 import com.skdirect.viewmodel.SellerProductListViewMode;
@@ -36,12 +38,13 @@ public class SellerProductListActivity extends AppCompatActivity implements View
     private int totalItemCount = 0;
     private boolean loading = true;
     private NearSellerListAdapter nearSellerListAdapter;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_saller_product_list);
         sellerProductListViewMode = ViewModelProviders.of(this).get(SellerProductListViewMode.class);
+        dbHelper = MyApplication.getInstance().dbHelper;
         initView();
         callProductList();
     }
@@ -57,7 +60,7 @@ public class SellerProductListActivity extends AppCompatActivity implements View
     }
     private void initView() {
         mBinding.shimmerViewContainer.startShimmer();
-        mBinding.toolbarTittle.tvTittle.setText("Seller List");
+        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.seller_list));
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL,false);
@@ -105,7 +108,7 @@ public class SellerProductListActivity extends AppCompatActivity implements View
         if (Utils.isNetworkAvailable(getApplicationContext())) {
             getProductListAPI();
         } else {
-            Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
 

@@ -124,7 +124,8 @@
                         android:layout_height="wrap_content"
                         android:maxLines="2"
                         android:padding="15dp"
-                        android:text="Shipping Details"
+                        android:id="@+id/tvShippingDetails"
+                        android:text="@string/shipping_details"
                         android:textColor="@color/seller_button_color"
                         android:textSize="14dp"
                         android:textStyle="bold" />
@@ -202,7 +203,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
-                        android:text="Price Details"
+                        android:text="@string/price_details"
                         android:textColor="@color/black"
                         android:textSize="17dp"
                         android:textStyle="bold" />
@@ -220,7 +221,8 @@
                             android:layout_alignParentLeft="true"
                             android:layout_marginStart="10dp"
                             android:padding="5dp"
-                            android:text="Order Amount"
+                            android:id="@+id/tvOrderAmountTitle"
+                            android:text="@string/order_amount"
                             android:textColor="@color/black"
                             android:textSize="15dp" />
 
@@ -253,7 +255,8 @@
                             android:layout_alignParentLeft="true"
                             android:layout_marginStart="10dp"
                             android:padding="5dp"
-                            android:text="Total Saving"
+                            android:id="@+id/tvTotalSavingTitle"
+                            android:text="@string/total_saving"
                             android:textColor="@color/black"
                             android:textSize="15dp" />
 
@@ -287,7 +290,8 @@
                             android:layout_alignParentLeft="true"
                             android:layout_marginStart="10dp"
                             android:padding="5dp"
-                            android:text="Delivery Charge"
+                            android:id="@+id/tvDeliveryChargeTitle"
+                            android:text="@string/delivery_charge"
                             android:textColor="@color/black"
                             android:textSize="15dp" />
 
@@ -320,7 +324,8 @@
                             android:layout_alignParentLeft="true"
                             android:layout_marginStart="10dp"
                             android:padding="5dp"
-                            android:text="Total Amount"
+                            android:id="@+id/tvTotalAmountTitle"
+                            android:text="@string/total_amount"
                             android:textColor="@color/black"
                             android:textSize="15dp" />
 
@@ -350,7 +355,7 @@
                         android:background="@drawable/rounded_drawer"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="Cancel Order"
+                        android:text="@string/cancel_order"
                         android:textColor="@color/seller_button_color"
                         android:textSize="14sp"
                         android:textStyle="bold"

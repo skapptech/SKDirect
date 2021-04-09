@@ -45,7 +45,7 @@
                     android:layout_centerInParent="true"
                     android:background="@drawable/db_button_an"
                     android:layout_marginStart="5dp"
-                    android:text="Add new address"
+                    android:text="@string/add_new_address"
                     android:textColor="@color/seller_button_color"
                     android:textStyle="normal" />
 
@@ -60,7 +60,7 @@
                     android:layout_marginEnd="5dp"
                     android:background="@drawable/rounded_ng_new_location"
                     android:gravity="center"
-                    android:text="Select &amp; Proceed"
+                    android:text="@string/select_amp_proceed"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="normal" />

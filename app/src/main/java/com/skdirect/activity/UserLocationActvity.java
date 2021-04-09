@@ -24,6 +24,8 @@ import com.skdirect.databinding.ActivityUserLocationBinding;
 import com.skdirect.location.EasyWayLocation;
 import com.skdirect.location.LocationData;
 import com.skdirect.location.Listener;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 
@@ -33,12 +35,14 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
     private String cityName = "";
     private boolean searchCity = false;
     private EasyWayLocation easyWayLocation;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_location);
         easyWayLocation = new EasyWayLocation(this, false,this);
+        dbHelper = MyApplication.getInstance().dbHelper;
+
         if (getIntent() != null) {
             cityName = getIntent().getStringExtra("cityname");
             searchCity = getIntent().getBooleanExtra("searchCity", false);
@@ -48,6 +52,11 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
     }
 
     private void initView() {
+
+        mBinding.address.setHint(dbHelper.getString(R.string.search_your_address));
+        mBinding.tvOr.setText(dbHelper.getString(R.string.or));
+        mBinding.btUseCurrentLocation.setText(dbHelper.getString(R.string.use_current_location));
+
         Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
         //mBinding.etSearchPlace.addTextChangedListener(filterTextWatcher);
         mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(this, searchCity);
@@ -87,9 +96,9 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
         String s = mBinding.etSearchPlace.getText().toString();
         if (TextUtils.isNullOrEmpty(s)) {
             if (searchCity) {
-                Utils.setToast(getApplicationContext(), "Please enter city name");
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_city_name));
             } else {
-                Utils.setToast(getApplicationContext(), "Please enter address");
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_address));
             }
         } else {
             mBinding.imSearchPlace.setVisibility(View.INVISIBLE);

@@ -14,6 +14,8 @@ import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityLoginWithPasswordBinding;
 import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.UpdateTokenModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 
@@ -25,11 +27,13 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
 
     private CommonClassForAPI commonClassForAPI;
     private String fcmToken;
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_login_with_password);
+        dbHelper = MyApplication.getInstance().dbHelper;
         getIntentData();
         initView();
     }
@@ -40,6 +44,12 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
     }
 
     private void initView() {
+
+        mBinding.tvPasswordVerification.setText(dbHelper.getString(R.string.password_verification));
+        mBinding.tvEnterThePassword.setText(dbHelper.getString(R.string.enter_the_password));
+        mBinding.etPassword.setHint(dbHelper.getString(R.string.enter_password));
+        mBinding.btLoddingOtp.setText(dbHelper.getString(R.string.next));
+
         fcmToken = Utils.getFcmToken();
         commonClassForAPI = CommonClassForAPI.getInstance(this);
         mBinding.btLoddingOtp.setOnClickListener(this);
@@ -58,11 +68,11 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
 
     private void loginWithPassword() {
 
-        mBinding.btLoddingOtp.setText("Loading ...");
+        mBinding.btLoddingOtp.setText(dbHelper.getString(R.string.loading));
         passwordString = mBinding.etPassword.getText().toString().trim();
         if (passwordString.isEmpty()) {
-            mBinding.btLoddingOtp.setText("Next");
-            Utils.setToast(this, "Please Enter Password");
+            mBinding.btLoddingOtp.setText(dbHelper.getString(R.string.next));
+            Utils.setToast(this, dbHelper.getString(R.string.please_enter_password));
         } else {
             checkPasswordApi();
         }
@@ -73,7 +83,7 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
             if (commonClassForAPI != null) {
                 /*commonClassForAPI.getToken(callToken, "password", mobileNumber, passwordString, false, true, "BUYERAPP");*/
             } else {
-                Utils.setToast(this, "No Internet Connection Please connect.");
+                Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
             }
         }
     }
@@ -95,14 +105,14 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                Utils.setToast(getApplicationContext(), "Invalid Password");
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
 
             }
         }
 
         @Override
         public void onError(Throwable e) {
-            Utils.setToast(getApplicationContext(), "Invalid Password");
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
             Utils.hideProgressDialog();
             e.printStackTrace();
         }

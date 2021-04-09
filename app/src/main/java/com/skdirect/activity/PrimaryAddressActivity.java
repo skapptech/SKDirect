@@ -17,6 +17,8 @@ import com.skdirect.adapter.UserLocationAdapter;
 import com.skdirect.databinding.ActivityPrimaryAddressBinding;
 import com.skdirect.model.MainLocationModel;
 import com.skdirect.model.UserLocationModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.PrimaryAddressViewMode;
 
@@ -28,12 +30,13 @@ public class PrimaryAddressActivity extends AppCompatActivity implements View.On
     private ArrayList<UserLocationModel> locationModelArrayList = new ArrayList<>();
     private UserLocationAdapter userLocationAdapter;
     private int userLocationId;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_primary_address);
         primaryAddressViewMode = ViewModelProviders.of(this).get(PrimaryAddressViewMode.class);
+        dbHelper = MyApplication.getInstance().dbHelper;
         getSharedData();
         initView();
         callUserLocation();
@@ -52,9 +55,12 @@ public class PrimaryAddressActivity extends AppCompatActivity implements View.On
 
     private void initView() {
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
-        mBinding.toolbarTittle.tvTittle.setText("Address");
+        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.address));
         mBinding.btSelectedProcess.setOnClickListener(this);
         mBinding.btAddNewAddresh.setOnClickListener(this);
+
+        mBinding.btAddNewAddresh.setText(dbHelper.getString(R.string.add_new_address));
+        mBinding.btSelectedProcess.setText(dbHelper.getString(R.string.select_amp_proceed));
 
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
@@ -86,7 +92,7 @@ public class PrimaryAddressActivity extends AppCompatActivity implements View.On
             Utils.showProgressDialog(PrimaryAddressActivity.this);
             userLocationAPI();
         } else {
-            Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
 

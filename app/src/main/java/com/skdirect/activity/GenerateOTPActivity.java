@@ -51,6 +51,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
         super.onCreate(savedInstanceState);
         Binding = DataBindingUtil.setContentView(this, R.layout.activity_generate_otp);
         otpVerificationViewModel = ViewModelProviders.of(this).get(OTPVerificationViewModel.class);
+        dbHelper = MyApplication.getInstance().dbHelper;
         getIntentData();
         initView();
 
@@ -63,10 +64,12 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     }
 
     private void initView() {
-        dbHelper = MyApplication.getInstance().dbHelper;
         commonClassForAPI = CommonClassForAPI.getInstance(this);
         Binding.btLoddingOtp.setOnClickListener(this);
         Binding.tvVerifactionText.setText(dbHelper.getString(R.string.enter_no_txt) + latsFiveNumber);
+        Binding.tvVerificationHead.setText(dbHelper.getString(R.string.verification));
+        Binding.resendotp.setText(dbHelper.getString(R.string.resend_otp));
+        Binding.btLoddingOtp.setText(dbHelper.getString(R.string.next));
         startTimer(Binding.resendOtpTimer, Binding.resendotp);
         // init broadcast receiver
         mSmsBroadcastReceiver = new SmsBroadcastReceiver();

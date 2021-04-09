@@ -28,7 +28,7 @@
                 android:background="@drawable/bg_white_rounded"
                 android:drawableLeft="@drawable/ic_search"
                 android:drawablePadding="10dp"
-                android:hint="Search seller by name or product"
+                android:hint="@string/search_seller_by_name_or_product"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:maxLines="1"

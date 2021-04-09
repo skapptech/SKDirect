@@ -24,6 +24,8 @@ import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityPlacesSearchBinding;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateTokenModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
@@ -43,16 +45,22 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
     private String fcmToken;
     private LatLng latLng;
     private String pinCode;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_places_search);
+        dbHelper = MyApplication.getInstance().dbHelper;
         initView();
 
     }
 
     private void initView() {
+
+        mBinding.etLocation.setHint(dbHelper.getString(R.string.enter_your_address));
+        mBinding.etPinCode.setHint(dbHelper.getString(R.string.enter_pin_code));
+        mBinding.btSave.setHint(dbHelper.getString(R.string.save));
+
         commonClassForAPI = CommonClassForAPI.getInstance(this);
         fcmToken = Utils.getFcmToken();
         mGeocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
@@ -77,16 +85,16 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
 
     private void saveLocationData() {
         if (TextUtils.isNullOrEmpty(mBinding.etLocation.getText().toString().trim())) {
-            Utils.setToast(this, "Enter your Address");
+            Utils.setToast(this, dbHelper.getString(R.string.enter_your_address));
         } else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString().trim())) {
-            Utils.setToast(this, "Enter your PinCode");
+            Utils.setToast(this, dbHelper.getString(R.string.enter_pin_code));
         } else {
             if (Utils.isNetworkAvailable(this)) {
                 if (commonClassForAPI != null) {
                     commonClassForAPI.getToken(callToken, "password", Utils.getDeviceUniqueID(PlaceSearchActivity.this), "", true, true, "BUYERAPP", true, Utils.getDeviceUniqueID(PlaceSearchActivity.this), latLng.latitude, latLng.longitude, pinCode);
                 }
             } else {
-                Utils.setToast(this, "No Internet Connection Please connect.");
+                Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
             }
         }
     }
@@ -189,14 +197,14 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                Utils.setToast(getApplicationContext(), "Invalid Password");
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
 
             }
         }
 
         @Override
         public void onError(Throwable e) {
-            Utils.setToast(getApplicationContext(), "Invalid Password");
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
             Utils.hideProgressDialog();
             e.printStackTrace();
         }

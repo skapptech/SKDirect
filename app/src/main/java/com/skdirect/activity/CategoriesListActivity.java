@@ -20,6 +20,8 @@ import com.skdirect.databinding.ActivitySallerProductListBinding;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.PaginationModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.CategoriesViewMode;
 import com.skdirect.viewmodel.SellerProductListViewMode;
@@ -37,12 +39,13 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
     private int totalItemCount = 0;
     private boolean loading = true;
     private CategoriesAdapter categoriesAdapter;
-
+    private DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_categories_list);
         categoriesViewMode = ViewModelProviders.of(this).get(CategoriesViewMode.class);
+        dbHelper = MyApplication.getInstance().dbHelper;
         initView();
         callProductList();
     }
@@ -57,7 +60,7 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
         }
     }
     private void initView() {
-        mBinding.toolbarTittle.tvTittle.setText("Categories List");
+        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.category_list));
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.shimmerViewContainer.startShimmer();
 
