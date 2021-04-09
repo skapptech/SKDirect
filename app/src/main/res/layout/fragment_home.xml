@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,8 +50,8 @@
                 android:id="@+id/ll_mall_home"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -86,7 +85,6 @@
                     android:background="@drawable/ic_bottom" />
 
             </LinearLayout>
-
 
             <LinearLayout
                 android:id="@+id/ll_main_app_home"
@@ -339,7 +337,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_near_seller"
+                        android:id="@+id/tv_near_seller_two"
                         style="@style/font_normal_sami_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -361,9 +359,9 @@
                         android:id="@+id/rv_near_by_seller"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         android:orientation="horizontal"
-                        android:scrollbars="horizontal" />
+                        android:scrollbars="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                     <LinearLayout
                         android:id="@+id/ll_near_by_seller"
@@ -436,9 +434,9 @@
                         android:id="@+id/rv_most_visited_seller"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         android:orientation="horizontal"
-                        android:scrollbars="horizontal" />
+                        android:scrollbars="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                     <LinearLayout
                         android:id="@+id/ll_most_visited_seller"
@@ -511,9 +509,9 @@
                         android:id="@+id/rv_new_seller"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         android:orientation="horizontal"
-                        android:scrollbars="horizontal" />
+                        android:scrollbars="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                     <LinearLayout
                         android:id="@+id/ll_new_seller"

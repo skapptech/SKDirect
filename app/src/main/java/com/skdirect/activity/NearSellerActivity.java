@@ -12,24 +12,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.R;
-import com.skdirect.adapter.NearProductListAdapter;
 import com.skdirect.adapter.NearSellerListAdapter;
-import com.skdirect.databinding.ActivityProductListBinding;
+import com.skdirect.databinding.ActivityNearSalleBinding;
 import com.skdirect.databinding.ActivitySallerProductListBinding;
 import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.NearBySellerMainModel;
-import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.PaginationModel;
-import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.utils.Utils;
-import com.skdirect.viewmodel.NearProductListViewMode;
+import com.skdirect.viewmodel.NearSellerViewMode;
 import com.skdirect.viewmodel.SellerProductListViewMode;
 
 import java.util.ArrayList;
 
-public class SellerProductListActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivitySallerProductListBinding mBinding;
-    private SellerProductListViewMode sellerProductListViewMode;
+public class NearSellerActivity extends AppCompatActivity implements View.OnClickListener {
+    private ActivityNearSalleBinding mBinding;
+    private NearSellerViewMode NearSellerViewMode;
     private final ArrayList<NearBySallerModel> nearBySallerList = new ArrayList<>();
     private int skipCount = 0;
     private int takeCount = 10;
@@ -43,8 +40,8 @@ public class SellerProductListActivity extends AppCompatActivity implements View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_saller_product_list);
-        sellerProductListViewMode = ViewModelProviders.of(this).get(SellerProductListViewMode.class);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_near_salle);
+        NearSellerViewMode = ViewModelProviders.of(this).get(NearSellerViewMode.class);
         initView();
         callProductList();
     }
@@ -114,8 +111,8 @@ public class SellerProductListActivity extends AppCompatActivity implements View
 
 
     private void getProductListAPI() {
-        sellerProductListViewMode.getSellerProductListRequest(new PaginationModel(skipCount,takeCount,SearchKeybard));
-        sellerProductListViewMode.getSellerProductListVM().observe(this, new Observer<NearBySellerMainModel>() {
+        NearSellerViewMode.getSellerProductListRequest(new PaginationModel(skipCount,takeCount,SearchKeybard));
+        NearSellerViewMode.getSellerProductListVM().observe(this, new Observer<NearBySellerMainModel>() {
             @Override
             public void onChanged(NearBySellerMainModel nearBySaller) {
                 if (nearBySaller.isSuccess()){

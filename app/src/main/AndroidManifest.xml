@@ -92,6 +92,10 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
+            android:name=".activity.NearSellerActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
             android:name=".activity.ProductDetailsActivity"
             android:launchMode="singleTask"
             android:parentActivityName=".activity.MainActivity"
