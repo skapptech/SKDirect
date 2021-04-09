@@ -22,8 +22,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.skdirect.R;
 import com.skdirect.activity.CategoriesListActivity;
 import com.skdirect.activity.MainActivity;
+import com.skdirect.activity.MostVisitedSellerActivity;
 import com.skdirect.activity.NearByItemProductListActivity;
 import com.skdirect.activity.NearSellerActivity;
+import com.skdirect.activity.NewSellerActivity;
 import com.skdirect.activity.SearchActivity;
 import com.skdirect.activity.SellerProductListActivity;
 import com.skdirect.adapter.AllCategoriesAdapter;
@@ -354,6 +356,20 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), NearSellerActivity.class));
+            }
+        });
+
+        mBinding.tvMostVisitedSeller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), MostVisitedSellerActivity.class));
+            }
+        });
+
+        mBinding.tvNewSeller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), NewSellerActivity.class));
             }
         });
     }

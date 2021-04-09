@@ -56,7 +56,7 @@ public class NearSellerListAdapter extends RecyclerView.Adapter<NearSellerListAd
             @Override
             public void onClick(View view) {
                 Intent menuIntent = new Intent(context, SellerProfileActivity.class);
-                menuIntent.putExtra("ID",nearBySallerModel.getEncryptedId());
+                menuIntent.putExtra("ID",nearBySallerModel.getId());
                 context.startActivity(menuIntent);
             }
         });

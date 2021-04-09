@@ -113,9 +113,14 @@ public interface APIServices {
     @POST("api/NativeBuyer/AppHomeFilter/GetCategorybyfilter")
     Call<AllCategoresMainModel> GetCategorybyfilter(@Body PaginationModel paginationModel);
 
-
     @POST("api/NativeBuyer/AppHomeFilter/GetNearBySellerFilter")
     Call<NearBySellerMainModel> GetNearBySellerFilter(@Body PaginationModel paginationModel);
+
+    @POST("api/NativeBuyer/AppHomeFilter/GetMostVisitedSellerFilter")
+    Call<NearBySellerMainModel> GetMostVisitedSellerFilter(@Body PaginationModel paginationModel);
+
+    @POST("api/NativeBuyer/AppHomeFilter/GetNewSellerFilter")
+    Call<NearBySellerMainModel> GetNewSellerFilter(@Body PaginationModel paginationModel);
 
 
     @GET("api/buyer/Seller/GetTopSeller")
