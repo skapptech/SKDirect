@@ -41,6 +41,8 @@ import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.adapter.PlacesAutoCompleteAdapter;
 import com.skdirect.databinding.ActivityMapsBinding;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.MapViewViewMode;
@@ -63,19 +65,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private MapViewViewMode mapViewViewMode;
     private ActivityMapsBinding mBinding;
     //private PlacesAutoCompleteAdapter placesAutoCompleteAdapter;
-
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_maps);
         mapViewViewMode = ViewModelProviders.of(this).get(MapViewViewMode.class);
-
+        dbHelper = MyApplication.getInstance().dbHelper;
         initView();
     }
 
     private void initView() {
         //Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
+
+        mBinding.tvLoction.setText(dbHelper.getString(R.string.update_location));
+
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -143,7 +148,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Utils.showProgressDialog(MapsActivity.this);
             callLocationAPI(latitude, longitude);
         } else {
-            Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
 

@@ -15,6 +15,8 @@ import com.skdirect.adapter.ViewPagerAdapter;
 import com.skdirect.databinding.ActivitySearchBinding;
 import com.skdirect.fragment.ProductFragment;
 import com.skdirect.fragment.ShopFragment;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
 
 import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
@@ -23,11 +25,12 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private ActivitySearchBinding mBinding;
     private String searchSellerName;
     private int allCategoriesID;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_search);
+        dbHelper = MyApplication.getInstance().dbHelper;
         getIntentData();
         initView();
         setupViewPager(mBinding.viewpager);
@@ -44,14 +47,16 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        adapter.addFragment(new ProductFragment(searchSellerName,allCategoriesID), "Product");
-        adapter.addFragment(new ShopFragment(searchSellerName,allCategoriesID), "Shop");
+        adapter.addFragment(new ProductFragment(searchSellerName,allCategoriesID), dbHelper.getString(R.string.product));
+        adapter.addFragment(new ShopFragment(searchSellerName,allCategoriesID), dbHelper.getString(R.string.shop));
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(2);
     }
 
     private void initView() {
-        mBinding.toolbarTittle.tvTittle.setText("Product List");
+
+        mBinding.etSearchSeller.setHint(dbHelper.getString(R.string.search_seller_by_name_or_product));
+        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.product_list));
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
 
 

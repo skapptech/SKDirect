@@ -22,6 +22,7 @@ import com.skdirect.model.CartMainModel;
 import com.skdirect.model.CartModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.RemoveItemRequestModel;
+import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.CartItemViewMode;
@@ -40,13 +41,14 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     private int totalItemCount = 0;
     private boolean loading = true;
     private double totalAmount;
-
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_cart);
         cartItemViewMode = ViewModelProviders.of(this).get(CartItemViewMode.class);
+        dbHelper = MyApplication.getInstance().dbHelper;
         initView();
     }
 
@@ -101,7 +103,11 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
-        mBinding.toolbarTittle.tvTittle.setText("Shopping Bag");
+        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.shopping_bag));
+        mBinding.tvNotingInBasket.setText(dbHelper.getString(R.string.nothing_in_basket));
+        mBinding.tvKeepShopping.setText(dbHelper.getString(R.string.keep_shopping));
+        mBinding.tvAdd.setText(dbHelper.getString(R.string.checkout));
+
         mBinding.tvKeepShopping.setOnClickListener(this);
         mBinding.tvAdd.setOnClickListener(this);
 
@@ -196,10 +202,10 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
     public void removeItemAlertDialog(CartModel cartModel, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Alert");
-        builder.setMessage("Are you sure that you want to delete this items?");
-        builder.setPositiveButton("Yes", (dialog, which) -> removeItemFromCart(cartModel, position));
-        builder.setNegativeButton("No", (dialog, which) -> {
+        builder.setTitle(dbHelper.getString(R.string.alert));
+        builder.setMessage(dbHelper.getString(R.string.are_you_sure_you_want_to_delete));
+        builder.setPositiveButton(dbHelper.getString(R.string.yes), (dialog, which) -> removeItemFromCart(cartModel, position));
+        builder.setNegativeButton(dbHelper.getString(R.string.no), (dialog, which) -> {
             dialog.dismiss();
         });
 

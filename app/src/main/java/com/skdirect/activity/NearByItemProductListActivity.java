@@ -55,12 +55,12 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_product_list);
         nearProductListViewMode = ViewModelProviders.of(this).get(NearProductListViewMode.class);
+        dbHelper = MyApplication.getInstance().dbHelper;
         initView();
         callProductList();
         setString();
     }
     private void setString() {
-        dbHelper = MyApplication.getInstance().dbHelper;
         mBinding.tvSort.setText(dbHelper.getString(R.string.sort));
         mBinding.tvFilter.setText(dbHelper.getString(R.string.filter));
     }
@@ -74,7 +74,7 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
         }
     }
     private void initView() {
-        mBinding.toolbarTittle.tvTittle.setText("Product List");
+        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.product_list));
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.shimmerViewContainer.startShimmer();
 
@@ -151,7 +151,7 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
         if (Utils.isNetworkAvailable(getApplicationContext())) {
             getProductListAPI();
         } else {
-            Utils.setToast(getApplicationContext(), getString(R.string.no_connection));
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_connection));
         }
     }
 

@@ -53,7 +53,7 @@
                         android:paddingStart="2dp"
                         android:paddingEnd="2dp"
                         android:maxLines="1"
-                        android:text="Location"
+                        android:text="@string/location"
                         android:textColor="@color/colorAccent"
                         android:textSize="12sp"
                         android:textStyle="bold" />

@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     return;
                 }
                 doubleBackToExitPressedOnce = true;
-                Snackbar.make(mBinding.drawer, getString(R.string.back_again),
+                Snackbar.make(mBinding.drawer, dbHelper.getString(R.string.back_again),
                         Snackbar.LENGTH_SHORT).show();
                 new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
             } else {

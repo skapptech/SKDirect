@@ -17,6 +17,7 @@ import com.skdirect.databinding.ItemCategoriesBinding;
 import com.skdirect.databinding.ItemDetailsItemBinding;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.OrderItemModel;
+import com.skdirect.utils.MyApplication;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -43,7 +44,7 @@ public class OrderDetailsItemAdapter extends RecyclerView.Adapter<OrderDetailsIt
     public void onBindViewHolder(@NonNull OrderDetailsItemAdapter.ViewHolder holder, int position) {
         OrderItemModel orderItemModel = orderItemModels.get(position);
         holder.mBinding.tvItemName.setText(orderItemModel.getProductName());
-        holder.mBinding.tvQuantity.setText("Qty :"+String.valueOf(orderItemModel.getQuantity()));
+        holder.mBinding.tvQuantity.setText(MyApplication.getInstance().dbHelper.getString(R.string.qty)+" "+String.valueOf(orderItemModel.getQuantity()));
         holder.mBinding.tvMrp.setText("₹ " +orderItemModel.getMrp());
 
         if (orderItemModel.getImagePath()!=null && !orderItemModel.getImagePath().contains("http")) {

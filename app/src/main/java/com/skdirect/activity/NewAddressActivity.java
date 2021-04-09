@@ -14,7 +14,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityNewAddreshBinding;
+import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.GPSTracker;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
@@ -31,16 +33,26 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
     private ActivityNewAddreshBinding mBinding;
     private NewAddressViewMode newAddressViewMode;
     private GPSTracker gpsTracker;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_new_addresh);
         newAddressViewMode = ViewModelProviders.of(this).get(NewAddressViewMode.class);
+        dbHelper = MyApplication.getInstance().dbHelper;
         initView();
     }
 
     private void initView() {
+
+        mBinding.tilFullName.setHint(dbHelper.getString(R.string.full_name));
+        mBinding.tilStreetAdd.setHint(dbHelper.getString(R.string.street_address));
+        mBinding.tilLandMark.setHint(dbHelper.getString(R.string.landmark_optional));
+        mBinding.tilPincode.setHint(dbHelper.getString(R.string.pincode));
+        mBinding.tilCity.setHint(dbHelper.getString(R.string.city));
+        mBinding.tilState.setHint(dbHelper.getString(R.string.state));
+        mBinding.btSaveAddresh.setText(dbHelper.getString(R.string.save));
+
         mBinding.toolbarTittle.tvUsingLocation.setVisibility(View.VISIBLE);
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.toolbarTittle.tvUsingLocation.setOnClickListener(this);

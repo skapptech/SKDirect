@@ -40,7 +40,10 @@ import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityMapsExtendedBinding;
 import com.skdirect.model.CommonResponseModel;
+import com.skdirect.model.TokenModel;
+import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.GpsUtils;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.MapViewViewMode;
@@ -53,6 +56,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import io.reactivex.observers.DisposableObserver;
 
 
 public class MapsExtendedActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
@@ -81,7 +86,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
     LatLng mCenterLatLong;
     Boolean isGPS = false;
     private MapViewViewMode mapViewViewMode;
-
+    DBHelper dbHelper;
 
     @Override
     public void applyOverrideConfiguration(Configuration overrideConfiguration) {
@@ -113,8 +118,17 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
 
     private void initializeViews() {
         utils = new Utils(MapsExtendedActivity.this);
+        dbHelper = MyApplication.getInstance().dbHelper;
+
         mapViewViewMode = ViewModelProviders.of(this).get(MapViewViewMode.class);
         commonClassForAPI = CommonClassForAPI.getInstance(MapsExtendedActivity.this);
+        dbHelper = MyApplication.getInstance().dbHelper;
+
+        mBinding.tvFlatNo.setText(dbHelper.getString(R.string.flat_no));
+        mBinding.editTextName.setHint(dbHelper.getString(R.string.name));
+        mBinding.cancel.setText(dbHelper.getString(R.string.cancel));
+        mBinding.tvSubmit.setText(dbHelper.getString(R.string.confirm_location));
+
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -135,7 +149,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                 callLocationAPI(latitude, longitude);
                 setLocationAPI(latitude, longitude);
             } else {
-                Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
             }
 
         });
@@ -199,9 +213,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                 try {
                     if (data!=null){
                         if(data.isSuccess()){
-                            Utils.setLongToast(MapsExtendedActivity.this,data.getSuccessMessage());
-                            startActivity(new Intent(MapsExtendedActivity.this, MainActivity.class));
-                            finish();
+                            Gettoken();
                         }
                         else{
                             Utils.setLongToast(MapsExtendedActivity.this,data.getErrorMessage());
@@ -216,7 +228,50 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
         });
 
     }
+    public void Gettoken() {
+        commonClassForAPI
+                .getToken(callToken, "password", Utils.getDeviceUniqueID(this),
+                "", true, true, "BUYERAPP", true,
+                Utils.getDeviceUniqueID(this), Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)),Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON)), SharePrefs.getInstance(MapsExtendedActivity.this).getString(SharePrefs.PIN_CODE));
+    }
 
+
+    private final DisposableObserver<TokenModel> callToken = new DisposableObserver<TokenModel>() {
+        @Override
+        public void onNext(@NotNull TokenModel model) {
+            try {
+                Utils.hideProgressDialog();
+                if (model != null) {
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
+                    SharePrefs.setSharedPreference(MapsExtendedActivity.this, SharePrefs.IS_REGISTRATIONCOMPLETE, model.getIsRegistrationComplete());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LAT, model.getLatitiute());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LON, model.getLongitude());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
+                    startActivity(new Intent(MapsExtendedActivity.this, MainActivity.class));
+                    finish();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
+
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+            Utils.hideProgressDialog();
+        }
+    };
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

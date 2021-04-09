@@ -21,13 +21,9 @@ public class PaginationModel {
    /* @SerializedName("ProductId")
     private int  ProductId;*/
 
-
-
-
    /* public PaginationModel(int productId) {
         ProductId = productId;
     }*/
-
 
 
     /*public PaginationModel(int skip, int take, int parentCategoryId, String categoryName, boolean isParentCategory) {

@@ -51,7 +51,7 @@
                     android:layout_marginStart="5dp"
                     android:maxLines="3"
                     android:padding="2dp"
-                    android:text="bhagwan"
+                    android:text=""
                     style="@style/font_normal"
                     android:textColor="@color/black"
                     android:textSize="14dp"
@@ -64,7 +64,7 @@
                     android:layout_marginStart="5dp"
                     android:maxLines="3"
                     android:padding="2dp"
-                    android:text="bhagwan"
+                    android:text=""
                     style="@style/font_normal"
                     android:textColor="@color/black"
                     android:textSize="14dp"
@@ -98,7 +98,7 @@
             style="@style/font_normal_sami_bold"
             android:textSize="15dp"
             android:textColor="@color/seller_button_color"
-            android:text="View More"/>
+            android:text="@string/view_more"/>
 
         <View
             android:layout_width="match_parent"

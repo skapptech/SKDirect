@@ -14,6 +14,8 @@ import com.skdirect.R;
 import com.skdirect.databinding.ActivityProfileBinding;
 import com.skdirect.databinding.ActivityReviewBinding;
 import com.skdirect.model.AddReviewModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
@@ -24,12 +26,13 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
     private ActivityReviewBinding mBinding;
     private int orderID;
     private ReViewViewMode reViewViewMode;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_review);
         reViewViewMode = ViewModelProviders.of(this).get(ReViewViewMode.class);
+        dbHelper = MyApplication.getInstance().dbHelper;
         getIntentData();
         initView();
     }
@@ -39,9 +42,15 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initView() {
-        mBinding.toolbarTittle.tvTittle.setText("Review");
+        mBinding.tvRateExperience.setText(dbHelper.getString(R.string.rate_your_experience));
+        mBinding.tvHowWouldRate.setText(dbHelper.getString(R.string.how_would_you_rate_the_seller));
+        mBinding.tvComments.setText(dbHelper.getString(R.string.comments));
+        mBinding.etEnterComment.setHint(dbHelper.getString(R.string.enter_comments));
+        mBinding.btSaveRatting.setText(dbHelper.getString(R.string.save));
+
+        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.review));
         mBinding.toolbarTittle.tvUsingLocation.setVisibility(View.VISIBLE);
-        mBinding.toolbarTittle.tvUsingLocation.setText("Order ID :"+orderID);
+        mBinding.toolbarTittle.tvUsingLocation.setText(dbHelper.getString(R.string.order_id)+" "+orderID);
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.btSaveRatting.setOnClickListener(this);
         mBinding.ratingBar.setOnClickListener(this);
@@ -71,9 +80,9 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
 
     private void checkRatting() {
         if (mBinding.ratingBar.getRating() == 0.0){
-            Utils.setToast(this,"Please Add rating");
+            Utils.setToast(this,dbHelper.getString(R.string.please_add_rating));
         }else if (TextUtils.isNullOrEmpty(mBinding.etEnterComment.getText().toString().trim())){
-            Utils.setToast(this,"Please enter comments");
+            Utils.setToast(this,dbHelper.getString(R.string.please_enter_comments));
         }else {
             if (Utils.isNetworkAvailable(getApplicationContext())) {
                 Utils.showProgressDialog(ReviewActivity.this);
@@ -81,7 +90,7 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
 
 
             } else {
-                Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+                Utils.setToast(getApplicationContext(),dbHelper.getString(R.string.no_internet_connection));
             }
         }
 

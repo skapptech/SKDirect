@@ -111,30 +111,6 @@
         "near_by_seller": "Nearby Seller",
         "all_categories": "All Categories",
         "filter": "FILTER"
-      },
-      "ગુજરાતી": {
-        "guest_user": "गेस्ट यूजर",
-        "logout": "लॉग आउट",
-        "profile": "प्रोफ़ाइल",
-        "change_pass": "पासवर्ड बदलें",
-        "chat": "चैट",
-        "rate_app": "एप्लिकेशन की श्रेणी बताओ",
-        "privacy_policy": "गोपनीयता नीति",
-        "about_direct": "डायरेक्ट के बारे में",
-        "sign_in": "लॉगिन",
-        "get_otp": "Otp प्राप्त करें",
-        "skip": "स्किप",
-        "other_settings": "अन्य सेटिंग",
-        "how_to_use": "कैसे इस्तेमाल करे",
-        "help": "हेल्प",
-        "next": "अगला",
-        "txt_mrp": "एमआरपी",
-        "txt_selling_price": "विक्रय मूल्य",
-        "txt_Inclusive": "सभी करों को मिलाकर",
-        "txt_seller_details": "विक्रेता विवरण",
-        "txt_shop_name": "दुकान का नाम",
-        "txt_delivery": "वितरण विकल्प:",
-        "change_language": "भाषा बदलें"
       }
     }
   }
