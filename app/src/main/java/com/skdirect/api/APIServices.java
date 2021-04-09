@@ -24,6 +24,8 @@ import com.skdirect.model.MainSimilarTopSellerModel;
 import com.skdirect.model.MainTopSimilarSellerModel;
 import com.skdirect.model.MallMainModel;
 import com.skdirect.model.MallMainModelBolleanResult;
+import com.skdirect.model.MallMainModelListResult;
+import com.skdirect.model.MallMainPriceModel;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.NearByMainModel;
 import com.skdirect.model.NearBySallerModel;
@@ -232,4 +234,11 @@ public interface APIServices {
 
     @GET("/api/NativeBuyer/SellerCoupon/ApplyCoupon/{couponId}")
     Observable<CommonResponseModel> applyCoupon(@Path("couponId") int couponId);
+
+    @GET("api/NativeBuyer/GlobalFilter/GetCategoryList")
+    Observable<MallMainModelListResult> getFilterCategory();
+
+    @GET("api/NativeBuyer/GlobalFilter/GetPriceRangeAsync")
+    Observable<MallMainPriceModel> getFilterPriceRange(@Query("categoryid") int categoryId);
+
 }
