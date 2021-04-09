@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.skdirect.api.RestClient;
+import com.skdirect.model.NearProductListMainModel;
 import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.utils.Utils;
@@ -20,18 +21,18 @@ import retrofit2.Response;
 public class FilterViewModel extends ViewModel {
     final String TAG = getClass().getSimpleName();
 
-    private MutableLiveData<ArrayList<NearProductListModel>> nearProductListViewModel;
+    private MutableLiveData<NearProductListMainModel> nearProductListViewModel;
 
-    public LiveData<ArrayList<NearProductListModel>> getFilterList() {
+    public LiveData<NearProductListMainModel> getFilterList() {
           nearProductListViewModel=null;
             nearProductListViewModel = new MutableLiveData<>();
         return nearProductListViewModel;
     }
 
-    public MutableLiveData<ArrayList<NearProductListModel>> getFilterListRequest(PaginationModel paginationModel) {
-        RestClient.getInstance().getService().getNearItem(paginationModel).enqueue(new Callback<ArrayList<NearProductListModel>>() {
+    public MutableLiveData<NearProductListMainModel> getFilterListRequest(PaginationModel paginationModel) {
+        RestClient.getInstance().getService().getNearItem(paginationModel).enqueue(new Callback<NearProductListMainModel>() {
             @Override
-            public void onResponse(Call<ArrayList<NearProductListModel>> call, Response<ArrayList<NearProductListModel>> response) {
+            public void onResponse(Call<NearProductListMainModel> call, Response<NearProductListMainModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     nearProductListViewModel.setValue(response.body());
@@ -39,7 +40,7 @@ public class FilterViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<NearProductListModel>> call, Throwable t) {
+            public void onFailure(Call<NearProductListMainModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + call.toString());
                 Utils.hideProgressDialog();
             }

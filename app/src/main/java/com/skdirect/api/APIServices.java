@@ -27,6 +27,7 @@ import com.skdirect.model.MallMainModelBolleanResult;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.NearByMainModel;
 import com.skdirect.model.NearBySallerModel;
+import com.skdirect.model.NearProductListMainModel;
 import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.OrderDetailsModel;
 import com.skdirect.model.OrderItemModel;
@@ -107,7 +108,7 @@ public interface APIServices {
 
 
     @POST("api/NativeBuyer/AppHomeFilter/GetNearByItemFilter")
-    Call<ArrayList<NearProductListModel>> getNearItem(@Body PaginationModel paginationModel);
+    Call<NearProductListMainModel> getNearItem(@Body PaginationModel paginationModel);
 
     @GET("api/buyer/Seller/GetSellerListForBuyer")
     Call<ArrayList<NearBySallerModel>> GetSellerListForBuyer(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword);

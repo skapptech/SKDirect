@@ -80,15 +80,9 @@ public class PaginationModel {
 
     }
 
-    public PaginationModel(int sellerId, int parentProductId, int id, int skip, int take, double latitude, double longitude, int tagId, String keyword) {
-        SellerId = sellerId;
-        ParentProductId = parentProductId;
-        Id = id;
+    public PaginationModel(int skip, int take, String keyword) {
         Skip = skip;
         Take = take;
-        Latitude = latitude;
-        Longitude = longitude;
-        TagId = tagId;
         Keyword = keyword;
     }
 }
