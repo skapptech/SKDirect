@@ -23,6 +23,7 @@ import com.skdirect.adapter.SellerShopListAdapter;
 import com.skdirect.databinding.FragmentProductBinding;
 import com.skdirect.databinding.FragmentShopBinding;
 import com.skdirect.model.TopSellerModel;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.SearchViewMode;
 
@@ -69,6 +70,7 @@ public class ShopFragment extends Fragment {
 
 
     private void initViews() {
+        mBinding.tvNotDataFound.setText(MyApplication.getInstance().dbHelper.getString(R.string.no_data_found));
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         mBinding.rvSearch.setLayoutManager(layoutManager);
         sellerShopListAdapter = new SellerShopListAdapter(getActivity(), sallerShopList);
@@ -111,7 +113,7 @@ public class ShopFragment extends Fragment {
             Utils.showProgressDialog(getActivity());
             getShopData();
         } else {
-            Utils.setToast(getActivity(), "No Internet Connection Please connect.");
+            Utils.setToast(getActivity(), MyApplication.getInstance().dbHelper.getString(R.string.no_internet_connection));
         }
 
     }

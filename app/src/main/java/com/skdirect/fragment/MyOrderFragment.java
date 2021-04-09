@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.skdirect.R;
 import com.skdirect.activity.MainActivity;
 import com.skdirect.databinding.FragmentMyOrderBinding;
+import com.skdirect.utils.MyApplication;
 
 public class MyOrderFragment extends Fragment {
     private FragmentMyOrderBinding mBinding;
@@ -35,7 +36,7 @@ public class MyOrderFragment extends Fragment {
     }
 
     private void initViews() {
-        mBinding.toolbarTittle.tvTittle.setText("My Order");
+        mBinding.toolbarTittle.tvTittle.setText(MyApplication.getInstance().dbHelper.getString(R.string.my_order));
         mBinding.toolbarTittle.ivBackPress.setVisibility(View.GONE);;
         activity.appBarLayout.setVisibility(View.GONE);
     }

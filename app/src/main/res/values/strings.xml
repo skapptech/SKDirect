@@ -202,4 +202,5 @@
     <string name="or_above">or above</string>
     <string name="detail">Detail</string>
     <string name="qty">Qty :</string>
+    <string name="no_record_found">No Record Found</string>
 </resources>
