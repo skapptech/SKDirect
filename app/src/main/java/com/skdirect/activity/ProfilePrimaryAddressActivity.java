@@ -20,6 +20,8 @@ import com.skdirect.databinding.ActivityProfilePrimaryAddressBinding;
 import com.skdirect.interfacee.MakeDefaultInterface;
 import com.skdirect.model.MainLocationModel;
 import com.skdirect.model.UserLocationModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.PrimaryAddressViewMode;
 
@@ -31,12 +33,13 @@ public class ProfilePrimaryAddressActivity extends AppCompatActivity implements 
     private ArrayList<UserLocationModel> locationModelArrayList = new ArrayList<>();
     private ProfileUserLocationAdapter userLocationAdapter;
     private int userLocationId;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_profile_primary_address);
         primaryAddressViewMode = ViewModelProviders.of(this).get(PrimaryAddressViewMode.class);
+        dbHelper = MyApplication.getInstance().dbHelper;
         getSharedData();
         initView();
         callUserLocation();
@@ -54,8 +57,9 @@ public class ProfilePrimaryAddressActivity extends AppCompatActivity implements 
     }
 
     private void initView() {
+        mBinding.btAddNewAddresh.setText(dbHelper.getString(R.string.add_new_address));
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
-        mBinding.toolbarTittle.tvTittle.setText("Address");
+        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.address));
         mBinding.btAddNewAddresh.setOnClickListener(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         mBinding.rvUserLocation.setLayoutManager(layoutManager);
@@ -79,7 +83,7 @@ public class ProfilePrimaryAddressActivity extends AppCompatActivity implements 
             Utils.showProgressDialog(ProfilePrimaryAddressActivity.this);
             userLocationAPI();
         } else {
-            Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
@@ -118,9 +122,9 @@ public class ProfilePrimaryAddressActivity extends AppCompatActivity implements 
 
     private void makeDefaultLocationDialgo(UserLocationModel userLocationModel, int position) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Alert");
-            builder.setMessage("Are you sure that you want to make this address Default?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            builder.setTitle(dbHelper.getString(R.string.alert));
+            builder.setMessage(dbHelper.getString(R.string.make_default_address));
+            builder.setPositiveButton(dbHelper.getString(R.string.yes), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
@@ -141,7 +145,7 @@ public class ProfilePrimaryAddressActivity extends AppCompatActivity implements 
                 }
             });
 
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(dbHelper.getString(R.string.no), new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -161,9 +165,9 @@ public class ProfilePrimaryAddressActivity extends AppCompatActivity implements 
 
     private void deleteLocationDialog(UserLocationModel userLocationModel) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Alert");
-        builder.setMessage("Are you sure you want to delete this address?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setTitle(dbHelper.getString(R.string.alert));
+        builder.setMessage(dbHelper.getString(R.string.want_to_delete));
+        builder.setPositiveButton(dbHelper.getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -184,7 +188,7 @@ public class ProfilePrimaryAddressActivity extends AppCompatActivity implements 
             }
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(dbHelper.getString(R.string.no), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {

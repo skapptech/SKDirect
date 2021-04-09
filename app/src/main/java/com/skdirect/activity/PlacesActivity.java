@@ -19,19 +19,15 @@ import com.google.android.libraries.places.api.model.Place;
 import com.skdirect.R;
 import com.skdirect.adapter.PlacesAutoCompleteMapsAdapter;
 import com.skdirect.databinding.ActivityPlacesBinding;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 
-
-/**
- * Created by Pritesh on 17/07/2020.
- **/
 
 public class PlacesActivity extends AppCompatActivity implements PlacesAutoCompleteMapsAdapter.ClickListener {
     public ActivityPlacesBinding binding;
     private PlacesAutoCompleteMapsAdapter mAutoCompleteAdapter;
     private Boolean searchCity = false;
-
-
-
+    DBHelper dbHelper;
 
     @Override
     public void applyOverrideConfiguration(Configuration overrideConfiguration) {
@@ -46,6 +42,8 @@ public class PlacesActivity extends AppCompatActivity implements PlacesAutoCompl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_places);
+        dbHelper = MyApplication.getInstance().dbHelper;
+
         binding.llGps.setOnClickListener(V -> {
             startActivityForResult(new Intent(PlacesActivity.this, MapsExtendedActivity.class),2000);
             finish();
@@ -55,6 +53,11 @@ public class PlacesActivity extends AppCompatActivity implements PlacesAutoCompl
     }
 
     public void initPlaces() {
+
+        binding.etSearchPlace.setHint(dbHelper.getString(R.string.search_for));
+        binding.tvCurrentLocation.setText(dbHelper.getString(R.string.current_location));
+        binding.tvSearchResult.setText(dbHelper.getString(R.string.search_results));
+
         Places.initialize(this, getResources().getString(R.string.google_maps_key));
         binding.etSearchPlace.addTextChangedListener(filterTextWatcher);
         mAutoCompleteAdapter = new PlacesAutoCompleteMapsAdapter(this, searchCity);

@@ -17,7 +17,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:id="@+id/tilName">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_name"
@@ -27,34 +28,39 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:gravity="center_vertical"
-                    android:hint="Name"
+                    android:hint="@string/name_reg"
                     android:imeOptions="actionNext"
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
 
-
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_email_id"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="57dp"
-                android:layout_marginStart="10dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:gravity="center_vertical"
-                android:hint="Email is Optional"
-                android:textColorHint="@color/seller_button_color"
-                android:imeOptions="actionNext"
-                android:inputType="textEmailAddress"
-                />
+                android:id="@+id/tilEmail">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_email_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="57dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="@string/email_is_optional"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
+                    android:textColorHint="@color/seller_button_color" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="invisible">
+                android:visibility="invisible"
+                android:id="@+id/tilPincode">
 
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -65,7 +71,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:gravity="center_vertical"
-                    android:hint="Pincode"
+                    android:hint="@string/pincode"
                     android:imeOptions="actionNext"
                     android:inputType="textPostalAddress"
 
@@ -80,10 +86,10 @@
             android:id="@+id/bt_save_addresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:background="@drawable/db_button_save"
-            android:layout_alignParentBottom="true"
-            android:text="Save"
+            android:text="@string/save"
             android:textColor="@color/seller_button_color"
             android:textStyle="normal" />
 

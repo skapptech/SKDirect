@@ -12,6 +12,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityUpdateProfileBinding;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
@@ -21,21 +23,27 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
 
     private ActivityUpdateProfileBinding mBinding;
     private UpdateProfileViewMode updateProfileViewMode;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_update_profile);
         updateProfileViewMode = ViewModelProviders.of(this).get(UpdateProfileViewMode.class);
-
+        dbHelper = MyApplication.getInstance().dbHelper;
         initView();
 
     }
 
     private void initView() {
+
+        mBinding.tilName.setHint(dbHelper.getString(R.string.name_reg));
+        mBinding.tilEmail.setHint(dbHelper.getString(R.string.email));
+        mBinding.tilPincode.setHint(dbHelper.getString(R.string.pincode));
+        mBinding.btSaveAddresh.setText(dbHelper.getString(R.string.save));
+
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.btSaveAddresh.setOnClickListener(this);
-        mBinding.toolbarTittle.tvTittle.setText(getString(R.string.update_profile));
+        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.update_profile));
         mBinding.etName.setText(SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.FIRST_NAME));
         mBinding.etEmailId.setText(SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.EMAIL_ID));
         mBinding.etPinCode.setText(SharePrefs.getStringSharedPreferences(UpdateProfileActivity.this,SharePrefs.PIN_CODE));
@@ -55,16 +63,16 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
 
     private void upDateProfile() {
         if (TextUtils.isNullOrEmpty(mBinding.etName.getText().toString().trim())) {
-            Utils.setToast(getApplicationContext(), getString(R.string.please_enter_name));
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_name));
         } else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString().trim())) {
-            Utils.setToast(getApplicationContext(), getString(R.string.please_enter_pincode));
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_pincode));
         } else {
             if (Utils.isNetworkAvailable(getApplicationContext())) {
                 Utils.showProgressDialog(UpdateProfileActivity.this);
                 updateUserData();
 
             } else {
-                Utils.setToast(getApplicationContext(), getString(R.string.no_connection));
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_connection));
             }
         }
 

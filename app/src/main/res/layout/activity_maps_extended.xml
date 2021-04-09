@@ -63,7 +63,7 @@
                 android:textSize="15sp"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:text="Your location"
+                android:text="@string/your_location"
                 style="@style/font_Bold"
                 android:textColor="@color/black"
                 android:layout_width="match_parent"
@@ -96,7 +96,7 @@
                     android:layout_width="70dp"
                     android:layout_height="25dp"
                     android:gravity="center"
-                    android:text="change"
+                    android:text="@string/change"
                     android:textColor="@color/seller_button_color"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -116,8 +116,9 @@
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:visibility="gone"
+                android:id="@+id/tvFlatNo"
                 android:layout_marginTop="10dp"
-                android:text="flat_no" />
+                android:text="@string/flat_no" />
 
 
 
@@ -142,7 +143,7 @@
                     android:background="@color/white"
                     style="@style/font_normal_sami_bold"
                     android:gravity="start"
-                    android:hint="name"
+                    android:hint="@string/name"
                     android:maxLines="1"
                     android:paddingHorizontal="18dp"
                     android:paddingVertical="13dp"
@@ -158,7 +159,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:gravity="center"
-                    android:text="cancel"
+                    android:text="@string/cancel"
                     android:layout_marginEnd="18dp"
                     android:textColor="#EF3828"
                     android:textSize="14sp"
@@ -180,7 +181,7 @@
                 style="@style/font_normal_sami_bold"
                 android:paddingHorizontal="20dp"
                 android:minWidth="125dp"
-                android:text="Confirm Location"
+                android:text="@string/confirm_location"
                 android:textAllCaps="false"
                 android:textColor="@color/seller_button_color"
                 android:textSize="16sp" />

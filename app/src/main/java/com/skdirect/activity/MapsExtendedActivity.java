@@ -122,6 +122,13 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
 
         mapViewViewMode = ViewModelProviders.of(this).get(MapViewViewMode.class);
         commonClassForAPI = CommonClassForAPI.getInstance(MapsExtendedActivity.this);
+        dbHelper = MyApplication.getInstance().dbHelper;
+
+        mBinding.tvFlatNo.setText(dbHelper.getString(R.string.flat_no));
+        mBinding.editTextName.setHint(dbHelper.getString(R.string.name));
+        mBinding.cancel.setText(dbHelper.getString(R.string.cancel));
+        mBinding.tvSubmit.setText(dbHelper.getString(R.string.confirm_location));
+
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -142,7 +149,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                 callLocationAPI(latitude, longitude);
                 setLocationAPI(latitude, longitude);
             } else {
-                Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
             }
 
         });

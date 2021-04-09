@@ -17,6 +17,8 @@ import com.skdirect.databinding.ActivityCategoriesListBinding;
 import com.skdirect.model.AllCategoresMainModel;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.PaginationModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.CategoriesViewMode;
 
@@ -33,6 +35,7 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
     private int totalItemCount = 0;
     private boolean loading = true;
     private CategoriesAdapter categoriesAdapter;
+    private DBHelper dbHelper;
     private String searchKeybord;
 
     @Override
@@ -40,6 +43,7 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_categories_list);
         categoriesViewMode = ViewModelProviders.of(this).get(CategoriesViewMode.class);
+        dbHelper = MyApplication.getInstance().dbHelper;
         initView();
         callProductList();
     }
@@ -55,7 +59,7 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
     }
 
     private void initView() {
-        mBinding.toolbarTittle.tvTittle.setText("Categories List");
+        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.category_list));
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.shimmerViewContainer.startShimmer();
 

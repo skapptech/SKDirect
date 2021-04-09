@@ -44,16 +44,18 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     public DBHelper dbHelper;
     int categoryId = 0;
     private CommonClassForAPI commonClassForAPI;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_filter);
+        dbHelper = MyApplication.getInstance().dbHelper;
+
         initView();
         setString();
     }
 
     private void setString() {
-        dbHelper = MyApplication.getInstance().dbHelper;
         mBinding.tvFilter.setText(dbHelper.getString(R.string.filter));
         mBinding.tvClearAll.setText(dbHelper.getString(R.string.clear_all));
         mBinding.tvFilterType.setText(dbHelper.getString(R.string.select_price_range));

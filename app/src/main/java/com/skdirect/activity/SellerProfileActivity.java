@@ -29,6 +29,7 @@ import com.skdirect.model.SellerDeliveryModel;
 import com.skdirect.model.SellerProductList;
 import com.skdirect.model.SellerProfileDataModel;
 import com.skdirect.model.UserDetailModel;
+import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
@@ -50,13 +51,14 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     private final ArrayList<SellerProductList> sellerProductModels = new ArrayList<>();
     private SellerProductAdapter sellerShopListAdapter;
     private String searchSellerName;
-
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_seller_profile);
         sellerProfileViewMode = ViewModelProviders.of(this).get(SellerProfileViewMode.class);
+        dbHelper = MyApplication.getInstance().dbHelper;
         getIntentData();
         initView();
         callSellerDetails();
@@ -104,7 +106,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             getSellerProductsApi(searchSellerName);
             addProduct();
         } else {
-            Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
@@ -119,8 +121,16 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     }
 
     private void initView() {
+
+        mBinding.etSearchSeller.setHint(dbHelper.getString(R.string.search_seller_by_name_or_product));
+        mBinding.btShare.setText(dbHelper.getString(R.string.share));
+        mBinding.tvDeliveryTitle.setText(dbHelper.getString(R.string.delivery_options));
+        mBinding.tvMinOrderTitle.setText(dbHelper.getString(R.string.minimum_order_amount));
+        mBinding.tvDeliverDistanceTitle.setText(dbHelper.getString(R.string.delivered_till_distance));
+        mBinding.tvItemNotFound.setText(dbHelper.getString(R.string.searched_item_is_not_available));
+
         mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
-        mBinding.toolbarTittle.tvTittle.setText("Seller Items");
+        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.seller_items));
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.toolbarTittle.notifictionCount.setOnClickListener(this);
         mBinding.btShare.setOnClickListener(this);

@@ -25,7 +25,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:gravity="center"
-                    android:text="Buyer"
+                    android:text="@string/buyer"
+                    android:id="@+id/tvBuyerHead"
                     android:textColor="@color/colorAccent"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -48,7 +49,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
-                        android:text="Browse products"
+                        android:text="@string/browse_products"
+                        android:id="@+id/tvBuyerTitle1"
                         android:textSize="13sp"
                         android:textColor="@color/colorAccent"
                         android:textStyle="bold" />
@@ -72,7 +74,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
-                        android:text="Place order"
+                        android:text="@string/place_order"
+                        android:id="@+id/tvBuyerTitle2"
                         android:textSize="13sp"
                         android:textColor="@color/colorAccent"
                         android:textStyle="bold" />
@@ -95,7 +98,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
-                        android:text="Add your favourite store"
+                        android:text="@string/add_your_favourite_store"
+                        android:id="@+id/tvBuyerTitle3"
                         android:textColor="@color/colorAccent"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -128,7 +132,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:gravity="center"
-                    android:text="Seller"
+                    android:text="@string/seller"
+                    android:id="@+id/tvSellerHead"
                     android:textColor="@color/colorAccent"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -155,7 +160,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:gravity="center_vertical"
-                            android:text="Display your product"
+                            android:text="@string/display_your_product"
+                            android:id="@+id/tvSellerTitle1"
                             android:textSize="13sp"
                             android:textColor="@color/colorAccent"
                             android:textStyle="bold" />
@@ -178,7 +184,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:gravity="center_vertical"
-                            android:text="Accept and manage order"
+                            android:text="@string/accept_and_manage_order"
+                            android:id="@+id/tvSellerTitle2"
                             android:textSize="13sp"
                             android:textColor="@color/colorAccent"
                             android:textStyle="bold" />
@@ -201,7 +208,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:gravity="center_vertical"
-                            android:text="Invite customer to store"
+                            android:text="@string/invite_customer_to_store"
+                            android:id="@+id/tvSellerTitle3"
                             android:textSize="13sp"
                             android:textColor="@color/colorAccent"
                             android:textStyle="bold" />
@@ -236,7 +244,7 @@
                     android:background="@drawable/background_for_buttons"
                     android:gravity="center"
                     android:padding="15dp"
-                    android:text="I'M BUYER"
+                    android:text="@string/i_m_buyer"
                     android:textColor="@color/seller_button_color"
                     android:textStyle="bold" />
 
@@ -250,7 +258,7 @@
                     android:gravity="center"
                     android:padding="15dp"
                     android:visibility="gone"
-                    android:text="I'M SELLER"
+                    android:text="@string/i_m_seller"
                     android:textColor="@color/seller_button_color"
                     android:textStyle="bold" />
             </LinearLayout>

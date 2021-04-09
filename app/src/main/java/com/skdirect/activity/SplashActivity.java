@@ -23,6 +23,7 @@ import com.skdirect.R;
 import com.skdirect.databinding.ActivitySplashBinding;
 import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.model.AppVersionModel;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
@@ -69,7 +70,7 @@ public class SplashActivity extends AppCompatActivity {
             if (Utils.isNetworkAvailable(activity)) {
                 getAppVersionApi();
             } else {
-                Utils.setToast(getBaseContext(), "No Internet Connection!!");
+                Utils.setToast(getBaseContext(), MyApplication.getInstance().dbHelper.getString(R.string.no_internet_connection));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -162,14 +163,14 @@ public class SplashActivity extends AppCompatActivity {
 
             } else {
                 @SuppressLint("RestrictedApi") AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.Base_Theme_AppCompat_Dialog));
-                alertDialogBuilder.setTitle("Update Available");
-                alertDialogBuilder.setMessage("Please update the latest version " + appVersionModels.getResultItem().getVersion() + " from play store");
+                alertDialogBuilder.setTitle(R.string.update_available);
+                alertDialogBuilder.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.update_to_latest_version)+" " + appVersionModels.getResultItem().getVersion() + " "+MyApplication.getInstance().dbHelper.getString(R.string.from_play_store));
                 alertDialogBuilder.setCancelable(false);
-                alertDialogBuilder.setPositiveButton("Update", (dialog, id) -> {
+                alertDialogBuilder.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.update), (dialog, id) -> {
                     dialog.cancel();
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + activity.getPackageName())));
                 });
-                alertDialogBuilder.setNegativeButton(R.string.skip, (dialog, i) -> {
+                alertDialogBuilder.setNegativeButton(MyApplication.getInstance().dbHelper.getString(R.string.skip), (dialog, i) -> {
                     startActivity(new Intent(activity, MainActivity.class));
                     finish();
                 });

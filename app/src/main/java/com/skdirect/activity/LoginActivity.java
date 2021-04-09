@@ -40,12 +40,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         Binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        dbHelper = MyApplication.getInstance().dbHelper;
         initView();
     }
 
 
     private void initView() {
-        dbHelper = MyApplication.getInstance().dbHelper;
         Binding.btGetOtp.setOnClickListener(this);
         Binding.btLoginWithPassword.setOnClickListener(this);
         Binding.btSkip.setOnClickListener(this);
