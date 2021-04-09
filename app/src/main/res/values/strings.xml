@@ -10,7 +10,7 @@
     <string name="privacy_policy">गोपनीयता नीति</string>
     <string name="about_direct">डायरेक्ट के बारे में</string>
     <string name="sign_in">लॉगिन</string>
-    <string name="get_otp">Otp प्राप्त करें</string>
+    <string name="get_otp">ओटीपी प्राप्त करें</string>
     <string name="skip">स्किप</string>
     <string name="other_settings">अन्य सेटिंग</string>
     <string name="how_to_use">कैसे इस्तेमाल करे</string>
@@ -78,4 +78,6 @@
     <string name="apply_coupon">Apply Coupon</string>
     <string name="available_offers">Available Offers</string>
     <string name="no_offer_found">No offer found</string>
+    <string name="enter_your_mobno">Enter Your Mobile Number</string>
+
 </resources>
