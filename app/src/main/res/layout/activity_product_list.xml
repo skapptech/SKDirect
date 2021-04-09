@@ -24,7 +24,7 @@
 
 
                 <EditText
-                    android:id="@+id/et_search_seller"
+                    android:id="@+id/et_search"
                     style="@style/font_normal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
