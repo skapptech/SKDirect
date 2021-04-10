@@ -80,7 +80,7 @@
                     android:layout_centerVertical="true"
                     android:clipToPadding="false"
                     android:focusable="true"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="25dp"
