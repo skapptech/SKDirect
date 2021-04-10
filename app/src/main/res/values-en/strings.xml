@@ -205,6 +205,10 @@
     <string name="qty">Qty :</string>
     <string name="no_record_found">No Record Found</string>
     <string name="language_code">en</string>
+    <string name="select_a_promo_code">प्रोमो कोड चुनें</string>
     <string name="enter_coupon_code">Enter Coupon Code</string>
     <string name="title_activity_payment">Payment</string>
+    <string name="please_select_address">Please select address</string>
+    <string name="total_order_value">Total Order Value</string>
+    <string name="view_offer">View Offer</string>
 </resources>

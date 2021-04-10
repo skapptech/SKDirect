@@ -44,7 +44,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="15dp"
                         android:layout_toEndOf="@+id/ivOffer"
-                        android:text="Select a Promo Code" />
+                        android:text="@string/select_a_promo_code" />
 
                     <Button
                         android:id="@+id/btnOffer"
@@ -54,7 +54,7 @@
                         android:layout_alignParentEnd="true"
                         android:background="@drawable/rounded_drawer"
                         android:gravity="center"
-                        android:text="View Offer"
+                        android:text="@string/view_offer"
                         android:textAllCaps="false"
                         android:textColor="@color/seller_button_color"
                         android:textSize="13sp"
