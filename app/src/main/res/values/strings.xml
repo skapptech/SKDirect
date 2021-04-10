@@ -204,7 +204,10 @@
     <string name="qty">मात्रा :</string>
     <string name="no_record_found">कोई रिकॉर्ड नहीं मिला</string>
     <string name="language_code">hi</string>
-    <string name="enter_coupon_code">Enter Coupon Code</string>
-    <string name="title_activity_payment">Payment</string>
-    <string name="total_order_value">Total Order Value</string>
+    <string name="select_a_promo_code">प्रोमो कोड चुनें</string>
+    <string name="enter_coupon_code">कूपन कोड डालें</string>
+    <string name="title_activity_payment">भुगतान</string>
+    <string name="total_order_value">कुल आर्डर मूल्य</string>
+    <string name="please_select_address">कृपया पता चुनें</string>
+    <string name="view_offer">कूपन देखें</string>
 </resources>

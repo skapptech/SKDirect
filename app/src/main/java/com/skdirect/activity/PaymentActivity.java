@@ -27,7 +27,6 @@ import com.skdirect.databinding.ActivityPaymentBinding;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.DeliveryMainModel;
 import com.skdirect.model.DeliveryOptionModel;
-import com.skdirect.model.OrderPlaceMainModel;
 import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.UserLocationModel;
 import com.skdirect.model.response.OfferResponse;
@@ -48,7 +47,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private DeliveryOptionAdapter deliveryOptionAdapter;
 
     private OfferResponse.Coupon coupon;
-    private int deliveryOption, UserLocationId;
+    private int deliveryOption, userLocationId;
     private double cartTotal, totalAmount, discount = 0;
 
 
@@ -80,16 +79,20 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.btnOffer:
                 startActivityForResult(new Intent(getApplicationContext(), OfferActivity.class), 9);
                 break;
-            case R.id.tv_place_order:
+            case R.id.btnPlaceOrder:
                 if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                    OrderPlaceAlertDialog();
+                    if (userLocationId != 0) {
+                        OrderPlaceAlertDialog();
+                    } else {
+                        Utils.setToast(getApplicationContext(), MyApplication.getInstance().dbHelper.getString(R.string.please_select_address));
+                    }
                 } else {
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 }
                 break;
             case R.id.btnAdd:
                 startActivityForResult(new Intent(getApplicationContext(),
-                        PrimaryAddressActivity.class).putExtra("UserLocationId", UserLocationId), 2);
+                        PrimaryAddressActivity.class).putExtra("UserLocationId", userLocationId), 2);
                 break;
         }
     }
@@ -100,7 +103,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         // check if the request code is same as what is passed  here it is 2
         if (requestCode == 2 && resultCode == RESULT_OK) {
             UserLocationModel userLocationModel = (UserLocationModel) data.getSerializableExtra("address");
-            UserLocationId = userLocationModel.getId();
+            userLocationId = userLocationModel.getId();
             mBinding.tvShopName.setText(userLocationModel.getAddressOne());
             mBinding.tvAddresh.setText(userLocationModel.getAddressTwo());
             mBinding.tvAddreshTree.setText(userLocationModel.getAddressThree());
@@ -126,7 +129,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mBinding.tvAddress.setText(MyApplication.getInstance().dbHelper.getString(R.string.address));
         mBinding.btnOffer.setOnClickListener(this);
         mBinding.btnRemove.setOnClickListener(this);
-        mBinding.tvPlaceOrder.setOnClickListener(this);
+        mBinding.btnPlaceOrder.setOnClickListener(this);
         mBinding.btnAdd.setOnClickListener(this);
     }
 
@@ -158,26 +161,19 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Confirmation");
         builder.setMessage("Are you sure you want to place order?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (Utils.isNetworkAvailable(getApplicationContext())) {
-                    Utils.showProgressDialog(PaymentActivity.this);
-                    orderPlaceAPI();
-                } else {
-                    Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
-                }
-
-
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            if (Utils.isNetworkAvailable(getApplicationContext())) {
+                Utils.showProgressDialog(this);
+                orderPlaceAPI();
+            } else {
+                Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
             }
+
+
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("No", (dialog, which) -> {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
         });
 
         AlertDialog dialog = builder.create();
@@ -186,17 +182,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void orderPlaceAPI() {
-        OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASE", deliveryOption, cartItemModel.getId(), UserLocationId);
+        OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASE", deliveryOption, cartItemModel.getId(), userLocationId);
         paymentViewMode.getOrderPlaceVMRequest(orderPlaceRequestModel);
-        paymentViewMode.getOrderPlaceVM().observe(this, new Observer<OrderPlaceMainModel>() {
-            @Override
-            public void onChanged(OrderPlaceMainModel response) {
-                Utils.hideProgressDialog();
-                if (response.isSuccess()) {
-                    orderPlaceDialog();
-                } else {
-                    Toast.makeText(PaymentActivity.this, response.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                }
+        paymentViewMode.getOrderPlaceVM().observe(this, response -> {
+            Utils.hideProgressDialog();
+            if (response.isSuccess()) {
+                orderPlaceDialog();
+            } else {
+                Toast.makeText(PaymentActivity.this, response.getErrorMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -243,7 +236,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             if (locationModel.isSuccess() && locationModel.getResultItem().size() > 0) {
                 for (int i = 0; i < locationModel.getResultItem().size(); i++) {
                     if (locationModel.getResultItem().get(i).isPrimaryAddress()) {
-                        UserLocationId = locationModel.getResultItem().get(i).getId();
+                        userLocationId = locationModel.getResultItem().get(i).getId();
                         mBinding.tvShopName.setText(locationModel.getResultItem().get(i).getAddressOne());
                         mBinding.tvAddresh.setText(locationModel.getResultItem().get(i).getAddressTwo());
                         mBinding.tvAddreshTree.setText(locationModel.getResultItem().get(i).getAddressThree());

@@ -81,6 +81,7 @@
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:text="@string/checkout"
+                android:textAllCaps="false"
                 android:textColor="@color/seller_button_color"
                 android:textSize="14sp"
                 android:textStyle="bold" />
