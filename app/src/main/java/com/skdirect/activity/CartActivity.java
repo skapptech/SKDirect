@@ -43,6 +43,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     private double totalAmount;
     DBHelper dbHelper;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +60,9 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 onBackPressed();
                 break;
             case R.id.tv_add:
-                startActivity(new Intent(getApplicationContext(), PaymentActivity.class).putExtra("cartItemSize", cartItemDataModel).putExtra("totalAmount", totalAmount));
+                startActivity(new Intent(getApplicationContext(), PaymentActivity.class)
+                        .putExtra("cartItemSize", cartItemDataModel)
+                        .putExtra("totalAmount", totalAmount));
                 break;
             case R.id.tv_keep_shopping:
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));

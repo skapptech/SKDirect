@@ -8,14 +8,14 @@ import androidx.annotation.RequiresApi;
 import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.model.CommonResponseModel;
-import com.skdirect.model.MallMainModelListResult;
 import com.skdirect.model.MallMainPriceModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PostBrandModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateProfilePostModel;
-import com.skdirect.model.response.CouponResponse;
+import com.skdirect.model.response.ApplyOfferResponse;
+import com.skdirect.model.response.OfferResponse;
 import com.skdirect.utils.MyApplication;
 
 import org.jetbrains.annotations.NotNull;
@@ -153,17 +153,17 @@ public class CommonClassForAPI {
                 });
     }
 
-    public void getCouponList(final DisposableObserver<CouponResponse> observer, int sellerId) {
+    public void getCouponList(final DisposableObserver<OfferResponse> observer, int sellerId) {
         RestClient.getInstance().getService().getCouponList(sellerId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<CouponResponse>() {
+                .subscribe(new Observer<OfferResponse>() {
                     @Override
                     public void onSubscribe(@NotNull Disposable d) {
                     }
 
                     @Override
-                    public void onNext(@NotNull CouponResponse o) {
+                    public void onNext(@NotNull OfferResponse o) {
                         observer.onNext(o);
                     }
 
@@ -180,18 +180,17 @@ public class CommonClassForAPI {
     }
 
 
-
-    public void applyCoupon(final DisposableObserver observer, int couponId) {
+    public void applyCoupon(final DisposableObserver<ApplyOfferResponse> observer, int couponId) {
         RestClient.getInstance().getService().applyCoupon(couponId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<CommonResponseModel>() {
+                .subscribe(new Observer<ApplyOfferResponse>() {
                     @Override
                     public void onSubscribe(@NotNull Disposable d) {
                     }
 
                     @Override
-                    public void onNext(@NotNull CommonResponseModel o) {
+                    public void onNext(@NotNull ApplyOfferResponse o) {
                         observer.onNext(o);
                     }
 
