@@ -34,6 +34,7 @@ import com.skdirect.model.ProductDataModel;
 import com.skdirect.model.ProductResultModel;
 import com.skdirect.model.ProductVariantAttributeDCModel;
 import com.skdirect.model.VariationListModel;
+import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
@@ -52,12 +53,13 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private int SellerItemID;
     private ProductResultModel resultModel = new ProductResultModel();
     private String shopName;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_product_details);
         productDetailsViewMode = ViewModelProviders.of(this).get(ProductDetailsViewMode.class);
+        dbHelper = MyApplication.getInstance().dbHelper;
         getIntentData();
         initView();
         ClickListener();
@@ -123,7 +125,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.showProgressDialog(this);
             addProduct();
         } else {
-            Utils.setToast(this, "No Internet Connection Please connect.");
+            Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
@@ -132,7 +134,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.showProgressDialog(this);
             cartItemsAPI();
         } else {
-            Utils.setToast(this, "No Internet Connection Please connect.");
+            Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
@@ -141,7 +143,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.showProgressDialog(this);
             topSimilarProductAPI();
         } else {
-            Utils.setToast(this, "No Internet Connection Please connect.");
+            Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
@@ -150,7 +152,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.showProgressDialog(this);
             SellarOtherProductsAPI();
         } else {
-            Utils.setToast(this, "No Internet Connection Please connect.");
+            Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
@@ -159,7 +161,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.showProgressDialog(this);
             getTopSeller();
         } else {
-            Utils.setToast(this, "No Internet Connection Please connect.");
+            Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
@@ -178,11 +180,24 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.showProgressDialog(this);
             getProductListAPI();
         } else {
-            Utils.setToast(this, "No Internet Connection Please connect.");
+            Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
     private void initView() {
+
+        mBinding.tvMrpTitle.setText(dbHelper.getString(R.string.txt_mrp));
+        mBinding.tvTax.setText(dbHelper.getString(R.string.txt_Inclusive));
+        mBinding.tvQuantity.setText(dbHelper.getString(R.string.txt_Inclusive));
+        mBinding.tvSellingPriceTitle.setText(dbHelper.getString(R.string.txt_selling_price));
+        mBinding.tvSellerDeatil.setText(dbHelper.getString(R.string.txt_seller_details));
+        mBinding.tvShopNameTitle.setText(dbHelper.getString(R.string.txt_shop_name));
+        mBinding.tvSimilaProducts.setText(dbHelper.getString(R.string.similar_products));
+        mBinding.tvOtherSellers.setText(dbHelper.getString(R.string.other_sellers));
+        mBinding.tvSellersOtherProduct.setText(dbHelper.getString(R.string.seller_s_others_product));
+        mBinding.btAddToCart.setText(dbHelper.getString(R.string.add_to_cart));
+
+
         mBinding.rvNearByItem.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         mBinding.rvOtherSellars.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         mBinding.rvSellarsOthersItems.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -510,9 +525,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
     public void checkCustomerAlertDialog(int id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Alert");
-        builder.setMessage("Your Cart has existing items from Another Seller.Do You Want to clear it and add items from this Seller?");
-        builder.setPositiveButton("Yes", (dialog, which) -> {
+        builder.setTitle(dbHelper.getString(R.string.alert));
+        builder.setMessage(dbHelper.getString(R.string.existing_clear_cart));
+        builder.setPositiveButton(dbHelper.getString(R.string.yes), (dialog, which) -> {
             clearCartItem(id);
             CartModel cartModel = new CartModel(null, 0, null,
                     resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(),

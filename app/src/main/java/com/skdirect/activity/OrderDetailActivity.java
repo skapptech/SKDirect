@@ -19,6 +19,8 @@ import com.skdirect.model.OrderDetailsModel;
 import com.skdirect.model.OrderItemModel;
 import com.skdirect.model.OrderStatusDC;
 import com.skdirect.stepform.MainStepperAdapter;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.OrderDetailsViewMode;
 
@@ -32,13 +34,14 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
     private OrderDetailsViewMode orderDetailsViewMode;
     private List<OrderStatusDC> OrderStatusDCList = new ArrayList<>();
     private MainStepperAdapter mainStepperAdapter;
-
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_order_deatils);
         orderDetailsViewMode = ViewModelProviders.of(this).get(OrderDetailsViewMode.class);
+        dbHelper = MyApplication.getInstance().dbHelper;
         getIntentData();
         initView();
         callOrderDetails();
@@ -50,7 +53,7 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
             callOrderDetailsAPI();
             callOrderItemsAPI();
         } else {
-            Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
@@ -61,9 +64,18 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void initView() {
-        mBinding.toolbarTittle.tvTittle.setText("My Order");
+        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.my_order));
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.tvCancleOrder.setOnClickListener(this);
+
+        mBinding.tvShippingDetails.setText(dbHelper.getString(R.string.shipping_details));
+        mBinding.tvItemCount.setText(dbHelper.getString(R.string.price_details));
+        mBinding.tvOrderAmountTitle.setText(dbHelper.getString(R.string.order_amount));
+        mBinding.tvTotalSavingTitle.setText(dbHelper.getString(R.string.total_saving));
+        mBinding.tvDeliveryChargeTitle.setText(dbHelper.getString(R.string.delivery_charge));
+        mBinding.tvTotalAmountTitle.setText(dbHelper.getString(R.string.total_amount));
+        mBinding.tvCancleOrder.setText(dbHelper.getString(R.string.cancel_order));
+
     }
 
     @Override
@@ -98,10 +110,10 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
 
                     OrderStatusDCList.add(new OrderStatusDC(orderDetailsModel.getOrderDate(), "Ordered"));
                     OrderStatusDCList.addAll(orderDetailsModel.getOrderStatusDC());
-                    mBinding.tvOrderNumber.setText("Order No :" + orderDetailsModel.getId());
-                    mBinding.tvCreatedOrder.setText("Order on " + Utils.getDateFormate(orderDetailsModel.getOrderDate()));
-                    mBinding.tvSellerName.setText("Seller: " + orderDetailsModel.getSellerName());
-                    mBinding.tvPaymentType.setText("Payment Mode: " + orderDetailsModel.getPaymentMode());
+                    mBinding.tvOrderNumber.setText(dbHelper.getString(R.string.order_no)+" " + orderDetailsModel.getId());
+                    mBinding.tvCreatedOrder.setText(dbHelper.getString(R.string.order_on) +" "+ Utils.getDateFormate(orderDetailsModel.getOrderDate()));
+                    mBinding.tvSellerName.setText(dbHelper.getString(R.string.sell_by) +" "+ orderDetailsModel.getSellerName());
+                    mBinding.tvPaymentType.setText(dbHelper.getString(R.string.payment_mode)+" "+ orderDetailsModel.getPaymentMode());
                     mBinding.tvAddreshOne.setText(orderDetailsModel.getAddressOne());
                     mBinding.tvSellerAddress.setText(orderDetailsModel.getAddressThree());
                     mBinding.tvCity.setText(orderDetailsModel.getCity());
@@ -163,7 +175,7 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
                 if (orderItemModels.size() > 0) {
                     OrderDetailsItemAdapter orderDetailsItemAdapter = new OrderDetailsItemAdapter(OrderDetailActivity.this, orderItemModels);
                     mBinding.rMyOrder.setAdapter(orderDetailsItemAdapter);
-                    mBinding.tvItemCount.setText("Price Details (" + orderItemModels.size() + " items )");
+                    mBinding.tvItemCount.setText(dbHelper.getString(R.string.price_details_order) + orderItemModels.size() +" "+ dbHelper.getString(R.string.items_order));
                 }
 
             }
@@ -176,7 +188,7 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
             Utils.showProgressDialog(OrderDetailActivity.this);
             orderCancleFromUser();
         } else {
-            Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
 

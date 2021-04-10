@@ -19,6 +19,7 @@ import com.skdirect.databinding.ItemAllCategoriesBinding;
 import com.skdirect.databinding.ItemNearProductListBinding;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.NearProductListModel;
+import com.skdirect.utils.MyApplication;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -44,6 +45,11 @@ public class NearProductListAdapter extends RecyclerView.Adapter<NearProductList
     public void onBindViewHolder(@NonNull NearProductListAdapter.ViewHolder holder, int position) {
         NearProductListModel nearProductListModel = nearProductListList.get(position);
         holder.mBinding.tvItemName.setText(nearProductListModel.getProductName());
+
+        holder.mBinding.tvMrpTitle.setText(MyApplication.getInstance().dbHelper.getString(R.string.txt_mrp));
+        holder.mBinding.tvSellingPriceTitle.setText(MyApplication.getInstance().dbHelper.getString(R.string.txt_selling_price));
+        holder.mBinding.tvInclusiveAll.setText(MyApplication.getInstance().dbHelper.getString(R.string.txt_Inclusive));
+        holder.mBinding.tvNearByViewAll.setText(MyApplication.getInstance().dbHelper.getString(R.string.detail));
 
         if (nearProductListModel.getMrp() == nearProductListModel.getSellingPrice()) {
             holder.mBinding.llSellingPrice.setVisibility(View.GONE);

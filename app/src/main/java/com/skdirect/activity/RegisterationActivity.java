@@ -13,6 +13,8 @@ import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityRegistrationBinding;
 import com.skdirect.model.CommonResponseModel;
 import com.skdirect.model.UpdateProfilePostModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
@@ -24,18 +26,22 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
 
     private ActivityRegistrationBinding mBinding;
     private UpdateProfileViewMode updateProfileViewMode;
-
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_registration);
         updateProfileViewMode = ViewModelProviders.of(this).get(UpdateProfileViewMode.class);
-
+        dbHelper = MyApplication.getInstance().dbHelper;
         initView();
 
     }
 
     private void initView() {
+        mBinding.tilName.setHint(dbHelper.getString(R.string.name_reg));
+        mBinding.tilEmail.setHint(dbHelper.getString(R.string.email_is_optional));
+        mBinding.tilPincode.setHint(dbHelper.getString(R.string.pincode));
+        mBinding.btSaveAddresh.setHint(dbHelper.getString(R.string.save));
         mBinding.btSaveAddresh.setOnClickListener(this);
         mBinding.etName.setText(SharePrefs.getInstance(RegisterationActivity.this).getString(SharePrefs.FIRST_NAME));
         mBinding.etEmailId.setText(SharePrefs.getInstance(RegisterationActivity.this).getString(SharePrefs.EMAIL_ID));
@@ -56,7 +62,7 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
 
     private void upDateProfile() {
         if (TextUtils.isNullOrEmpty(mBinding.etName.getText().toString().trim())) {
-            Utils.setToast(getApplicationContext(), "Please Enter Name");
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_name));
         } /*else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString().trim())) {
             Utils.setToast(getApplicationContext(), "Please Enter PinCode");
         }*/ else {
@@ -66,7 +72,7 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
                 UpdateProfilePostModel updateProfilePostModel = new UpdateProfilePostModel(mBinding.etName.getText().toString(), mBinding.etEmailId.getText().toString());
                 new CommonClassForAPI().UpdateUserProfile(updateprofile, updateProfilePostModel);
             } else {
-                Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
             }
         }
 

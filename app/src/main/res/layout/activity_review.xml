@@ -25,7 +25,8 @@
                 android:maxLines="1"
                 android:padding="5dp"
                 style="@style/font_normal_sami_bold"
-                android:text="Rate Your Experience"
+                android:text="@string/rate_your_experience"
+                android:id="@+id/tvRateExperience"
                 android:textColor="@color/black"
                 android:textSize="15dp"
                  />
@@ -38,7 +39,8 @@
                 android:maxLines="1"
                 style="@style/font_normal"
                 android:padding="5dp"
-                android:text="How would you rate the seller?"
+                android:id="@+id/tvHowWouldRate"
+                android:text="@string/how_would_you_rate_the_seller"
                 android:textColor="@color/black"
                 android:textSize="13dp"
                 android:textStyle="normal" />
@@ -53,10 +55,6 @@
                 android:numStars="5"
                 />
 
-
-
-
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,7 +63,8 @@
                 android:maxLines="1"
                 android:padding="5dp"
                 style="@style/font_normal"
-                android:text="Comments"
+                android:text="@string/comments"
+                android:id="@+id/tvComments"
                 android:textColor="@color/black"
                 android:textSize="13dp"
                 android:textStyle="normal" />
@@ -84,7 +83,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:background="@null"
-                    android:hint="Enter Comments"
+                    android:hint="@string/enter_comments"
                     style="@style/font_normal"
                     android:inputType="textMultiLine"
                     android:maxLines="3"
@@ -106,7 +105,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_alignParentBottom="true"
-            android:text="Save"
+            android:text="@string/save"
             android:textColor="@color/seller_button_color"
             android:textStyle="normal" />
 

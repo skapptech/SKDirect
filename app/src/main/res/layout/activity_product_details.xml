@@ -60,7 +60,7 @@
                             android:layout_margin="10dp"
                             android:background="@drawable/rounded_drawer"
                             android:padding="5dp"
-                            android:text="Variants"
+                            android:text="@string/variants"
                             android:textColor="@color/seller_button_color"
                             android:textSize="10sp"
                             android:textStyle="normal"
@@ -147,6 +147,7 @@
                                     android:maxLines="1"
                                     android:padding="2dp"
                                     android:text="@string/txt_mrp"
+                                    android:id="@+id/tvMrpTitle"
                                     android:textColor="@color/black"
                                     android:textSize="10dp"
                                     android:textStyle="bold" />
@@ -210,6 +211,7 @@
                                     android:ellipsize="end"
                                     android:maxLines="1"
                                     android:padding="2dp"
+                                    android:id="@+id/tvSellingPriceTitle"
                                     android:text="@string/txt_selling_price"
                                     android:textColor="@color/black"
                                     android:textSize="10dp"
@@ -281,6 +283,7 @@
                                 android:ellipsize="end"
                                 android:maxLines="1"
                                 android:padding="2dp"
+                                android:id="@+id/tvShopNameTitle"
                                 android:text="@string/txt_shop_name"
                                 android:textColor="@color/black"
                                 android:textSize="14dp"
@@ -447,7 +450,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:padding="5dp"
-                        android:text="Similar Products"
+                        android:text="@string/similar_products"
+                        android:id="@+id/tvSimilaProducts"
                         android:textColor="@color/seller_button_color"
                         android:textStyle="bold" />
 
@@ -474,7 +478,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:padding="5dp"
-                        android:text="Other Sellers"
+                        android:text="@string/other_sellers"
+                        android:id="@+id/tvOtherSellers"
                         android:textColor="@color/seller_button_color"
                         android:textStyle="bold" />
 
@@ -501,7 +506,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:padding="5dp"
-                        android:text="Seller's others product"
+                        android:id="@+id/tvSellersOtherProduct"
+                        android:text="@string/seller_s_others_product"
                         android:textColor="@color/seller_button_color"
                         android:textStyle="bold" />
 
@@ -537,7 +543,7 @@
                 android:drawableRight="@drawable/ic_basket_un"
                 android:drawablePadding="10dp"
                 android:padding="5dp"
-                android:text="Add to Cart"
+                android:text="@string/add_to_cart"
                 android:textAllCaps="true"
                 android:textColor="@color/seller_button_color"
                 android:textSize="15dp"

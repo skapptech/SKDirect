@@ -53,7 +53,7 @@
                     android:layout_marginTop="10dp"
                     style="@style/font_normal"
                     android:layout_toRightOf="@+id/iv_seller"
-                    android:text="User Name"
+                    android:text="@string/user_name"
                     android:textColor="@color/black"
                     android:textSize="14dp"
                     android:textStyle="bold" />
@@ -102,7 +102,7 @@
                     android:layout_marginTop="10dp"
                     style="@style/font_normal"
                     android:layout_toRightOf="@+id/iv_my_order"
-                    android:text="My Order"
+                    android:text="@string/my_order"
                     android:textColor="@color/black"
                     android:textSize="14dp"
                     android:textStyle="bold" />
@@ -114,7 +114,8 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@+id/iv_my_order"
-                    android:text="Check Your Order status"
+                    android:text="@string/check_your_order_status"
+                    android:id="@+id/tvCheckOrderStatus"
                     style="@style/font_normal"
                     android:textSize="14dp"
                     android:textStyle="normal" />
@@ -149,7 +150,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@+id/iv_address"
-                    android:text="My Address"
+                    android:text="@string/my_address"
                     style="@style/font_normal"
                     android:textColor="@color/black"
                     android:textSize="14dp"
@@ -164,7 +165,8 @@
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@+id/iv_address"
                     style="@style/font_normal"
-                    android:text="Save address for a hassle-free checkout "
+                    android:id="@+id/tvSavedAddress"
+                    android:text="@string/save_address_for_a_hassle_free_checkout"
                     android:textSize="14dp"
                     android:textStyle="normal" />
 
@@ -198,7 +200,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@+id/iv_chnage_password"
-                    android:text="Change Password"
+                    android:text="@string/change_password"
                     android:textColor="@color/black"
                     style="@style/font_normal"
                     android:textSize="14dp"
@@ -212,7 +214,8 @@
                     android:layout_marginTop="5dp"
                     style="@style/font_normal"
                     android:layout_toRightOf="@+id/iv_chnage_password"
-                    android:text="Manage your password"
+                    android:text="@string/manage_your_password"
+                    android:id="@+id/tvMangePassword"
                     android:textSize="14dp"
                     android:textStyle="normal" />
 

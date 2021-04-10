@@ -17,6 +17,7 @@ import com.skdirect.activity.ProductDetailsActivity;
 import com.skdirect.databinding.ItemSearchBinding;
 import com.skdirect.databinding.ItemSearchDataBinding;
 import com.skdirect.model.SearchDataModel;
+import com.skdirect.utils.MyApplication;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -47,7 +48,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         holder.mBinding.tvPrice.setText("₹ "+String.valueOf(model.getMrp()));
         holder.mBinding.tvSellingPrice.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
         holder.mBinding.tvSellingPrice.setText("₹ "+String.valueOf(model.getSellingPrice()));
-        holder.mBinding.tvTax.setText(context.getString(R.string.txt_Inclusive));
+        holder.mBinding.tvTax.setText(MyApplication.getInstance().dbHelper.getString(R.string.txt_Inclusive));
         holder.mBinding.tvQty.setText("Qty "+String.valueOf(model.getMeasurement())+ " PC");
         holder.mBinding.tvPice.setText("("+model.getMeasurement()+" "+model.getUom()+" )");
         double offPersentagePrice = model.getMrp()-model.getSellingPrice()/model.getMrp();

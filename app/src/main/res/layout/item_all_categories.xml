@@ -28,7 +28,7 @@
             android:maxLines="1"
             style="@style/font_normal_sami_bold"
             android:padding="2dp"
-            android:text="bhagwan"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="11sp" />
 

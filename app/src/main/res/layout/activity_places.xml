@@ -45,7 +45,7 @@
                         android:id="@+id/et_searchPlace"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="search_for"
+                        android:hint="@string/search_for"
                         android:imeOptions="actionNext"
                         android:inputType="textCapWords"
                         android:layout_marginStart="6dp"
@@ -108,8 +108,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Current location"
+                        android:text="@string/current_location"
                         android:textSize="15sp"
+                        android:id="@+id/tvCurrentLocation"
                         style="@style/font_normal_sami_bold" />
 
                     <TextView
@@ -132,7 +133,8 @@
 
             <TextView
                 android:layout_margin="10dp"
-                android:text="SearchResults"
+                android:text="@string/search_results"
+                android:id="@+id/tvSearchResult"
                 android:textAllCaps="true"
                 android:textSize="12sp"
                 android:textStyle="bold"
