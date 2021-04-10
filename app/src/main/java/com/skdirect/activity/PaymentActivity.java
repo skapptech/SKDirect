@@ -79,7 +79,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.btnOffer:
                 startActivityForResult(new Intent(getApplicationContext(), OfferActivity.class), 9);
                 break;
-            case R.id.tv_place_order:
+            case R.id.btnPlaceOrder:
                 if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
                     if (userLocationId != 0) {
                         OrderPlaceAlertDialog();
@@ -129,7 +129,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mBinding.tvAddress.setText(MyApplication.getInstance().dbHelper.getString(R.string.address));
         mBinding.btnOffer.setOnClickListener(this);
         mBinding.btnRemove.setOnClickListener(this);
-        mBinding.tvPlaceOrder.setOnClickListener(this);
+        mBinding.btnPlaceOrder.setOnClickListener(this);
         mBinding.btnAdd.setOnClickListener(this);
     }
 
