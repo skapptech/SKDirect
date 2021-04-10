@@ -176,6 +176,12 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
                 String brand = data.getExtras().getString(Constant.Brands);
                 String discount = data.getExtras().getString(Constant.Discount);
                 System.out.println("Category::" + category);
+                System.out.println("Category::" + priceMin);
+                System.out.println("Category::" + priceMax);
+                System.out.println("Category::" + brand);
+                System.out.println("Category::" + discount);
+
+
             } else
             {
                 System.out.println("Canceld by user");

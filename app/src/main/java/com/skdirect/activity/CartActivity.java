@@ -2,6 +2,7 @@ package com.skdirect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -43,13 +44,23 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     private double totalAmount;
     DBHelper dbHelper;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_cart);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(MyApplication.getInstance().dbHelper.getString(R.string.shopping_bag));
+
         cartItemViewMode = ViewModelProviders.of(this).get(CartItemViewMode.class);
         dbHelper = MyApplication.getInstance().dbHelper;
         initView();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -58,8 +69,10 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.iv_back_press:
                 onBackPressed();
                 break;
-            case R.id.tv_add:
-                startActivity(new Intent(getApplicationContext(), PaymentActivity.class).putExtra("cartItemSize", cartItemDataModel).putExtra("totalAmount", totalAmount));
+            case R.id.btnCheckout:
+                startActivity(new Intent(getApplicationContext(), PaymentActivity.class)
+                        .putExtra("cartItemSize", cartItemDataModel)
+                        .putExtra("totalAmount", totalAmount));
                 break;
             case R.id.tv_keep_shopping:
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -102,14 +115,12 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void initView() {
-        mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
-        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.shopping_bag));
         mBinding.tvNotingInBasket.setText(dbHelper.getString(R.string.nothing_in_basket));
         mBinding.tvKeepShopping.setText(dbHelper.getString(R.string.keep_shopping));
-        mBinding.tvAdd.setText(dbHelper.getString(R.string.checkout));
+        mBinding.btnCheckout.setText(dbHelper.getString(R.string.checkout));
 
         mBinding.tvKeepShopping.setOnClickListener(this);
-        mBinding.tvAdd.setOnClickListener(this);
+        mBinding.btnCheckout.setOnClickListener(this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         mBinding.rvCartItem.setLayoutManager(layoutManager);

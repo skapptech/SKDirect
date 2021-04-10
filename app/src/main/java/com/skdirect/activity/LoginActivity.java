@@ -126,7 +126,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                  SharePrefs.getInstance(LoginActivity.this).getString(SharePrefs.PIN_CODE));
      }
 
-
      private final DisposableObserver<TokenModel> callToken = new DisposableObserver<TokenModel>() {
          @Override
          public void onNext(@NotNull TokenModel model) {

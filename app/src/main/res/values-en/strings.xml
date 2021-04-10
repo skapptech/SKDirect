@@ -205,4 +205,6 @@
     <string name="qty">Qty :</string>
     <string name="no_record_found">No Record Found</string>
     <string name="language_code">en</string>
+    <string name="enter_coupon_code">Enter Coupon Code</string>
+    <string name="title_activity_payment">Payment</string>
 </resources>

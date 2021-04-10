@@ -200,12 +200,14 @@
         </activity>
         <activity
             android:name=".activity.CartActivity"
-            android:label=""
-            android:screenOrientation="portrait" />
+            android:label="@string/shopping_bag"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.PaymentActivity"
-            android:label=""
-            android:screenOrientation="portrait" />
+            android:label="@string/title_activity_payment"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.MapsActivity"
             android:hardwareAccelerated="false"

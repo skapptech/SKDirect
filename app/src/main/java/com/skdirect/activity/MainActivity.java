@@ -219,7 +219,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.tvHowToTitle.setText(dbHelper.getString(R.string.how_to_use));
         mBinding.tvLogoutTitle.setText(dbHelper.getString(R.string.logout));
         mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
-
     }
 
     private void setlocationInHader() {

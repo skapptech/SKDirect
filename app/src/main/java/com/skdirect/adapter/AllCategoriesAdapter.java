@@ -61,10 +61,6 @@ public class AllCategoriesAdapter extends RecyclerView.Adapter<AllCategoriesAdap
                 context.startActivity(new Intent(context, SearchActivity.class).putExtra("CateogryId",allCategoriesModel.getId()));
             }
         });
-
-
-
-
     }
 
     @Override
