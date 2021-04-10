@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -138,6 +140,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBinding.drawer.openDrawer(GravityCompat.START);
             }
         });
+
+        Menu menu = mBinding.toolbarId.bottomNavigation.getMenu();
+        MenuItem home = menu.findItem(R.id.nav_home);
+        MenuItem profile = menu.findItem(R.id.nav_profile);
+        MenuItem myOrder = menu.findItem(R.id.nav_my_order);
+        MenuItem chat = menu.findItem(R.id.nav_chat);
+        home.setTitle(dbHelper.getString(R.string.home));
+        profile.setTitle(dbHelper.getString(R.string.profile));
+        myOrder.setTitle(dbHelper.getString(R.string.my_order));
+        chat.setTitle(dbHelper.getString(R.string.chat));
 
         mBinding.toolbarId.bottomNavigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
