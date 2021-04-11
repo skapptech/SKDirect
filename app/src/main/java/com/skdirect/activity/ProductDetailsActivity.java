@@ -521,8 +521,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         productDetailsViewMode.getAddItemsInCardVMRequest(paginationModel);
         productDetailsViewMode.getAddItemsInCardVM().observe(this, addCartItemModel -> {
             Utils.hideProgressDialog();
-            if (addCartItemModel != null && addCartItemModel.getId() != null) {
-                MyApplication.getInstance().cartRepository.updateCartId(addCartItemModel.getId());
+            if (addCartItemModel != null && addCartItemModel.getResultItem() != null) {
+                MyApplication.getInstance().cartRepository.updateCartId(addCartItemModel.getResultItem().getId());
             }
         });
     }

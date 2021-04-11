@@ -5,95 +5,108 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 public class AddCartItemModel {
-    @SerializedName("ShoppingCartItem")
-    private ArrayList<ShoppingCartItem> ShoppingCartItem;
-    @SerializedName("EncryptSellerId")
-    private String EncryptSellerId;
-    @SerializedName("SellerId")
-    private int SellerId;
-    @SerializedName("ModifiedBy")
-    private int ModifiedBy;
-    @SerializedName("CreatedBy")
-    private int CreatedBy;
-    @SerializedName("CreatedDate")
-    private String CreatedDate;
-    @SerializedName("ModifiedDate")
-    private String ModifiedDate;
-    @SerializedName("CookieValue")
-    private String CookieValue;
-    @SerializedName("Id")
-    private String Id;
+    @SerializedName("ResultItem")
+    private ResultItem resultItem;
 
-    public ArrayList<AddCartItemModel.ShoppingCartItem> getShoppingCartItem() {
-        return ShoppingCartItem;
+    public ResultItem getResultItem() {
+        return resultItem;
     }
 
-    public void setShoppingCartItem(ArrayList<AddCartItemModel.ShoppingCartItem> shoppingCartItem) {
-        ShoppingCartItem = shoppingCartItem;
+    public void setResultItem(ResultItem resultItem) {
+        this.resultItem = resultItem;
     }
 
-    public String getEncryptSellerId() {
-        return EncryptSellerId;
-    }
+    public class ResultItem {
+        @SerializedName("ShoppingCartItem")
+        private ArrayList<ShoppingCartItem> ShoppingCartItem;
+        @SerializedName("EncryptSellerId")
+        private String EncryptSellerId;
+        @SerializedName("SellerId")
+        private int SellerId;
+        @SerializedName("ModifiedBy")
+        private int ModifiedBy;
+        @SerializedName("CreatedBy")
+        private int CreatedBy;
+        @SerializedName("CreatedDate")
+        private String CreatedDate;
+        @SerializedName("ModifiedDate")
+        private String ModifiedDate;
+        @SerializedName("CookieValue")
+        private String CookieValue;
+        @SerializedName("Id")
+        private String Id;
 
-    public void setEncryptSellerId(String encryptSellerId) {
-        EncryptSellerId = encryptSellerId;
-    }
+        public ArrayList<AddCartItemModel.ShoppingCartItem> getShoppingCartItem() {
+            return ShoppingCartItem;
+        }
 
-    public int getSellerId() {
-        return SellerId;
-    }
+        public void setShoppingCartItem(ArrayList<AddCartItemModel.ShoppingCartItem> shoppingCartItem) {
+            ShoppingCartItem = shoppingCartItem;
+        }
 
-    public void setSellerId(int sellerId) {
-        SellerId = sellerId;
-    }
+        public String getEncryptSellerId() {
+            return EncryptSellerId;
+        }
 
-    public int getModifiedBy() {
-        return ModifiedBy;
-    }
+        public void setEncryptSellerId(String encryptSellerId) {
+            EncryptSellerId = encryptSellerId;
+        }
 
-    public void setModifiedBy(int modifiedBy) {
-        ModifiedBy = modifiedBy;
-    }
+        public int getSellerId() {
+            return SellerId;
+        }
 
-    public int getCreatedBy() {
-        return CreatedBy;
-    }
+        public void setSellerId(int sellerId) {
+            SellerId = sellerId;
+        }
 
-    public void setCreatedBy(int createdBy) {
-        CreatedBy = createdBy;
-    }
+        public int getModifiedBy() {
+            return ModifiedBy;
+        }
 
-    public String getCreatedDate() {
-        return CreatedDate;
-    }
+        public void setModifiedBy(int modifiedBy) {
+            ModifiedBy = modifiedBy;
+        }
 
-    public void setCreatedDate(String createdDate) {
-        CreatedDate = createdDate;
-    }
+        public int getCreatedBy() {
+            return CreatedBy;
+        }
 
-    public String getModifiedDate() {
-        return ModifiedDate;
-    }
+        public void setCreatedBy(int createdBy) {
+            CreatedBy = createdBy;
+        }
 
-    public void setModifiedDate(String modifiedDate) {
-        ModifiedDate = modifiedDate;
-    }
+        public String getCreatedDate() {
+            return CreatedDate;
+        }
 
-    public String getCookieValue() {
-        return CookieValue;
-    }
+        public void setCreatedDate(String createdDate) {
+            CreatedDate = createdDate;
+        }
 
-    public void setCookieValue(String cookieValue) {
-        CookieValue = cookieValue;
-    }
+        public String getModifiedDate() {
+            return ModifiedDate;
+        }
 
-    public String getId() {
-        return Id;
-    }
+        public void setModifiedDate(String modifiedDate) {
+            ModifiedDate = modifiedDate;
+        }
 
-    public void setId(String id) {
-        Id = id;
+        public String getCookieValue() {
+            return CookieValue;
+        }
+
+        public void setCookieValue(String cookieValue) {
+            CookieValue = cookieValue;
+        }
+
+        public String getId() {
+            return Id;
+        }
+
+        public void setId(String id) {
+            Id = id;
+        }
     }
 
     public class ShoppingCartItem {
