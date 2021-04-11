@@ -74,6 +74,32 @@ public class CommonClassForAPI {
                     }
                 });
     }
+ public void getTokenwithphoneNo(final DisposableObserver observer, String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp, boolean isDevice, String deviceID, double lat, double log, String pincode,String type,String phoneno) {
+        RestClient.getInstance().getService().getTokenwithphoneno(password, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp, isDevice, deviceID, lat, log, pincode,
+                MyApplication.getInstance().dbHelper.getString(R.string.language_code),type,phoneno)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<TokenModel>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(TokenModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
 
     public void getUpdateToken(final DisposableObserver observer, String fcmId) {
         RestClient.getInstance().getService().getUpdateToken(fcmId)

@@ -36,7 +36,7 @@
     <string name="we_will_send_an_otp_to_nabove_number">हम उपरोक्त नंबर पर एक OTP भेजेंगे</string>
     <string name="login_using_password">पासवर्ड का उपयोग कर लॉगिन करें</string>
     <string name="invalid_pass">अवैध पासवर्ड</string>
-    <string name="enter_no_txt">सत्यापन कोड दर्ज करें जिसे हमने XXXXX को भेजा है </string>
+    <string name="enter_no_txt">सत्यापन कोड दर्ज करें जिसे हमने भेजा है XXXXX  </string>
     <string name="resend_otp">ओटीपी पुनः भेजें</string>
     <string name="valid_otp">कृपया मान्य OTP दर्ज करें।</string>
     <string name="enter_otp"> कृपया ओटीपी डालें</string>

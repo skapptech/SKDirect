@@ -35,8 +35,6 @@ import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityMainBinding;
 import com.skdirect.firebase.FirebaseLanguageFetch;
-import com.skdirect.fragment.BasketFragment;
-import com.skdirect.fragment.ChatFragment;
 import com.skdirect.fragment.HomeFragment;
 import com.skdirect.model.CartModel;
 import com.skdirect.utils.AppSignatureHelper;
@@ -177,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case R.id.nav_chat:
                     positionChanged = true;
-                    openFragment(new ChatFragment());
+                    startActivity(new Intent(MainActivity.this, ChatActivity.class));
                     break;
 
             }
@@ -284,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.ll_chet:
                 mBinding.drawer.closeDrawers();
+                startActivity(new Intent(MainActivity.this, ChatActivity.class));
                 break;
             case R.id.ll_rate_this_app:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.playStoreURL)));

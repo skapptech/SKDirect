@@ -136,6 +136,10 @@
         <activity
             android:name=".activity.ProfilePrimaryAddressActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ChatActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ChangePasswordActivity"
             android:screenOrientation="portrait" />

@@ -27,6 +27,7 @@ import com.skdirect.model.GenerateOtpResponseModel;
 import com.skdirect.model.LoginWithPasswordModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
+import com.skdirect.model.TokenModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
@@ -222,9 +223,9 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, model.getResultItem().getIsUserExist());
                     SharePrefs.getInstance(GenerateOTPActivity.this).putString(SharePrefs.USER_ID, model.getResultItem().getUserid());
                     commonClassForAPI
-                            .getToken(callToken, "password", Utils.getDeviceUniqueID(GenerateOTPActivity.this),
+                            .getTokenwithphoneNo(callToken, "password", Utils.getDeviceUniqueID(GenerateOTPActivity.this),
                                     "", true, true, "BUYERAPP", true,
-                                    Utils.getDeviceUniqueID(GenerateOTPActivity.this), Double.parseDouble(SharePrefs.getStringSharedPreferences(GenerateOTPActivity.this,SharePrefs.LAT)),Double.parseDouble(SharePrefs.getStringSharedPreferences(GenerateOTPActivity.this,SharePrefs.LON)), SharePrefs.getInstance(GenerateOTPActivity.this).getString(SharePrefs.PIN_CODE),"GET");
+                                    Utils.getDeviceUniqueID(GenerateOTPActivity.this), Double.parseDouble(SharePrefs.getStringSharedPreferences(GenerateOTPActivity.this,SharePrefs.LAT)),Double.parseDouble(SharePrefs.getStringSharedPreferences(GenerateOTPActivity.this,SharePrefs.LON)), SharePrefs.getInstance(GenerateOTPActivity.this).getString(SharePrefs.PIN_CODE),"GET",mobileNumber);
 
 
 
@@ -250,16 +251,20 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
         }
     };
 
-    private DisposableObserver<LoginWithPasswordModel> callToken = new DisposableObserver<LoginWithPasswordModel>() {
+    private DisposableObserver<TokenModel> callToken = new DisposableObserver<TokenModel>() {
         @Override
-        public void onNext(LoginWithPasswordModel model) {
+        public void onNext(TokenModel model) {
             try {
                 Utils.hideProgressDialog();
                 if (model != null) {
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
-                    // commonClassForAPI.getUpdateToken(updatecallToken,new UpdateTokenModel(fcmToken));
-
+                    SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE, model.getIsRegistrationComplete());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LAT,model.getLatitiute());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LON, model.getLongitude());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
                     commonClassForAPI.getUpdateToken(updatecallToken, fcmToken);
 
 
@@ -293,10 +298,11 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                 if (model != null) {
                     if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_USER_EXISTS)) {
                         startActivity(new Intent(GenerateOTPActivity.this, MainActivity.class));
+                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN,true);
+
                     } else {
                         startActivity(new Intent(GenerateOTPActivity.this, RegisterationActivity.class));
                     }
-                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN,true);
                     finish();
                 }
             } catch (Exception e) {
