@@ -71,7 +71,6 @@
                 android:id="@+id/img_verified"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:background="@drawable/checkbox_selector"
                 android:button="@null"
                 app:buttonCompat="@null"
                 android:layout_alignParentRight="true"
@@ -80,10 +79,6 @@
                 />
 
         </RelativeLayout>
-
-
-
-
     </LinearLayout>
 
 </layout>
