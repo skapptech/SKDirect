@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi;
 import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.model.CommonResponseModel;
+import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.MallMainPriceModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
@@ -284,4 +285,29 @@ public class CommonClassForAPI {
                 });
     }
 
+    public void getUserDetail(DisposableObserver<CustomerDataModel> observer) {
+        RestClient.getInstance().getService().getUserDetail()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CustomerDataModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull CustomerDataModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
 }
