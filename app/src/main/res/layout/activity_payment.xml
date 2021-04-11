@@ -355,26 +355,26 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:padding="10dp"
+                    android:background="@android:color/white">
 
                     <TextView
                         style="@style/font_normal_sami_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:drawableLeft="@drawable/ic_basket_un"
+                        android:drawableStart="@drawable/ic_basket_un"
                         android:drawablePadding="10dp"
                         android:gravity="center"
                         android:text="Cash on delivery"
                         android:textColor="@color/grid_divder"
-                        android:textSize="16dp" />
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerInParent="true"
-                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@string/app_name"
                         android:src="@drawable/correct" />
                 </RelativeLayout>
 

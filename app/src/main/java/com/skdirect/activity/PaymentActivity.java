@@ -48,6 +48,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private OfferResponse.Coupon coupon;
     private int deliveryOption, userLocationId;
     private double cartTotal, totalAmount, discount = 0;
+    private boolean isSelfPickup = false;
 
 
     @Override
@@ -80,8 +81,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.btnPlaceOrder:
                 if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                    if (userLocationId != 0) {
-                        OrderPlaceAlertDialog();
+                    if (userLocationId != 0 || isSelfPickup) {
+                        orderPlaceAlertDialog();
                     } else {
                         Utils.setToast(getApplicationContext(), MyApplication.getInstance().dbHelper.getString(R.string.please_select_address));
                     }
@@ -156,7 +157,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public void OrderPlaceAlertDialog() {
+    public void orderPlaceAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Confirmation");
         builder.setMessage("Are you sure you want to place order?");
@@ -178,7 +179,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void orderPlaceAPI() {
-        OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASE", deliveryOption, cartItemModel.getId(), userLocationId);
+        OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASH", deliveryOption, cartItemModel.getId(), userLocationId);
         paymentViewMode.getOrderPlaceVMRequest(orderPlaceRequestModel);
         paymentViewMode.getOrderPlaceVM().observe(this, response -> {
             Utils.hideProgressDialog();
@@ -188,7 +189,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 Toast.makeText(PaymentActivity.this, response.getErrorMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     private void orderPlaceDialog() {
@@ -254,6 +254,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 if (deliveryMainModel.isSuccess())
                     if (deliveryMainModel.getResultItem().size() == 1 && deliveryMainModel.getResultItem().get(0).getDelivery().equals("Self Pickup")) {
                         mBinding.liAddressV.setVisibility(View.GONE);
+                        isSelfPickup = true;
                     }
                 if (deliveryMainModel.getResultItem().size() > 0) {
                     for (int i = 0; i < deliveryMainModel.getResultItem().size(); i++) {

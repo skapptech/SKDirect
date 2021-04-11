@@ -48,7 +48,6 @@ import com.skdirect.model.SellerProfileDataModel;
 import com.skdirect.model.ShopMainModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.TopSellerMainModel;
-import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.UserLocationModel;
 import com.skdirect.model.response.ApplyOfferResponse;
@@ -83,13 +82,18 @@ public interface APIServices {
 
     @FormUrlEncoded
     @POST("/token")
-    Observable<TokenModel> getToken(@Field("grant_type") String grant_type, @Field("username") String username, @Field("password") String password, @Field("ISOTP") boolean isOTp, @Field("ISBUYER") boolean isBuyer, @Field("LOGINTYPE") String LOGINTYPE, @Field("ISDEVICE") boolean ISDEVICE, @Field("DEVICEID") String DEVICEID, @Field("LAT") double LAT, @Field("LNG") double LNG, @Field("PINCODE") String pincode,@Field("lang") String lang, @Field("TYPE") String TYPE);
-@FormUrlEncoded
+    Observable<TokenModel> getToken(@Field("grant_type") String grant_type, @Field("username") String username, @Field("password") String password, @Field("ISOTP") boolean isOTp, @Field("ISBUYER") boolean isBuyer, @Field("LOGINTYPE") String LOGINTYPE, @Field("ISDEVICE") boolean ISDEVICE, @Field("DEVICEID") String DEVICEID, @Field("LAT") double LAT, @Field("LNG") double LNG, @Field("PINCODE") String pincode, @Field("lang") String lang, @Field("TYPE") String TYPE);
+
+    @FormUrlEncoded
     @POST("/token")
-    Observable<TokenModel> getTokenwithphoneno(@Field("grant_type") String grant_type, @Field("username") String username, @Field("password") String password, @Field("ISOTP") boolean isOTp, @Field("ISBUYER") boolean isBuyer, @Field("LOGINTYPE") String LOGINTYPE, @Field("ISDEVICE") boolean ISDEVICE, @Field("DEVICEID") String DEVICEID, @Field("LAT") double LAT, @Field("LNG") double LNG, @Field("PINCODE") String pincode,@Field("lang") String lang, @Field("TYPE") String TYPE, @Field("PHONENUMBER") String PHONENUMBER);
+    Observable<TokenModel> getTokenwithphoneno(@Field("grant_type") String grant_type, @Field("username") String username, @Field("password") String password, @Field("ISOTP") boolean isOTp, @Field("ISBUYER") boolean isBuyer, @Field("LOGINTYPE") String LOGINTYPE, @Field("ISDEVICE") boolean ISDEVICE, @Field("DEVICEID") String DEVICEID, @Field("LAT") double LAT, @Field("LNG") double LNG, @Field("PINCODE") String pincode, @Field("lang") String lang, @Field("TYPE") String TYPE, @Field("PHONENUMBER") String PHONENUMBER);
+
 
     @GET("api/buyer/Profile/GetUserDetail")
     Call<CustomerDataModel> GetUserDetail();
+
+    @GET("api/buyer/Profile/GetUserDetail")
+    Observable<CustomerDataModel> getUserDetail();
 
     /*Home Page APi*/
     @GET("api/NativeBuyer/AppHome/GetNearByItem")
