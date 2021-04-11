@@ -143,7 +143,7 @@ public class SellerProfileViewMode extends ViewModel {
         return addItemsInCardVM;
     }
 
-    public MutableLiveData<Object> getClearCartItemVMRequest(int id) {
+    public MutableLiveData<Object> getClearCartItemVMRequest(String id) {
         RestClient.getInstance().getService().ClearCart(id).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {

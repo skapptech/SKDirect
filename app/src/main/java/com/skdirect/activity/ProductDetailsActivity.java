@@ -54,6 +54,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private ProductResultModel resultModel = new ProductResultModel();
     private String shopName;
     DBHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +104,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 startActivity(new Intent(getApplicationContext(), SellerProfileActivity.class).putExtra("ID", resultModel.getEncryptSellerId()));
                 break;
             case R.id.imShare:
-                Utils.shareProduct(this, BuildConfig.apiEndpoint+"/product/"+productID);
+                Utils.shareProduct(this, BuildConfig.apiEndpoint + "/product/" + productID);
                 break;
 
         }
@@ -166,11 +167,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     }
 
     private void getIntentData() {
-        if (getIntent().getData()!=null){
+        if (getIntent().getData() != null) {
             String sharedUrl = getIntent().getData().toString();
-            sharedUrl = sharedUrl.substring(sharedUrl.lastIndexOf("/")+1);
+            sharedUrl = sharedUrl.substring(sharedUrl.lastIndexOf("/") + 1);
             productID = Integer.parseInt(sharedUrl);
-        }else{
+        } else {
             productID = getIntent().getIntExtra("ID", 0);
         }
     }
@@ -528,7 +529,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         builder.setTitle(dbHelper.getString(R.string.alert));
         builder.setMessage(dbHelper.getString(R.string.existing_clear_cart));
         builder.setPositiveButton(dbHelper.getString(R.string.yes), (dialog, which) -> {
-            clearCartItem(id);
+            clearCartItem();
             CartModel cartModel = new CartModel(null, 0, null,
                     resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(),
                     resultModel.getUom(), "", 0, resultModel.getProductName(), 0,
@@ -544,19 +545,13 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         builder.setNegativeButton("No", (dialog, which) -> {
             dialog.dismiss();
         });
-
-//        AlertDialog dialog = builder.create();
         builder.show();
     }
 
-    private void clearCartItem(int id) {
-        productDetailsViewMode.getClearCartItemVMRequest(id);
-        productDetailsViewMode.getClearCartItemVM().observe(this, new Observer<Object>() {
-            @Override
-            public void onChanged(Object object) {
-                Utils.hideProgressDialog();
-            }
-        });
+    private void clearCartItem() {
+        String cartId = MyApplication.getInstance().cartRepository.getCartId();
+        productDetailsViewMode.getClearCartItemVMRequest(cartId);
+        productDetailsViewMode.getClearCartItemVM().observe(this, object -> Utils.hideProgressDialog());
     }
 
     private void checkAddButtonValidaction() {

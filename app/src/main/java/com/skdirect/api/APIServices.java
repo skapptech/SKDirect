@@ -167,8 +167,8 @@ public interface APIServices {
     @GET("api/NativeBuyer/SellerProfile/GetCartItems")
     Call<CartMainModel> GetCartItem();
 
-    @POST("api/NativeBuyer/SellerProfile/ClearCart")
-    Call<Object> ClearCart(@Query("Id") int id);
+    @GET("api/NativeBuyer/SellerProfile/ClearCart")
+    Call<Object> ClearCart(@Query("Id") String id);
 
     @GET("api/NativeBuyer/CartOverview/GetCartItems")
     Call<CartMainModel> CartItems();

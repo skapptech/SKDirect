@@ -53,6 +53,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     private String searchSellerName;
     DBHelper dbHelper;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -330,10 +331,10 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     private void addItemInCart(int QTY, SellerProductList sellerProductModel) {
         ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(), 0, 0);
         sellerProfileViewMode.getAddItemsInCardVMRequest(paginationModel);
-        sellerProfileViewMode.getAddItemsInCardVM().observe(this, sellerProdList -> {
+        sellerProfileViewMode.getAddItemsInCardVM().observe(this, addCartItemModel -> {
             Utils.hideProgressDialog();
-            if (sellerProdList != null) {
-                // sellerShopListAdapter.notifyDataSetChanged();
+            if (addCartItemModel != null && addCartItemModel.getId() != null) {
+                MyApplication.getInstance().cartRepository.updateCartId(addCartItemModel.getId());
             }
         });
     }
@@ -342,9 +343,9 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     public void checkCustomerAlertDialog(int id, SellerProductList sellerProductModel, TextView btAddToCart, LinearLayout LLPlusMinus) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Alert");
-        builder.setMessage("Your Cart has existing items from Another Seller.Do You Want to clear it and add items from this Seller?");
+        builder.setMessage("Your Cart has existing items from Another Seller. Do You Want to clear it and add items from this Seller?");
         builder.setPositiveButton("Yes", (dialog, which) -> {
-            clearCartItem(id);
+            clearCartItem();
             MyApplication.getInstance().cartRepository.truncateCart();
             // cartModel.setSellerId(sellerID);
             CartModel cartItemModel = new CartModel(null, 0, null, false,
@@ -368,8 +369,9 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         dialog.show();
     }
 
-    private void clearCartItem(int id) {
-        sellerProfileViewMode.getClearCartItemVMRequest(id);
+    private void clearCartItem() {
+        String cartId = MyApplication.getInstance().cartRepository.getCartId();
+        sellerProfileViewMode.getClearCartItemVMRequest(cartId);
         sellerProfileViewMode.getClearCartItemVM().observe(this, object -> {
             Utils.hideProgressDialog();
         });
