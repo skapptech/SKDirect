@@ -211,5 +211,5 @@
     <string name="please_select_address">कृपया पता चुनें</string>
     <string name="view_offer">कूपन देखें</string>
     <string name="clear_cart">कार्ट को खाली करें</string>
-    <string name="are_you_sure_clear_cart">क्या आपको यकीन है, आप कार्ट क्लियर करना चाहते हैं।</string>
+    <string name="are_you_sure_clear_cart">क्या आपको यकीन है, आप कार्ट खाली करना चाहते हैं।</string>
 </resources>
