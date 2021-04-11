@@ -51,7 +51,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     private final ArrayList<SellerProductList> sellerProductModels = new ArrayList<>();
     private SellerProductAdapter sellerShopListAdapter;
     private String searchSellerName;
-    DBHelper dbHelper;
+    private DBHelper dbHelper;
 
 
     @Override
@@ -94,7 +94,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 startActivity(new Intent(getApplicationContext(), CartActivity.class));
                 break;
             case R.id.btShare:
-                Utils.showShareWhatsappDialog(this,SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL)+"/seller/"+sellerID,"");
+                Utils.showShareWhatsappDialog(this, SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/seller/" + sellerID, "");
                 break;
 
         }
@@ -112,11 +112,11 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     }
 
     private void getIntentData() {
-        if (getIntent().getData()!=null){
+        if (getIntent().getData() != null) {
             String sharedUrl = getIntent().getData().toString();
-            sharedUrl = sharedUrl.substring(sharedUrl.lastIndexOf("/")+1);
+            sharedUrl = sharedUrl.substring(sharedUrl.lastIndexOf("/") + 1);
             sellerID = Integer.parseInt(sharedUrl);
-        }else {
+        } else {
             sellerID = getIntent().getIntExtra("ID", 0);
         }
     }
@@ -152,7 +152,6 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             }
             return handled;
         });
-
 
         mBinding.rvCategories.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -198,7 +197,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 mBinding.tvSellerName.setText(sellerDetailsModel.getSellerInfoModel().getShopName());
                 if (sellerDetailsModel.getSellerInfoModel().getMinOrderValue() != 0.0 && sellerDetailsModel.getSellerInfoModel().getRadialDistance() != 0.0) {
                     mBinding.tvMinimumOrderAmt.setText("₹ " + Math.round(sellerDetailsModel.getSellerInfoModel().getMinOrderValue()));
-                    mBinding.tvDiliverDistance.setText("" + Math.round(sellerDetailsModel.getSellerInfoModel().getRadialDistance())+" KM");
+                    mBinding.tvDiliverDistance.setText("" + Math.round(sellerDetailsModel.getSellerInfoModel().getRadialDistance()) + " KM");
                 } else {
                     mBinding.llMiniOrder.setVisibility(View.GONE);
                     mBinding.llDelivert.setVisibility(View.GONE);
@@ -215,7 +214,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
 
     private void getSellerProductsApi(String searchSellerName) {
 
-        SellerProfileDataModel paginationModel = new SellerProfileDataModel(sellerID, 0, 0, "", skipCount, takeCount, 0, searchSellerName,Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)),Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON)));
+        SellerProfileDataModel paginationModel = new SellerProfileDataModel(sellerID, 0, 0, "", skipCount, takeCount, 0, searchSellerName, Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LAT)), Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LON)));
         sellerProfileViewMode.getSellerProductRequest(paginationModel);
         sellerProfileViewMode.getSellerProductVM().observe(this, sellerProdList -> {
             Utils.hideProgressDialog();

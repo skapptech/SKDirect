@@ -214,4 +214,5 @@
     <string name="invalid_email">कृपया मान्य ईमेल आईडी दर्ज करें</string>
     <string name="clear_cart">कार्ट को खाली करें</string>
     <string name="are_you_sure_clear_cart">क्या आपको यकीन है, आप कार्ट खाली करना चाहते हैं।</string>
+    <string name="no_address_found">No Address Found</string>
 </resources>
