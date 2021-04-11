@@ -15,7 +15,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -39,7 +38,6 @@ import com.skdirect.model.MallMainModel;
 import com.skdirect.model.NearByMainModel;
 import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.utils.DBHelper;
-import com.skdirect.utils.GridSpacingItemDecoration;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
@@ -437,6 +435,4 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         });
 
     }
-
-
 }

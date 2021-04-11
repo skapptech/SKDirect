@@ -88,6 +88,7 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
                 if (model != null) {
                     if (model.isSuccess()) {
                         Utils.setToast(RegisterationActivity.this, model.getSuccessMessage());
+                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN,true);
                         startActivity(new Intent(RegisterationActivity.this, MainActivity.class));
                         finish();
                     } else {

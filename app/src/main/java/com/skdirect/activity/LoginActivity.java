@@ -94,18 +94,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mobileNumberString = Binding.etMobileNumber.getText().toString().trim();
         if (mobileNumberString.isEmpty()) {
             Utils.setToast(this,dbHelper.getString(R.string.enter_valid_mobno));
-        } else{
+        } else if (Utils.isValidMobile(mobileNumberString)) {
             startActivity(new Intent(LoginActivity.this, LoginWithPasswordActivity.class).putExtra("MobileNumber",mobileNumberString));
+        } else {
+            Utils.setToast(this, dbHelper.getString(R.string.enter_valid_mobno));
         }
     }
 
     private void getOTP() {
-        Binding.btGetOtp.setText(dbHelper.getString(R.string.loading));
         mobileNumberString = Binding.etMobileNumber.getText().toString().trim();
         if (mobileNumberString.isEmpty()) {
             Utils.setToast(this, dbHelper.getString(R.string.enter_mobno));
             Binding.btGetOtp.setText(dbHelper.getString(R.string.get_otp));
         } else if (Utils.isValidMobile(mobileNumberString)) {
+            Binding.btGetOtp.setText(dbHelper.getString(R.string.loading));
             callOTPApi(mobileNumberString);
         } else {
             Utils.setToast(this, dbHelper.getString(R.string.enter_valid_mobno));

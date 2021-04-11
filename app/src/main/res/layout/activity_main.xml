@@ -319,8 +319,9 @@
                             <ImageView
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
+                                android:padding="12dp"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/ic_logout" />
+                                android:src="@drawable/ic_how_to_use" />
 
 
                             <androidx.appcompat.widget.AppCompatTextView

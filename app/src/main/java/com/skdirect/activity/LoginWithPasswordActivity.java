@@ -13,6 +13,7 @@ import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityLoginWithPasswordBinding;
 import com.skdirect.model.LoginWithPasswordModel;
+import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateTokenModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
@@ -91,17 +92,15 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
         }
 
 
-    private final DisposableObserver<LoginWithPasswordModel> callToken = new DisposableObserver<LoginWithPasswordModel>() {
+    private final DisposableObserver<TokenModel> callToken = new DisposableObserver<TokenModel>() {
         @Override
-        public void onNext(LoginWithPasswordModel model) {
+        public void onNext(TokenModel model) {
             try {
                 Utils.hideProgressDialog();
                 if (model != null) {
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
-                    SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE, model.isRegistrationComplete());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN,true);
-                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.isIscontactRead());
                     commonClassForAPI.getUpdateToken(updatecallToken, fcmToken);
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();

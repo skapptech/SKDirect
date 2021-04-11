@@ -23,7 +23,8 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
 
     private ActivityUpdateProfileBinding mBinding;
     private UpdateProfileViewMode updateProfileViewMode;
-    DBHelper dbHelper;
+    private DBHelper dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +33,9 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         updateProfileViewMode = ViewModelProviders.of(this).get(UpdateProfileViewMode.class);
         dbHelper = MyApplication.getInstance().dbHelper;
         initView();
-
     }
 
     private void initView() {
-
         mBinding.tilName.setHint(dbHelper.getString(R.string.name_reg));
         mBinding.tilEmail.setHint(dbHelper.getString(R.string.email));
         mBinding.tilPincode.setHint(dbHelper.getString(R.string.pincode));
@@ -63,29 +62,25 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
     }
 
     private void upDateProfile() {
-        if (TextUtils.isNullOrEmpty(mBinding.etName.getText().toString().trim())) {
+        if (TextUtils.isNullOrEmpty(mBinding.etName.getText().toString())) {
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_name));
-        } else if (mBinding.etEmailId.getText().toString().trim().length()>0) {
-            if(!TextUtils.isValidEmail(mBinding.etEmailId.getText().toString().trim())){
+        } else if (mBinding.etEmailId.getText().toString().length() > 0) {
+            if (!TextUtils.isValidEmail(mBinding.etEmailId.getText().toString())) {
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_email));
             }
-        } else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString().trim())) {
+        } else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString())) {
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_pincode));
         } else {
             if (Utils.isNetworkAvailable(getApplicationContext())) {
-                Utils.showProgressDialog(UpdateProfileActivity.this);
+                Utils.showProgressDialog(this);
                 updateUserData();
-
             } else {
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_connection));
             }
         }
-
     }
 
     private void updateUserData() {
-
-
         updateProfileViewMode.updateProfileVMRequest(sendUserProfileData());
         updateProfileViewMode.updateProfileVM().observe(this, new Observer<Boolean>() {
             @Override
@@ -96,11 +91,8 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
                         onBackPressed();
                     }
                 }
-
             }
-
         });
-
     }
 
     public JsonObject sendUserProfileData() {
@@ -108,13 +100,13 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         object.addProperty("Id", SharePrefs.getInstance(UpdateProfileActivity.this).getInt(SharePrefs.ID));
         object.addProperty("IsActive", SharePrefs.getInstance(UpdateProfileActivity.this).getBoolean(SharePrefs.IS_ACTIVE));
         object.addProperty("IsDelete", SharePrefs.getInstance(UpdateProfileActivity.this).getBoolean(SharePrefs.IS_DELETE));
-        object.addProperty("FirstName", SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.FIRST_NAME));
+        object.addProperty("FirstName", mBinding.etName.getText().toString());
         object.addProperty("MiddleName", SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.MIDDLE_NAME));
         object.addProperty("MobileNo", SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.MOBILE_NUMBER));
         object.addProperty("LastName", SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.LAST_NAME));
         object.addProperty("UserId", SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.USER_ID));
-        object.addProperty("Email", SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.EMAIL_ID));
-        object.addProperty("Pincode", SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.PIN_CODE));
+        object.addProperty("Email", mBinding.etEmailId.getText().toString());
+        object.addProperty("Pincode", mBinding.etPinCode.getText().toString());
         object.addProperty("PinCodeMasterId", SharePrefs.getInstance(UpdateProfileActivity.this).getInt(SharePrefs.PIN_CODE_master));
         object.addProperty("ShopName", SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.SHOP_NAME));
         object.addProperty("ImagePath", SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.IMAGE_PATH));
