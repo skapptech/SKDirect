@@ -62,7 +62,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             showNotification(object.getString("icon"),
                     object.getString("body"),
-                    object.getString("title"), 0, redirectUrl);
+                    object.getString("title"), 0);
 
             if (object.has("languageUpdateDate")) {
                 String localLastLanguageUpdateDate = SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.LAST_LANGUAGE_UPDATE_DATE);
@@ -94,7 +94,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
 
-    private void showNotification(String imageUrl, String messageBody, String title, int actionId, String link) {
+    private void showNotification(String imageUrl, String messageBody, String title, int actionId) {
         Bitmap myBitmap = null;
         try {
             if (!TextUtils.isNullOrEmpty(imageUrl)) {
@@ -103,12 +103,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 }
             }
             Intent intent = null;
-            if (link != null && !link.equals("")) {
-                intent = new Intent(getApplicationContext(), MyOrderActivity.class);
-                intent.putExtra("url", link);
-            } else {
-                intent = new Intent(getApplicationContext(), SplashActivity.class);
-            }
+            intent = new Intent(getApplicationContext(), MyOrderActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

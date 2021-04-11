@@ -198,7 +198,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 mBinding.tvSellerName.setText(sellerDetailsModel.getSellerInfoModel().getShopName());
                 if (sellerDetailsModel.getSellerInfoModel().getMinOrderValue() != 0.0 && sellerDetailsModel.getSellerInfoModel().getRadialDistance() != 0.0) {
                     mBinding.tvMinimumOrderAmt.setText("₹ " + Math.round(sellerDetailsModel.getSellerInfoModel().getMinOrderValue()));
-                    mBinding.tvDiliverDistance.setText("" + Math.round(sellerDetailsModel.getSellerInfoModel().getRadialDistance()));
+                    mBinding.tvDiliverDistance.setText("" + Math.round(sellerDetailsModel.getSellerInfoModel().getRadialDistance())+" KM");
                 } else {
                     mBinding.llMiniOrder.setVisibility(View.GONE);
                     mBinding.llDelivert.setVisibility(View.GONE);
