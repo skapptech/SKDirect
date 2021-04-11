@@ -138,4 +138,12 @@ public class CartRepository {
     public void truncateCart() {
         cartDatabase.cartDaoAccess().truncateCart();
     }
+
+    public String getCartId() {
+        return cartDatabase.cartDaoAccess().getCartId();
+    }
+
+    public void updateCartId(String cartId) {
+        cartDatabase.cartDaoAccess().updateCartId(cartId);
+    }
 }

@@ -82,6 +82,7 @@ public class CartModel implements Serializable {
     @PrimaryKey
     @SerializedName("Id")
     private int Id;
+    private String carId;
 
 
     public CartModel() {
@@ -333,5 +334,13 @@ public class CartModel implements Serializable {
 
     public void setId(int id) {
         Id = id;
+    }
+
+    public String getCarId() {
+        return carId;
+    }
+
+    public void setCarId(String carId) {
+        this.carId = carId;
     }
 }

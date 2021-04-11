@@ -525,8 +525,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private void addItemInCart(int QTY, int sellerItemID) {
         ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerItemID, 0, 0);
         productDetailsViewMode.getAddItemsInCardVMRequest(paginationModel);
-        productDetailsViewMode.getAddItemsInCardVM().observe(this, sellerProdList -> {
+        productDetailsViewMode.getAddItemsInCardVM().observe(this, addCartItemModel -> {
             Utils.hideProgressDialog();
+            if (addCartItemModel != null && addCartItemModel.getResultItem() != null) {
+                MyApplication.getInstance().cartRepository.updateCartId(addCartItemModel.getResultItem().getId());
+            }
         });
     }
 
@@ -535,7 +538,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         builder.setTitle(dbHelper.getString(R.string.alert));
         builder.setMessage(dbHelper.getString(R.string.existing_clear_cart));
         builder.setPositiveButton(dbHelper.getString(R.string.yes), (dialog, which) -> {
-            clearCartItem(id);
+            clearCartItem();
             CartModel cartModel = new CartModel(null, 0, null,
                     resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(),
                     resultModel.getUom(), "", 0, resultModel.getProductName(), 0,
@@ -556,8 +559,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         builder.show();
     }
 
-    private void clearCartItem(int id) {
-        productDetailsViewMode.getClearCartItemVMRequest(id);
+    private void clearCartItem() {
+        String cartId = MyApplication.getInstance().cartRepository.getCartId();
+        productDetailsViewMode.getClearCartItemVMRequest(cartId);
         productDetailsViewMode.getClearCartItemVM().observe(this, new Observer<Object>() {
             @Override
             public void onChanged(Object object) {
