@@ -325,6 +325,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             // add item  to cart
             CartModel cartModel = new CartModel(null, 0, null, false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(), 0, 0, false, 0, 0, 0, 1, sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
             MyApplication.getInstance().cartRepository.addToCart(cartModel);
+            addItemInCart(1, sellerProductModel);
         }
     }
 

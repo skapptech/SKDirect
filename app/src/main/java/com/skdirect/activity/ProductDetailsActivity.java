@@ -519,8 +519,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private void addItemInCart(int QTY, int sellerItemID) {
         ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerItemID, 0, 0);
         productDetailsViewMode.getAddItemsInCardVMRequest(paginationModel);
-        productDetailsViewMode.getAddItemsInCardVM().observe(this, sellerProdList -> {
+        productDetailsViewMode.getAddItemsInCardVM().observe(this, addCartItemModel -> {
             Utils.hideProgressDialog();
+            if (addCartItemModel != null && addCartItemModel.getId() != null) {
+                MyApplication.getInstance().cartRepository.updateCartId(addCartItemModel.getId());
+            }
         });
     }
 
@@ -545,13 +548,20 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         builder.setNegativeButton("No", (dialog, which) -> {
             dialog.dismiss();
         });
+
+//        AlertDialog dialog = builder.create();
         builder.show();
     }
 
     private void clearCartItem() {
         String cartId = MyApplication.getInstance().cartRepository.getCartId();
         productDetailsViewMode.getClearCartItemVMRequest(cartId);
-        productDetailsViewMode.getClearCartItemVM().observe(this, object -> Utils.hideProgressDialog());
+        productDetailsViewMode.getClearCartItemVM().observe(this, new Observer<Object>() {
+            @Override
+            public void onChanged(Object object) {
+                Utils.hideProgressDialog();
+            }
+        });
     }
 
     private void checkAddButtonValidaction() {
