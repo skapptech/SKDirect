@@ -52,6 +52,7 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
         mBinding.tilCity.setHint(dbHelper.getString(R.string.city));
         mBinding.tilState.setHint(dbHelper.getString(R.string.state));
         mBinding.btSaveAddresh.setText(dbHelper.getString(R.string.save));
+        mBinding.toolbarTittle.tvUsingLocation.setText(dbHelper.getString(R.string.use_current_location));
 
         mBinding.toolbarTittle.tvUsingLocation.setVisibility(View.VISIBLE);
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);

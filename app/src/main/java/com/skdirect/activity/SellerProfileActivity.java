@@ -94,7 +94,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 startActivity(new Intent(getApplicationContext(), CartActivity.class));
                 break;
             case R.id.btShare:
-                Utils.showShareWhatsappDialog(this,BuildConfig.apiEndpoint+"/seller/"+sellerID,"");
+                Utils.showShareWhatsappDialog(this,SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL)+"/seller/"+sellerID,"");
                 break;
 
         }

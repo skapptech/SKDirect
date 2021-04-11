@@ -104,7 +104,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 startActivity(new Intent(getApplicationContext(), SellerProfileActivity.class).putExtra("ID", resultModel.getEncryptSellerId()));
                 break;
             case R.id.imShare:
-                Utils.shareProduct(this, BuildConfig.apiEndpoint + "/product/" + productID);
+                Utils.shareProduct(this, SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/product/" + productID);
                 break;
 
         }
