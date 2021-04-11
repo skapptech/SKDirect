@@ -54,6 +54,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private ProductResultModel resultModel = new ProductResultModel();
     private String shopName;
     DBHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +104,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 startActivity(new Intent(getApplicationContext(), SellerProfileActivity.class).putExtra("ID", resultModel.getEncryptSellerId()));
                 break;
             case R.id.imShare:
-                Utils.shareProduct(this, BuildConfig.apiEndpoint+"/product/"+productID);
+                Utils.shareProduct(this, BuildConfig.apiEndpoint + "/product/" + productID);
                 break;
 
         }
@@ -112,11 +113,17 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
     private void apiCalling() {
         callProductData();
-        GetTopSimilarProduct();
-        GetTopSellar();
-        GetSellarOtherProducts();
         GetCartItems();
-        addProductAPI();
+        if (SharePrefs.getInstance(this).getBoolean(SharePrefs.IS_Mall)) {
+            mBinding.llSimilarProduct.setVisibility(View.VISIBLE);
+            GetTopSimilarProduct();
+        } else {
+            mBinding.llOtherSellar.setVisibility(View.GONE);
+            mBinding.llSellarsOtherProducs.setVisibility(View.GONE);
+            GetTopSellar();
+            GetSellarOtherProducts();
+            GetTopSimilarProduct();
+        }
     }
 
 
@@ -166,11 +173,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     }
 
     private void getIntentData() {
-        if (getIntent().getData()!=null){
+        if (getIntent().getData() != null) {
             String sharedUrl = getIntent().getData().toString();
-            sharedUrl = sharedUrl.substring(sharedUrl.lastIndexOf("/")+1);
+            sharedUrl = sharedUrl.substring(sharedUrl.lastIndexOf("/") + 1);
             productID = Integer.parseInt(sharedUrl);
-        }else{
+        } else {
             productID = getIntent().getIntExtra("ID", 0);
         }
     }
