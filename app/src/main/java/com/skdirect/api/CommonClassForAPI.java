@@ -48,9 +48,9 @@ public class CommonClassForAPI {
 
     }
 
-    public void getToken(final DisposableObserver observer, String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp, boolean isDevice, String deviceID, double lat, double log, String pincode) {
+    public void getToken(final DisposableObserver observer, String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp, boolean isDevice, String deviceID, double lat, double log, String pincode,String type) {
         RestClient.getInstance().getService().getToken(password, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp, isDevice, deviceID, lat, log, pincode,
-                MyApplication.getInstance().dbHelper.getString(R.string.language_code))
+                MyApplication.getInstance().dbHelper.getString(R.string.language_code),type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<TokenModel>() {

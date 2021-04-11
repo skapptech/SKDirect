@@ -44,6 +44,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         initView();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
     private void initView() {
         Binding.btGetOtp.setOnClickListener(this);
@@ -123,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                  Utils.getDeviceUniqueID(this),
                  Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)),
                  Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON)),
-                 SharePrefs.getInstance(LoginActivity.this).getString(SharePrefs.PIN_CODE));
+                 SharePrefs.getInstance(LoginActivity.this).getString(SharePrefs.PIN_CODE),"");
      }
 
      private final DisposableObserver<TokenModel> callToken = new DisposableObserver<TokenModel>() {

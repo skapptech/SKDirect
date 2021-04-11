@@ -211,4 +211,7 @@
     <string name="please_select_address">Please select address</string>
     <string name="total_order_value">Total Order Value</string>
     <string name="view_offer">View Offer</string>
+    <string name="coming_soon">Coming Soon</string>
+    <string name="invalid_email">Please Enter Valid Email ID</string>
+
 </resources>

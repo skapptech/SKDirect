@@ -42,6 +42,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
         mBinding.tilNewPassword.setHint(dbHelper.getString(R.string.enter_new_password));
         mBinding.etConfirmPassword.setHint(dbHelper.getString(R.string.enter_confirm_password));
+        mBinding.etOtp.setHint(dbHelper.getString(R.string.enter_otp));
         mBinding.btSavePassword.setText(dbHelper.getString(R.string.save));
     }
 
@@ -66,6 +67,9 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         }
         else if (!mBinding.etConfirmPassword.getText().toString().trim().equalsIgnoreCase(mBinding.etNewPassword.getText().toString().trim())) {
             Utils.setLongToast(getApplicationContext(), dbHelper.getString(R.string.password_not_matched));
+        }
+        else if (TextUtils.isNullOrEmpty(mBinding.etOtp.getText().toString().trim())) {
+            Utils.setLongToast(getApplicationContext(), dbHelper.getString(R.string.enter_otp));
         }
         else {
             if (Utils.isNetworkAvailable(getApplicationContext())) {

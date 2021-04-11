@@ -66,7 +66,6 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
         mGeocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         mBinding.etLocation.setOnClickListener(this);
         mBinding.btSave.setOnClickListener(this);
-        mBinding.etPinCode.setFocusable(false);
 
     }
 
@@ -91,7 +90,7 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
         } else {
             if (Utils.isNetworkAvailable(this)) {
                 if (commonClassForAPI != null) {
-                    commonClassForAPI.getToken(callToken, "password", Utils.getDeviceUniqueID(PlaceSearchActivity.this), "", true, true, "BUYERAPP", true, Utils.getDeviceUniqueID(PlaceSearchActivity.this), latLng.latitude, latLng.longitude, pinCode);
+                    commonClassForAPI.getToken(callToken, "password", Utils.getDeviceUniqueID(PlaceSearchActivity.this), "", true, true, "BUYERAPP", true, Utils.getDeviceUniqueID(PlaceSearchActivity.this), latLng.latitude, latLng.longitude, pinCode,"");
                 }
             } else {
                 Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));

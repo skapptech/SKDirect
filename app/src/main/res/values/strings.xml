@@ -210,4 +210,7 @@
     <string name="total_order_value">कुल आर्डर मूल्य</string>
     <string name="please_select_address">कृपया पता चुनें</string>
     <string name="view_offer">कूपन देखें</string>
+    <string name="coming_soon">जल्द आ रहा है</string>
+    <string name="invalid_email">कृपया मान्य ईमेल आईडी दर्ज करें</string>
+
 </resources>

@@ -63,9 +63,11 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
     private void upDateProfile() {
         if (TextUtils.isNullOrEmpty(mBinding.etName.getText().toString().trim())) {
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_name));
-        } /*else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString().trim())) {
-            Utils.setToast(getApplicationContext(), "Please Enter PinCode");
-        }*/ else {
+        } else if (mBinding.etEmailId.getText().toString().trim().length()>0) {
+            if(!TextUtils.isValidEmail(mBinding.etEmailId.getText().toString().trim())){
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_email));
+             }
+        } else {
             if (Utils.isNetworkAvailable(getApplicationContext())) {
                 Utils.showProgressDialog(RegisterationActivity.this);
                 // updateUserData();

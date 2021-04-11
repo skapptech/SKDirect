@@ -36,6 +36,7 @@ import com.skdirect.R;
 import com.skdirect.databinding.ActivityMainBinding;
 import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.fragment.BasketFragment;
+import com.skdirect.fragment.ChatFragment;
 import com.skdirect.fragment.HomeFragment;
 import com.skdirect.utils.AppSignatureHelper;
 import com.skdirect.utils.DBHelper;
@@ -175,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case R.id.nav_chat:
                     positionChanged = true;
-                    openFragment(new BasketFragment());
+                    openFragment(new ChatFragment());
                     break;
 
             }
