@@ -15,6 +15,7 @@ import com.skdirect.model.ChangePasswordRequestModel;
 import com.skdirect.model.CommonResponseModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.DeliveryMainModel;
+import com.skdirect.model.FilterPostModel;
 import com.skdirect.model.GenerateOtpModel;
 import com.skdirect.model.GenerateOtpResponseModel;
 import com.skdirect.model.ItemAddModel;
@@ -110,6 +111,9 @@ public interface APIServices {
 
     @POST("api/NativeBuyer/AppHomeFilter/GetNearByItemFilter")
     Call<NearProductListMainModel> getNearItem(@Body PaginationModel paginationModel);
+
+    @POST("api/NativeBuyer/GlobalFilter/ApplyFilter")
+    Call<NearProductListMainModel> getFilterItem(@Body FilterPostModel filterPostModel);
 
     @POST("api/NativeBuyer/AppHomeFilter/GetTopSellerFilter")
     Call<NearBySellerMainModel> GetSellerListForBuyer(@Body PaginationModel paginationModel);

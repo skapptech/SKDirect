@@ -12,6 +12,8 @@ public class FilterCategoryDetails {
     @SerializedName("label")
     private String label;
 
+    private boolean isSelected;
+
     public FilterCategoryDetails(int value, String label) {
         this.value = value;
         this.label = label;
@@ -23,5 +25,13 @@ public class FilterCategoryDetails {
 
     public String getLabel() {
         return label;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

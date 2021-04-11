@@ -56,6 +56,8 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     public DBHelper dbHelper;
     int categoryId = 0;
     String brand = "";
+    ArrayList<String> selectedBrandList = new ArrayList<>();
+    ArrayList<Integer> selectedPriceList = new ArrayList<>();
     String discount = "";
     boolean sideTabClick = false;
     private CommonClassForAPI commonClassForAPI;
@@ -105,11 +107,12 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         mBinding.tvApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                selectedPriceList.add(minprice);
+                selectedPriceList.add(maxprice);
                 Intent intent = new Intent();
                 intent.putExtra(Constant.Category, categoryId);
-                intent.putExtra(Constant.PriceMin, minprice);
-                intent.putExtra(Constant.PriceMax, maxprice);
-                intent.putExtra(Constant.Brands, brand);
+                intent.putIntegerArrayListExtra(Constant.Price, selectedPriceList);
+                intent.putStringArrayListExtra(Constant.Brands, selectedBrandList);
                 intent.putExtra(Constant.Discount, discount);
                 setResult(Activity.RESULT_OK, intent);
                 finish();
@@ -380,14 +383,35 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
 
     @Override
     public void clickFilterCategoryInterface(int value, String label, String filterType) {
-        if (filterType.equalsIgnoreCase("Brands")) {
+        categoryId = value;
+        System.out.println("category:::" + categoryId);
+     /*   if (filterType.equalsIgnoreCase("Brands")) {
             brand = label;
         } else if (filterType.equalsIgnoreCase("Discount")) {
             discount = label;
         } else {
-            categoryId = value;
-            System.out.println("category:::" + categoryId);
+
+        }*/
+    }
+
+    @Override
+    public void clickFilterBrandyInterface(int cateId, String label, String position, boolean remove) {
+       // brand = label;
+        if(remove)
+        {
+            selectedBrandList.remove(label);
+        }else
+        {
+            selectedBrandList.add(label);
         }
+
+
+        System.out.println("selectedBrandList::"+selectedBrandList.toString());
+    }
+
+    @Override
+    public void clickFilterDiscountInterface(int cateId, String label, String position) {
+        discount = label;
     }
 
 }
