@@ -67,7 +67,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.clearCart) {
-            clearCart();
+            showClearCartDialog();
         } else
             onBackPressed();
         return super.onOptionsItemSelected(item);
@@ -207,6 +207,19 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 MyApplication.getInstance().cartRepository.truncateCart();
             }
         });
+    }
+
+    private void showClearCartDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(MyApplication.getInstance().dbHelper.getString(R.string.clear_cart));
+        builder.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.are_you_sure_clear_cart));
+
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            clearCart();
+        });
+        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+
+        builder.show();
     }
 
     private void addItemInCart(int QTY, CartModel sellerProductModel) {
