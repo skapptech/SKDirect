@@ -264,6 +264,8 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         cartItemViewMode.getClearCartItemVM().observe(this, object -> {
             MyApplication.getInstance().cartRepository.truncateCart();
             Utils.hideProgressDialog();
+            cartItemList.clear();
+            cartListAdapter.notifyDataSetChanged();
             mBinding.rlCheckOut.setVisibility(View.GONE);
             mBinding.blankBasket.setVisibility(View.VISIBLE);
         });
