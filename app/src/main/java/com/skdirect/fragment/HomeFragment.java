@@ -156,6 +156,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 Utils.hideProgressDialog();
                 if (mallMainModel.isSuccess()) {
                     if (mallMainModel.getResultItem() != null) {
+                        SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_Mall, true);
                         MallCategorieBannerAdapter mallCategorieBannerAdapter = new MallCategorieBannerAdapter(getActivity(), mallMainModel.getResultItem().getStoreCategoryList());
                         mBinding.rvStoreCategoryList.setAdapter(mallCategorieBannerAdapter);
                         mBinding.llMainAppHome.setVisibility(View.GONE);

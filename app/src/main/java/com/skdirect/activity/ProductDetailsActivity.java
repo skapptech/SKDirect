@@ -113,11 +113,17 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
     private void apiCalling() {
         callProductData();
-        GetTopSimilarProduct();
-        GetTopSellar();
-        GetSellarOtherProducts();
         GetCartItems();
-        addProductAPI();
+        if (SharePrefs.getInstance(this).getBoolean(SharePrefs.IS_Mall)) {
+            mBinding.llSimilarProduct.setVisibility(View.VISIBLE);
+            GetTopSimilarProduct();
+        } else {
+            mBinding.llOtherSellar.setVisibility(View.GONE);
+            mBinding.llSellarsOtherProducs.setVisibility(View.GONE);
+            GetTopSellar();
+            GetSellarOtherProducts();
+            GetTopSimilarProduct();
+        }
     }
 
 

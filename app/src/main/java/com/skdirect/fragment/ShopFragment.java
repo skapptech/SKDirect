@@ -22,6 +22,7 @@ import com.skdirect.adapter.SearchDataAdapter;
 import com.skdirect.adapter.SellerShopListAdapter;
 import com.skdirect.databinding.FragmentProductBinding;
 import com.skdirect.databinding.FragmentShopBinding;
+import com.skdirect.model.ShopMainModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
@@ -120,19 +121,26 @@ public class ShopFragment extends Fragment {
 
     private void getShopData() {
         searchViewMode.getShopDataViewModelRequest(skipCount, takeCount, searchSellerName,(String.valueOf(cateogryId).equals("0")) ? null : String.valueOf(cateogryId));
-        searchViewMode.getShopDataViewModel().observe(this, new Observer<ArrayList<TopSellerModel>>() {
+        searchViewMode.getShopDataViewModel().observe(this, new Observer<ShopMainModel>() {
             @Override
-            public void onChanged(ArrayList<TopSellerModel> topSellerModels) {
+            public void onChanged(ShopMainModel shopMainModel) {
                 Utils.hideProgressDialog();
-                if (topSellerModels!=null && topSellerModels.size() > 0) {
-                    mBinding.rvSearch.post(new Runnable() {
-                        public void run() {
-                            sallerShopList.addAll(topSellerModels);
-                            sellerShopListAdapter.notifyDataSetChanged();
-                            loading = true;
+                if (shopMainModel.isSuccess()) {
+                    if (shopMainModel != null && shopMainModel.getResultItem().size() > 0) {
+                        mBinding.rvSearch.post(new Runnable() {
+                            public void run() {
+                                sallerShopList.addAll(shopMainModel.getResultItem());
+                                sellerShopListAdapter.notifyDataSetChanged();
+                                loading = true;
+                            }
+                        });
+                    } else {
+                        if (sallerShopList.size() == 0) {
+                            mBinding.rvSearch.setVisibility(View.GONE);
+                            mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
                         }
-                    });
-                } else {
+                    }
+                }else {
                     if (sallerShopList.size() == 0) {
                         mBinding.rvSearch.setVisibility(View.GONE);
                         mBinding.tvNotDataFound.setVisibility(View.VISIBLE);

@@ -57,6 +57,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     int categoryId = 0;
     String brand = "";
     ArrayList<String> selectedBrandList = new ArrayList<>();
+    ArrayList<Integer> selectedPriceList = new ArrayList<>();
     String discount = "";
     boolean sideTabClick = false;
     private CommonClassForAPI commonClassForAPI;
@@ -106,10 +107,11 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         mBinding.tvApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                selectedPriceList.add(minprice);
+                selectedPriceList.add(maxprice);
                 Intent intent = new Intent();
                 intent.putExtra(Constant.Category, categoryId);
-                intent.putExtra(Constant.PriceMin, minprice);
-                intent.putExtra(Constant.PriceMax, maxprice);
+                intent.putIntegerArrayListExtra(Constant.Price, selectedPriceList);
                 intent.putStringArrayListExtra(Constant.Brands, selectedBrandList);
                 intent.putExtra(Constant.Discount, discount);
                 setResult(Activity.RESULT_OK, intent);

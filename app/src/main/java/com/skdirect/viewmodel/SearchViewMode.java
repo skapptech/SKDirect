@@ -13,6 +13,7 @@ import com.skdirect.model.PaginationModel;
 import com.skdirect.model.SearchDataModel;
 import com.skdirect.model.SearchMainModel;
 import com.skdirect.model.SearchRequestModel;
+import com.skdirect.model.ShopMainModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.utils.Utils;
 
@@ -27,7 +28,7 @@ public class SearchViewMode extends ViewModel {
 
     private MutableLiveData<SearchMainModel> searchViewModel;
 
-    private MutableLiveData<ArrayList<TopSellerModel>> shopDataViewModel;
+    private MutableLiveData<ShopMainModel> shopDataViewModel;
 
     public LiveData<SearchMainModel> getSearchViewModel() {
         if(searchViewModel==null){
@@ -39,7 +40,7 @@ public class SearchViewMode extends ViewModel {
         return searchViewModel;
     }
 
-    public LiveData<ArrayList<TopSellerModel>> getShopDataViewModel() {
+    public LiveData<ShopMainModel> getShopDataViewModel() {
         if(shopDataViewModel==null){
             shopDataViewModel = new MutableLiveData<>();
         }
@@ -70,10 +71,10 @@ public class SearchViewMode extends ViewModel {
     }
 
 
-    public MutableLiveData<ArrayList<TopSellerModel>> getShopDataViewModelRequest(int skipCount, int takeCount, String s, String cateogryId) {
-        RestClient.getInstance().getService().GetTopSellerItem(skipCount,takeCount,s,cateogryId).enqueue(new Callback<ArrayList<TopSellerModel>>() {
+    public MutableLiveData<ShopMainModel> getShopDataViewModelRequest(int skipCount, int takeCount, String s, String cateogryId) {
+        RestClient.getInstance().getService().GetTopSellerItem(skipCount,takeCount,s,cateogryId).enqueue(new Callback<ShopMainModel>() {
             @Override
-            public void onResponse(Call<ArrayList<TopSellerModel>> call, Response<ArrayList<TopSellerModel>> response) {
+            public void onResponse(Call<ShopMainModel> call, Response<ShopMainModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     shopDataViewModel.setValue(response.body());
@@ -81,7 +82,7 @@ public class SearchViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<TopSellerModel>> call, Throwable t) {
+            public void onFailure(Call<ShopMainModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + t.toString());
                 Utils.hideProgressDialog();
             }

@@ -27,7 +27,6 @@ public class MallResultItemModel {
     private String ModifiedDate;
     @SerializedName("ModifiedBy")
     private String ModifiedBy;
-
     public String getId() {
         return Id;
     }
