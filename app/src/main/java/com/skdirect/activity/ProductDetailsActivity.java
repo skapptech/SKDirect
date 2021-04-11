@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.adapter.BottomListAdapter;
 import com.skdirect.adapter.ShowImagesAdapter;
@@ -269,7 +268,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private void addToCart() {
         mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
         Integer cartSellerId = MyApplication.getInstance().cartRepository.getCartSellerId();
-        if (cartSellerId != null && cartSellerId != null) {
+        if (cartSellerId != null && cartSellerId != 0) {
             if (cartSellerId == resultModel.getSellerId()) {
                 mBinding.btAddToCart.setVisibility(View.GONE);
                 mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
@@ -355,7 +354,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         mBinding.llOtherSellar.setVisibility(View.GONE);
                     }
                 } else {
-                   /// Utils.setToast(ProductDetailsActivity.this, topSimilarSellerModel.getErrorMessage());
+                    /// Utils.setToast(ProductDetailsActivity.this, topSimilarSellerModel.getErrorMessage());
                 }
             }
         });

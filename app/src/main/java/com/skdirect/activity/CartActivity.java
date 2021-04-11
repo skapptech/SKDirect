@@ -43,7 +43,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     private int totalItemCount = 0;
     private boolean loading = true;
     private double totalAmount;
-    DBHelper dbHelper;
+    private DBHelper dbHelper;
 
 
     @Override

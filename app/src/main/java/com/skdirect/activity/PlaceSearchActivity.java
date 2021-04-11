@@ -15,7 +15,6 @@ import androidx.databinding.DataBindingUtil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
@@ -23,12 +22,13 @@ import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityPlacesSearchBinding;
 import com.skdirect.model.TokenModel;
-import com.skdirect.model.UpdateTokenModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,9 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
     private String fcmToken;
     private LatLng latLng;
     private String pinCode;
-    DBHelper dbHelper;
+    private DBHelper dbHelper;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +58,6 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void initView() {
-
         mBinding.etLocation.setHint(dbHelper.getString(R.string.enter_your_address));
         mBinding.etPinCode.setHint(dbHelper.getString(R.string.enter_pin_code));
         mBinding.btSave.setHint(dbHelper.getString(R.string.save));
@@ -66,7 +67,6 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
         mGeocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         mBinding.etLocation.setOnClickListener(this);
         mBinding.btSave.setOnClickListener(this);
-
     }
 
     @Override
@@ -75,7 +75,6 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
             case R.id.et_location:
                 callRunTimePermissions();
                 break;
-
             case R.id.bt_save:
                 saveLocationData();
                 break;
@@ -90,7 +89,7 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
         } else {
             if (Utils.isNetworkAvailable(this)) {
                 if (commonClassForAPI != null) {
-                    commonClassForAPI.getToken(callToken, "password", Utils.getDeviceUniqueID(PlaceSearchActivity.this), "", true, true, "BUYERAPP", true, Utils.getDeviceUniqueID(PlaceSearchActivity.this), latLng.latitude, latLng.longitude, pinCode,"");
+                    commonClassForAPI.getToken(callToken, "password", Utils.getDeviceUniqueID(PlaceSearchActivity.this), "", true, true, "BUYERAPP", true, Utils.getDeviceUniqueID(PlaceSearchActivity.this), latLng.latitude, latLng.longitude, pinCode, "");
                 }
             } else {
                 Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
@@ -129,7 +128,6 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
                         mBinding.etPinCode.setFocusable(false);
                     }
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -149,7 +147,6 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
                         mBinding.etPinCode.setFocusable(false);
                     }
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -174,30 +171,28 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private DisposableObserver<TokenModel> callToken = new DisposableObserver<TokenModel>() {
+    private final DisposableObserver<TokenModel> callToken = new DisposableObserver<TokenModel>() {
         @Override
-        public void onNext(TokenModel model) {
+        public void onNext(@NotNull TokenModel model) {
             try {
                 Utils.hideProgressDialog();
                 if (model != null) {
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
                     SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE, model.getIsRegistrationComplete());
-                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LAT,model.getLatitiute());
-                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LON, model.getLongitude());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LAT, model.getLatitiute());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LON, model.getLongitude());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
                     commonClassForAPI.getUpdateToken(updatecallToken, fcmToken);
-                    SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.Is_First_Time,true);
+                    SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.Is_First_Time, true);
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
-
             }
         }
 
@@ -214,9 +209,9 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
         }
     };
 
-    private DisposableObserver<JsonObject> updatecallToken = new DisposableObserver<JsonObject>() {
+    private final DisposableObserver<JsonObject> updatecallToken = new DisposableObserver<JsonObject>() {
         @Override
-        public void onNext(JsonObject model) {
+        public void onNext(@NotNull JsonObject model) {
             try {
                 Utils.hideProgressDialog();
                 if (model != null) {
@@ -224,15 +219,13 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-
-
             }
         }
 
         @Override
         public void onError(Throwable e) {
-            Utils.hideProgressDialog();
             e.printStackTrace();
+            Utils.hideProgressDialog();
         }
 
         @Override
