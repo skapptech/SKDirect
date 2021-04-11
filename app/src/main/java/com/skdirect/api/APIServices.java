@@ -23,7 +23,6 @@ import com.skdirect.model.MainSimilarTopSellerModel;
 import com.skdirect.model.MainTopSimilarSellerModel;
 import com.skdirect.model.MallMainModel;
 import com.skdirect.model.MallMainModelBolleanResult;
-import com.skdirect.model.MallMainModelListResult;
 import com.skdirect.model.MallMainPriceModel;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.NearByMainModel;
@@ -50,7 +49,8 @@ import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.UserLocationModel;
-import com.skdirect.model.response.CouponResponse;
+import com.skdirect.model.response.ApplyOfferResponse;
+import com.skdirect.model.response.OfferResponse;
 
 import java.util.ArrayList;
 
@@ -81,7 +81,7 @@ public interface APIServices {
 
     @FormUrlEncoded
     @POST("/token")
-    Observable<TokenModel> getToken(@Field("grant_type") String grant_type, @Field("username") String username, @Field("password") String password, @Field("ISOTP") boolean isOTp, @Field("ISBUYER") boolean isBuyer, @Field("LOGINTYPE") String LOGINTYPE, @Field("ISDEVICE") boolean ISDEVICE, @Field("DEVICEID") String DEVICEID, @Field("LAT") double LAT, @Field("LNG") double LNG, @Field("PINCODE") String pincode);
+    Observable<TokenModel> getToken(@Field("grant_type") String grant_type, @Field("username") String username, @Field("password") String password, @Field("ISOTP") boolean isOTp, @Field("ISBUYER") boolean isBuyer, @Field("LOGINTYPE") String LOGINTYPE, @Field("ISDEVICE") boolean ISDEVICE, @Field("DEVICEID") String DEVICEID, @Field("LAT") double LAT, @Field("LNG") double LNG, @Field("PINCODE") String pincode, @Field("lang") String lang);
 
     @GET("api/buyer/Profile/GetUserDetail")
     Call<CustomerDataModel> GetUserDetail();
@@ -239,10 +239,10 @@ public interface APIServices {
     Call<MallMainModel> getMall();
 
     @GET("api/NativeBuyer/SellerCoupon/GetCouponList")
-    Observable<CouponResponse> getCouponList(@Query("sellerid") int sellerId);
+    Observable<OfferResponse> getCouponList(@Query("sellerid") int sellerId);
 
     @GET("/api/NativeBuyer/SellerCoupon/ApplyCoupon/{couponId}")
-    Observable<CommonResponseModel> applyCoupon(@Path("couponId") int couponId);
+    Observable<ApplyOfferResponse> applyCoupon(@Path("couponId") int couponId);
 
     @GET("api/NativeBuyer/GlobalFilter/GetCategoryList")
     Observable<JsonObject> getFilterCategory();

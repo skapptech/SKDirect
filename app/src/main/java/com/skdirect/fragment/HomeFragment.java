@@ -250,6 +250,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         mBinding.rvMostVisitedSeller.setVisibility(View.GONE);
                     }
                 }
+
             }
         });
     }
@@ -327,6 +328,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 return handled;
             }
         });
+
 
     }
 

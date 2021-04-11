@@ -11,7 +11,6 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.text.TextUtils;
 import android.util.Patterns;
 
 import androidx.annotation.NonNull;
@@ -25,12 +24,18 @@ import com.skdirect.R;
 import com.skdirect.activity.MainActivity;
 import com.skdirect.activity.MyOrderActivity;
 import com.skdirect.activity.SplashActivity;
+import com.skdirect.utils.SharePrefs;
+import com.skdirect.utils.TextUtils;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -58,6 +63,31 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             showNotification(object.getString("icon"),
                     object.getString("body"),
                     object.getString("title"), 0, redirectUrl);
+
+            if (object.has("languageUpdateDate")) {
+                String localLastLanguageUpdateDate = SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.LAST_LANGUAGE_UPDATE_DATE);
+                String serverLastLanguageUpdateDate =object.getString("languageUpdateDate");
+                DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                try {
+                    if (TextUtils.isNullOrEmpty(localLastLanguageUpdateDate)) {
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAST_LANGUAGE_UPDATE_DATE, serverLastLanguageUpdateDate);
+                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_FETCH_LANGUAGE, true);
+                    } else {
+                        Date serverdate = originalFormat.parse(serverLastLanguageUpdateDate);
+                        Date localdate = originalFormat.parse(localLastLanguageUpdateDate);
+                        if (serverdate.after(localdate)) {
+                            SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAST_LANGUAGE_UPDATE_DATE, serverLastLanguageUpdateDate);
+                            SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_FETCH_LANGUAGE, true);
+                        }
+                    }
+
+                    if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_FETCH_LANGUAGE)) {
+                        new FirebaseLanguageFetch(getApplicationContext()).fetchLanguage();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,7 +97,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void showNotification(String imageUrl, String messageBody, String title, int actionId, String link) {
         Bitmap myBitmap = null;
         try {
-            if (!TextUtils.isEmpty(imageUrl)) {
+            if (!TextUtils.isNullOrEmpty(imageUrl)) {
                 if (imageUrl.length() > 4 && Patterns.WEB_URL.matcher(imageUrl).matches()) {
                     myBitmap = getBitmapFromURL(imageUrl);
                 }

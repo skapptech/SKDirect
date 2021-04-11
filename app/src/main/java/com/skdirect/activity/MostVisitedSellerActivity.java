@@ -1,7 +1,12 @@
 package com.skdirect.activity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,7 +39,7 @@ public class MostVisitedSellerActivity extends AppCompatActivity implements View
     private int visibleItemCount = 0;
     private int totalItemCount = 0;
     private boolean loading = true;
-    private String SearchKeybard;
+    private String searchString;
     private NearSellerListAdapter nearSellerListAdapter;
 
     @Override
@@ -59,6 +64,7 @@ public class MostVisitedSellerActivity extends AppCompatActivity implements View
         mBinding.shimmerViewContainer.startShimmer();
         mBinding.toolbarTittle.tvTittle.setText("Seller List");
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
+        nearBySallerList.clear();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL,false);
         mBinding.rvSellerProduct.setLayoutManager(layoutManager);
@@ -89,8 +95,45 @@ public class MostVisitedSellerActivity extends AppCompatActivity implements View
                 }
             }
         });
-        nearBySallerList.clear();
+        mBinding.etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                searchString = editable.toString().trim();
+                if (searchString.length() == 0) {
+                    skipCount = 0;
+                    takeCount = 10;
+                    nearBySallerList.clear();
+                    callProductList();
+
+                }
+            }
+        });
+
+        mBinding.etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
+                    if (!searchString.isEmpty()) {
+                        skipCount = 0;
+                        takeCount = 10;
+                        nearBySallerList.clear();
+                        callProductList();
+                        return true;
+                    } else {
+                        Utils.setLongToast(MostVisitedSellerActivity.this, "Please enter Item Name");
+                    }
+                }
+                return false;
+            }
+        });
     }
     @Override
     public void onClick(View view) {
@@ -111,7 +154,7 @@ public class MostVisitedSellerActivity extends AppCompatActivity implements View
 
 
     private void getProductListAPI() {
-        mostVisitedViewMode.getSellerProductListRequest(new PaginationModel(skipCount,takeCount,SearchKeybard));
+        mostVisitedViewMode.getSellerProductListRequest(new PaginationModel(skipCount,takeCount,searchString));
         mostVisitedViewMode.getSellerProductListVM().observe(this, new Observer<NearBySellerMainModel>() {
             @Override
             public void onChanged(NearBySellerMainModel nearBySaller) {

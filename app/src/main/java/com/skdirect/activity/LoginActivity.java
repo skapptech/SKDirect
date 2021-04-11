@@ -120,9 +120,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      public void Gettoken() {
          new CommonClassForAPI().getToken(callToken, "password", Utils.getDeviceUniqueID(this),
                  "", true, true, "BUYERAPP", true,
-                 Utils.getDeviceUniqueID(this), Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)),Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON)), SharePrefs.getInstance(LoginActivity.this).getString(SharePrefs.PIN_CODE));
+                 Utils.getDeviceUniqueID(this),
+                 Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)),
+                 Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON)),
+                 SharePrefs.getInstance(LoginActivity.this).getString(SharePrefs.PIN_CODE));
      }
-
 
      private final DisposableObserver<TokenModel> callToken = new DisposableObserver<TokenModel>() {
          @Override

@@ -87,30 +87,6 @@ public class SplashActivity extends AppCompatActivity {
                 if (appVersionModels != null) {
                     if (appVersionModels.isSuccess()) {
                         if (BuildConfig.VERSION_NAME.equals(appVersionModels.getResultItem().getVersion())) {
-
-                            String localLastLanguageUpdateDate = SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.LAST_LANGUAGE_UPDATE_DATE);
-                            String serverLastLanguageUpdateDate = "";//appVersionModels.getCompanyDetails().getLanguageLastUpdated();
-                            DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-                            try {
-                                if (TextUtils.isNullOrEmpty(localLastLanguageUpdateDate)) {
-                                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAST_LANGUAGE_UPDATE_DATE, serverLastLanguageUpdateDate);
-                                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_FETCH_LANGUAGE, true);
-                                } else {
-                                    Date serverdate = originalFormat.parse(serverLastLanguageUpdateDate);
-                                    Date localdate = originalFormat.parse(localLastLanguageUpdateDate);
-                                    if (serverdate.after(localdate)) {
-                                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAST_LANGUAGE_UPDATE_DATE, serverLastLanguageUpdateDate);
-                                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_FETCH_LANGUAGE, true);
-                                    }
-                                }
-
-                                if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_FETCH_LANGUAGE)) {
-                                    new FirebaseLanguageFetch(getApplicationContext()).fetchLanguage();
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
                             if (appVersionModels.isSuccess()) {
                                 if (BuildConfig.VERSION_NAME.equals(appVersionModels.getResultItem().getVersion())) {
                                     launchHomeScreen();
@@ -119,7 +95,6 @@ public class SplashActivity extends AppCompatActivity {
                                     checkVersionData(appVersionModels);
                                 }
                             }
-
                         }
                     }
                 }
@@ -171,7 +146,7 @@ public class SplashActivity extends AppCompatActivity {
             } else {
                 @SuppressLint("RestrictedApi") AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.Base_Theme_AppCompat_Dialog));
                 alertDialogBuilder.setTitle(R.string.update_available);
-                alertDialogBuilder.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.update_to_latest_version)+" " + appVersionModels.getResultItem().getVersion() + " "+MyApplication.getInstance().dbHelper.getString(R.string.from_play_store));
+                alertDialogBuilder.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.update_to_latest_version) + " " + appVersionModels.getResultItem().getVersion() + " " + MyApplication.getInstance().dbHelper.getString(R.string.from_play_store));
                 alertDialogBuilder.setCancelable(false);
                 alertDialogBuilder.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.update), (dialog, id) -> {
                     dialog.cancel();

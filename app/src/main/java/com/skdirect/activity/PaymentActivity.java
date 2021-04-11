@@ -1,21 +1,22 @@
 package com.skdirect.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonObject;
 import com.nabinbhandari.android.permissions.PermissionHandler;
@@ -26,11 +27,11 @@ import com.skdirect.databinding.ActivityPaymentBinding;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.DeliveryMainModel;
 import com.skdirect.model.DeliveryOptionModel;
-import com.skdirect.model.MainLocationModel;
-import com.skdirect.model.OrderPlaceMainModel;
 import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.UserLocationModel;
+import com.skdirect.model.response.OfferResponse;
 import com.skdirect.utils.GPSTracker;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.PaymentViewMode;
@@ -44,14 +45,19 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private CartItemModel cartItemModel;
     private final ArrayList<DeliveryOptionModel> deliveryOptionList = new ArrayList<>();
     private DeliveryOptionAdapter deliveryOptionAdapter;
-    private int deliveryOption, UserLocationId;
-    private double totalAmount;
+
+    private OfferResponse.Coupon coupon;
+    private int deliveryOption, userLocationId;
+    private double cartTotal, totalAmount, discount = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_payment);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(MyApplication.getInstance().dbHelper.getString(R.string.title_activity_payment));
+
         paymentViewMode = ViewModelProviders.of(this).get(PaymentViewMode.class);
         getSharedData();
         initView();
@@ -59,24 +65,34 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
+            case R.id.btnRemove:
+                updateViews(false, coupon);
                 break;
             case R.id.btnOffer:
                 startActivityForResult(new Intent(getApplicationContext(), OfferActivity.class), 9);
                 break;
-            case R.id.tv_place_order:
+            case R.id.btnPlaceOrder:
                 if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                    OrderPlaceAlertDialog();
+                    if (userLocationId != 0) {
+                        OrderPlaceAlertDialog();
+                    } else {
+                        Utils.setToast(getApplicationContext(), MyApplication.getInstance().dbHelper.getString(R.string.please_select_address));
+                    }
                 } else {
-                    startActivity(new Intent(this, LoginActivity.class));
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 }
                 break;
-            case R.id.rl_chnage:
-                startActivityForResult(new Intent(PaymentActivity.this,
-                        PrimaryAddressActivity.class).putExtra("UserLocationId", UserLocationId), 2);
+            case R.id.btnAdd:
+                startActivityForResult(new Intent(getApplicationContext(),
+                        PrimaryAddressActivity.class).putExtra("UserLocationId", userLocationId), 2);
                 break;
         }
     }
@@ -87,35 +103,47 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         // check if the request code is same as what is passed  here it is 2
         if (requestCode == 2 && resultCode == RESULT_OK) {
             UserLocationModel userLocationModel = (UserLocationModel) data.getSerializableExtra("address");
-            UserLocationId = userLocationModel.getId();
+            userLocationId = userLocationModel.getId();
             mBinding.tvShopName.setText(userLocationModel.getAddressOne());
             mBinding.tvAddresh.setText(userLocationModel.getAddressTwo());
             mBinding.tvAddreshTree.setText(userLocationModel.getAddressThree());
             mBinding.tvCityName.setText(userLocationModel.getCity() + " - " + userLocationModel.getPincode() + " (" + userLocationModel.getState() + ")");
+            mBinding.liAddress.setVisibility(View.VISIBLE);
+            mBinding.btnAdd.setText(MyApplication.getInstance().dbHelper.getString(R.string.change));
+        } else if (requestCode == 9 && resultCode == Activity.RESULT_OK) {
+            mBinding.liCoupon.setVisibility(View.VISIBLE);
+            coupon = data.getParcelableExtra("list");
+            if (cartTotal > coupon.getMinOrderValue()) {
+                discount = coupon.getAmount();
+                totalAmount = cartTotal - discount;
+                updateViews(true, coupon);
+            }
         }
+    }
+
+
+    private void initView() {
+        mBinding.tvOrderValueH.setText(MyApplication.getInstance().dbHelper.getString(R.string.total_order_value));
+        mBinding.tvAmountH.setText(MyApplication.getInstance().dbHelper.getString(R.string.total_amount));
+        mBinding.tvItemPrice.setText(MyApplication.getInstance().dbHelper.getString(R.string.price_details));
+        mBinding.tvAddress.setText(MyApplication.getInstance().dbHelper.getString(R.string.address));
+        mBinding.btnOffer.setOnClickListener(this);
+        mBinding.btnRemove.setOnClickListener(this);
+        mBinding.btnPlaceOrder.setOnClickListener(this);
+        mBinding.btnAdd.setOnClickListener(this);
     }
 
     private void getSharedData() {
         cartItemModel = (CartItemModel) getIntent().getSerializableExtra("cartItemSize");
-        totalAmount = getIntent().getDoubleExtra("totalAmount", 0);
+        cartTotal = getIntent().getDoubleExtra("totalAmount", 0);
+        totalAmount = cartTotal;
 
         Log.e("Total Amount ", "##### " + cartItemModel.getTotalAmount());
 
         mBinding.tvItemPrice.setText("Price Details ( " + (itemSize = cartItemModel.getCart().size()) + " items)");
-        mBinding.tvOrderValue.setText("₹ " + totalAmount);
+        mBinding.tvOrderValue.setText("₹ " + cartTotal);
         mBinding.tvTotalAmount.setText("₹ " + totalAmount);
-        mBinding.tvAmountTotal.setText("₹ " + totalAmount);
-    }
-
-    private void initView() {
-        mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
-        mBinding.btnOffer.setOnClickListener(this);
-        mBinding.tvPlaceOrder.setOnClickListener(this);
-        mBinding.toolbarTittle.tvTittle.setText("Payment ");
-        mBinding.rlChnage.setOnClickListener(this);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
-        mBinding.rvDeliveryOption.setLayoutManager(layoutManager);
+        mBinding.tvTotal.setText("₹ " + totalAmount);
     }
 
     private void callUserLocation() {
@@ -133,26 +161,19 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Confirmation");
         builder.setMessage("Are you sure you want to place order?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (Utils.isNetworkAvailable(getApplicationContext())) {
-                    Utils.showProgressDialog(PaymentActivity.this);
-                    orderPlaceAPI();
-                } else {
-                    Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
-                }
-
-
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            if (Utils.isNetworkAvailable(getApplicationContext())) {
+                Utils.showProgressDialog(this);
+                orderPlaceAPI();
+            } else {
+                Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
             }
+
+
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("No", (dialog, which) -> {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
         });
 
         AlertDialog dialog = builder.create();
@@ -161,18 +182,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void orderPlaceAPI() {
-        OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASE", deliveryOption, cartItemModel.getId(), UserLocationId);
+        OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASE", deliveryOption, cartItemModel.getId(), userLocationId);
         paymentViewMode.getOrderPlaceVMRequest(orderPlaceRequestModel);
-        paymentViewMode.getOrderPlaceVM().observe(this, new Observer<OrderPlaceMainModel>() {
-            @Override
-            public void onChanged(OrderPlaceMainModel response) {
-                Utils.hideProgressDialog();
-                if (response.isSuccess()) {
-                    orderPlaceDialog();
-                }else
-                {
-                  Toast.makeText(PaymentActivity.this, response.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                }
+        paymentViewMode.getOrderPlaceVM().observe(this, response -> {
+            Utils.hideProgressDialog();
+            if (response.isSuccess()) {
+                orderPlaceDialog();
+            } else {
+                Toast.makeText(PaymentActivity.this, response.getErrorMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -193,31 +210,42 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         dialog.show();
     }
 
+    private void updateViews(boolean isApplied, OfferResponse.Coupon coupon) {
+        if (isApplied) {
+            mBinding.rlApplyOffer.setVisibility(View.GONE);
+            mBinding.liOffer.setVisibility(View.VISIBLE);
+            mBinding.liCoupon.setVisibility(View.VISIBLE);
+            mBinding.tvOffer.setText("Code " + coupon.getCouponCode() + " Applied");
+            mBinding.tvDes.setText(coupon.getAmount() + " OFF up to ₹" + coupon.getMaxAmount());
+            mBinding.tvOfferAmount.setText("-₹ " + discount);
+            mBinding.tvOfferTotal.setText("-₹ " + discount);
+        } else {
+            cartTotal = totalAmount;
+            mBinding.rlApplyOffer.setVisibility(View.VISIBLE);
+            mBinding.liOffer.setVisibility(View.GONE);
+            mBinding.liCoupon.setVisibility(View.GONE);
+        }
+        mBinding.tvTotalAmount.setText("₹ " + totalAmount);
+        mBinding.tvTotal.setText("₹ " + totalAmount);
+    }
 
     private void userLocationAPI() {
         paymentViewMode.getUserLocationVMRequest();
-        paymentViewMode.getUserLocationVM().observe(this, new Observer<MainLocationModel>() {
-            @Override
-            public void onChanged(MainLocationModel locationModel) {
-                Utils.hideProgressDialog();
-                if (locationModel.isSuccess()){
-                    if (locationModel.getResultItem().size() > 0) {
-                        for (int i = 0; i < locationModel.getResultItem().size(); i++) {
-                            if (locationModel.getResultItem().get(i).isPrimaryAddress()) {
-                                UserLocationId = locationModel.getResultItem().get(i).getId();
-                                mBinding.tvShopName.setText(locationModel.getResultItem().get(i).getAddressOne());
-                                mBinding.tvAddresh.setText(locationModel.getResultItem().get(i).getAddressTwo());
-                                mBinding.tvAddreshTree.setText(locationModel.getResultItem().get(i).getAddressThree());
-                                mBinding.tvCityName.setText(locationModel.getResultItem().get(i).getCity() + " - " + locationModel.getResultItem().get(i).getPincode() + " (" + locationModel.getResultItem().get(i).getState() + ")");
-
-                            }
-
-
-                        }
-
+        paymentViewMode.getUserLocationVM().observe(this, locationModel -> {
+            Utils.hideProgressDialog();
+            if (locationModel.isSuccess() && locationModel.getResultItem().size() > 0) {
+                for (int i = 0; i < locationModel.getResultItem().size(); i++) {
+                    if (locationModel.getResultItem().get(i).isPrimaryAddress()) {
+                        userLocationId = locationModel.getResultItem().get(i).getId();
+                        mBinding.tvShopName.setText(locationModel.getResultItem().get(i).getAddressOne());
+                        mBinding.tvAddresh.setText(locationModel.getResultItem().get(i).getAddressTwo());
+                        mBinding.tvAddreshTree.setText(locationModel.getResultItem().get(i).getAddressThree());
+                        mBinding.tvCityName.setText(locationModel.getResultItem().get(i).getCity() + " - " + locationModel.getResultItem().get(i).getPincode() + " (" + locationModel.getResultItem().get(i).getState() + ")");
                     }
-
                 }
+            } else {
+                mBinding.liAddress.setVisibility(View.GONE);
+                mBinding.btnAdd.setText(MyApplication.getInstance().dbHelper.getString(R.string.add_new_address));
             }
         });
     }
@@ -229,8 +257,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             public void onChanged(DeliveryMainModel deliveryMainModel) {
                 Utils.hideProgressDialog();
                 if (deliveryMainModel.isSuccess())
-                    if (deliveryMainModel.getResultItem().size()==1 &&deliveryMainModel.getResultItem().get(0).getDelivery().equals("Self Pickup")){
-                        mBinding.llAddressView.setVisibility(View.GONE);
+                    if (deliveryMainModel.getResultItem().size() == 1 && deliveryMainModel.getResultItem().get(0).getDelivery().equals("Self Pickup")) {
+                        mBinding.liAddressV.setVisibility(View.GONE);
                     }
                 if (deliveryMainModel.getResultItem().size() > 0) {
                     for (int i = 0; i < deliveryMainModel.getResultItem().size(); i++) {
@@ -284,28 +312,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onChanged(JsonObject data) {
                 Utils.hideProgressDialog();
-               /* JSONObject jsonResponse = null;
-                try {
-                    jsonResponse = new JSONObject(data.toString());
-                    JSONObject components = jsonResponse.getJSONObject("geometry");
-                    JSONObject location = components.getJSONObject("location");
-                    double lat = location.getDouble("lat");
-                    double lng = location.getDouble("lng");
-                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-                    List<Address> addresses = null;
-                    try {
-                        addresses = geocoder.getFromLocation(lat, lng, 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    String cityName = addresses.get(0).getLocality();
-                    Log.e("cityName", "cityName  "+cityName);
-                    // setLocationTV.setText(cityName);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }*/
-
 
             }
         });

@@ -1,5 +1,7 @@
 package com.skdirect.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,11 +11,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.skdirect.R;
-import com.skdirect.adapter.CouponListAdapter;
+import com.skdirect.adapter.OfferListAdapter;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityOfferBinding;
-import com.skdirect.model.response.CouponResponse;
+import com.skdirect.model.response.ApplyOfferResponse;
+import com.skdirect.model.response.OfferResponse;
 import com.skdirect.utils.MyApplication;
+import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,9 +29,10 @@ import io.reactivex.observers.DisposableObserver;
 public class OfferActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityOfferBinding mBinding;
 
-    private ArrayList<CouponResponse.Coupon> list;
-    private CouponListAdapter adapter;
+    private ArrayList<OfferResponse.Coupon> list;
+    private OfferListAdapter adapter;
     private CommonClassForAPI commonClassForAPI;
+    private int position = 0;
 
 
     @Override
@@ -48,7 +53,11 @@ public class OfferActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-
+        if (TextUtils.isNullOrEmpty(mBinding.etOffer.getText().toString())) {
+            Utils.setToast(getApplicationContext(), MyApplication.getInstance().dbHelper.getString(R.string.enter_coupon_code));
+        } else {
+            callApplyCoupon(0, 0);
+        }
     }
 
 
@@ -56,17 +65,23 @@ public class OfferActivity extends AppCompatActivity implements View.OnClickList
         mBinding.btnApply.setOnClickListener(this);
 
         list = new ArrayList<>();
-        adapter = new CouponListAdapter(this, list);
+        adapter = new OfferListAdapter(this, list);
         mBinding.rvOffer.setAdapter(adapter);
 
         commonClassForAPI = CommonClassForAPI.getInstance(this);
         commonClassForAPI.getCouponList(couponObserver, MyApplication.getInstance().cartRepository.getCartSellerId());
     }
 
+    public void callApplyCoupon(int position, int id) {
+        this.position = position;
+        Utils.showProgressDialog(this);
+        commonClassForAPI.applyCoupon(applyCouponObserver, id);
+    }
 
-    private final DisposableObserver<CouponResponse> couponObserver = new DisposableObserver<CouponResponse>() {
+
+    private final DisposableObserver<OfferResponse> couponObserver = new DisposableObserver<OfferResponse>() {
         @Override
-        public void onNext(@NotNull CouponResponse model) {
+        public void onNext(@NotNull OfferResponse model) {
             mBinding.progressOffer.setVisibility(View.GONE);
             mBinding.tvEmpty.setVisibility(View.GONE);
             try {
@@ -83,9 +98,41 @@ public class OfferActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void onError(Throwable e) {
+            e.printStackTrace();
             mBinding.progressOffer.setVisibility(View.INVISIBLE);
             mBinding.tvEmpty.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
+
+    private final DisposableObserver<ApplyOfferResponse> applyCouponObserver = new DisposableObserver<ApplyOfferResponse>() {
+        @Override
+        public void onNext(@NotNull ApplyOfferResponse model) {
+            Utils.hideProgressDialog();
+            try {
+                if (model != null && model.isSuccess()) {
+                    Utils.setToast(getApplicationContext(), model.getSuccessMessage());
+
+                    Intent intent = new Intent();
+                    intent.putExtra("list", list.get(position));
+                    setResult(Activity.RESULT_OK, intent);
+                    onBackPressed();
+                } else {
+                    Utils.setToast(getApplicationContext(), model.getErrorMessage());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
             e.printStackTrace();
+            Utils.hideProgressDialog();
         }
 
         @Override
