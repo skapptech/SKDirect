@@ -127,10 +127,10 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
                 int category = data.getExtras().getInt(Constant.Category);
                 int priceMin = data.getExtras().getInt(Constant.PriceMin);
                 int priceMax = data.getExtras().getInt(Constant.PriceMax);
-                String brand = data.getExtras().getString(Constant.Brands);
+                ArrayList<String> brand = data.getExtras().getStringArrayList(Constant.Brands);
                 String discount = data.getExtras().getString(Constant.Discount);
                 Log.e("ProductList","Cate>>"+category+"\n Price Min>>"+priceMin+
-                        "\n Price Max>>"+priceMax+"\n Brand>>"+brand+"\n Discount>>"+discount);
+                        "\n Price Max>>"+priceMax+"\n Brand>>"+brand.toString()+"\n Discount>>"+discount);
             }else
             {
                 System.out.println("Canceld by user");
