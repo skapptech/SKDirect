@@ -53,7 +53,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private int SellerItemID;
     private ProductResultModel resultModel = new ProductResultModel();
     private String shopName;
-    DBHelper dbHelper;
+    private DBHelper dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,7 +256,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 0, null, resultModel.getSellerId(), 0, 0, 0,
                 resultModel.getMrp(), 0, resultModel.getId());
         if (qty >= 0) {
-            addItemInCart(qty, SellerItemID);
             MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
         }
         if (qty == 0) {
@@ -263,6 +263,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             mBinding.LLPlusMinus.setVisibility(View.GONE);
             MyApplication.getInstance().cartRepository.deleteCartItem(cartModel);
         }
+        addItemInCart(qty, SellerItemID);
     }
 
     private void addToCart() {
