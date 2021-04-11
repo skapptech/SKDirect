@@ -15,7 +15,6 @@ import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
-import com.skdirect.utils.Utils;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;
@@ -89,7 +88,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         CommonClassForAPI.getInstance(this).getUserDetail(new DisposableObserver<CustomerDataModel>() {
             @Override
             public void onNext(@NonNull CustomerDataModel customerDataModel) {
-                Utils.hideProgressDialog();
                 if (customerDataModel != null) {
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FIRST_NAME, customerDataModel.getFirstName());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.MIDDLE_NAME, customerDataModel.getMiddleName());
