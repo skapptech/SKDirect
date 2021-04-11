@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.llSignIn.setOnClickListener(this);
         mBinding.llHowtoUse.setOnClickListener(this);
         mBinding.llChangeLanguage.setOnClickListener(this);
+        mBinding.llRateThisApp.setOnClickListener(this);
     }
 
 
@@ -286,28 +287,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.ll_rate_this_app:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.playStoreURL)));
-                finish();
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_logout:
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 clearSharePrefs();
                 finish();
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_sign_in:
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_howto_use:
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop"));
                 startActivity(intent);
-                finish();
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.llChangeLanguage:
-                startActivity(new Intent(getApplicationContext(), ChangeLanguageActivity.class));
+                startActivity(new Intent(MainActivity.this, ChangeLanguageActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
         }
