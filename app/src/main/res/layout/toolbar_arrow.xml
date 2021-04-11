@@ -33,20 +33,26 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
                     android:layout_toRightOf="@+id/iv_back_press"
+                    android:layout_toLeftOf="@+id/LLCartLayout"
                     android:gravity="center_vertical"
                     android:text=""
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
-
+            <LinearLayout
+                android:id="@+id/LLCartLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true">
                 <TextView
                     android:id="@+id/tv_store_view"
                     style="@style/font_normal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/imShare"
-                    android:layout_centerVertical="true"
                     android:layout_margin="5dp"
                     android:background="@drawable/drwable_view"
                     android:drawableLeft="@drawable/ic_eye"
@@ -62,8 +68,6 @@
                     android:id="@+id/imShare"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/notifiction_count"
                     android:layout_margin="5dp"
                     android:gravity="center_vertical"
                     android:padding="5dp"
@@ -76,8 +80,7 @@
                     style="?attr/actionButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
                     android:clipToPadding="false"
                     android:focusable="true"
                     android:visibility="gone">
@@ -109,17 +112,15 @@
                     android:id="@+id/tv_using_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="30dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Use current location"
+                    android:padding="5dp"
+                    android:text="@string/use_current_location"
                     android:textColor="@color/seller_button_color"
                     android:textSize="12dp"
                     android:textStyle="normal"
                     android:visibility="gone" />
-
-
+            </LinearLayout>
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>

@@ -24,6 +24,7 @@ import com.skdirect.R;
 import com.skdirect.adapter.NearProductListAdapter;
 import com.skdirect.adapter.TopNearByItemAdapter;
 import com.skdirect.databinding.ActivityProductListBinding;
+import com.skdirect.model.FilterPostModel;
 import com.skdirect.model.NearProductListMainModel;
 import com.skdirect.model.NearProductListModel;
 import com.skdirect.model.PaginationModel;
@@ -55,7 +56,8 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
     private final int REQUEST = 100;
     public DBHelper dbHelper;
     public String searchString;
-
+    public boolean paginationFlag = false;
+    FilterPostModel filterPostModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +112,15 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
                             loading = false;
                             skipCount = skipCount + 10;
                             // mBinding.progressBar.setVisibility(View.VISIBLE);
-                            callProductList();
+                            if(paginationFlag)
+                            {
+                                filterPostModel.setSkip(skipCount);
+                                callFilterAPI();
+                            }else
+                            {
+                                callProductList();
+                            }
+
                         }
                     }
                 }
@@ -171,12 +181,15 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
         if (requestCode == REQUEST) {
             if (data != null && resultCode == RESULT_OK) {
                 int category = data.getExtras().getInt(Constant.Category);
-                int priceMin = data.getExtras().getInt(Constant.PriceMin);
-                int priceMax = data.getExtras().getInt(Constant.PriceMax);
+                ArrayList<Integer>  price = data.getExtras().getIntegerArrayList(Constant.Price);
                 ArrayList<String> brand = data.getExtras().getStringArrayList(Constant.Brands);
                 String discount = data.getExtras().getString(Constant.Discount);
-                Log.e("ProductList","Cate>>"+category+"\n Price Min>>"+priceMin+
-                        "\n Price Max>>"+priceMax+"\n Brand>>"+brand.toString()+"\n Discount>>"+discount);
+                Log.e("ProductList","Cate>>"+category+"\n Price Min>>"+price.toString()
+                       +"\n Brand>>"+brand.toString()+"\n Discount>>"+discount);
+                nearProductList.clear();
+                paginationFlag = true;
+                 filterPostModel = new FilterPostModel(category, false, skipCount,takeCount,0,0,brand,price,discount);
+                callFilterAPI();
             }else
 
             {
@@ -184,6 +197,31 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
             }
 
         }
+    }
+
+    private void callFilterAPI() {
+        nearProductListViewMode.getFilterProductListRequest(filterPostModel);
+        nearProductListViewMode.getFilterProductList().observe(this, new Observer<NearProductListMainModel>() {
+            @Override
+            public void onChanged(NearProductListMainModel nearProductListList) {
+                if (nearProductListList.isSuccess()) {
+                    mBinding.shimmerViewContainer.stopShimmer();
+                    mBinding.shimmerViewContainer.setVisibility(View.GONE);
+                    if (nearProductListList.getResultItem().size() > 0) {
+                        mBinding.rvNearByProduct.post(new Runnable() {
+                            public void run() {
+                                nearProductList.addAll(nearProductListList.getResultItem());
+                                nearProductListAdapter.notifyDataSetChanged();
+                                loading = true;
+                            }
+                        });
+
+                    } else {
+                        loading = false;
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -229,4 +267,5 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
             }
         });
     }
+
 }

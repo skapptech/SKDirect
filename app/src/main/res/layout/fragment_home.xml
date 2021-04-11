@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -90,7 +90,8 @@
                 android:id="@+id/ll_main_app_home"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -286,7 +287,9 @@
                         android:id="@+id/rv_all_cetegory"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scrollbars="horizontal" />
+                        android:scrollbars="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="3" />
 
                     <LinearLayout
                         android:id="@+id/ll_all_cetegory_not_found"

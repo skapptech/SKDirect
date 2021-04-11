@@ -115,12 +115,9 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="skdirectbuyer.shopkirana.in"
-                    android:scheme="http" />
-                <data
-                    android:host="skdirectbuyer.shopkirana.in"
+                    android:pathPrefix="/product"
                     android:scheme="https" />
                 <data
                     android:host="virtualstockuat.shopkirana.in"
@@ -128,9 +125,7 @@
                     android:scheme="https" />
                 <data
                     android:host="directbuyer.er15.xyz"
-                    android:scheme="http" />
-                <data
-                    android:host="directbuyer.er15.xyz"
+                    android:pathPrefix="/product"
                     android:scheme="https" />
             </intent-filter>
 
@@ -175,12 +170,9 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="skdirectbuyer.shopkirana.in"
-                    android:scheme="http" />
-                <data
-                    android:host="skdirectbuyer.shopkirana.in"
+                    android:pathPrefix="/seller"
                     android:scheme="https" />
                 <data
                     android:host="virtualstockuat.shopkirana.in"
@@ -188,9 +180,7 @@
                     android:scheme="https" />
                 <data
                     android:host="directbuyer.er15.xyz"
-                    android:scheme="http" />
-                <data
-                    android:host="directbuyer.er15.xyz"
+                    android:pathPrefix="/seller"
                     android:scheme="https" />
             </intent-filter>
 

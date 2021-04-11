@@ -70,4 +70,10 @@ public interface CartDaoAccess {
 
     @Query("DELETE FROM ShoppingCart")
     void truncateCart();
+
+    @Query("SELECT carId FROM ShoppingCart LIMIT 1")
+    String getCartId();
+
+    @Query("UPDATE ShoppingCart set carId = :cartId")
+    void updateCartId(String cartId);
 }

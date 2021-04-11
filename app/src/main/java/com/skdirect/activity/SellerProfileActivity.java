@@ -53,6 +53,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     private String searchSellerName;
     DBHelper dbHelper;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +94,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 startActivity(new Intent(getApplicationContext(), CartActivity.class));
                 break;
             case R.id.btShare:
-                Utils.showShareWhatsappDialog(this,BuildConfig.apiEndpoint+"/seller/"+sellerID,"");
+                Utils.showShareWhatsappDialog(this,SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL)+"/seller/"+sellerID,"");
                 break;
 
         }
@@ -197,7 +198,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 mBinding.tvSellerName.setText(sellerDetailsModel.getSellerInfoModel().getShopName());
                 if (sellerDetailsModel.getSellerInfoModel().getMinOrderValue() != 0.0 && sellerDetailsModel.getSellerInfoModel().getRadialDistance() != 0.0) {
                     mBinding.tvMinimumOrderAmt.setText("₹ " + Math.round(sellerDetailsModel.getSellerInfoModel().getMinOrderValue()));
-                    mBinding.tvDiliverDistance.setText("" + Math.round(sellerDetailsModel.getSellerInfoModel().getRadialDistance()));
+                    mBinding.tvDiliverDistance.setText("" + Math.round(sellerDetailsModel.getSellerInfoModel().getRadialDistance())+" KM");
                 } else {
                     mBinding.llMiniOrder.setVisibility(View.GONE);
                     mBinding.llDelivert.setVisibility(View.GONE);
@@ -311,7 +312,13 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             if (cartSellerId == sellerID) {
                 btAddToCart.setVisibility(View.GONE);
                 LLPlusMinus.setVisibility(View.VISIBLE);
-                CartModel cartModel = new CartModel(null, 0, null, false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(), 0, 0, false, 0, 0, 0, sellerProductModel.getQty(), sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
+                CartModel cartModel = new CartModel(null, 0, null,
+                        false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(),
+                        sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(),
+                        0, sellerProductModel.getProductName(), 0, 0, false,
+                        0, 0, 0, sellerProductModel.getQty(), sellerProductModel.getCreatedBy(),
+                        null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(),
+                        sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
                 MyApplication.getInstance().cartRepository.addToCart(cartModel);
                 SellerProfileActivity.this.plusButtonOnClick(sellerProductModel, tvSelectedQty);
             } else {
@@ -324,16 +331,17 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             // add item  to cart
             CartModel cartModel = new CartModel(null, 0, null, false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(), 0, 0, false, 0, 0, 0, 1, sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
             MyApplication.getInstance().cartRepository.addToCart(cartModel);
+            addItemInCart(1, sellerProductModel);
         }
     }
 
     private void addItemInCart(int QTY, SellerProductList sellerProductModel) {
         ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(), 0, 0);
         sellerProfileViewMode.getAddItemsInCardVMRequest(paginationModel);
-        sellerProfileViewMode.getAddItemsInCardVM().observe(this, sellerProdList -> {
+        sellerProfileViewMode.getAddItemsInCardVM().observe(this, addCartItemModel -> {
             Utils.hideProgressDialog();
-            if (sellerProdList != null) {
-                // sellerShopListAdapter.notifyDataSetChanged();
+            if (addCartItemModel != null && addCartItemModel.getResultItem() != null) {
+                MyApplication.getInstance().cartRepository.updateCartId(addCartItemModel.getResultItem().getId());
             }
         });
     }
@@ -342,9 +350,9 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     public void checkCustomerAlertDialog(int id, SellerProductList sellerProductModel, TextView btAddToCart, LinearLayout LLPlusMinus) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Alert");
-        builder.setMessage("Your Cart has existing items from Another Seller.Do You Want to clear it and add items from this Seller?");
+        builder.setMessage("Your Cart has existing items from Another Seller. Do You Want to clear it and add items from this Seller?");
         builder.setPositiveButton("Yes", (dialog, which) -> {
-            clearCartItem(id);
+            clearCartItem();
             MyApplication.getInstance().cartRepository.truncateCart();
             // cartModel.setSellerId(sellerID);
             CartModel cartItemModel = new CartModel(null, 0, null, false,
@@ -368,8 +376,9 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         dialog.show();
     }
 
-    private void clearCartItem(int id) {
-        sellerProfileViewMode.getClearCartItemVMRequest(id);
+    private void clearCartItem() {
+        String cartId = MyApplication.getInstance().cartRepository.getCartId();
+        sellerProfileViewMode.getClearCartItemVMRequest(cartId);
         sellerProfileViewMode.getClearCartItemVM().observe(this, object -> {
             Utils.hideProgressDialog();
         });

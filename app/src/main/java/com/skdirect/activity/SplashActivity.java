@@ -89,6 +89,8 @@ public class SplashActivity extends AppCompatActivity {
                         if (BuildConfig.VERSION_NAME.equals(appVersionModels.getResultItem().getVersion())) {
                             if (appVersionModels.isSuccess()) {
                                 if (BuildConfig.VERSION_NAME.equals(appVersionModels.getResultItem().getVersion())) {
+                                    SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL, appVersionModels.getResultItem().getSellerUrl());
+                                    SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL, appVersionModels.getResultItem().getBuyerUrl());
                                     launchHomeScreen();
                                     finish();
                                 } else {

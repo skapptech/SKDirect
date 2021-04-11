@@ -38,6 +38,7 @@ import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.fragment.BasketFragment;
 import com.skdirect.fragment.ChatFragment;
 import com.skdirect.fragment.HomeFragment;
+import com.skdirect.model.CartModel;
 import com.skdirect.utils.AppSignatureHelper;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.GPSTracker;
@@ -333,6 +334,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Utils.hideProgressDialog();
             if (model.isSuccess() && model.getResultItem().getCart() != null) {
                 System.out.println("HomeSellerId " + model.getResultItem().getSellerId());
+                for (CartModel itemModel : model.getResultItem().getCart()) {
+                    itemModel.setCarId(model.getResultItem().getId());
+                }
                 MyApplication.getInstance().cartRepository.addToCart(model.getResultItem().getCart());
             } else {
                 MyApplication.getInstance().cartRepository.truncateCart();

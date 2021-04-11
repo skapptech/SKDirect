@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.JsonElement;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AddCartItemModel;
-import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CartMainModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.RemoveItemRequestModel;
@@ -28,6 +27,7 @@ public class CartItemViewMode extends ViewModel {
     private MutableLiveData<CartMainModel> CartItemModelVM;
     private MutableLiveData<AddCartItemModel> addItemsInCardVM;
     private MutableLiveData<JsonElement> removeItemFromCartVM;
+    private MutableLiveData<Object> clearCartItemVM;
 
     public LiveData<CartMainModel> getCartItemModelVM() {
         if (CartItemModelVM == null) {
@@ -55,6 +55,12 @@ public class CartItemViewMode extends ViewModel {
             removeItemFromCartVM.setValue(null);
         }
         return removeItemFromCartVM;
+    }
+
+    public LiveData<Object> getClearCartItemVM() {
+        clearCartItemVM = null;
+        clearCartItemVM = new MutableLiveData<>();
+        return clearCartItemVM;
     }
 
     public MutableLiveData<CartMainModel> getCartItemModelVMRequest(RecyclerView rvCartItem, LinearLayout blankBasket) {
@@ -121,5 +127,25 @@ public class CartItemViewMode extends ViewModel {
         });
 
         return removeItemFromCartVM;
+    }
+
+    public MutableLiveData<Object> clearCartItemVMRequest(String id) {
+        RestClient.getInstance().getService().ClearCart(id).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
+                    clearCartItemVM.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + t.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return clearCartItemVM;
     }
 }
