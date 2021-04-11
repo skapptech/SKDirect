@@ -3,7 +3,6 @@ package com.skdirect.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -168,8 +167,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             } else {
                 Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
             }
-
-
         });
 
         builder.setNegativeButton("No", (dialog, which) -> {
@@ -178,7 +175,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         AlertDialog dialog = builder.create();
         dialog.show();
-
     }
 
     private void orderPlaceAPI() {
@@ -200,14 +196,13 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         dialog.setTitle("Congratulation");
         dialog.setMessage("Order Place Successfully");
         dialog.setPositiveButton("OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(PaymentActivity.this, MainActivity.class));
-                        finish();
-
-                    }
+                (dialog1, which) -> {
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
                 });
         dialog.show();
+        // clear cart
+        MyApplication.getInstance().cartRepository.truncateCart();
     }
 
     private void updateViews(boolean isApplied, OfferResponse.Coupon coupon) {

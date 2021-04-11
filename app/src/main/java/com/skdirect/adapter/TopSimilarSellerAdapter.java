@@ -25,10 +25,10 @@ import java.util.ArrayList;
 
 public class TopSimilarSellerAdapter extends RecyclerView.Adapter<TopSimilarSellerAdapter.ViewHolder> {
 
-    private Context context;
+    private ProductDetailsActivity context;
     private ArrayList<TopSimilatSellerModel> topSimilatSellerList;
 
-    public TopSimilarSellerAdapter(Context context, ArrayList<TopSimilatSellerModel> topSellerList) {
+    public TopSimilarSellerAdapter(ProductDetailsActivity context, ArrayList<TopSimilatSellerModel> topSellerList) {
         this.context = context;
         this.topSimilatSellerList = topSellerList;
     }
@@ -79,6 +79,7 @@ public class TopSimilarSellerAdapter extends RecyclerView.Adapter<TopSimilarSell
                 Intent menuIntent = new Intent(context, ProductDetailsActivity.class);
                 menuIntent.putExtra("ID",topSellerModel.getId());
                 context.startActivity(menuIntent);
+                context.finish();
             }
         });
     }

@@ -9,14 +9,11 @@ import androidx.lifecycle.ViewModel;
 import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.DeliveryMainModel;
-import com.skdirect.model.DeliveryOptionModel;
 import com.skdirect.model.MainLocationModel;
 import com.skdirect.model.OrderPlaceMainModel;
 import com.skdirect.model.OrderPlaceRequestModel;
-import com.skdirect.model.UserLocationModel;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -168,8 +165,9 @@ public class PaymentViewMode extends ViewModel {
         return orderPlaceVM;
     }
 
-    public MutableLiveData<Object> getClearCartDataRequest(int id) {
-        RestClient.getInstance().getService().ClearCart(id).enqueue(new Callback<Object>() {
+    public MutableLiveData<Object> getClearCartDataRequest() {
+        String cartId = MyApplication.getInstance().cartRepository.getCartId();
+        RestClient.getInstance().getService().ClearCart(cartId).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 if (response.isSuccessful() && response.body() != null) {

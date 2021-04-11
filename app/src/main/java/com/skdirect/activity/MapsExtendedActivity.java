@@ -213,6 +213,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                 try {
                     if (data!=null){
                         if(data.isSuccess()){
+                            SharePrefs.getInstance(MapsExtendedActivity.this).putBoolean(SharePrefs.IS_Mall,false);
                             Gettoken();
                         }
                         else{

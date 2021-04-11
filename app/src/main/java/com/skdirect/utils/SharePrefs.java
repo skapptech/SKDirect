@@ -36,6 +36,7 @@ public class SharePrefs {
     public static final String USER_IS_ACTIVE ="user_IsActive";
     public static final String USER_IS_DELETE ="user_IsDelete";
     public static final String IS_DELETE ="IsDelete";
+    public static final String IS_Mall ="IsMall";
     public static final String PIN_CODE_master ="Pincode_master";
     public static final String PIN_CODE ="Pincode";
     public static final String IMAGE_PATH ="image_path";

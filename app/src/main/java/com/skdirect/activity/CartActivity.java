@@ -2,6 +2,7 @@ package com.skdirect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -58,8 +59,17 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.cart, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        onBackPressed();
+        if (item.getItemId() == R.id.clearCart) {
+            clearCart();
+        } else
+            onBackPressed();
         return super.onOptionsItemSelected(item);
     }
 
@@ -189,8 +199,8 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                         loading = false;
                     }
                 }
-            }else {
-                Utils.setToast(this,cartMainModel.getErrorMessage());
+            } else {
+                Utils.setToast(this, cartMainModel.getErrorMessage());
                 mBinding.rvCartItem.setVisibility(View.GONE);
                 mBinding.blankBasket.setVisibility(View.VISIBLE);
                 mBinding.rlCheckOut.setVisibility(View.GONE);
@@ -244,6 +254,20 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 mBinding.rlCheckOut.setVisibility(View.GONE);
                 mBinding.blankBasket.setVisibility(View.VISIBLE);
             }
+        });
+    }
+
+    private void clearCart() {
+        Utils.showProgressDialog(this);
+        String cartId = MyApplication.getInstance().cartRepository.getCartId();
+        cartItemViewMode.clearCartItemVMRequest(cartId);
+        cartItemViewMode.getClearCartItemVM().observe(this, object -> {
+            MyApplication.getInstance().cartRepository.truncateCart();
+            Utils.hideProgressDialog();
+            cartItemList.clear();
+            cartListAdapter.notifyDataSetChanged();
+            mBinding.rlCheckOut.setVisibility(View.GONE);
+            mBinding.blankBasket.setVisibility(View.VISIBLE);
         });
     }
 }

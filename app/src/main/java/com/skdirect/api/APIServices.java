@@ -45,6 +45,7 @@ import com.skdirect.model.SearchRequestModel;
 import com.skdirect.model.SellerDetailsModel;
 import com.skdirect.model.SellerProductMainModel;
 import com.skdirect.model.SellerProfileDataModel;
+import com.skdirect.model.ShopMainModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.model.TopSellerModel;
@@ -130,8 +131,8 @@ public interface APIServices {
     Call<NearBySellerMainModel> GetNewSellerFilter(@Body PaginationModel paginationModel);
 
 
-    @GET("api/buyer/Seller/GetTopSeller")
-    Call<ArrayList<TopSellerModel>> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword, @Query("categoryId") String categoryId);
+    @GET("/api/NativeBuyer/ShopList/GetShopList")
+    Call<ShopMainModel> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword, @Query("categoryId") String categoryId);
 
     @POST("/api/NativeBuyer/ItemList/GetSellerListWithItem")
     Call<SearchMainModel> GetSellerListWithItem(@Body SearchRequestModel paginationModel);
@@ -171,8 +172,8 @@ public interface APIServices {
     @GET("api/NativeBuyer/SellerProfile/GetCartItems")
     Call<CartMainModel> GetCartItem();
 
-    @POST("api/NativeBuyer/SellerProfile/ClearCart")
-    Call<Object> ClearCart(@Query("Id") int id);
+    @GET("api/NativeBuyer/SellerProfile/ClearCart")
+    Call<Object> ClearCart(@Query("Id") String id);
 
     @GET("api/NativeBuyer/CartOverview/GetCartItems")
     Call<CartMainModel> CartItems();
