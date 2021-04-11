@@ -15,10 +15,10 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:id="@+id/tilName">
+                android:layout_marginTop="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_name"
@@ -27,6 +27,8 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
+                    android:padding="10dp"
+                    android:background="@drawable/editext_drawble"
                     android:gravity="center_vertical"
                     android:hint="@string/name_reg"
                     android:imeOptions="actionNext"
@@ -36,10 +38,10 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:id="@+id/tilEmail">
+                android:layout_marginTop="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_email_id"
@@ -48,19 +50,21 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
+                    android:background="@drawable/editext_drawble"
                     android:gravity="center_vertical"
                     android:hint="@string/email_is_optional"
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
+                    android:padding="10dp"
                     android:textColorHint="@color/seller_button_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPincode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:id="@+id/tilPincode">
+                android:visibility="invisible">
 
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -84,11 +88,10 @@
 
         <Button
             android:id="@+id/bt_save_addresh"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
-            android:background="@drawable/db_button_save"
+            android:background="@drawable/background_for_buttons"
             android:text="@string/save"
             android:textColor="@color/seller_button_color"
             android:textStyle="normal" />

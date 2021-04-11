@@ -34,6 +34,7 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
     private NewAddressViewMode newAddressViewMode;
     private GPSTracker gpsTracker;
     DBHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,11 +145,20 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void callLocationAPI() {
+
         gpsTracker = new GPSTracker(getApplicationContext());
-        if (gpsTracker != null) {
-            callLocation(gpsTracker.getLatitude(), gpsTracker.getLongitude());
+
+        if (Utils.isNetworkAvailable(getApplicationContext())) {
+            if (gpsTracker != null) {
+                Utils.showProgressDialog(this);
+                callLocation(gpsTracker.getLatitude(), gpsTracker.getLongitude());
+            }
+
+        } else {
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_connection));
         }
     }
+
 
     private void callLocation(double latitude, double longitude) {
         newAddressViewMode.getMapViewModelRequest(latitude, longitude);

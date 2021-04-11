@@ -42,7 +42,7 @@ public class UserLocationAdapter extends RecyclerView.Adapter<UserLocationAdapte
         if (selectedPosition == position) {
             holder.mBinding.imgVerified.setBackground(context.getResources().getDrawable(R.drawable.correct));
         } else {
-            holder.mBinding.imgVerified.setBackground(context.getResources().getDrawable(R.drawable.ic_right));
+            //holder.mBinding.imgVerified.setBackground(context.getResources().getDrawable(R.drawable.ic_right));
         }
 
 

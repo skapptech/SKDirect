@@ -23,6 +23,8 @@ import com.skdirect.databinding.ActivitySallerProductListBinding;
 import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.NearBySellerMainModel;
 import com.skdirect.model.PaginationModel;
+import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.NearSellerViewMode;
 import com.skdirect.viewmodel.SellerProductListViewMode;
@@ -41,6 +43,7 @@ public class NearSellerActivity extends AppCompatActivity implements View.OnClic
     private boolean loading = true;
     private String searchString;
     private NearSellerListAdapter nearSellerListAdapter;
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,7 @@ public class NearSellerActivity extends AppCompatActivity implements View.OnClic
         mBinding.toolbarTittle.tvTittle.setText("Seller List");
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         nearBySallerList.clear();
+        dbHelper = MyApplication.getInstance().dbHelper;
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL,false);
         mBinding.rvSellerProduct.setLayoutManager(layoutManager);
@@ -149,7 +153,7 @@ public class NearSellerActivity extends AppCompatActivity implements View.OnClic
         if (Utils.isNetworkAvailable(getApplicationContext())) {
             getProductListAPI();
         } else {
-            Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_connection));
         }
     }
 

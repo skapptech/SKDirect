@@ -157,8 +157,9 @@
             android:layout_centerInParent="true"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
-            android:background="@drawable/db_button_save"
+            android:background="@drawable/background_for_buttons"
             android:text="@string/save"
+            android:layout_marginBottom="10dp"
             android:textColor="@color/seller_button_color"
             android:textStyle="normal" />
 

@@ -81,12 +81,15 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
     private void checkPasswordApi() {
         if (Utils.isNetworkAvailable(this)) {
             if (commonClassForAPI != null) {
-                /*commonClassForAPI.getToken(callToken, "password", mobileNumber, passwordString, false, true, "BUYERAPP");*/
-            } else {
+                commonClassForAPI.getToken(callToken, "password", mobileNumber, passwordString, false, true, "BUYERAPP",true,
+                        Utils.getDeviceUniqueID(this), Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)),Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON)), SharePrefs.getInstance(LoginWithPasswordActivity.this).getString(SharePrefs.PIN_CODE),"");
+            }
+
+        } else {
                 Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
             }
         }
-    }
+
 
     private final DisposableObserver<LoginWithPasswordModel> callToken = new DisposableObserver<LoginWithPasswordModel>() {
         @Override

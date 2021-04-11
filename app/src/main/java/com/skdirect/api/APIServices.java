@@ -83,7 +83,7 @@ public interface APIServices {
 
     @FormUrlEncoded
     @POST("/token")
-    Observable<TokenModel> getToken(@Field("grant_type") String grant_type, @Field("username") String username, @Field("password") String password, @Field("ISOTP") boolean isOTp, @Field("ISBUYER") boolean isBuyer, @Field("LOGINTYPE") String LOGINTYPE, @Field("ISDEVICE") boolean ISDEVICE, @Field("DEVICEID") String DEVICEID, @Field("LAT") double LAT, @Field("LNG") double LNG, @Field("PINCODE") String pincode, @Field("lang") String lang);
+    Observable<TokenModel> getToken(@Field("grant_type") String grant_type, @Field("username") String username, @Field("password") String password, @Field("ISOTP") boolean isOTp, @Field("ISBUYER") boolean isBuyer, @Field("LOGINTYPE") String LOGINTYPE, @Field("ISDEVICE") boolean ISDEVICE, @Field("DEVICEID") String DEVICEID, @Field("LAT") double LAT, @Field("LNG") double LNG, @Field("PINCODE") String pincode,@Field("lang") String lang, @Field("TYPE") String TYPE);
 
     @GET("api/buyer/Profile/GetUserDetail")
     Call<CustomerDataModel> GetUserDetail();

@@ -221,20 +221,13 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                 if (model.isSuccess()) {
                     SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, model.getResultItem().getIsUserExist());
                     SharePrefs.getInstance(GenerateOTPActivity.this).putString(SharePrefs.USER_ID, model.getResultItem().getUserid());
-                    /*  commonClassForAPI.getToken(callToken, "password", mobileNumber, otpString, true, true, "BUYERAPP",true,Utils.getDeviceUniqueID(GenerateOTPActivity.this),);*/
+                    commonClassForAPI
+                            .getToken(callToken, "password", Utils.getDeviceUniqueID(GenerateOTPActivity.this),
+                                    "", true, true, "BUYERAPP", true,
+                                    Utils.getDeviceUniqueID(GenerateOTPActivity.this), Double.parseDouble(SharePrefs.getStringSharedPreferences(GenerateOTPActivity.this,SharePrefs.LAT)),Double.parseDouble(SharePrefs.getStringSharedPreferences(GenerateOTPActivity.this,SharePrefs.LON)), SharePrefs.getInstance(GenerateOTPActivity.this).getString(SharePrefs.PIN_CODE),"GET");
 
-                        /*if (SharePrefs.getInstance(GenerateOTPActivity.this).getBoolean(SharePrefs.IS_LOGIN)){
 
-                        }else {
-                            startActivity(new Intent(GenerateOTPActivity.this,PlaceSearchActivity.class));
-                        }*/
-                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)) {
-                        startActivity(new Intent(GenerateOTPActivity.this, MainActivity.class));
-                    } else {
-                        startActivity(new Intent(GenerateOTPActivity.this, RegisterationActivity.class));
-                    }
-                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN,true);
-                    finish();
+
 
                 } else {
                     Binding.btLoddingOtp.setText(dbHelper.getString(R.string.next));
@@ -298,7 +291,13 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
             try {
                 Utils.hideProgressDialog();
                 if (model != null) {
-
+                    if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_USER_EXISTS)) {
+                        startActivity(new Intent(GenerateOTPActivity.this, MainActivity.class));
+                    } else {
+                        startActivity(new Intent(GenerateOTPActivity.this, RegisterationActivity.class));
+                    }
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN,true);
+                    finish();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

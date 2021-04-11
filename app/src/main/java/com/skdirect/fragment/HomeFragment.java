@@ -420,17 +420,17 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         }
 
 
-                        if (customerDataModel.isRegistrationComplete() && SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_LOGIN)) {
-                            activity.userNameTV.setText(customerDataModel.getFirstName());
-                            activity.mBinding.llLogout.setVisibility(View.VISIBLE);
-                            activity.mBinding.llSignIn.setVisibility(View.GONE);
+                    }
+                    if (customerDataModel.isRegistrationComplete() && SharePrefs.getInstance(activity).getBoolean(SharePrefs.IS_LOGIN)) {
+                        activity.userNameTV.setText(customerDataModel.getFirstName());
+                        activity.mBinding.llLogout.setVisibility(View.VISIBLE);
+                        activity.mBinding.llSignIn.setVisibility(View.GONE);
 
-                        } else {
-                            activity.userNameTV.setText(R.string.guest_user);
-                            activity.mBinding.llSignIn.setVisibility(View.VISIBLE);
-                            activity.mBinding.llLogout.setVisibility(View.GONE);
+                    } else {
+                        activity.userNameTV.setText(R.string.guest_user);
+                        activity.mBinding.llSignIn.setVisibility(View.VISIBLE);
+                        activity.mBinding.llLogout.setVisibility(View.GONE);
 
-                        }
                     }
                 }
             }

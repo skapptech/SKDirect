@@ -24,6 +24,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
     private ActivityUpdateProfileBinding mBinding;
     private UpdateProfileViewMode updateProfileViewMode;
     DBHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +47,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.update_profile));
         mBinding.etName.setText(SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.FIRST_NAME));
         mBinding.etEmailId.setText(SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.EMAIL_ID));
-        mBinding.etPinCode.setText(SharePrefs.getStringSharedPreferences(UpdateProfileActivity.this,SharePrefs.PIN_CODE));
+        mBinding.etPinCode.setText(SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.PIN_CODE));
     }
 
     @Override
@@ -64,6 +65,10 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
     private void upDateProfile() {
         if (TextUtils.isNullOrEmpty(mBinding.etName.getText().toString().trim())) {
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_name));
+        } else if (mBinding.etEmailId.getText().toString().trim().length()>0) {
+            if(!TextUtils.isValidEmail(mBinding.etEmailId.getText().toString().trim())){
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_email));
+            }
         } else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString().trim())) {
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_pincode));
         } else {

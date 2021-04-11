@@ -233,7 +233,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
         commonClassForAPI
                 .getToken(callToken, "password", Utils.getDeviceUniqueID(this),
                 "", true, true, "BUYERAPP", true,
-                Utils.getDeviceUniqueID(this), Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)),Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON)), SharePrefs.getInstance(MapsExtendedActivity.this).getString(SharePrefs.PIN_CODE));
+                Utils.getDeviceUniqueID(this), Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)),Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON)), SharePrefs.getInstance(MapsExtendedActivity.this).getString(SharePrefs.PIN_CODE),"");
     }
 
 

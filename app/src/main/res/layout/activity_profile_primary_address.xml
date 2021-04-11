@@ -43,10 +43,11 @@
                     android:layout_weight=".5"
                     android:layout_alignParentLeft="true"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/db_button_rounf_two"
+                    android:background="@drawable/background_for_buttons"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="10dp"
                     android:text="@string/add_new_address"
+                    android:layout_marginBottom="10dp"
                     android:textColor="@color/seller_button_color"
                     android:textStyle="normal" />
 
