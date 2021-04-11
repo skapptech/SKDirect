@@ -298,21 +298,24 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         qty--;
         if (qty > 0) {
             selectedQty.setText("" + qty);
-            addItemInCart(qty, sellerProductModel);
         } else {
             btAddToCart.setVisibility(View.VISIBLE);
             LLPlusMinus.setVisibility(View.GONE);
-            mBinding.toolbarTittle.cartBadge.setVisibility(View.GONE);
         }
         // add item  to cart
         CartModel cartModel = new CartModel(null, 0, null,
                 false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(),
                 sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(),
                 0, sellerProductModel.getProductName(), 0, 0,
-                false, 0, 0, 0, 1, sellerProductModel.getCreatedBy(),
+                false, 0, 0, 0, sellerProductModel.getQty(), sellerProductModel.getCreatedBy(),
                 null, sellerProductModel.getSellerId(), 0, 0,
                 sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
-        MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
+        if (qty > 0) {
+            MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
+        } else {
+            MyApplication.getInstance().cartRepository.deleteCartItem(cartModel);
+        }
+        addItemInCart(qty, sellerProductModel);
     }
 
     @Override
