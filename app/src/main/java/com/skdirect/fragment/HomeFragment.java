@@ -39,6 +39,7 @@ import com.skdirect.model.MallMainModel;
 import com.skdirect.model.NearByMainModel;
 import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.GridSpacingItemDecoration;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
@@ -295,6 +296,8 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void initViews() {
+
+
         dbHelper = MyApplication.getInstance().dbHelper;
         mBinding.etSearchSeller.setText(dbHelper.getString(R.string.search_seller));
         mBinding.tvNearByViewAll.setText(dbHelper.getString(R.string.view_more));
@@ -307,7 +310,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         //mBinding.swiperefresh.setOnRefreshListener(this);
         mBinding.rvNearByItem.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         mBinding.rvTopSeller.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
-        mBinding.rvAllCetegory.setLayoutManager(new GridLayoutManager(activity, 3));
         activity.appBarLayout.setVisibility(View.VISIBLE);
         if (Utils.isNetworkAvailable(activity)) {
             Utils.showProgressDialog(activity);
