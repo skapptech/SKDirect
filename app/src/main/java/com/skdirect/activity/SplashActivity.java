@@ -14,27 +14,18 @@ import android.view.WindowManager;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivitySplashBinding;
-import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.model.AppVersionModel;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
-import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.VersionViewModel;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class SplashActivity extends AppCompatActivity {
     private ActivitySplashBinding mBinding;
@@ -55,17 +46,19 @@ public class SplashActivity extends AppCompatActivity {
         initViews();
     }
 
+    @Override
+    protected void onPostResume() {
+        callAPI();
+        super.onPostResume();
+    }
+
+
     private void initViews() {
         Glide.with(activity).load("")
                 .placeholder(R.drawable.splash)
                 .into(mBinding.imSplash);
     }
 
-    @Override
-    protected void onPostResume() {
-        callAPI();
-        super.onPostResume();
-    }
 
     private void callAPI() {
         try {
@@ -80,22 +73,19 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void getAppVersionApi() {
-        versionViewModel.getVersion().observe(this, new Observer<AppVersionModel>() {
-            @Override
-            public void onChanged(AppVersionModel appVersionModels) {
-                mBinding.pBar.setVisibility(View.GONE);
-                if (appVersionModels != null) {
-                    if (appVersionModels.isSuccess()) {
-                        if (BuildConfig.VERSION_NAME.equals(appVersionModels.getResultItem().getVersion())) {
-                            if (appVersionModels.isSuccess()) {
-                                if (BuildConfig.VERSION_NAME.equals(appVersionModels.getResultItem().getVersion())) {
-                                    SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL, appVersionModels.getResultItem().getSellerUrl());
-                                    SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL, appVersionModels.getResultItem().getBuyerUrl());
-                                    launchHomeScreen();
-                                    finish();
-                                } else {
-                                    checkVersionData(appVersionModels);
-                                }
+        versionViewModel.getVersion().observe(this, appVersionModels -> {
+            mBinding.pBar.setVisibility(View.GONE);
+            if (appVersionModels != null) {
+                if (appVersionModels.isSuccess()) {
+                    if (BuildConfig.VERSION_NAME.equals(appVersionModels.getResultItem().getVersion())) {
+                        if (appVersionModels.isSuccess()) {
+                            if (BuildConfig.VERSION_NAME.equals(appVersionModels.getResultItem().getVersion())) {
+                                SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL, appVersionModels.getResultItem().getSellerUrl());
+                                SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL, appVersionModels.getResultItem().getBuyerUrl());
+                                launchHomeScreen();
+                                finish();
+                            } else {
+                                checkVersionData(appVersionModels);
                             }
                         }
                     }
@@ -146,7 +136,8 @@ public class SplashActivity extends AppCompatActivity {
             if (BuildConfig.VERSION_NAME.equalsIgnoreCase(appVersionModels.getResultItem().getVersion())) {
 
             } else {
-                @SuppressLint("RestrictedApi") AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.Base_Theme_AppCompat_Dialog));
+                @SuppressLint("RestrictedApi")
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle(R.string.update_available);
                 alertDialogBuilder.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.update_to_latest_version) + " " + appVersionModels.getResultItem().getVersion() + " " + MyApplication.getInstance().dbHelper.getString(R.string.from_play_store));
                 alertDialogBuilder.setCancelable(false);
@@ -160,10 +151,8 @@ public class SplashActivity extends AppCompatActivity {
                 });
                 alertDialogBuilder.show();
             }
-
         } catch (Exception ex) {
             ex.printStackTrace();
-
         }
     }
 }

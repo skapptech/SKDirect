@@ -2,8 +2,10 @@ package com.skdirect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityIntroBinding;
 import com.skdirect.utils.DBHelper;
@@ -11,9 +13,11 @@ import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 
 public class IntroActivity extends AppCompatActivity {
-    ActivityIntroBinding mBinding;
-    IntroActivity activity;
-    DBHelper dbHelper;
+    private ActivityIntroBinding mBinding;
+    private IntroActivity activity;
+    private DBHelper dbHelper;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +55,6 @@ public class IntroActivity extends AppCompatActivity {
             startActivity(i);
             finish();
         });
-
     }
 
     @Override
