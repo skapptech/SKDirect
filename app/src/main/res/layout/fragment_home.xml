@@ -288,7 +288,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scrollbars="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="3" />
 
                     <LinearLayout
                         android:id="@+id/ll_all_cetegory_not_found"
@@ -363,8 +364,7 @@
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
                         android:scrollbars="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                        app:spanCount="3" />
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                     <LinearLayout
                         android:id="@+id/ll_near_by_seller"
