@@ -354,7 +354,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         mBinding.llOtherSellar.setVisibility(View.GONE);
                     }
                 } else {
-                    Utils.setToast(ProductDetailsActivity.this, topSimilarSellerModel.getErrorMessage());
+                   /// Utils.setToast(ProductDetailsActivity.this, topSimilarSellerModel.getErrorMessage());
                 }
             }
         });

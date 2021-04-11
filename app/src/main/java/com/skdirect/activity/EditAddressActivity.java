@@ -13,7 +13,8 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.R;
-import com.skdirect.databinding.ActivityNewAddreshBinding;
+import com.skdirect.databinding.ActivityEditAddreshBinding;
+import com.skdirect.model.UserLocationModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.MyApplication;
@@ -29,19 +30,36 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class NewAddressActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivityNewAddreshBinding mBinding;
+public class EditAddressActivity extends AppCompatActivity implements View.OnClickListener {
+    private ActivityEditAddreshBinding mBinding;
     private NewAddressViewMode newAddressViewMode;
     private GPSTracker gpsTracker;
     DBHelper dbHelper;
+    private UserLocationModel userLocationModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_new_addresh);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_addresh);
         newAddressViewMode = ViewModelProviders.of(this).get(NewAddressViewMode.class);
         dbHelper = MyApplication.getInstance().dbHelper;
+        getIntentData();
         initView();
+    }
+
+    private void getIntentData() {
+        userLocationModel = (UserLocationModel) getIntent().getSerializableExtra("UserEditData");
+
+        if (userLocationModel != null) {
+
+            mBinding.etFullName.setText(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME));
+            mBinding.etStreetAddresh.setText(userLocationModel.getAddressThree());
+            mBinding.etLandmark.setText(userLocationModel.getAddressTwo());
+            mBinding.etPinCity.setText(userLocationModel.getPincode());
+            mBinding.etPinCode.setText(userLocationModel.getCity());
+            mBinding.etPinState.setText(userLocationModel.getState());
+        }
+
     }
 
     private void initView() {
@@ -60,12 +78,6 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
         mBinding.toolbarTittle.tvUsingLocation.setOnClickListener(this);
         mBinding.btSaveAddresh.setOnClickListener(this);
 
-        /*mBinding.etFullName.setText(SharePrefs.getInstance(NewAddressActivity.this).getString(SharePrefs.FIRST_NAME));
-        mBinding.tilStreetAdd.setText(SharePrefs.getInstance(NewAddressActivity.this).getString(SharePrefs.));
-        mBinding.tilLandMark.setText(SharePrefs.getInstance(NewAddressActivity.this).getString(SharePrefs.FIRST_NAME));
-        mBinding.tilPincode.setText(SharePrefs.getInstance(NewAddressActivity.this).getString(SharePrefs.PIN_CODE));
-        mBinding.tilCity.setText(SharePrefs.getInstance(NewAddressActivity.this).getString(SharePrefs.CITY_NAME));
-        mBinding.tilState.setText(SharePrefs.getInstance(NewAddressActivity.this).getString(SharePrefs.STATE));*/
     }
 
     @Override
@@ -95,7 +107,7 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
             Utils.setToast(getApplicationContext(), "Please enter city name.");
         } else {
             if (Utils.isNetworkAvailable(getApplicationContext())) {
-                Utils.showProgressDialog(NewAddressActivity.this);
+                Utils.showProgressDialog(EditAddressActivity.this);
                 setLocationAPI();
             } else {
                 Utils.setToast(getApplicationContext(), "No Internet Connection Please connect.");
@@ -129,8 +141,8 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
             jsonObject.addProperty("AddressThree", mBinding.etStreetAddresh.getText().toString());
             jsonObject.addProperty("AddressTwo", mBinding.etLandmark.getText().toString());
             jsonObject.addProperty("Id", "");
-            jsonObject.addProperty("IsActive", SharePrefs.getInstance(NewAddressActivity.this).getBoolean(SharePrefs.IS_ACTIVE));
-            jsonObject.addProperty("IsDelete", SharePrefs.getInstance(NewAddressActivity.this).getBoolean(SharePrefs.IS_DELETE));
+            jsonObject.addProperty("IsActive", SharePrefs.getInstance(EditAddressActivity.this).getBoolean(SharePrefs.IS_ACTIVE));
+            jsonObject.addProperty("IsDelete", SharePrefs.getInstance(EditAddressActivity.this).getBoolean(SharePrefs.IS_DELETE));
             jsonObject.addProperty("IsPrimaryAddress", "");
             jsonObject.addProperty("Latitiute", gpsTracker.getLatitude());
             jsonObject.addProperty("Longitude", gpsTracker.getLongitude());
