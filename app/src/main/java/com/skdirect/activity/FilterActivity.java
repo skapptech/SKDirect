@@ -17,7 +17,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.innovattic.rangeseekbar.RangeSeekBar;
 import com.skdirect.R;
-import com.skdirect.adapter.FilterCategoryAdapter;
+import com.skdirect.adapter.BrandsFilterAdapter;
+import com.skdirect.adapter.CategoryFilterAdapter;
+import com.skdirect.adapter.DiscountFilterAdapter;
 import com.skdirect.adapter.FilterTypeAdapter;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityFilterBinding;
@@ -45,7 +47,9 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     ActivityFilterBinding mBinding;
     ArrayList<String> otherList = new ArrayList<>();
     ArrayList<FilterCategoryDetails> filterCateDataList = new ArrayList<>();
-    FilterCategoryAdapter filterCategoryAdapter;
+    CategoryFilterAdapter filterCategoryAdapter;
+    BrandsFilterAdapter filterBrandAdapter;
+    DiscountFilterAdapter filterDiscountAdapter;
     private int maxprice = 10000, minprice = 1;
     private int skipCount = 0;
     private int takeCount = 15;
@@ -59,9 +63,10 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     ArrayList<String> selectedBrandList = new ArrayList<>();
     ArrayList<Integer> selectedPriceList = new ArrayList<>();
     String discount = "";
-    boolean sideTabClick = false;
+    boolean sideTabBrandClick = true;
+    boolean sideTabDiscountClick = true;
     private CommonClassForAPI commonClassForAPI;
-    LinearLayoutManager layoutManager;
+    LinearLayoutManager layoutManagerBrand;
 
 
     @Override
@@ -90,19 +95,21 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         mBinding.rvFilterType.addItemDecoration(dividerItemDecoration);
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.devider));
 
-        ArrayList<String> list = new ArrayList<>();
-        list.add("Categories");
-        list.add("Price");
-        list.add("Brands");
-        list.add("Discount");
 
-        FilterTypeAdapter filterTypeAdapter = new FilterTypeAdapter(this, list, this);
-        mBinding.rvFilterType.setAdapter(filterTypeAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+        mBinding.rvFilterCateData.setLayoutManager(layoutManager);
+        filterCategoryAdapter = new CategoryFilterAdapter(this, filterCateDataList, this);
+        mBinding.rvFilterCateData.setAdapter(filterCategoryAdapter);
 
-        layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        mBinding.rvFilterData.setLayoutManager(layoutManager);
-        filterCategoryAdapter = new FilterCategoryAdapter(this, filterCateDataList, this);
-        mBinding.rvFilterData.setAdapter(filterCategoryAdapter);
+        layoutManagerBrand = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+        mBinding.rvFilterBrandsData.setLayoutManager(layoutManagerBrand);
+        filterBrandAdapter = new BrandsFilterAdapter(this, filterCateDataList, this);
+        mBinding.rvFilterBrandsData.setAdapter(filterBrandAdapter);
+
+        LinearLayoutManager  layoutManagerDis = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+        mBinding.rvFilterDiscountData.setLayoutManager(layoutManagerDis);
+        filterDiscountAdapter = new DiscountFilterAdapter(this, filterCateDataList, this);
+        mBinding.rvFilterDiscountData.setAdapter(filterDiscountAdapter);
 
         mBinding.tvApply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,15 +137,17 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         mBinding.tvClearAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                selectedBrandList.clear();
+                selectedPriceList.clear();
                 categoryId = 0;
-                brand = "";
                 discount = "";
                 maxprice = 0;
                 minprice = 0;
+                setFilterTypeData();
             }
         });
-        // if(sideTabClick) {
-        mBinding.rvFilterData.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+        mBinding.rvFilterBrandsData.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -161,13 +170,79 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                 }
             }
         });
-        //  }
+        setFilterTypeData();
+    }
+
+    private void setFilterTypeData() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("Categories");
+        list.add("Price");
+        list.add("Brands");
+        list.add("Discount");
+        FilterTypeAdapter filterTypeAdapter = new FilterTypeAdapter(this, list, this);
+        mBinding.rvFilterType.setAdapter(filterTypeAdapter);
+
+        String savedData = SharePrefs.getInstance(this).getString(SharePrefs.FILTER_CATEGORY_LIST);
+        if (!savedData.isEmpty()) {
+            try {
+                JSONObject jsonObject = new JSONObject(savedData);
+                ArrayList<FilterCategoryDetails> detailsList = new Gson().fromJson(jsonObject.get("ResultItem").toString(), new TypeToken<List<FilterCategoryDetails>>() {
+                }.getType());
+                if (detailsList.size() > 0) {
+                    viewVisibility(0);
+                    filterCategoryAdapter.setData(detailsList);
+                    //  filterCateDataList.addAll(detailsList);
+                    //filterCategoryAdapter.notifyDataSetChanged();
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FILTER_CATEGORY_LIST, jsonObject.toString());
+                } else {
+                    viewVisibility(4);
+                    mBinding.tvNoData.setText(dbHelper.getString(R.string.no_filter_categories));
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else if (Utils.isNetworkAvailable(getApplicationContext())) {
+            commonClassForAPI.getFilterCategoryResult(new DisposableObserver<JsonObject>() {
+                @Override
+                public void onNext(@NotNull JsonObject jsonObject) {
+                    if (jsonObject.get("IsSuccess").getAsBoolean()) {
+                        ArrayList<FilterCategoryDetails> detailsList = new Gson().fromJson(jsonObject.get("ResultItem").getAsJsonArray().toString(), new TypeToken<List<FilterCategoryDetails>>() {
+                        }.getType());
+                        if (detailsList.size() > 0) {
+                            SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FILTER_CATEGORY_LIST, jsonObject.toString());
+                            viewVisibility(0);
+                            // filterCateDataList.addAll(detailsList);
+                            //  filterCategoryAdapter.notifyDataSetChanged();
+                            filterCategoryAdapter.setData(detailsList);
+                        } else {
+                            viewVisibility(4);
+                            mBinding.tvNoData.setText(dbHelper.getString(R.string.no_filter_categories));
+                        }
+                    } else {
+                        viewVisibility(4);
+                        mBinding.tvNoData.setText(dbHelper.getString(R.string.no_filter_categories));
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                    viewVisibility(4);
+                }
+
+                @Override
+                public void onComplete() {
+                    Utils.hideProgressDialog();
+                }
+            });
+
+        } else {
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_connection));
+        }
     }
 
     private void callBrandList() {
-        //LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
-        // mBinding.rvFilterData.setLayoutManager(layoutManager);
-
         if (Utils.isNetworkAvailable(getApplicationContext())) {
             PostBrandModel postBrandModel = new PostBrandModel("", skipCount, takeCount, categoryId);
             commonClassForAPI.getFilterBrandsListResult(new DisposableObserver<JsonObject>() {
@@ -177,14 +252,14 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                         ArrayList<FilterCategoryDetails> detailsList = new Gson().fromJson(jsonObject.get("ResultItem").getAsJsonArray().toString(), new TypeToken<List<FilterCategoryDetails>>() {
                         }.getType());
                         if (detailsList.size() > 0) {
-                            viewVisibility(1);
+                            viewVisibility(2);
                             filterCateDataList.addAll(detailsList);
-                            filterCategoryAdapter.setDataAdapter(filterCateDataList, "Brands");
+                            filterBrandAdapter.setData(filterCateDataList);
                             // filterCategoryAdapter.notifyDataSetChanged();
                             loading = true;
                         } else {
                             loading = false;
-                            viewVisibility(2);
+                            viewVisibility(4);
                             mBinding.tvNoData.setText(dbHelper.getString(R.string.no_filter_brands));
                         }
                     } else {
@@ -197,7 +272,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                 @Override
                 public void onError(Throwable e) {
                     e.printStackTrace();
-                    viewVisibility(2);
+                    viewVisibility(4);
                 }
 
                 @Override
@@ -221,81 +296,21 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
 
     @Override
     public void clickFilterTypeInterface(String name, int position) {
-        filterCateDataList.clear();
-        skipCount = 0;
+        System.out.println("Position::"+position);
         switch (position) {
             case 0:
-                sideTabClick = false;
-                String savedData = SharePrefs.getInstance(this).getString(SharePrefs.FILTER_CATEGORY_LIST);
-                if (!savedData.isEmpty()) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(savedData);
-                        ArrayList<FilterCategoryDetails> detailsList = new Gson().fromJson(jsonObject.get("ResultItem").toString(), new TypeToken<List<FilterCategoryDetails>>() {
-                        }.getType());
-                        if (detailsList.size() > 0) {
-                            viewVisibility(1);
-                            filterCategoryAdapter.setDataAdapter(detailsList, "Category");
-                            //  filterCateDataList.addAll(detailsList);
-                            //filterCategoryAdapter.notifyDataSetChanged();
-                            SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FILTER_CATEGORY_LIST, jsonObject.toString());
-                        } else {
-                            viewVisibility(2);
-                            mBinding.tvNoData.setText(dbHelper.getString(R.string.no_filter_categories));
-
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else if (Utils.isNetworkAvailable(getApplicationContext())) {
-                    commonClassForAPI.getFilterCategoryResult(new DisposableObserver<JsonObject>() {
-                        @Override
-                        public void onNext(@NotNull JsonObject jsonObject) {
-                            if (jsonObject.get("IsSuccess").getAsBoolean()) {
-                                ArrayList<FilterCategoryDetails> detailsList = new Gson().fromJson(jsonObject.get("ResultItem").getAsJsonArray().toString(), new TypeToken<List<FilterCategoryDetails>>() {
-                                }.getType());
-                                if (detailsList.size() > 0) {
-                                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FILTER_CATEGORY_LIST, jsonObject.toString());
-                                    viewVisibility(1);
-                                    // filterCateDataList.addAll(detailsList);
-                                    //  filterCategoryAdapter.notifyDataSetChanged();
-                                    filterCategoryAdapter.setDataAdapter(detailsList, "Category");
-                                } else {
-                                    viewVisibility(2);
-                                    mBinding.tvNoData.setText(dbHelper.getString(R.string.no_filter_categories));
-                                }
-                            } else {
-                                viewVisibility(2);
-                                mBinding.tvNoData.setText(dbHelper.getString(R.string.no_filter_categories));
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            e.printStackTrace();
-                            viewVisibility(2);
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            Utils.hideProgressDialog();
-                        }
-                    });
-
-                } else {
-                    Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_connection));
-                }
+                viewVisibility(0);
                 break;
             case 1:
-                sideTabClick = false;
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     commonClassForAPI.getFilterPriceRangeResult(new DisposableObserver<MallMainPriceModel>() {
                         @Override
                         public void onNext(@NotNull MallMainPriceModel result) {
                             if (result.isSuccess()) {
-                                viewVisibility(3);
+                                viewVisibility(1);
                                 setRangeSeekbar(result.getResultItem().getMin(), result.getResultItem().getMax());
                             } else {
-                                viewVisibility(2);
+                                viewVisibility(4);
                                 mBinding.tvNoData.setText(dbHelper.getString(R.string.no_filter_price));
                             }
                         }
@@ -303,7 +318,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                         @Override
                         public void onError(Throwable e) {
                             e.printStackTrace();
-                            viewVisibility(2);
+                            viewVisibility(4);
                         }
 
                         @Override
@@ -316,24 +331,33 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                 }
                 break;
             case 2:
-                sideTabClick = true;
-                callBrandList();
-
+                if(sideTabBrandClick){
+                    sideTabBrandClick = false;
+                    callBrandList();
+                }else
+                {
+                    viewVisibility(2);
+                }
                 break;
             case 3:
-                sideTabClick = false;
-                viewVisibility(1);
-                ArrayList<FilterCategoryDetails> discountList = new ArrayList<>();
-                discountList.add(new FilterCategoryDetails(0, "Any"));
-                discountList.add(new FilterCategoryDetails(0, "10% and above"));
-                discountList.add(new FilterCategoryDetails(0, "20% and above"));
-                discountList.add(new FilterCategoryDetails(0, "30% and above"));
-                discountList.add(new FilterCategoryDetails(0, "40% and above"));
-                discountList.add(new FilterCategoryDetails(0, "50% and above"));
-                discountList.add(new FilterCategoryDetails(0, "60% and above"));
-                discountList.add(new FilterCategoryDetails(0, "70% and above"));
-                filterCategoryAdapter.setDataAdapter(discountList, "Discount");
-                // filterCategoryAdapter.notifyDataSetChanged();
+               if(sideTabDiscountClick) {
+                  sideTabDiscountClick = false;
+                   viewVisibility(3);
+                   ArrayList<FilterCategoryDetails> discountList = new ArrayList<>();
+                   discountList.add(new FilterCategoryDetails(0, "Any"));
+                   discountList.add(new FilterCategoryDetails(0, "10% and above"));
+                   discountList.add(new FilterCategoryDetails(0, "20% and above"));
+                   discountList.add(new FilterCategoryDetails(0, "30% and above"));
+                   discountList.add(new FilterCategoryDetails(0, "40% and above"));
+                   discountList.add(new FilterCategoryDetails(0, "50% and above"));
+                   discountList.add(new FilterCategoryDetails(0, "60% and above"));
+                   discountList.add(new FilterCategoryDetails(0, "70% and above"));
+                   filterDiscountAdapter.setData(discountList);
+               }else
+               {
+                   viewVisibility(3);
+
+               }
                 break;
             default:
                 break;
@@ -341,18 +365,37 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     }
 
     private void viewVisibility(int type) {
-        if (type == 1) {
-            mBinding.rvFilterData.setVisibility(View.VISIBLE);
+        if (type == 0) {
+            mBinding.rvFilterCateData.setVisibility(View.VISIBLE);
+            mBinding.rvFilterBrandsData.setVisibility(View.GONE);
+            mBinding.rvFilterDiscountData.setVisibility(View.GONE);
             mBinding.priceFilter.setVisibility(View.GONE);
             mBinding.tvNoData.setVisibility(View.GONE);
-        } else if (type == 2) {
-            mBinding.rvFilterData.setVisibility(View.GONE);
-            mBinding.priceFilter.setVisibility(View.GONE);
-            mBinding.tvNoData.setVisibility(View.VISIBLE);
-        } else if (type == 3) {
-            mBinding.rvFilterData.setVisibility(View.GONE);
+        }else if (type == 1) {
+            mBinding.rvFilterCateData.setVisibility(View.GONE);
+            mBinding.rvFilterBrandsData.setVisibility(View.GONE);
+            mBinding.rvFilterDiscountData.setVisibility(View.GONE);
             mBinding.priceFilter.setVisibility(View.VISIBLE);
             mBinding.tvNoData.setVisibility(View.GONE);
+        } else if (type == 2) {
+            mBinding.rvFilterCateData.setVisibility(View.GONE);
+            mBinding.rvFilterBrandsData.setVisibility(View.VISIBLE);
+            mBinding.rvFilterDiscountData.setVisibility(View.GONE);
+            mBinding.priceFilter.setVisibility(View.GONE);
+            mBinding.tvNoData.setVisibility(View.GONE);
+        } else if (type == 3) {
+            mBinding.rvFilterCateData.setVisibility(View.GONE);
+            mBinding.rvFilterBrandsData.setVisibility(View.GONE);
+            mBinding.rvFilterDiscountData.setVisibility(View.VISIBLE);
+            mBinding.priceFilter.setVisibility(View.GONE);
+            mBinding.tvNoData.setVisibility(View.GONE);
+        }else
+        {
+            mBinding.rvFilterCateData.setVisibility(View.GONE);
+            mBinding.rvFilterBrandsData.setVisibility(View.GONE);
+            mBinding.rvFilterDiscountData.setVisibility(View.GONE);
+            mBinding.priceFilter.setVisibility(View.GONE);
+            mBinding.tvNoData.setVisibility(View.VISIBLE);
         }
     }
 
@@ -382,20 +425,22 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     }
 
     @Override
-    public void clickFilterCategoryInterface(int value, String label, String filterType) {
-        categoryId = value;
-        System.out.println("category:::" + categoryId);
-     /*   if (filterType.equalsIgnoreCase("Brands")) {
-            brand = label;
-        } else if (filterType.equalsIgnoreCase("Discount")) {
-            discount = label;
-        } else {
+    public void clickFilterCategoryInterface(int value, String label) {
+        if(categoryId!=value)
+        {
+            categoryId = value;
+            System.out.println("categoryId:::" + categoryId);
+            sideTabBrandClick = true;
+            sideTabDiscountClick = true;
+            skipCount = 0;
+            filterCateDataList.clear();
 
-        }*/
+        }
+
     }
 
     @Override
-    public void clickFilterBrandyInterface(int cateId, String label, String position, boolean remove) {
+    public void clickFilterBrandyInterface(int cateId, String label, boolean remove) {
        // brand = label;
         if(remove)
         {
@@ -410,7 +455,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     }
 
     @Override
-    public void clickFilterDiscountInterface(int cateId, String label, String position) {
+    public void clickFilterDiscountInterface(int cateId, String label) {
         discount = label;
     }
 
