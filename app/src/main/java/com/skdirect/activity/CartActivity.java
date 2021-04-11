@@ -114,7 +114,11 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             mBinding.tvTotalAmount.setText("₹ " + totalAmount);
             cartListAdapter.notifyDataSetChanged();
             addItemInCart(qty, cartModel);
-            MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
+            MyApplication.getInstance().cartRepository.deleteCartItem(cartModel);
+            if (cartItemList.size() == 0) {
+                mBinding.rlCheckOut.setVisibility(View.GONE);
+                mBinding.blankBasket.setVisibility(View.VISIBLE);
+            }
         }
     }
 
