@@ -109,8 +109,8 @@ public class CartItemViewMode extends ViewModel {
         return addItemsInCardVM;
     }
 
-    public MutableLiveData<JsonElement> getRemoveItemFromCartVMRequest(RemoveItemRequestModel itemRequestModel) {
-        RestClient.getInstance().getService().deleteCartItems(itemRequestModel).enqueue(new Callback<JsonElement>() {
+    public MutableLiveData<JsonElement> getRemoveItemFromCartVMRequest(int id) {
+        RestClient.getInstance().getService().deleteCartItems(id).enqueue(new Callback<JsonElement>() {
             @Override
             public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
                 if (response.isSuccessful() && response.body() != null) {

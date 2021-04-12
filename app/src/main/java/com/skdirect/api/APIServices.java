@@ -185,8 +185,8 @@ public interface APIServices {
     @GET("api/NativeBuyer/CartOverview/GetCartItems")
     Call<CartMainModel> CartItems();
 
-    @POST("api/Buyer/SellerProfile/DeleteCartItems")
-    Call<JsonElement> deleteCartItems(@Body RemoveItemRequestModel itemRequestModel);
+    @GET("api/NativeBuyer/SellerProfile/DeleteCartItems/{id}")
+    Call<JsonElement> deleteCartItems(@Path("id") int id);
 
     @GET("api/buyer/Profile/GetLocation")
     Call<JsonObject> GetLocation(@Query("lat") double lat, @Query("lng") double log);

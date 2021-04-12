@@ -252,8 +252,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void removeItemFromCart(CartModel cartModel, int position) {
-        RemoveItemRequestModel itemRequestModel = new RemoveItemRequestModel("123", cartModel.getId());
-        cartItemViewMode.getRemoveItemFromCartVMRequest(itemRequestModel);
+        cartItemViewMode.getRemoveItemFromCartVMRequest(cartModel.getId());
         cartItemViewMode.getRemoveItemFromCartVM().observe(this, jsonElement -> {
             Utils.hideProgressDialog();
             try {
