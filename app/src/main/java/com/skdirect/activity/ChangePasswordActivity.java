@@ -27,6 +27,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     private ActivityChnagePasswordBinding mBinding;
     private ChangePasswordViewMode changePasswordViewMode;
     DBHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,13 +55,13 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.iv_back_press:
                 onBackPressed();
                 break;
 
             case R.id.bt_save_password:
-               changePassword();
+                changePassword();
                 break;
         }
     }
@@ -70,14 +71,11 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             Utils.setLongToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_new_password));
         } else if (TextUtils.isNullOrEmpty(mBinding.etConfirmPassword.getText().toString().trim())) {
             Utils.setLongToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_confirm_password));
-        }
-        else if (!mBinding.etConfirmPassword.getText().toString().trim().equalsIgnoreCase(mBinding.etNewPassword.getText().toString().trim())) {
+        } else if (!mBinding.etConfirmPassword.getText().toString().trim().equalsIgnoreCase(mBinding.etNewPassword.getText().toString().trim())) {
             Utils.setLongToast(getApplicationContext(), dbHelper.getString(R.string.password_not_matched));
-        }
-        else if (TextUtils.isNullOrEmpty(mBinding.etOtp.getText().toString().trim())) {
+        } else if (TextUtils.isNullOrEmpty(mBinding.etOtp.getText().toString().trim())) {
             Utils.setLongToast(getApplicationContext(), dbHelper.getString(R.string.enter_otp));
-        }
-        else {
+        } else {
             if (Utils.isNetworkAvailable(getApplicationContext())) {
                 Utils.showProgressDialog(ChangePasswordActivity.this);
                 changePasswordAPI();
@@ -87,6 +85,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             }
         }
     }
+
     private void getOtp() {
         if (Utils.isNetworkAvailable(getApplicationContext())) {
             Utils.showProgressDialog(ChangePasswordActivity.this);
@@ -95,8 +94,9 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
+
     private void changePasswordAPI() {
-        ChangePasswordRequestModel changePasswordRequestModel = new ChangePasswordRequestModel(mBinding.etNewPassword.getText().toString().trim(),mBinding.etConfirmPassword.getText().toString().trim(),mBinding.etOtp.getText().toString().trim());
+        ChangePasswordRequestModel changePasswordRequestModel = new ChangePasswordRequestModel(mBinding.etNewPassword.getText().toString().trim(), mBinding.etConfirmPassword.getText().toString().trim(), mBinding.etOtp.getText().toString().trim());
         changePasswordViewMode.getChangePasswordRequest(changePasswordRequestModel);
         changePasswordViewMode.getChangePasswordVM().observe(this, new Observer<CommonResponseModel>() {
             @Override
@@ -105,9 +105,8 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 if (model != null) {
                     if (model.isSuccess()) {
                         changePasswordDialog(model.getSuccessMessage());
-                    }
-                    else{
-                        Utils.setToast(ChangePasswordActivity.this,model.getErrorMessage());
+                    } else {
+                        Utils.setToast(ChangePasswordActivity.this, model.getErrorMessage());
                     }
                 }
 
@@ -115,14 +114,21 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
         });
     }
+
     private void GetOtpAPI() {
         changePasswordViewMode.getOtpVM();
-        changePasswordViewMode.getOtp().observe(this, new Observer<JsonObject>() {
+        changePasswordViewMode.getOtp().observe(this, new Observer<CommonResponseModel>() {
             @Override
-            public void onChanged(JsonObject model) {
+            public void onChanged(CommonResponseModel model) {
                 Utils.hideProgressDialog();
                 if (model != null) {
+                    if (model.isSuccess()) {
+                        Utils.setToast(ChangePasswordActivity.this, model.getSuccessMessage());
+                    }
+                    else{
+                        Utils.setToast(ChangePasswordActivity.this, model.getErrorMessage());
 
+                    }
                 }
 
             }
