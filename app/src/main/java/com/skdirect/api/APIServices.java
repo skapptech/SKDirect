@@ -46,6 +46,7 @@ import com.skdirect.model.SellerProfileDataModel;
 import com.skdirect.model.ShopMainModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.TopSellerMainModel;
+import com.skdirect.model.UpdateEditeAddreshMainModel;
 import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.UserDetailResponseModel;
 import com.skdirect.model.UserLocationModel;
@@ -206,7 +207,7 @@ public interface APIServices {
     Call<Boolean> AddLocation(@Body JsonArray jsonArray);
 
     @POST("api/NativeBuyer/Address//UpdateBuyerLocation")
-    Call<Boolean> UpdateBuyerLocation(@Body JsonArray jsonArray);
+    Call<UpdateEditeAddreshMainModel> UpdateBuyerLocation(@Body JsonObject jsonArray);
 
     @POST("api/Buyer/SellerProductDetail/AddCartItem/")
     Call<AddCartItemModel> AddCartItem(@Body ItemAddModel itemAddModel);
