@@ -118,8 +118,8 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void setLocationAPI() {
-        newAddressViewMode.getAddLocationVMRequest(setUserValue());
-        newAddressViewMode.getAddLocationVM().observe(this, new Observer<Boolean>() {
+        newAddressViewMode.getupdateLocationVMRequest(setUserValue());
+        newAddressViewMode.getUpdateLocationVM().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean status) {
                 Utils.hideProgressDialog();
@@ -143,7 +143,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
             jsonObject.addProperty("Id", "");
             jsonObject.addProperty("IsActive", SharePrefs.getInstance(EditAddressActivity.this).getBoolean(SharePrefs.IS_ACTIVE));
             jsonObject.addProperty("IsDelete", SharePrefs.getInstance(EditAddressActivity.this).getBoolean(SharePrefs.IS_DELETE));
-            jsonObject.addProperty("IsPrimaryAddress", "");
+            jsonObject.addProperty("IsPrimaryAddress", userLocationModel.getId());
             jsonObject.addProperty("Latitiute", gpsTracker.getLatitude());
             jsonObject.addProperty("Longitude", gpsTracker.getLongitude());
             jsonObject.addProperty("LocationType", "");

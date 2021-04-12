@@ -204,6 +204,9 @@ public interface APIServices {
     @POST("api/buyer/Profile/AddLocation")
     Call<Boolean> AddLocation(@Body JsonArray jsonArray);
 
+    @POST("api/NativeBuyer/Address//UpdateBuyerLocation")
+    Call<Boolean> UpdateBuyerLocation(@Body JsonArray jsonArray);
+
     @POST("api/Buyer/SellerProductDetail/AddCartItem/")
     Call<AddCartItemModel> AddCartItem(@Body ItemAddModel itemAddModel);
 

@@ -25,6 +25,7 @@ public class NewAddressViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
     private MutableLiveData<JsonObject> mapViewModel;
     private MutableLiveData<Boolean> addLocationVM;
+    private MutableLiveData<Boolean> addUpdateLocationVM;
 
     public LiveData<JsonObject> getMapViewModel() {
         mapViewModel=null;
@@ -36,6 +37,12 @@ public class NewAddressViewMode extends ViewModel {
         addLocationVM=null;
         addLocationVM = new MutableLiveData<>();
         return addLocationVM;
+    }
+
+    public LiveData<Boolean> getUpdateLocationVM() {
+        addUpdateLocationVM=null;
+        addUpdateLocationVM = new MutableLiveData<>();
+        return addUpdateLocationVM;
     }
 
     public MutableLiveData<JsonObject> getMapViewModelRequest(double lat, double log) {
@@ -76,5 +83,25 @@ public class NewAddressViewMode extends ViewModel {
         });
 
         return addLocationVM;
+    }
+
+    public MutableLiveData<Boolean> getupdateLocationVMRequest(JsonArray jsonArray) {
+        RestClient.getInstance().getService().UpdateBuyerLocation(jsonArray).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (response.isSuccessful() && response.body()!=null ) {
+                    Log.e(TAG, "request response="+response.body());
+                    addUpdateLocationVM.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + call.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return addUpdateLocationVM;
     }
 }
