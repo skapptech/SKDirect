@@ -1,7 +1,6 @@
 package com.skdirect.api;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.AddReviewModel;
@@ -186,7 +185,7 @@ public interface APIServices {
     Call<CartMainModel> CartItems();
 
     @GET("api/NativeBuyer/SellerProfile/DeleteCartItems")
-    Call<JsonElement> deleteCartItems(@Query("id") int id);
+    Observable<CartMainModel> deleteCartItems(@Query("id") int id);
 
     @GET("api/buyer/Profile/GetLocation")
     Call<JsonObject> GetLocation(@Query("lat") double lat, @Query("lng") double log);
@@ -205,6 +204,9 @@ public interface APIServices {
 
     @POST("api/buyer/Profile/AddLocation")
     Call<Boolean> AddLocation(@Body JsonArray jsonArray);
+
+    @POST("api/NativeBuyer/Address//UpdateBuyerLocation")
+    Call<Boolean> UpdateBuyerLocation(@Body JsonArray jsonArray);
 
     @POST("api/Buyer/SellerProductDetail/AddCartItem/")
     Call<AddCartItemModel> AddCartItem(@Body ItemAddModel itemAddModel);

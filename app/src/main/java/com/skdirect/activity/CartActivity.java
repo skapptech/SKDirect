@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -17,19 +18,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.R;
 import com.skdirect.adapter.CartListAdapter;
+import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityCartBinding;
 import com.skdirect.interfacee.CartItemInterface;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CartMainModel;
 import com.skdirect.model.CartModel;
 import com.skdirect.model.ItemAddModel;
-import com.skdirect.model.RemoveItemRequestModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.CartItemViewMode;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+
+import io.reactivex.observers.DisposableObserver;
 
 public class CartActivity extends AppCompatActivity implements View.OnClickListener, CartItemInterface {
     private ActivityCartBinding mBinding;
@@ -44,6 +49,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     private boolean loading = true;
     private double totalAmount;
     private DBHelper dbHelper;
+    private CommonClassForAPI commonClassForAPI;
 
 
     @Override
@@ -56,6 +62,12 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         cartItemViewMode = ViewModelProviders.of(this).get(CartItemViewMode.class);
         dbHelper = MyApplication.getInstance().dbHelper;
         initView();
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        commonClassForAPI = CommonClassForAPI.getInstance(this);
     }
 
     @Override
@@ -247,30 +259,40 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             dialog.dismiss();
         });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        builder.show();
     }
 
     private void removeItemFromCart(CartModel cartModel, int position) {
-        cartItemViewMode.getRemoveItemFromCartVMRequest(cartModel.getId());
-        cartItemViewMode.getRemoveItemFromCartVM().observe(this, jsonElement -> {
-            Utils.hideProgressDialog();
-            try {
-                if (jsonElement != null || cartItemList.size() == 1) {
-                    MyApplication.getInstance().cartRepository.deleteCartItem(cartModel);
-                    cartItemList.remove(position);
-                    cartListAdapter.notifyDataSetChanged();
+        commonClassForAPI.deleteCartItems(new DisposableObserver<CartMainModel>() {
+            @Override
+            public void onNext(@NotNull CartMainModel cartMainModel) {
+                Utils.hideProgressDialog();
+                try {
+                    if (cartMainModel != null && cartMainModel.isSuccess()) {
+                        MyApplication.getInstance().cartRepository.deleteCartItem(cartModel);
+                        cartItemList.remove(position);
+                        cartListAdapter.notifyDataSetChanged();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
+                if (cartItemList != null && cartItemList.isEmpty()) {
+                    mBinding.rlCheckOut.setVisibility(View.GONE);
+                    mBinding.blankBasket.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onError(@NotNull Throwable e) {
                 e.printStackTrace();
-                cartItemList.remove(position);
-                cartListAdapter.notifyDataSetChanged();
+                Utils.hideProgressDialog();
             }
-            if (cartItemList.size() == 0) {
-                mBinding.rlCheckOut.setVisibility(View.GONE);
-                mBinding.blankBasket.setVisibility(View.VISIBLE);
+
+            @Override
+            public void onComplete() {
+
             }
-        });
+        }, cartModel.getId());
     }
 
     private void clearCart() {
