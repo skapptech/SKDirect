@@ -23,7 +23,6 @@ import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CartMainModel;
 import com.skdirect.model.CartModel;
 import com.skdirect.model.ItemAddModel;
-import com.skdirect.model.RemoveItemRequestModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
@@ -247,26 +246,24 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             dialog.dismiss();
         });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        builder.show();
     }
 
     private void removeItemFromCart(CartModel cartModel, int position) {
+        Utils.showProgressDialog(this);
         cartItemViewMode.getRemoveItemFromCartVMRequest(cartModel.getId());
-        cartItemViewMode.getRemoveItemFromCartVM().observe(this, jsonElement -> {
+        cartItemViewMode.getRemoveItemFromCartVM().observe(this, cartMainModel -> {
             Utils.hideProgressDialog();
             try {
-                if (jsonElement != null || cartItemList.size() == 1) {
+                if (cartMainModel != null && cartMainModel.isSuccess()) {
                     MyApplication.getInstance().cartRepository.deleteCartItem(cartModel);
                     cartItemList.remove(position);
                     cartListAdapter.notifyDataSetChanged();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                cartItemList.remove(position);
-                cartListAdapter.notifyDataSetChanged();
             }
-            if (cartItemList.size() == 0) {
+            if (cartItemList != null && cartItemList.isEmpty()) {
                 mBinding.rlCheckOut.setVisibility(View.GONE);
                 mBinding.blankBasket.setVisibility(View.VISIBLE);
             }
