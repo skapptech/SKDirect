@@ -211,7 +211,6 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                     if (data != null) {
                         if (data.isSuccess()) {
                             SharePrefs.getInstance(MapsExtendedActivity.this).putBoolean(SharePrefs.IS_Mall, false);
-                            Gettoken();
                         } else {
                             Utils.setLongToast(MapsExtendedActivity.this, data.getErrorMessage());
                         }
@@ -226,7 +225,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
 
     }
 
-    public void Gettoken() {
+    /*public void Gettoken() {
         commonClassForAPI
                 .getToken(callToken, "password", Utils.getDeviceUniqueID(this),
                         "", true, true, "BUYERAPP", true,
@@ -269,7 +268,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
             Utils.hideProgressDialog();
         }
     };
-
+*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -440,6 +439,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                             mBinding.tvCustAddress.setText(displayAddress + "," + zipCode);
                         }
                     }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

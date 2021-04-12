@@ -89,7 +89,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         CommonClassForAPI.getInstance(this).getUserDetail(new DisposableObserver<UserDetailResponseModel>() {
             @Override
             public void onNext(@NonNull UserDetailResponseModel customerDataModel) {
-                if (customerDataModel != null) {
+                if (customerDataModel.getIsSuccess()) {
                     SharePrefs.getInstance(ProfileActivity.this).putString(SharePrefs.FIRST_NAME, customerDataModel.getResultItem().getFirstName());
                     SharePrefs.getInstance(ProfileActivity.this).putInt(SharePrefs.ID, customerDataModel.getResultItem().getId());
                     SharePrefs.getInstance(ProfileActivity.this).putString(SharePrefs.MOBILE_NUMBER, customerDataModel.getResultItem().getMobileNo());
