@@ -14,6 +14,7 @@ import com.skdirect.databinding.ItemsFilterBrandBinding;
 import com.skdirect.databinding.ItemsFilterCategoryBinding;
 import com.skdirect.interfacee.FilterCategoryInterface;
 import com.skdirect.model.FilterCategoryDetails;
+import com.skdirect.utils.TextUtils;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,14 @@ public class BrandsFilterAdapter extends RecyclerView.Adapter<BrandsFilterAdapte
 
     @Override
     public void onBindViewHolder(@NonNull BrandsFilterAdapter.ViewHolder holder, int position) {
-        holder.mBinding.tvFilterCategoryName.setText(filterTypelist.get(position).getLabel());
+        if(!TextUtils.isNullOrEmpty(filterTypelist.get(position).getLabel()))
+        {
+            holder.mBinding.tvFilterCategoryName.setText(filterTypelist.get(position).getLabel());
+        }else
+        {
+            holder.mBinding.tvFilterCategoryName.setText("No Brand");
+        }
+
         holder.mBinding.rbBrandItemSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
