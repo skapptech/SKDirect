@@ -24,7 +24,7 @@ public class ChangePasswordViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
 
     private MutableLiveData<CommonResponseModel> changePasswordVM;
-    private MutableLiveData<JsonObject> OtpVM;
+    private MutableLiveData<CommonResponseModel> OtpVM;
 
     public LiveData<CommonResponseModel> getChangePasswordVM() {
         if(changePasswordVM==null)
@@ -35,7 +35,7 @@ public class ChangePasswordViewMode extends ViewModel {
         }
         return changePasswordVM;
     }
-    public LiveData<JsonObject> getOtpVM() {
+    public LiveData<CommonResponseModel> getOtpVM() {
         if(OtpVM==null)
             OtpVM = new MutableLiveData<>();
         if (OtpVM.getValue() != null)
@@ -65,10 +65,10 @@ public class ChangePasswordViewMode extends ViewModel {
         return changePasswordVM;
     }
 
-    public MutableLiveData<JsonObject> getOtp() {
-        RestClient.getInstance().getService().sendotp().enqueue(new Callback<JsonObject>() {
+    public MutableLiveData<CommonResponseModel> getOtp() {
+        RestClient.getInstance().getService().sendotp().enqueue(new Callback<CommonResponseModel>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(Call<CommonResponseModel> call, Response<CommonResponseModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     OtpVM.setValue(response.body());
@@ -76,7 +76,7 @@ public class ChangePasswordViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(Call<CommonResponseModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + call.toString());
                 Utils.hideProgressDialog();
             }
