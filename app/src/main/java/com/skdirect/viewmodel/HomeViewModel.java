@@ -12,6 +12,7 @@ import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.MallMainModel;
 import com.skdirect.model.NearByMainModel;
 import com.skdirect.model.TopSellerMainModel;
+import com.skdirect.model.UserDetailResponseModel;
 import com.skdirect.utils.Utils;
 
 import retrofit2.Call;
@@ -20,7 +21,7 @@ import retrofit2.Response;
 
 public class HomeViewModel extends ViewModel {
     final String TAG = getClass().getSimpleName();
-    private MutableLiveData<CustomerDataModel> userDetailViewModel;
+    private MutableLiveData<UserDetailResponseModel> userDetailViewModel;
     private MutableLiveData<NearByMainModel> topNearByItem;
     private MutableLiveData<TopSellerMainModel> topSellerLiveData;
     private MutableLiveData<TopSellerMainModel> nearBySellerLiveData;
@@ -31,7 +32,7 @@ public class HomeViewModel extends ViewModel {
     private MutableLiveData<MallMainModel> mallDataViewModel;
 
 
-    public LiveData<CustomerDataModel> GetUserDetail() {
+    public LiveData<UserDetailResponseModel> GetUserDetail() {
         if (userDetailViewModel == null) {
             userDetailViewModel = new MutableLiveData<>();
         }
@@ -102,10 +103,10 @@ public class HomeViewModel extends ViewModel {
     }
 
 
-    public MutableLiveData<CustomerDataModel> getUserDetailRequest() {
-        RestClient.getInstance().getService().GetUserDetail().enqueue(new Callback<CustomerDataModel>() {
+    public MutableLiveData<UserDetailResponseModel> getUserDetailRequest() {
+        RestClient.getInstance().getService().GetUserDetail().enqueue(new Callback<UserDetailResponseModel>() {
             @Override
-            public void onResponse(Call<CustomerDataModel> call, Response<CustomerDataModel> response) {
+            public void onResponse(Call<UserDetailResponseModel> call, Response<UserDetailResponseModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.e(TAG, "request response=" + response.body());
                     userDetailViewModel.setValue(response.body());
@@ -113,7 +114,7 @@ public class HomeViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<CustomerDataModel> call, Throwable t) {
+            public void onFailure(Call<UserDetailResponseModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + call.toString());
                 Utils.hideProgressDialog();
             }

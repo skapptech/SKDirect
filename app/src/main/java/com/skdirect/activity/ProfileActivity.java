@@ -11,6 +11,7 @@ import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityProfileBinding;
 import com.skdirect.model.CustomerDataModel;
+import com.skdirect.model.UserDetailResponseModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
@@ -85,28 +86,35 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void getProfileData() {
-        CommonClassForAPI.getInstance(this).getUserDetail(new DisposableObserver<CustomerDataModel>() {
+        CommonClassForAPI.getInstance(this).getUserDetail(new DisposableObserver<UserDetailResponseModel>() {
             @Override
-            public void onNext(@NonNull CustomerDataModel customerDataModel) {
+            public void onNext(@NonNull UserDetailResponseModel customerDataModel) {
                 if (customerDataModel != null) {
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FIRST_NAME, customerDataModel.getFirstName());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.MIDDLE_NAME, customerDataModel.getMiddleName());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, customerDataModel.getUserName());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAST_NAME, customerDataModel.getLastName());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_ID, customerDataModel.getUserId());
-                    SharePrefs.getInstance(getApplicationContext()).putInt(SharePrefs.ID, customerDataModel.getId());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.ENCRIPTED_ID, customerDataModel.getEncryptedId());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.MOBILE_NUMBER, customerDataModel.getMobileNo());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.SHOP_NAME, customerDataModel.getShopName());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.EMAIL_ID, customerDataModel.getEmail());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.STATE, customerDataModel.getState());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CITYNAME, customerDataModel.getCity());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.PIN_CODE, customerDataModel.getPincode());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.IMAGE_PATH, customerDataModel.getImagePath());
-                    SharePrefs.getInstance(getApplicationContext()).putInt(SharePrefs.PIN_CODE_master, customerDataModel.getPinCodeMasterId());
-                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_ACTIVE, customerDataModel.isActive());
-                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_DELETE, customerDataModel.isDelete());
-                    SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE, customerDataModel.isRegistrationComplete());
+                    SharePrefs.getInstance(ProfileActivity.this).putString(SharePrefs.FIRST_NAME, customerDataModel.getResultItem().getFirstName());
+                    SharePrefs.getInstance(ProfileActivity.this).putInt(SharePrefs.ID, customerDataModel.getResultItem().getId());
+                    SharePrefs.getInstance(ProfileActivity.this).putString(SharePrefs.MOBILE_NUMBER, customerDataModel.getResultItem().getMobileNo());
+                    SharePrefs.getInstance(ProfileActivity.this).putString(SharePrefs.EMAIL_ID, customerDataModel.getResultItem().getEmail());
+                    SharePrefs.getInstance(ProfileActivity.this).putString(SharePrefs.STATE, customerDataModel.getResultItem().getState());
+                    SharePrefs.getInstance(ProfileActivity.this).putString(SharePrefs.CITYNAME, customerDataModel.getResultItem().getCity());
+                    SharePrefs.getInstance(ProfileActivity.this).putString(SharePrefs.PIN_CODE, customerDataModel.getResultItem().getPincode());
+                    SharePrefs.getInstance(ProfileActivity.this).putInt(SharePrefs.PIN_CODE_master, customerDataModel.getResultItem().getPinCodeMasterId());
+                    SharePrefs.getInstance(ProfileActivity.this).putBoolean(SharePrefs.IS_ACTIVE, customerDataModel.getResultItem().getIsActive());
+                    SharePrefs.getInstance(ProfileActivity.this).putBoolean(SharePrefs.IS_DELETE, customerDataModel.getResultItem().getIsDelete());
+                    SharePrefs.getInstance(ProfileActivity.this).putString(SharePrefs.CITY_NAME, customerDataModel.getResultItem().getCity());
+                    SharePrefs.setSharedPreference(ProfileActivity.this, SharePrefs.IS_REGISTRATIONCOMPLETE, customerDataModel.getResultItem().getIsRegistrationComplete());
+                    SharePrefs.setStringSharedPreference(ProfileActivity.this, SharePrefs.LAT, String.valueOf(customerDataModel.getResultItem().getLatitiute()));
+                    SharePrefs.setStringSharedPreference(ProfileActivity.this, SharePrefs.LON, String.valueOf(customerDataModel.getResultItem().getLongitude()));
+                    if (customerDataModel.getResultItem().getUserDeliveryDC() != null && customerDataModel.getResultItem().getUserDeliveryDC().size() > 0) {
+                        for (int i = 0; i < customerDataModel.getResultItem().getUserDeliveryDC().size(); i++) {
+                            SharePrefs.getInstance(ProfileActivity.this).putBoolean(SharePrefs.USER_IS_DELETE, customerDataModel.getResultItem().getUserDeliveryDC().get(i).getIsDelete());
+                            SharePrefs.getInstance(ProfileActivity.this).putBoolean(SharePrefs.USER_IS_ACTIVE, customerDataModel.getResultItem().getUserDeliveryDC().get(i).getIsActive());
+                            SharePrefs.getInstance(ProfileActivity.this).putInt(SharePrefs.USER_DC_ID, customerDataModel.getResultItem().getUserDeliveryDC().get(i).getId());
+                            SharePrefs.getInstance(ProfileActivity.this).putInt(SharePrefs.USER_DC_USER_ID, customerDataModel.getResultItem().getUserDeliveryDC().get(i).getUserId());
+                            SharePrefs.getInstance(ProfileActivity.this).putString(SharePrefs.DELIVERY, customerDataModel.getResultItem().getUserDeliveryDC().get(i).getDelivery());
+                        }
+
+
+                    }
                     if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.FIRST_NAME))) {
                         mBinding.tvSellerName.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.FIRST_NAME));
                     }

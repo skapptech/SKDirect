@@ -15,6 +15,7 @@ import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PostBrandModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateProfilePostModel;
+import com.skdirect.model.UserDetailResponseModel;
 import com.skdirect.model.response.ApplyOfferResponse;
 import com.skdirect.model.response.OfferResponse;
 import com.skdirect.utils.MyApplication;
@@ -311,17 +312,17 @@ public class CommonClassForAPI {
                 });
     }
 
-    public void getUserDetail(DisposableObserver<CustomerDataModel> observer) {
+    public void getUserDetail(DisposableObserver<UserDetailResponseModel> observer) {
         RestClient.getInstance().getService().getUserDetail()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<CustomerDataModel>() {
+                .subscribe(new Observer<UserDetailResponseModel>() {
                     @Override
                     public void onSubscribe(@NotNull Disposable d) {
                     }
 
                     @Override
-                    public void onNext(@NotNull CustomerDataModel o) {
+                    public void onNext(@NotNull UserDetailResponseModel o) {
                         observer.onNext(o);
                     }
 
