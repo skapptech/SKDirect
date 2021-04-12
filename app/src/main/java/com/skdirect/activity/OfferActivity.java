@@ -40,7 +40,11 @@ public class OfferActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_offer);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(getString(R.string.apply_coupon));
+        setTitle(MyApplication.getInstance().dbHelper.getString(R.string.apply_coupon));
+        mBinding.etOffer.setHint(MyApplication.getInstance().dbHelper.getString(R.string.enter_promo_code));
+        mBinding.btnApply.setText(MyApplication.getInstance().dbHelper.getString(R.string.apply));
+        mBinding.tvAvailableOfferTitle.setText(MyApplication.getInstance().dbHelper.getString(R.string.available_offers));
+        mBinding.tvEmpty.setText(MyApplication.getInstance().dbHelper.getString(R.string.no_offer_found));
 
         initViews();
     }

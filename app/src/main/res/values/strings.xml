@@ -215,4 +215,6 @@
     <string name="clear_cart">कार्ट को खाली करें</string>
     <string name="are_you_sure_clear_cart">क्या आपको यकीन है, आप कार्ट खाली करना चाहते हैं।</string>
     <string name="no_address_found">कोई पता नहीं मिला</string>
+    <string name="cash_on_delivery">डिलवरी पर नकदी</string>
+    <string name="delivery_option">डिलीवरी विकल्प</string>
 </resources>

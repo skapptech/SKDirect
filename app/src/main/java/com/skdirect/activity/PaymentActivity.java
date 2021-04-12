@@ -127,6 +127,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mBinding.tvAmountH.setText(MyApplication.getInstance().dbHelper.getString(R.string.total_amount));
         mBinding.tvItemPrice.setText(MyApplication.getInstance().dbHelper.getString(R.string.price_details));
         mBinding.tvAddress.setText(MyApplication.getInstance().dbHelper.getString(R.string.address));
+        mBinding.tvCodTitle.setText(MyApplication.getInstance().dbHelper.getString(R.string.cash_on_delivery));
+        mBinding.tvDOption.setText(MyApplication.getInstance().dbHelper.getString(R.string.delivery_option));
+        mBinding.btnPlaceOrder.setText(MyApplication.getInstance().dbHelper.getString(R.string.place_order));
         mBinding.btnOffer.setOnClickListener(this);
         mBinding.btnRemove.setOnClickListener(this);
         mBinding.btnPlaceOrder.setOnClickListener(this);
