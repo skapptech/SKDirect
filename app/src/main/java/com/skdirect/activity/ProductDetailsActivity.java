@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.adapter.BottomListAdapter;
 import com.skdirect.adapter.ShowImagesAdapter;
@@ -53,7 +52,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private int SellerItemID;
     private ProductResultModel resultModel = new ProductResultModel();
     private String shopName;
-    DBHelper dbHelper;
+    private DBHelper dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,7 +255,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 0, null, resultModel.getSellerId(), 0, 0, 0,
                 resultModel.getMrp(), 0, resultModel.getId());
         if (qty >= 0) {
-            addItemInCart(qty, SellerItemID);
             MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
         }
         if (qty == 0) {
@@ -263,12 +262,13 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             mBinding.LLPlusMinus.setVisibility(View.GONE);
             MyApplication.getInstance().cartRepository.deleteCartItem(cartModel);
         }
+        addItemInCart(qty, SellerItemID);
     }
 
     private void addToCart() {
         mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
         Integer cartSellerId = MyApplication.getInstance().cartRepository.getCartSellerId();
-        if (cartSellerId != null && cartSellerId != null) {
+        if (cartSellerId != null && cartSellerId != 0) {
             if (cartSellerId == resultModel.getSellerId()) {
                 mBinding.btAddToCart.setVisibility(View.GONE);
                 mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
@@ -354,7 +354,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         mBinding.llOtherSellar.setVisibility(View.GONE);
                     }
                 } else {
-                    Utils.setToast(ProductDetailsActivity.this, topSimilarSellerModel.getErrorMessage());
+                    /// Utils.setToast(ProductDetailsActivity.this, topSimilarSellerModel.getErrorMessage());
                 }
             }
         });

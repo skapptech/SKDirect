@@ -60,6 +60,10 @@
         <activity
             android:name=".activity.PlacesActivity"
             android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".activity.EditAddressActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">

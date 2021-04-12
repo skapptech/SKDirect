@@ -26,6 +26,7 @@ import com.skdirect.adapter.LanguageListAdapter;
 import com.skdirect.databinding.ActivityChangeLanguageBinding;
 import com.skdirect.interfacee.OnLanguageClick;
 import com.skdirect.utils.MyApplication;
+import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 
 import java.util.ArrayList;
@@ -56,6 +57,11 @@ public class ChangeLanguageActivity extends AppCompatActivity implements View.On
         languageList = new ArrayList<>();
         adapter = new LanguageListAdapter(this, languageList, this);
         mBinding.rvLanguage.setAdapter(adapter);
+
+        String selectedLanguage = SharePrefs.getInstance(activity).getString(SharePrefs.SELECTED_LANGUAGE);
+        if (selectedLanguage == null || selectedLanguage.equals("")) {
+                SharePrefs.getInstance(activity).putString(SharePrefs.SELECTED_LANGUAGE, "हिंदी");
+        }
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference language = database.getReference();

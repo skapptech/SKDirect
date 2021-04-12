@@ -1,17 +1,13 @@
 package com.skdirect.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
@@ -22,25 +18,27 @@ import com.skdirect.R;
 import com.skdirect.adapter.PlacesAutoCompleteAdapter;
 import com.skdirect.databinding.ActivityUserLocationBinding;
 import com.skdirect.location.EasyWayLocation;
-import com.skdirect.location.LocationData;
 import com.skdirect.location.Listener;
+import com.skdirect.location.LocationData;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 
-public class UserLocationActvity extends AppCompatActivity implements PlacesAutoCompleteAdapter.ClickListener,Listener, LocationData.AddressCallBack {
+public class UserLocationActvity extends AppCompatActivity implements PlacesAutoCompleteAdapter.ClickListener, Listener, LocationData.AddressCallBack {
     private ActivityUserLocationBinding mBinding;
     private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
     private String cityName = "";
     private boolean searchCity = false;
     private EasyWayLocation easyWayLocation;
-    DBHelper dbHelper;
+    private DBHelper dbHelper;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_location);
-        easyWayLocation = new EasyWayLocation(this, false,this);
+        easyWayLocation = new EasyWayLocation(this, false, this);
         dbHelper = MyApplication.getInstance().dbHelper;
 
         if (getIntent() != null) {
@@ -48,7 +46,6 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
             searchCity = getIntent().getBooleanExtra("searchCity", false);
         }
         initView();
-
     }
 
     private void initView() {
@@ -76,7 +73,7 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
             return false;
         });
         mBinding.imSearchPlace.setOnClickListener(view -> searchPlace());
-        mBinding.btUseCurrentLocation.setOnClickListener(view ->  getLocation());
+        mBinding.btUseCurrentLocation.setOnClickListener(view -> getLocation());
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(view -> onBackPressed());
     }
 
@@ -117,7 +114,6 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
     }
 
 
-
     @Override
     public void locationData(LocationData locationData) {
 
@@ -130,7 +126,7 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
 
     @Override
     public void currentLocation(Location location) {
-        LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         Intent intent = new Intent();
         intent.putExtra("PlaceResult", latLng);
         setResult(3, intent);

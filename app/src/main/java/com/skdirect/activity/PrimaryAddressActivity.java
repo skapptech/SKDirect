@@ -7,15 +7,11 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.R;
 import com.skdirect.adapter.UserLocationAdapter;
 import com.skdirect.databinding.ActivityPrimaryAddressBinding;
-import com.skdirect.model.MainLocationModel;
 import com.skdirect.model.UserLocationModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
@@ -27,10 +23,12 @@ import java.util.ArrayList;
 public class PrimaryAddressActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityPrimaryAddressBinding mBinding;
     private PrimaryAddressViewMode primaryAddressViewMode;
-    private ArrayList<UserLocationModel> locationModelArrayList = new ArrayList<>();
+    private final ArrayList<UserLocationModel> locationModelArrayList = new ArrayList<>();
     private UserLocationAdapter userLocationAdapter;
     private int userLocationId;
-    DBHelper dbHelper;
+    private DBHelper dbHelper;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +38,6 @@ public class PrimaryAddressActivity extends AppCompatActivity implements View.On
         getSharedData();
         initView();
         callUserLocation();
-
     }
 
     @Override
@@ -49,9 +46,28 @@ public class PrimaryAddressActivity extends AppCompatActivity implements View.On
         callUserLocation();
     }
 
-    private void getSharedData() {
-        userLocationId = getIntent().getIntExtra("UserLocationId", 0);
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back_press:
+                onBackPressed();
+                break;
+            case R.id.bt_selected_process:
+                if (locationModelArrayList.size() > 0) {
+                    Intent intent = new Intent();
+                    intent.putExtra("address", userLocationAdapter.getSelectedData());
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                } else {
+                    Utils.setToast(getApplicationContext(), MyApplication.getInstance().dbHelper.getString(R.string.please_enter_address));
+                }
+                break;
+            case R.id.bt_add_new_addresh:
+                startActivity(new Intent(getApplicationContext(), NewAddressActivity.class));
+                break;
+        }
     }
+
 
     private void initView() {
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
@@ -61,30 +77,10 @@ public class PrimaryAddressActivity extends AppCompatActivity implements View.On
 
         mBinding.btAddNewAddresh.setText(dbHelper.getString(R.string.add_new_address));
         mBinding.btSelectedProcess.setText(dbHelper.getString(R.string.select_amp_proceed));
-
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
-        mBinding.rvUserLocation.setLayoutManager(layoutManager);
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
-
-            case R.id.bt_selected_process:
-                Intent intent = new Intent();
-                intent.putExtra("address", userLocationAdapter.getSelectedData());
-                setResult(Activity.RESULT_OK, intent);
-                finish();
-                break;
-
-            case R.id.bt_add_new_addresh:
-              startActivity(new Intent(PrimaryAddressActivity.this,NewAddressActivity.class));
-                break;
-        }
+    private void getSharedData() {
+        userLocationId = getIntent().getIntExtra("UserLocationId", 0);
     }
 
     private void callUserLocation() {
@@ -98,26 +94,25 @@ public class PrimaryAddressActivity extends AppCompatActivity implements View.On
 
     private void userLocationAPI() {
         primaryAddressViewMode.getUserLocationVMRequest();
-        primaryAddressViewMode.getUserLocationVM().observe(this, new Observer<MainLocationModel>() {
-            @Override
-            public void onChanged(MainLocationModel locationModel) {
-                Utils.hideProgressDialog();
-                locationModelArrayList.clear();
-                if (locationModel.isSuccess()) {
-                        if (locationModel.getResultItem().size() > 0) {
-                            locationModelArrayList.addAll(locationModel.getResultItem());
-                            int position = 0;
-                            for (int i = 0; i < locationModelArrayList.size(); i++) {
-                                if (locationModelArrayList.get(i).isPrimaryAddress()) {
-                                    position = i;
-                                    break;
-                                }
-                            }
-                            userLocationAdapter = new UserLocationAdapter(PrimaryAddressActivity.this, locationModelArrayList, position);
-                            mBinding.rvUserLocation.setAdapter(userLocationAdapter);
+        primaryAddressViewMode.getUserLocationVM().observe(this, locationModel -> {
+            mBinding.tvEmpty.setVisibility(View.GONE);
+            Utils.hideProgressDialog();
+            locationModelArrayList.clear();
+            if (locationModel.isSuccess()) {
+                if (locationModel.getResultItem().size() > 0) {
+                    locationModelArrayList.addAll(locationModel.getResultItem());
+                    int position = 0;
+                    for (int i = 0; i < locationModelArrayList.size(); i++) {
+                        if (locationModelArrayList.get(i).isPrimaryAddress()) {
+                            position = i;
+                            break;
                         }
-
+                    }
+                    userLocationAdapter = new UserLocationAdapter(PrimaryAddressActivity.this, locationModelArrayList, position);
+                    mBinding.rvUserLocation.setAdapter(userLocationAdapter);
                 }
+            } else {
+                mBinding.tvEmpty.setVisibility(View.VISIBLE);
             }
         });
     }

@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.R;
+import com.skdirect.activity.EditAddressActivity;
 import com.skdirect.activity.NewAddressActivity;
 import com.skdirect.databinding.ItemProfileUserLocationBinding;
 import com.skdirect.interfacee.MakeDefaultInterface;
@@ -82,7 +83,7 @@ public class ProfileUserLocationAdapter extends RecyclerView.Adapter<ProfileUser
                         makeDefaultInterface.defaultOnClick(userLocationModel,position);
                         return true;
                     case R.id.menu_edit:
-                        editAdddressView();
+                        editAdddressView(userLocationModel);
                         return true;
                     case R.id.menu_delet:
                         makeDefaultInterface.deleteLocationClick(userLocationModel);
@@ -96,8 +97,8 @@ public class ProfileUserLocationAdapter extends RecyclerView.Adapter<ProfileUser
         popup.show();
     }
 
-    private void editAdddressView() {
-        context.startActivity(new Intent(context, NewAddressActivity.class));
+    private void editAdddressView(UserLocationModel userLocationModel) {
+        context.startActivity(new Intent(context, EditAddressActivity.class).putExtra("UserEditData",userLocationModel));
     }
 
 
