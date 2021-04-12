@@ -214,7 +214,9 @@
       "invalid_email": "कृपया मान्य ईमेल आईडी दर्ज करें",
       "clear_cart": "कार्ट को खाली करें",
       "are_you_sure_clear_cart": "क्या आपको यकीन है, आप कार्ट खाली करना चाहते हैं।",
-      "no_address_found": "कोई पता नहीं मिला"
+      "no_address_found": "कोई पता नहीं मिला",
+      "cash_on_delivery": "डिलवरी पर नकदी",
+      "delivery_option": "डिलीवरी विकल्प"
     },
     "English": {
       "language_code": "en",
@@ -430,7 +432,9 @@
       "invalid_email": "Please enter email Id",
       "clear_cart": "Clear Cart",
       "are_you_sure_clear_cart": "Are You Sure, You want clear cart.",
-      "no_address_found": "No Address Found"
+      "no_address_found": "No Address Found",
+      "cash_on_delivery": "Cash on delivery",
+      "delivery_option": "Delivery Option"
     }
   }
 }

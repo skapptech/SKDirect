@@ -217,4 +217,6 @@
     <string name="clear_cart">Clear Cart</string>
     <string name="are_you_sure_clear_cart">Are You Sure, You want to clear cart.</string>
     <string name="no_address_found">No Address Found</string>
+    <string name="cash_on_delivery">Cash on delivery</string>
+    <string name="delivery_option">Delivery Option</string>
 </resources>

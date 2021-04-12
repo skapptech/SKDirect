@@ -73,6 +73,8 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.cart, menu);
+        MenuItem item = menu.findItem(R.id.clearCart);
+        item.setTitle(dbHelper.getString(R.string.clear_all));
         return super.onCreateOptionsMenu(menu);
     }
 
