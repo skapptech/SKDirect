@@ -429,7 +429,6 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         if(categoryId!=value)
         {
             categoryId = value;
-            System.out.println("categoryId:::" + categoryId);
             sideTabBrandClick = true;
             sideTabDiscountClick = true;
             skipCount = 0;
@@ -449,9 +448,6 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         {
             selectedBrandList.add(label);
         }
-
-
-        System.out.println("selectedBrandList::"+selectedBrandList.toString());
     }
 
     @Override
