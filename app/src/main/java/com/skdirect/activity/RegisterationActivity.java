@@ -38,8 +38,6 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
     }
 
     private void initView() {
-        mBinding.tilName.setHint(dbHelper.getString(R.string.name_reg));
-        mBinding.tilEmail.setHint(dbHelper.getString(R.string.email_is_optional));
         mBinding.tilPincode.setHint(dbHelper.getString(R.string.pincode));
         mBinding.btSaveAddresh.setHint(dbHelper.getString(R.string.save));
         mBinding.btSaveAddresh.setOnClickListener(this);
@@ -67,6 +65,16 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
             if(!TextUtils.isValidEmail(mBinding.etEmailId.getText().toString().trim())){
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_email));
              }
+            else{
+                if (Utils.isNetworkAvailable(getApplicationContext())) {
+                    Utils.showProgressDialog(RegisterationActivity.this);
+                    // updateUserData();
+                    UpdateProfilePostModel updateProfilePostModel = new UpdateProfilePostModel(mBinding.etName.getText().toString(), mBinding.etEmailId.getText().toString());
+                    new CommonClassForAPI().UpdateUserProfile(updateprofile, updateProfilePostModel);
+                } else {
+                    Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
+                }
+            }
         } else {
             if (Utils.isNetworkAvailable(getApplicationContext())) {
                 Utils.showProgressDialog(RegisterationActivity.this);
@@ -89,6 +97,7 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
                     if (model.isSuccess()) {
                         Utils.setToast(RegisterationActivity.this, model.getSuccessMessage());
                         SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN,true);
+                        Utils.setToast(RegisterationActivity.this, model.getSuccessMessage());
                         startActivity(new Intent(RegisterationActivity.this, MainActivity.class));
                         finish();
                     } else {

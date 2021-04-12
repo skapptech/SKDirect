@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityChnagePasswordBinding;
 import com.skdirect.model.ChangePasswordRequestModel;
@@ -40,10 +41,15 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.btSavePassword.setOnClickListener(this);
 
-        mBinding.tilNewPassword.setHint(dbHelper.getString(R.string.enter_new_password));
         mBinding.etConfirmPassword.setHint(dbHelper.getString(R.string.enter_confirm_password));
         mBinding.etOtp.setHint(dbHelper.getString(R.string.enter_otp));
         mBinding.btSavePassword.setText(dbHelper.getString(R.string.save));
+        mBinding.tvGetOtp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getOtp();
+            }
+        });
     }
 
     @Override
@@ -81,10 +87,16 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             }
         }
     }
-
+    private void getOtp() {
+        if (Utils.isNetworkAvailable(getApplicationContext())) {
+            Utils.showProgressDialog(ChangePasswordActivity.this);
+            GetOtpAPI();
+        } else {
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
+        }
+    }
     private void changePasswordAPI() {
-        ChangePasswordRequestModel changePasswordRequestModel = new ChangePasswordRequestModel(mBinding.etNewPassword.getText().toString().trim(),mBinding.etConfirmPassword.getText().toString().trim());
-
+        ChangePasswordRequestModel changePasswordRequestModel = new ChangePasswordRequestModel(mBinding.etNewPassword.getText().toString().trim(),mBinding.etConfirmPassword.getText().toString().trim(),mBinding.etOtp.getText().toString().trim());
         changePasswordViewMode.getChangePasswordRequest(changePasswordRequestModel);
         changePasswordViewMode.getChangePasswordVM().observe(this, new Observer<CommonResponseModel>() {
             @Override
@@ -94,6 +106,23 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                     if (model.isSuccess()) {
                         changePasswordDialog(model.getSuccessMessage());
                     }
+                    else{
+                        Utils.setToast(ChangePasswordActivity.this,model.getErrorMessage());
+                    }
+                }
+
+            }
+
+        });
+    }
+    private void GetOtpAPI() {
+        changePasswordViewMode.getOtpVM();
+        changePasswordViewMode.getOtp().observe(this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject model) {
+                Utils.hideProgressDialog();
+                if (model != null) {
+
                 }
 
             }

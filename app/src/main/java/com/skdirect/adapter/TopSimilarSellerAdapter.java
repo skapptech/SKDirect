@@ -76,10 +76,11 @@ public class TopSimilarSellerAdapter extends RecyclerView.Adapter<TopSimilarSell
         holder.mBinding.llTopSellar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                context.finish();
                 Intent menuIntent = new Intent(context, ProductDetailsActivity.class);
                 menuIntent.putExtra("ID",topSellerModel.getId());
                 context.startActivity(menuIntent);
-                context.finish();
+
             }
         });
     }

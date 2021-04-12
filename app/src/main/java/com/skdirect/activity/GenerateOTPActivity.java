@@ -223,7 +223,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     SharePrefs.getInstance(GenerateOTPActivity.this).putString(SharePrefs.USER_ID, model.getResultItem().getUserid());
                     commonClassForAPI
                             .getTokenwithphoneNo(callToken, "password", Utils.getDeviceUniqueID(GenerateOTPActivity.this),
-                                    "" + otpString, true, true, "BUYERAPP", true,
+                                    otpString, true, true, "BUYERAPP", true,
                                     Utils.getDeviceUniqueID(GenerateOTPActivity.this), Double.parseDouble(SharePrefs.getStringSharedPreferences(GenerateOTPActivity.this, SharePrefs.LAT)), Double.parseDouble(SharePrefs.getStringSharedPreferences(GenerateOTPActivity.this, SharePrefs.LON)), SharePrefs.getInstance(GenerateOTPActivity.this).getString(SharePrefs.PIN_CODE), "GET", mobileNumber);
 
 
@@ -293,7 +293,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
             try {
                 Utils.hideProgressDialog();
                 if (model != null) {
-                    if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_USER_EXISTS)) {
+                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)) {
                         startActivity(new Intent(GenerateOTPActivity.this, MainActivity.class));
                         SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
 
