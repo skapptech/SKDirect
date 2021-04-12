@@ -211,6 +211,8 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                     if (data != null) {
                         if (data.isSuccess()) {
                             SharePrefs.getInstance(MapsExtendedActivity.this).putBoolean(SharePrefs.IS_Mall, false);
+                            startActivity(new Intent(MapsExtendedActivity.this, MainActivity.class));
+                            finish();
                         } else {
                             Utils.setLongToast(MapsExtendedActivity.this, data.getErrorMessage());
                         }
