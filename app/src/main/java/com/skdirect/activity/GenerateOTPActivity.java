@@ -296,7 +296,6 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)) {
                         startActivity(new Intent(GenerateOTPActivity.this, MainActivity.class));
                         SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
-
                     } else {
                         startActivity(new Intent(GenerateOTPActivity.this, RegisterationActivity.class));
                     }

@@ -119,16 +119,14 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
     private void initializeViews() {
         utils = new Utils(MapsExtendedActivity.this);
         dbHelper = MyApplication.getInstance().dbHelper;
-
         mapViewViewMode = ViewModelProviders.of(this).get(MapViewViewMode.class);
         commonClassForAPI = CommonClassForAPI.getInstance(MapsExtendedActivity.this);
         dbHelper = MyApplication.getInstance().dbHelper;
-
         mBinding.tvFlatNo.setText(dbHelper.getString(R.string.flat_no));
         mBinding.editTextName.setHint(dbHelper.getString(R.string.name));
         mBinding.cancel.setText(dbHelper.getString(R.string.cancel));
         mBinding.tvSubmit.setText(dbHelper.getString(R.string.confirm_location));
-
+        mBinding.progressbar.setVisibility(View.VISIBLE);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -192,7 +190,6 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                     SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LON, String.valueOf(lng));
 
 
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -211,13 +208,12 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
             public void onChanged(CommonResponseModel data) {
                 Utils.hideProgressDialog();
                 try {
-                    if (data!=null){
-                        if(data.isSuccess()){
-                            SharePrefs.getInstance(MapsExtendedActivity.this).putBoolean(SharePrefs.IS_Mall,false);
+                    if (data != null) {
+                        if (data.isSuccess()) {
+                            SharePrefs.getInstance(MapsExtendedActivity.this).putBoolean(SharePrefs.IS_Mall, false);
                             Gettoken();
-                        }
-                        else{
-                            Utils.setLongToast(MapsExtendedActivity.this,data.getErrorMessage());
+                        } else {
+                            Utils.setLongToast(MapsExtendedActivity.this, data.getErrorMessage());
                         }
                     }
                 } catch (Exception e) {
@@ -229,11 +225,12 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
         });
 
     }
+
     public void Gettoken() {
         commonClassForAPI
                 .getToken(callToken, "password", Utils.getDeviceUniqueID(this),
-                "", true, true, "BUYERAPP", true,
-                Utils.getDeviceUniqueID(this), Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)),Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON)), SharePrefs.getInstance(MapsExtendedActivity.this).getString(SharePrefs.PIN_CODE),"");
+                        "", true, true, "BUYERAPP", true,
+                        Utils.getDeviceUniqueID(this), Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LAT)), Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LON)), SharePrefs.getInstance(MapsExtendedActivity.this).getString(SharePrefs.PIN_CODE), "");
     }
 
 
@@ -246,15 +243,15 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
                     SharePrefs.setSharedPreference(MapsExtendedActivity.this, SharePrefs.IS_REGISTRATIONCOMPLETE, model.getIsRegistrationComplete());
-                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LAT, model.getLatitiute());
-                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LON, model.getLongitude());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LAT, model.getLatitiute());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LON, model.getLongitude());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
                     startActivity(new Intent(MapsExtendedActivity.this, MainActivity.class));
                     finish();
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
 
             }
@@ -272,6 +269,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
             Utils.hideProgressDialog();
         }
     };
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -371,8 +369,6 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                         if (addresses.get(0).getLongitude() != 0.0) {
                             longitude = addresses.get(0).getLongitude();
                         }
-
-
                         if (addresses.get(0).getPremises() != null) {
                             premises = addresses.get(0).getPremises();
                             if (fullAddress.length() > 0) {
@@ -439,6 +435,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                         }
                         if (displayAddress.length() > 0) {
 //                            mBinding.cvAddress.setVisibility(View.VISIBLE);
+                            mBinding.progressbar.setVisibility(View.GONE);
                             mBinding.tvCurrentAddress.setText(displayAddress);
                             mBinding.tvCustAddress.setText(displayAddress + "," + zipCode);
                         }

@@ -104,6 +104,13 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
                 if (model != null) {
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
+                    SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE, model.getIsRegistrationComplete());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LAT, model.getLatitiute());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LON, model.getLongitude());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
+
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN,true);
                     commonClassForAPI.getUpdateToken(updatecallToken, fcmToken);
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
