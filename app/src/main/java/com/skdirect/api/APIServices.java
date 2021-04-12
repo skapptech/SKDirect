@@ -39,7 +39,6 @@ import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.PostBrandModel;
 import com.skdirect.model.ProductDataModel;
-import com.skdirect.model.RemoveItemRequestModel;
 import com.skdirect.model.SearchMainModel;
 import com.skdirect.model.SearchRequestModel;
 import com.skdirect.model.SellerDetailsModel;
@@ -185,8 +184,8 @@ public interface APIServices {
     @GET("api/NativeBuyer/CartOverview/GetCartItems")
     Call<CartMainModel> CartItems();
 
-    @POST("api/Buyer/SellerProfile/DeleteCartItems")
-    Call<JsonElement> deleteCartItems(@Body RemoveItemRequestModel itemRequestModel);
+    @GET("api/NativeBuyer/SellerProfile/DeleteCartItems")
+    Call<JsonElement> deleteCartItems(@Query("id") int id);
 
     @GET("api/buyer/Profile/GetLocation")
     Call<JsonObject> GetLocation(@Query("lat") double lat, @Query("lng") double log);
