@@ -141,7 +141,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                 selectedPriceList.clear();
                 categoryId = 0;
                 discount = "";
-                maxprice = 0;
+                maxprice = 10000;
                 minprice = 0;
                 setFilterTypeData();
             }
