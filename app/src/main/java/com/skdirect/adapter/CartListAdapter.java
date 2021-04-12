@@ -24,10 +24,10 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
     private final CartItemInterface cartItemInterface;
 
 
-    public CartListAdapter(Context context, ArrayList<CartModel> cartItemList, CartItemInterface cartItemInter) {
+    public CartListAdapter(Context context, ArrayList<CartModel> cartItemList, CartItemInterface cartItemInterface) {
         this.context = context;
         this.cartItemList = cartItemList;
-        cartItemInterface = cartItemInter;
+        this.cartItemInterface = cartItemInterface;
     }
 
     @NonNull
@@ -63,9 +63,6 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
             holder.mBinding.tvSelectedQty.setText("" + cartModel.getQuantity());
             cartItemInterface.minusButtonOnClick(cartModel, holder.mBinding.LLPlusMinus);
         });
-        holder.mBinding.tvRomove.setOnClickListener(view -> {
-            cartItemInterface.removeButtonOnClick(cartModel, position);
-        });
     }
 
     @Override
@@ -80,6 +77,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         public ViewHolder(ItemCartListBinding Binding) {
             super(Binding.getRoot());
             this.mBinding = Binding;
+            mBinding.tvRomove.setOnClickListener(view -> {
+                cartItemInterface.removeButtonOnClick(cartItemList.get(getAdapterPosition()), getAdapterPosition());
+            });
         }
     }
 }

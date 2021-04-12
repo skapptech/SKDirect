@@ -203,7 +203,18 @@
       "detail": "विस्तार",
       "qty": "मात्रा :",
       "no_record_found": "कोई रिकॉर्ड नहीं मिला",
-      "language_code": "hi"
+      "language_code": "hi:",
+      "select_a_promo_code": "प्रोमो कोड चुनें",
+      "enter_coupon_code": "कूपन कोड डालें",
+      "title_activity_payment": "भुगतान",
+      "total_order_value": "कुल आर्डर मूल्य",
+      "please_select_address": "कृपया पता चुनें",
+      "view_offer": "कूपन देखें",
+      "coming_soon": "जल्द आ रहा है",
+      "invalid_email": "कृपया मान्य ईमेल आईडी दर्ज करें",
+      "clear_cart": "कार्ट को खाली करें",
+      "are_you_sure_clear_cart": "क्या आपको यकीन है, आप कार्ट खाली करना चाहते हैं।",
+      "no_address_found": "कोई पता नहीं मिला"
     },
     "English": {
       "language_code": "en",
@@ -408,7 +419,18 @@
       "or_above": "or above",
       "detail": "Detail",
       "qty": "Qty :",
-      "no_record_found": "No Record Found"
+      "no_record_found": "No Record Found",
+      "select_a_promo_code": "प्रोमो कोड चुनें",
+      "enter_coupon_code": "कूपन कोड डालें",
+      "title_activity_payment": "भुगतान",
+      "total_order_value": "कुल आर्डर मूल्य",
+      "please_select_address": "कृपया पता चुनें",
+      "view_offer": "View ",
+      "coming_soon": "Coming Soon",
+      "invalid_email": "Please enter email Id",
+      "clear_cart": "Clear Cart",
+      "are_you_sure_clear_cart": "Are You Sure, You want clear cart.",
+      "no_address_found": "No Address Found"
     }
   }
 }
