@@ -33,7 +33,8 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
     private ActivityNewAddreshBinding mBinding;
     private NewAddressViewMode newAddressViewMode;
     private GPSTracker gpsTracker;
-    DBHelper dbHelper;
+    private DBHelper dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,23 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
         dbHelper = MyApplication.getInstance().dbHelper;
         initView();
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back_press:
+                onBackPressed();
+                break;
+            case R.id.tv_using_location:
+                callLocationAPI();
+                break;
+
+            case R.id.bt_save_addresh:
+                addLocation();
+                break;
+        }
+    }
+
 
     private void initView() {
 
@@ -66,22 +84,6 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
         mBinding.tilPincode.setText(SharePrefs.getInstance(NewAddressActivity.this).getString(SharePrefs.PIN_CODE));
         mBinding.tilCity.setText(SharePrefs.getInstance(NewAddressActivity.this).getString(SharePrefs.CITY_NAME));
         mBinding.tilState.setText(SharePrefs.getInstance(NewAddressActivity.this).getString(SharePrefs.STATE));*/
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
-            case R.id.tv_using_location:
-                callLocationAPI();
-                break;
-
-            case R.id.bt_save_addresh:
-                addLocation();
-                break;
-        }
     }
 
     private void addLocation() {

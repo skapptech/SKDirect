@@ -10,7 +10,6 @@
             android:id="@+id/toolbar_tittle"
             layout="@layout/toolbar_arrow" />
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -19,9 +18,9 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilFullName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tilFullName"
                 android:layout_marginTop="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -39,11 +38,10 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilStreetAdd"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tilStreetAdd">
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_street_addresh"
@@ -62,9 +60,9 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilLandMark"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tilLandMark">
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_landmark"
@@ -83,10 +81,9 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPincode"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tilPincode">
-
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_pin_code"
@@ -99,34 +96,35 @@
                     android:gravity="center_vertical"
                     android:hint="@string/pincode"
                     android:imeOptions="actionNext"
-                    android:inputType="textPostalAddress"
-
-                    />
+                    android:inputType="number"
+                    android:maxLength="6" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCity"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tilCity">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_pin_city"
-                style="@style/font_normal"
-                android:layout_width="match_parent"
-                android:layout_height="57dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:gravity="center_vertical"
-                android:hint="@string/city"
-                android:imeOptions="actionNext"
-                android:inputType="text"
-                android:paddingLeft="15dp" />
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_pin_city"
+                    style="@style/font_normal"
+                    android:layout_width="match_parent"
+                    android:layout_height="57dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="@string/city"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:paddingLeft="15dp" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilState"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tilState">
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_pin_state"
@@ -141,11 +139,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:paddingLeft="15dp" />
-
-
             </com.google.android.material.textfield.TextInputLayout>
-
-
         </LinearLayout>
 
         <Button
@@ -157,12 +151,10 @@
             android:layout_centerInParent="true"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/background_for_buttons"
             android:text="@string/save"
-            android:layout_marginBottom="10dp"
             android:textColor="@color/seller_button_color"
             android:textStyle="normal" />
-
     </RelativeLayout>
-
 </layout>
