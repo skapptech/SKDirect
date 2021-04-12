@@ -133,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME))) {
             userNameTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME));
         }
-        mobileNumberTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.MOBILE_NUMBER));
 
         mBinding.toolbarId.ivMenu.setOnClickListener(new View.OnClickListener() {
             @Override

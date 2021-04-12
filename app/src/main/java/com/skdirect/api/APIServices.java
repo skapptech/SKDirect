@@ -47,6 +47,7 @@ import com.skdirect.model.ShopMainModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.model.UpdateProfilePostModel;
+import com.skdirect.model.UserDetailResponseModel;
 import com.skdirect.model.UserLocationModel;
 import com.skdirect.model.response.ApplyOfferResponse;
 import com.skdirect.model.response.OfferResponse;
@@ -87,11 +88,11 @@ public interface APIServices {
     Observable<TokenModel> getTokenwithphoneno(@Field("grant_type") String grant_type, @Field("username") String username, @Field("password") String password, @Field("ISOTP") boolean isOTp, @Field("ISBUYER") boolean isBuyer, @Field("LOGINTYPE") String LOGINTYPE, @Field("ISDEVICE") boolean ISDEVICE, @Field("DEVICEID") String DEVICEID, @Field("LAT") double LAT, @Field("LNG") double LNG, @Field("PINCODE") String pincode, @Field("lang") String lang, @Field("TYPE") String TYPE, @Field("PHONENUMBER") String PHONENUMBER);
 
 
-    @GET("api/buyer/Profile/GetUserDetail")
-    Call<CustomerDataModel> GetUserDetail();
+    @GET("api/NativeBuyer/BuyerProfile/GetUserDetail")
+    Call<UserDetailResponseModel> GetUserDetail();
 
-    @GET("api/buyer/Profile/GetUserDetail")
-    Observable<CustomerDataModel> getUserDetail();
+    @GET("api/NativeBuyer/BuyerProfile/GetUserDetail")
+    Observable<UserDetailResponseModel> getUserDetail();
 
     /*Home Page APi*/
     @GET("api/NativeBuyer/AppHome/GetNearByItem")
