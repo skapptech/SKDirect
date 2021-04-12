@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class TextUtils {
-    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    private static final String EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.[a-z]+";
     private static final String MOBILE_NO_PATTERN = "^[+]?[0-9]{10,13}$";
 
     public static boolean isValidEmail(final String hex) {
