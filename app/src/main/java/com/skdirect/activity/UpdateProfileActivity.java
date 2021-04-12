@@ -64,12 +64,21 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
     private void upDateProfile() {
         if (TextUtils.isNullOrEmpty(mBinding.etName.getText().toString())) {
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_name));
-        } else if (mBinding.etEmailId.getText().toString().length() > 0) {
+        } else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString())) {
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_pincode));
+        }
+        else if (mBinding.etEmailId.getText().toString().length() > 0) {
             if (!TextUtils.isValidEmail(mBinding.etEmailId.getText().toString())) {
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_email));
             }
-        } else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString())) {
-            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_pincode));
+            else {
+                if (Utils.isNetworkAvailable(getApplicationContext())) {
+                    Utils.showProgressDialog(this);
+                    updateUserData();
+                } else {
+                    Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_connection));
+                }
+            }
         } else {
             if (Utils.isNetworkAvailable(getApplicationContext())) {
                 Utils.showProgressDialog(this);
