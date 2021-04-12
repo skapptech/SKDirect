@@ -109,21 +109,21 @@ public class CartItemViewMode extends ViewModel {
     }
 
     public MutableLiveData<CartMainModel> getRemoveItemFromCartVMRequest(int id) {
-        RestClient.getInstance().getService().deleteCartItems(id).enqueue(new Callback<CartMainModel>() {
-            @Override
-            public void onResponse(Call<CartMainModel> call, Response<CartMainModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.e(TAG, "request response=" + response.body());
-                    removeItemFromCartVM.setValue(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CartMainModel> call, Throwable t) {
-                Log.e(TAG, "onFailure Responce" + t.toString());
-                Utils.hideProgressDialog();
-            }
-        });
+//        RestClient.getInstance().getService().deleteCartItems(id).enqueue(new Callback<CartMainModel>() {
+//            @Override
+//            public void onResponse(Call<CartMainModel> call, Response<CartMainModel> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    Log.e(TAG, "request response=" + response.body());
+//                    removeItemFromCartVM.setValue(response.body());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<CartMainModel> call, Throwable t) {
+//                Log.e(TAG, "onFailure Responce" + t.toString());
+//                Utils.hideProgressDialog();
+//            }
+//        });
 
         return removeItemFromCartVM;
     }

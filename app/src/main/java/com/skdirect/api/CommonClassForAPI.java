@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 
 import com.google.gson.JsonObject;
 import com.skdirect.R;
+import com.skdirect.model.CartMainModel;
 import com.skdirect.model.CommonResponseModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.MallMainPriceModel;
@@ -49,9 +50,9 @@ public class CommonClassForAPI {
 
     }
 
-    public void getToken(final DisposableObserver observer, String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp, boolean isDevice, String deviceID, double lat, double log, String pincode,String type) {
+    public void getToken(final DisposableObserver observer, String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp, boolean isDevice, String deviceID, double lat, double log, String pincode, String type) {
         RestClient.getInstance().getService().getToken(password, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp, isDevice, deviceID, lat, log, pincode,
-                MyApplication.getInstance().dbHelper.getString(R.string.language_code),type)
+                MyApplication.getInstance().dbHelper.getString(R.string.language_code), type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<TokenModel>() {
@@ -75,9 +76,10 @@ public class CommonClassForAPI {
                     }
                 });
     }
- public void getTokenwithphoneNo(final DisposableObserver observer, String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp, boolean isDevice, String deviceID, double lat, double log, String pincode,String type,String phoneno) {
+
+    public void getTokenwithphoneNo(final DisposableObserver observer, String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp, boolean isDevice, String deviceID, double lat, double log, String pincode, String type, String phoneno) {
         RestClient.getInstance().getService().getTokenwithphoneno(password, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp, isDevice, deviceID, lat, log, pincode,
-                MyApplication.getInstance().dbHelper.getString(R.string.language_code),type,phoneno)
+                MyApplication.getInstance().dbHelper.getString(R.string.language_code), type, phoneno)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<TokenModel>() {
@@ -259,7 +261,7 @@ public class CommonClassForAPI {
                 });
     }
 
-    public void getFilterPriceRangeResult(final DisposableObserver<MallMainPriceModel> observer,int CategoryId) {
+    public void getFilterPriceRangeResult(final DisposableObserver<MallMainPriceModel> observer, int CategoryId) {
         RestClient.getInstance().getService().getFilterPriceRange(CategoryId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -337,4 +339,30 @@ public class CommonClassForAPI {
                 });
     }
 
+
+    public void deleteCartItems(DisposableObserver<CartMainModel> observer, int productId) {
+        RestClient.getInstance().getService().deleteCartItems(productId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CartMainModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull CartMainModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
 }

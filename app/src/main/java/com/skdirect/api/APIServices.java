@@ -184,7 +184,7 @@ public interface APIServices {
     Call<CartMainModel> CartItems();
 
     @GET("api/NativeBuyer/SellerProfile/DeleteCartItems")
-    Call<CartMainModel> deleteCartItems(@Query("id") int id);
+    Observable<CartMainModel> deleteCartItems(@Query("id") int id);
 
     @GET("api/buyer/Profile/GetLocation")
     Call<JsonObject> GetLocation(@Query("lat") double lat, @Query("lng") double log);
