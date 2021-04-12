@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.ChangePasswordRequestModel;
@@ -23,6 +24,7 @@ public class ChangePasswordViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
 
     private MutableLiveData<CommonResponseModel> changePasswordVM;
+    private MutableLiveData<JsonObject> OtpVM;
 
     public LiveData<CommonResponseModel> getChangePasswordVM() {
         if(changePasswordVM==null)
@@ -32,6 +34,15 @@ public class ChangePasswordViewMode extends ViewModel {
             changePasswordVM.setValue(null);
         }
         return changePasswordVM;
+    }
+    public LiveData<JsonObject> getOtpVM() {
+        if(OtpVM==null)
+            OtpVM = new MutableLiveData<>();
+        if (OtpVM.getValue() != null)
+        {
+            OtpVM.setValue(null);
+        }
+        return OtpVM;
     }
 
     public MutableLiveData<CommonResponseModel> getChangePasswordRequest(ChangePasswordRequestModel passwordRequestModel) {
@@ -52,5 +63,25 @@ public class ChangePasswordViewMode extends ViewModel {
         });
 
         return changePasswordVM;
+    }
+
+    public MutableLiveData<JsonObject> getOtp() {
+        RestClient.getInstance().getService().sendotp().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful() && response.body()!=null ) {
+                    Log.e(TAG, "request response="+response.body());
+                    OtpVM.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + call.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return OtpVM;
     }
 }

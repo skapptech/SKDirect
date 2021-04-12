@@ -259,6 +259,9 @@ public interface APIServices {
     @GET("api/NativeBuyer/GlobalFilter/GetCategoryList")
     Observable<JsonObject> getFilterCategory();
 
+    @GET("api/NativeBuyer/BuyerProfile/SendOtp")
+    Call<JsonObject> sendotp();
+
     @GET("api/NativeBuyer/GlobalFilter/GetPriceRangeAsync")
     Observable<MallMainPriceModel> getFilterPriceRange(@Query("categoryid") int categoryId);
 
