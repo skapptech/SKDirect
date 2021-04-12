@@ -62,9 +62,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
     }
 
     private void upDateProfile() {
-        try {
-            
-        }
         if (TextUtils.isNullOrEmpty(mBinding.etName.getText().toString())) {
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_name));
         } else if (mBinding.etEmailId.getText().toString().length() > 0) {
