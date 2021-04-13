@@ -81,7 +81,14 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.clearCart) {
-            showClearCartDialog();
+            if(cartItemList.size()>0)
+            {
+                showClearCartDialog();
+            }else
+            {
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_items_available));
+            }
+
         } else
             onBackPressed();
         return super.onOptionsItemSelected(item);

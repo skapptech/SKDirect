@@ -221,4 +221,5 @@
     <string name="cash_on_delivery">Cash on delivery</string>
     <string name="delivery_option">Delivery Option</string>
     <string name="clear_all_done">All filters have been cleared</string>
+    <string name="no_items_available">No items available</string>
 </resources>
