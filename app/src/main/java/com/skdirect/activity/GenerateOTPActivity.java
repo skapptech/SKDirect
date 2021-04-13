@@ -155,7 +155,6 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_lodding_otp:
-                Binding.btLoddingOtp.setText(dbHelper.getString(R.string.loading));
                 checkVerification();
 
                 break;
@@ -167,6 +166,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
         if (otpString.isEmpty()) {
             Utils.setToast(this, dbHelper.getString(R.string.enter_otp));
         } else {
+            Binding.btLoddingOtp.setText(dbHelper.getString(R.string.loading));
             callOTPVerfiyAPI(otpString);
         }
 
@@ -268,6 +268,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                Binding.btLoddingOtp.setText(dbHelper.getString(R.string.next));
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
 
             }
@@ -275,6 +276,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
 
         @Override
         public void onError(Throwable e) {
+            Binding.btLoddingOtp.setText(dbHelper.getString(R.string.next));
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
             Utils.hideProgressDialog();
             e.printStackTrace();
