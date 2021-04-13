@@ -337,6 +337,7 @@
                                 android:ellipsize="end"
                                 android:maxLines="1"
                                 android:padding="2dp"
+                                android:id="@+id/tvDeliveryOptionsTitle"
                                 android:text="@string/txt_delivery"
                                 android:textColor="@color/black"
                                 android:textSize="14dp"

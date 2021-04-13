@@ -287,23 +287,45 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         mBinding.rvAllCetegory.setVisibility(View.GONE);
                     }
                 }
-
-
             }
         });
 
     }
 
     private void initViews() {
-
-
         dbHelper = MyApplication.getInstance().dbHelper;
-        mBinding.etSearchSeller.setText(dbHelper.getString(R.string.search_seller));
-        mBinding.tvNearByViewAll.setText(dbHelper.getString(R.string.view_more));
+        mBinding.etSearchSeller.setHint(dbHelper.getString(R.string.search_seller));
+
         mBinding.tvNearItem.setText(dbHelper.getString(R.string.near_by_item));
+        mBinding.tvNearByViewAll.setText(dbHelper.getString(R.string.view_more));
+        mBinding.tvNearNoItem.setText(dbHelper.getString(R.string.no_item_found));
         mBinding.tvLoNotFound.setText(dbHelper.getString(R.string.no_loction_found));
+
         mBinding.tvNearSellar.setText(dbHelper.getString(R.string.near_by_seller));
         mBinding.tvNearBySellar.setText(dbHelper.getString(R.string.view_more));
+        mBinding.tvNoSeller.setText(dbHelper.getString(R.string.no_item_found));
+        mBinding.tvNoSellerLocation.setText(dbHelper.getString(R.string.no_loction_found));
+
+        mBinding.tvAllCat.setText(dbHelper.getString(R.string.all_categories));
+        mBinding.tvCetegory.setText(dbHelper.getString(R.string.view_more));
+        mBinding.tvNoItemCat.setText(dbHelper.getString(R.string.no_item_found));
+        mBinding.tvNoLocationCat.setText(dbHelper.getString(R.string.no_loction_found));
+
+        mBinding.tvNearSeller2.setText(dbHelper.getString(R.string.by_seller));
+        mBinding.tvNearSellerTwo.setText(dbHelper.getString(R.string.view_more));
+        mBinding.tvNoSellerItem.setText(dbHelper.getString(R.string.no_item_found));
+        mBinding.tvNoSelleronLocation.setText(dbHelper.getString(R.string.no_loction_found));
+
+        mBinding.tvMaxSeller.setText(dbHelper.getString(R.string.most_visted_seller));
+        mBinding.tvMostVisitedSeller.setText(dbHelper.getString(R.string.view_more));
+        mBinding.tvNoMaxSeller.setText(dbHelper.getString(R.string.no_item_found));
+        mBinding.tvNoMaxSellerLocation.setText(dbHelper.getString(R.string.no_loction_found));
+
+        mBinding.tvNewSellerTitle.setText(dbHelper.getString(R.string.new_seller));
+        mBinding.tvNewSeller.setText(dbHelper.getString(R.string.view_more));
+        mBinding.tvNoNewSellerItem.setText(dbHelper.getString(R.string.no_item_found));
+        mBinding.tvNoNewSellerItemLocation.setText(dbHelper.getString(R.string.no_loction_found));
+
 
 
         //mBinding.swiperefresh.setOnRefreshListener(this);
@@ -425,14 +447,15 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         } else {
                             activity.mBinding.llSignIn.setVisibility(View.VISIBLE);
                             activity.mBinding.llLogout.setVisibility(View.GONE);
+                            activity.mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.log_in));
                             activity.mobileNumberTV.setText("");
-
                         }
 
 
                     } else {
                         activity.userNameTV.setText(R.string.guest_user);
                         activity.mBinding.llSignIn.setVisibility(View.VISIBLE);
+                        activity.mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
                         activity.mBinding.llLogout.setVisibility(View.GONE);
                         activity.mobileNumberTV.setText("");
 

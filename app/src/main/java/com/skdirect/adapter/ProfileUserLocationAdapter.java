@@ -62,7 +62,7 @@ public class ProfileUserLocationAdapter extends RecyclerView.Adapter<ProfileUser
         holder.mBinding.tvCityName.setText(userLocationModel.getCity() + " - " + userLocationModel.getPincode() + " (" + userLocationModel.getState() + ")");
 
 
-        holder.mBinding.ivOpcationValue.setOnClickListener(new View.OnClickListener() {
+        holder.mBinding.llMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PopupMenuView(holder,userLocationModel,position);

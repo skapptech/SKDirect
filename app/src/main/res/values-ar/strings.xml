@@ -10,6 +10,7 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="about_direct">About Direct</string>
     <string name="sign_in">Sign In</string>
+    <string name="log_in">Log In</string>
     <string name="get_otp">Get Otp</string>
     <string name="skip">Skip</string>
     <string name="other_settings">Other Setting</string>
