@@ -1,16 +1,16 @@
 package com.skdirect.activity;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -44,29 +44,30 @@ import java.util.List;
 import io.reactivex.observers.DisposableObserver;
 
 public class FilterActivity extends AppCompatActivity implements FilterTypeInterface, FilterCategoryInterface {
-    ActivityFilterBinding mBinding;
-    ArrayList<String> otherList = new ArrayList<>();
-    ArrayList<FilterCategoryDetails> filterCateDataList = new ArrayList<>();
-    CategoryFilterAdapter filterCategoryAdapter;
-    BrandsFilterAdapter filterBrandAdapter;
-    DiscountFilterAdapter filterDiscountAdapter;
+    private ActivityFilterBinding mBinding;
+
+    private final ArrayList<FilterCategoryDetails> filterCateDataList = new ArrayList<>();
+    private CategoryFilterAdapter filterCategoryAdapter;
+    private BrandsFilterAdapter filterBrandAdapter;
+    private DiscountFilterAdapter filterDiscountAdapter;
     private int maxprice = 10000, minprice = 1;
     private int skipCount = 0;
-    private int takeCount = 15;
+    private final int takeCount = 15;
     private int pastVisiblesItems = 0;
     private int visibleItemCount = 0;
     private int totalItemCount = 0;
     private boolean loading = true;
     public DBHelper dbHelper;
-    int categoryId = 0;
-    String brand = "";
-    ArrayList<String> selectedBrandList = new ArrayList<>();
-    ArrayList<Integer> selectedPriceList = new ArrayList<>();
-    String discount = "";
+    public int categoryId = 14;
+    private final String brand = "";
+    private ArrayList<FilterCategoryDetails> categoryList;
+    private final ArrayList<String> selectedBrandList = new ArrayList<>();
+    private final ArrayList<Integer> selectedPriceList = new ArrayList<>();
+    private String discount = "";
     boolean sideTabBrandClick = true;
-    boolean sideTabDiscountClick = true;
+    private boolean sideTabDiscountClick = true;
     private CommonClassForAPI commonClassForAPI;
-    LinearLayoutManager layoutManagerBrand;
+    private LinearLayoutManager layoutManagerBrand;
 
 
     @Override
@@ -95,7 +96,6 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         mBinding.rvFilterType.addItemDecoration(dividerItemDecoration);
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.devider));
 
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         mBinding.rvFilterCateData.setLayoutManager(layoutManager);
         filterCategoryAdapter = new CategoryFilterAdapter(this, filterCateDataList, this);
@@ -106,45 +106,36 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         filterBrandAdapter = new BrandsFilterAdapter(this, filterCateDataList, this);
         mBinding.rvFilterBrandsData.setAdapter(filterBrandAdapter);
 
-        LinearLayoutManager  layoutManagerDis = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManagerDis = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         mBinding.rvFilterDiscountData.setLayoutManager(layoutManagerDis);
         filterDiscountAdapter = new DiscountFilterAdapter(this, filterCateDataList, this);
         mBinding.rvFilterDiscountData.setAdapter(filterDiscountAdapter);
 
-        mBinding.tvApply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedPriceList.add(minprice);
-                selectedPriceList.add(maxprice);
-                Intent intent = new Intent();
-                intent.putExtra(Constant.Category, categoryId);
-                intent.putIntegerArrayListExtra(Constant.Price, selectedPriceList);
-                intent.putStringArrayListExtra(Constant.Brands, selectedBrandList);
-                intent.putExtra(Constant.Discount, discount);
-                setResult(Activity.RESULT_OK, intent);
-                finish();
-            }
+        mBinding.tvApply.setOnClickListener(v -> {
+            selectedPriceList.add(minprice);
+            selectedPriceList.add(maxprice);
+            Intent intent = new Intent();
+            intent.putExtra(Constant.Category, categoryId);
+            intent.putIntegerArrayListExtra(Constant.Price, selectedPriceList);
+            intent.putStringArrayListExtra(Constant.Brands, selectedBrandList);
+            intent.putExtra(Constant.Discount, discount);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
         });
 
-        mBinding.tvCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                setResult(Activity.RESULT_CANCELED, intent);
-                finish();
-            }
+        mBinding.tvCancel.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            setResult(Activity.RESULT_CANCELED, intent);
+            finish();
         });
-        mBinding.tvClearAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedBrandList.clear();
-                selectedPriceList.clear();
-                categoryId = 0;
-                discount = "";
-                maxprice = 10000;
-                minprice = 0;
-                setFilterTypeData();
-            }
+        mBinding.tvClearAll.setOnClickListener(v -> {
+            selectedBrandList.clear();
+            selectedPriceList.clear();
+            categoryId = 0;
+            discount = "";
+            maxprice = 10000;
+            minprice = 0;
+            setFilterTypeData();
         });
 
         mBinding.rvFilterBrandsData.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -186,18 +177,19 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         if (!savedData.isEmpty()) {
             try {
                 JSONObject jsonObject = new JSONObject(savedData);
-                ArrayList<FilterCategoryDetails> detailsList = new Gson().fromJson(jsonObject.get("ResultItem").toString(), new TypeToken<List<FilterCategoryDetails>>() {
-                }.getType());
-                if (detailsList.size() > 0) {
+                categoryList = new Gson().fromJson(jsonObject.get("ResultItem").toString(),
+                        new TypeToken<List<FilterCategoryDetails>>() {
+                        }.getType());
+                if (categoryList.size() > 0) {
                     viewVisibility(0);
-                    filterCategoryAdapter.setData(detailsList);
+                    filterCategoryAdapter.setData(categoryList);
+                    setSelectedCategory();
                     //  filterCateDataList.addAll(detailsList);
                     //filterCategoryAdapter.notifyDataSetChanged();
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FILTER_CATEGORY_LIST, jsonObject.toString());
                 } else {
                     viewVisibility(4);
                     mBinding.tvNoData.setText(dbHelper.getString(R.string.no_filter_categories));
-
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -207,14 +199,17 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                 @Override
                 public void onNext(@NotNull JsonObject jsonObject) {
                     if (jsonObject.get("IsSuccess").getAsBoolean()) {
-                        ArrayList<FilterCategoryDetails> detailsList = new Gson().fromJson(jsonObject.get("ResultItem").getAsJsonArray().toString(), new TypeToken<List<FilterCategoryDetails>>() {
-                        }.getType());
-                        if (detailsList.size() > 0) {
-                            SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FILTER_CATEGORY_LIST, jsonObject.toString());
+                        categoryList = new Gson().fromJson(jsonObject.get("ResultItem").getAsJsonArray().toString(),
+                                new TypeToken<List<FilterCategoryDetails>>() {
+                                }.getType());
+                        if (categoryList.size() > 0) {
+                            SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FILTER_CATEGORY_LIST,
+                                    jsonObject.toString());
                             viewVisibility(0);
                             // filterCateDataList.addAll(detailsList);
                             //  filterCategoryAdapter.notifyDataSetChanged();
-                            filterCategoryAdapter.setData(detailsList);
+                            filterCategoryAdapter.setData(categoryList);
+                            setSelectedCategory();
                         } else {
                             viewVisibility(4);
                             mBinding.tvNoData.setText(dbHelper.getString(R.string.no_filter_categories));
@@ -226,7 +221,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                 }
 
                 @Override
-                public void onError(Throwable e) {
+                public void onError(@NotNull Throwable e) {
                     e.printStackTrace();
                     viewVisibility(4);
                 }
@@ -236,7 +231,6 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                     Utils.hideProgressDialog();
                 }
             });
-
         } else {
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_connection));
         }
@@ -265,7 +259,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                     } else {
                         loading = false;
                         //viewVisibility(2);
-                       // mBinding.tvNoData.setText(dbHelper.getString(R.string.no_filter_brands));
+                        // mBinding.tvNoData.setText(dbHelper.getString(R.string.no_filter_brands));
                     }
                 }
 
@@ -296,7 +290,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
 
     @Override
     public void clickFilterTypeInterface(String name, int position) {
-        System.out.println("Position::"+position);
+        System.out.println("Position::" + position);
         switch (position) {
             case 0:
                 viewVisibility(0);
@@ -331,33 +325,31 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                 }
                 break;
             case 2:
-                if(sideTabBrandClick){
+                if (sideTabBrandClick) {
                     sideTabBrandClick = false;
                     callBrandList();
-                }else
-                {
+                } else {
                     viewVisibility(2);
                 }
                 break;
             case 3:
-               if(sideTabDiscountClick) {
-                  sideTabDiscountClick = false;
-                   viewVisibility(3);
-                   ArrayList<FilterCategoryDetails> discountList = new ArrayList<>();
-                   discountList.add(new FilterCategoryDetails(0, "Any"));
-                   discountList.add(new FilterCategoryDetails(0, "10% and above"));
-                   discountList.add(new FilterCategoryDetails(0, "20% and above"));
-                   discountList.add(new FilterCategoryDetails(0, "30% and above"));
-                   discountList.add(new FilterCategoryDetails(0, "40% and above"));
-                   discountList.add(new FilterCategoryDetails(0, "50% and above"));
-                   discountList.add(new FilterCategoryDetails(0, "60% and above"));
-                   discountList.add(new FilterCategoryDetails(0, "70% and above"));
-                   filterDiscountAdapter.setData(discountList);
-               }else
-               {
-                   viewVisibility(3);
+                if (sideTabDiscountClick) {
+                    sideTabDiscountClick = false;
+                    viewVisibility(3);
+                    ArrayList<FilterCategoryDetails> discountList = new ArrayList<>();
+                    discountList.add(new FilterCategoryDetails(0, "Any"));
+                    discountList.add(new FilterCategoryDetails(0, "10% and above"));
+                    discountList.add(new FilterCategoryDetails(0, "20% and above"));
+                    discountList.add(new FilterCategoryDetails(0, "30% and above"));
+                    discountList.add(new FilterCategoryDetails(0, "40% and above"));
+                    discountList.add(new FilterCategoryDetails(0, "50% and above"));
+                    discountList.add(new FilterCategoryDetails(0, "60% and above"));
+                    discountList.add(new FilterCategoryDetails(0, "70% and above"));
+                    filterDiscountAdapter.setData(discountList);
+                } else {
+                    viewVisibility(3);
 
-               }
+                }
                 break;
             default:
                 break;
@@ -371,7 +363,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
             mBinding.rvFilterDiscountData.setVisibility(View.GONE);
             mBinding.priceFilter.setVisibility(View.GONE);
             mBinding.tvNoData.setVisibility(View.GONE);
-        }else if (type == 1) {
+        } else if (type == 1) {
             mBinding.rvFilterCateData.setVisibility(View.GONE);
             mBinding.rvFilterBrandsData.setVisibility(View.GONE);
             mBinding.rvFilterDiscountData.setVisibility(View.GONE);
@@ -389,8 +381,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
             mBinding.rvFilterDiscountData.setVisibility(View.VISIBLE);
             mBinding.priceFilter.setVisibility(View.GONE);
             mBinding.tvNoData.setVisibility(View.GONE);
-        }else
-        {
+        } else {
             mBinding.rvFilterCateData.setVisibility(View.GONE);
             mBinding.rvFilterBrandsData.setVisibility(View.GONE);
             mBinding.rvFilterDiscountData.setVisibility(View.GONE);
@@ -418,34 +409,39 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
             public void onValueChanged(int minValue, int maxValue) {
                 int min = mBinding.rangeSeekbar.getMinRange() + minValue;
                 mBinding.tvMinMaxRange.setText("₹" + min + "- ₹" + maxValue);
-                maxprice = (int) maxValue;
-                minprice = (int) mBinding.rangeSeekbar.getMinRange() + minValue;
+                maxprice = maxValue;
+                minprice = mBinding.rangeSeekbar.getMinRange() + minValue;
             }
         });
     }
 
+    private void setSelectedCategory() {
+        for (int i = 0; i < categoryList.size(); i++) {
+            if (categoryList.get(i).getValue() == categoryId) {
+                categoryId = categoryList.get(i).getValue();
+                filterCategoryAdapter.lastSelectedPosition = i;
+                break;
+            }
+        }
+    }
+
     @Override
     public void clickFilterCategoryInterface(int value, String label) {
-        if(categoryId!=value)
-        {
+        if (categoryId != value) {
             categoryId = value;
             sideTabBrandClick = true;
             sideTabDiscountClick = true;
             skipCount = 0;
             filterCateDataList.clear();
-
         }
-
     }
 
     @Override
     public void clickFilterBrandyInterface(int cateId, String label, boolean remove) {
-       // brand = label;
-        if(remove)
-        {
+        // brand = label;
+        if (remove) {
             selectedBrandList.remove(label);
-        }else
-        {
+        } else {
             selectedBrandList.add(label);
         }
     }
@@ -454,5 +450,4 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     public void clickFilterDiscountInterface(int cateId, String label) {
         discount = label;
     }
-
 }
