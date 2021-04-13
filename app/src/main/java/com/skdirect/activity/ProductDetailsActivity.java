@@ -106,7 +106,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             case R.id.imShare:
                 Utils.shareProduct(this, SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/product/" + productID);
                 break;
-
         }
     }
 
@@ -203,6 +202,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         mBinding.tvOtherSellers.setText(dbHelper.getString(R.string.other_sellers));
         mBinding.tvSellersOtherProduct.setText(dbHelper.getString(R.string.seller_s_others_product));
         mBinding.btAddToCart.setText(dbHelper.getString(R.string.add_to_cart));
+        mBinding.tvVarientButton.setText(dbHelper.getString(R.string.variants));
+        mBinding.tvDeliveryOptionsTitle.setText(dbHelper.getString(R.string.txt_delivery));
 
 
         mBinding.rvNearByItem.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -273,7 +274,13 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 mBinding.btAddToCart.setVisibility(View.GONE);
                 mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
                 // add item in cart
-                CartModel cartModel = new CartModel(null, 0, null, resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(), resultModel.getUom(), "", 0, resultModel.getProductName(), 0, 0, resultModel.IsDelete, resultModel.getOffPercentage(), 0, 0, 1, 0, null, resultModel.getSellerId(), 0, 0, 0, resultModel.getMrp(), 0, resultModel.getId());
+                CartModel cartModel = new CartModel(null, 0, null,
+                        resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(),
+                        resultModel.getMeasurement(), resultModel.getUom(), "", 0,
+                        resultModel.getProductName(), 0, 0, resultModel.IsDelete,
+                        resultModel.getOffPercentage(), 0, 0, 1, 0,
+                        null, resultModel.getSellerId(), 0, 0,
+                        0, resultModel.getMrp(), 0, resultModel.getId());
                 MyApplication.getInstance().cartRepository.addToCart(cartModel);
                 addItemInCart(1, SellerItemID);
             } else {

@@ -2,7 +2,6 @@ package com.skdirect.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.R;
 import com.skdirect.databinding.ItemsFilterBrandBinding;
-import com.skdirect.databinding.ItemsFilterCategoryBinding;
 import com.skdirect.interfacee.FilterCategoryInterface;
 import com.skdirect.model.FilterCategoryDetails;
 import com.skdirect.utils.TextUtils;
@@ -19,21 +17,22 @@ import com.skdirect.utils.TextUtils;
 import java.util.ArrayList;
 
 public class BrandsFilterAdapter extends RecyclerView.Adapter<BrandsFilterAdapter.ViewHolder> {
-    private Context context;
-    private ArrayList<FilterCategoryDetails>filterTypelist;
-    private int lastSelectedPosition = 0;
+    private final Context context;
+    private ArrayList<FilterCategoryDetails> filterTypelist;
     private final FilterCategoryInterface filterCategoryInterface;
 
-    public BrandsFilterAdapter(Context context, ArrayList<FilterCategoryDetails>  filterTypelist, FilterCategoryInterface filterCategoryInterface) {
+
+    public BrandsFilterAdapter(Context context, ArrayList<FilterCategoryDetails> filterTypelist, FilterCategoryInterface filterCategoryInterface) {
         this.context = context;
         this.filterTypelist = filterTypelist;
         this.filterCategoryInterface = filterCategoryInterface;
-
     }
-    public void setData(ArrayList<FilterCategoryDetails>  filterTypelist) {
+
+    public void setData(ArrayList<FilterCategoryDetails> filterTypelist) {
         this.filterTypelist = filterTypelist;
         notifyDataSetChanged();
     }
+
     @NonNull
     @Override
     public BrandsFilterAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -43,29 +42,23 @@ public class BrandsFilterAdapter extends RecyclerView.Adapter<BrandsFilterAdapte
 
     @Override
     public void onBindViewHolder(@NonNull BrandsFilterAdapter.ViewHolder holder, int position) {
-        if(!TextUtils.isNullOrEmpty(filterTypelist.get(position).getLabel()))
-        {
+        if (!TextUtils.isNullOrEmpty(filterTypelist.get(position).getLabel())) {
             holder.mBinding.tvFilterCategoryName.setText(filterTypelist.get(position).getLabel());
-        }else
-        {
+        } else {
             holder.mBinding.tvFilterCategoryName.setText("No Brand");
         }
 
-        holder.mBinding.rbBrandItemSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (filterTypelist.get(position).isSelected()) {
-                    filterTypelist.get(position).setSelected(false);
-                    holder.mBinding.rbBrandItemSelect.setChecked(false);
-                    filterCategoryInterface.clickFilterBrandyInterface(filterTypelist.get(position).getValue(),filterTypelist.get(position).getLabel(),true);
+        holder.mBinding.rbBrandItemSelect.setChecked(filterTypelist.get(position).isSelected());
 
-                } else {
-                    filterTypelist.get(position).setSelected(true);
-                    holder.mBinding.rbBrandItemSelect.setChecked(true);
-                    filterCategoryInterface.clickFilterBrandyInterface(filterTypelist.get(position).getValue(),filterTypelist.get(position).getLabel(),false);
-
-                }
-
+        holder.mBinding.rbBrandItemSelect.setOnClickListener(v -> {
+            if (filterTypelist.get(position).isSelected()) {
+                filterTypelist.get(position).setSelected(false);
+                holder.mBinding.rbBrandItemSelect.setChecked(false);
+                filterCategoryInterface.clickFilterBrandyInterface(filterTypelist.get(position).getValue(), filterTypelist.get(position).getLabel(), true);
+            } else {
+                filterTypelist.get(position).setSelected(true);
+                holder.mBinding.rbBrandItemSelect.setChecked(true);
+                filterCategoryInterface.clickFilterBrandyInterface(filterTypelist.get(position).getValue(), filterTypelist.get(position).getLabel(), false);
             }
         });
     }

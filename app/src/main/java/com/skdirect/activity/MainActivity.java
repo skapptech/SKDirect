@@ -290,10 +290,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.ll_logout:
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                clearSharePrefs();
-                finish();
                 mBinding.drawer.closeDrawers();
+                clearSharePrefs();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
                 break;
             case R.id.ll_sign_in:
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -312,6 +312,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void clearSharePrefs() {
+        MyApplication.getInstance().cartRepository.truncateCart();
         sharedPreferences.edit().clear().apply();
     }
 
