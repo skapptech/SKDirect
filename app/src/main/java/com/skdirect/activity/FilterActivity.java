@@ -32,6 +32,7 @@ import com.skdirect.utils.Constant;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
+import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
@@ -44,13 +45,11 @@ import java.util.List;
 import io.reactivex.observers.DisposableObserver;
 
 public class FilterActivity extends AppCompatActivity implements FilterTypeInterface, FilterCategoryInterface {
-    private ActivityFilterBinding mBinding;
-
-    private final ArrayList<FilterCategoryDetails> filterCateDataList = new ArrayList<>();
-    private CategoryFilterAdapter filterCategoryAdapter;
-    private BrandsFilterAdapter filterBrandAdapter;
-    private DiscountFilterAdapter filterDiscountAdapter;
-    private int maxprice = 10000, minprice = 1;
+    ActivityFilterBinding mBinding;
+    CategoryFilterAdapter filterCategoryAdapter;
+    BrandsFilterAdapter filterBrandAdapter;
+    DiscountFilterAdapter filterDiscountAdapter;
+    private int maxprice = 17500, minprice = 1;
     private int skipCount = 0;
     private final int takeCount = 15;
     private int pastVisiblesItems = 0;
@@ -58,18 +57,17 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     private int totalItemCount = 0;
     private boolean loading = true;
     public DBHelper dbHelper;
-    public int categoryId = 0;
-
+    int categoryId = 0;
+    String discount = null;
+    private final ArrayList<FilterCategoryDetails> filterCateDataList = new ArrayList<>();
     private ArrayList<FilterCategoryDetails> categoryList;
     private ArrayList<String> selectedBrandList = new ArrayList<>();
     private ArrayList<Integer> selectedPriceList = new ArrayList<>();
     private ArrayList<FilterCategoryDetails> discountList;
-    private String discount = "";
     boolean sideTabBrandClick = true;
     private boolean sideTabDiscountClick = true;
     private CommonClassForAPI commonClassForAPI;
     private LinearLayoutManager layoutManagerBrand;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +80,6 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
             discount = getIntent().getStringExtra("discount");
             selectedBrandList = getIntent().getStringArrayListExtra("brandList");
             selectedPriceList = getIntent().getIntegerArrayListExtra("priceList");
-            if (selectedPriceList != null && selectedPriceList.size() > 0) {
-                mBinding.rangeSeekbar.setMinThumbValue(selectedPriceList.get(0));
-                mBinding.rangeSeekbar.setMaxThumbValue(selectedPriceList.get(1));
-            }
         }
 
         initView();
@@ -123,17 +117,17 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         filterDiscountAdapter = new DiscountFilterAdapter(this, filterCateDataList, this);
         mBinding.rvFilterDiscountData.setAdapter(filterDiscountAdapter);
 
-        mBinding.tvApply.setOnClickListener(v -> {
-            selectedPriceList.clear();
-            selectedPriceList.add(minprice);
-            selectedPriceList.add(maxprice);
-            Intent intent = new Intent();
-            intent.putExtra(Constant.Category, categoryId);
-            intent.putIntegerArrayListExtra(Constant.Price, selectedPriceList);
-            intent.putStringArrayListExtra(Constant.Brands, selectedBrandList);
-            intent.putExtra(Constant.Discount, discount);
-            setResult(Activity.RESULT_OK, intent);
-            finish();
+        mBinding.tvApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra(Constant.Category, categoryId);
+                intent.putIntegerArrayListExtra(Constant.Price, selectedPriceList);
+                intent.putStringArrayListExtra(Constant.Brands, selectedBrandList);
+                intent.putExtra(Constant.Discount, discount);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
         });
 
         mBinding.tvCancel.setOnClickListener(v -> {
@@ -141,14 +135,19 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
             setResult(Activity.RESULT_CANCELED, intent);
             finish();
         });
-        mBinding.tvClearAll.setOnClickListener(v -> {
-            selectedBrandList.clear();
-            selectedPriceList.clear();
-            categoryId = 0;
-            discount = "";
-            maxprice = 10000;
-            minprice = 0;
-            setFilterTypeData();
+
+        mBinding.tvClearAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedBrandList.clear();
+                selectedPriceList.clear();
+                categoryId = 0;
+                discount = "null";
+                maxprice = 0;
+                minprice = 0;
+                setFilterTypeData();
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.clear_all_done));
+            }
         });
 
         mBinding.rvFilterBrandsData.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -406,7 +405,14 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     }
 
     private void setRangeSeekbar(int min, int max) {
-        mBinding.tvMinMaxRange.setText("₹" + min + "- ₹" + max);
+        if (selectedPriceList != null && selectedPriceList.size() > 0) {
+             mBinding.rangeSeekbar.setMinThumbValue(15);
+            mBinding.rangeSeekbar.setMaxThumbValue(1000);
+            mBinding.tvMinMaxRange.setText("₹" + selectedPriceList.get(0) + "- ₹" + selectedPriceList.get(1));
+        }else
+        {
+            mBinding.tvMinMaxRange.setText("₹" + min + "- ₹" + max);
+        }
         mBinding.rangeSeekbar.setMinRange(min);
         mBinding.rangeSeekbar.setMax(max);
         minprice = min;
@@ -418,6 +424,11 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
 
             @Override
             public void onStoppedSeeking() {
+                selectedPriceList.clear();
+                if(maxprice!=0){
+                    selectedPriceList.add(minprice);
+                    selectedPriceList.add(maxprice);
+                }
             }
 
             @Override
@@ -469,6 +480,8 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
             sideTabDiscountClick = true;
             skipCount = 0;
             filterCateDataList.clear();
+            selectedPriceList.clear();
+            selectedBrandList.clear();
         }
     }
 
@@ -478,7 +491,10 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         if (remove) {
             selectedBrandList.remove(label);
         } else {
-            selectedBrandList.add(label);
+            if(label!=null)
+            {
+                selectedBrandList.add(label);
+            }
         }
     }
 

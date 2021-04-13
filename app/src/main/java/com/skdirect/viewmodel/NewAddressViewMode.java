@@ -25,7 +25,7 @@ import retrofit2.Response;
 public class NewAddressViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
     private MutableLiveData<JsonObject> mapViewModel;
-    private MutableLiveData<Boolean> addLocationVM;
+    private MutableLiveData<JsonObject> addLocationVM;
     private MutableLiveData<UpdateEditeAddreshMainModel> addUpdateLocationVM;
 
     public LiveData<JsonObject> getMapViewModel() {
@@ -34,7 +34,7 @@ public class NewAddressViewMode extends ViewModel {
         return mapViewModel;
     }
 
-    public LiveData<Boolean> getAddLocationVM() {
+    public LiveData<JsonObject> getAddLocationVM() {
         addLocationVM=null;
         addLocationVM = new MutableLiveData<>();
         return addLocationVM;
@@ -66,10 +66,10 @@ public class NewAddressViewMode extends ViewModel {
         return mapViewModel;
     }
 
-    public MutableLiveData<Boolean> getAddLocationVMRequest(JsonArray jsonArray) {
-        RestClient.getInstance().getService().AddLocation(jsonArray).enqueue(new Callback<Boolean>() {
+    public MutableLiveData<JsonObject> getAddLocationVMRequest(JsonObject jsonObject) {
+        RestClient.getInstance().getService().AddLocation(jsonObject).enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     addLocationVM.setValue(response.body());
@@ -77,7 +77,7 @@ public class NewAddressViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + call.toString());
                 Utils.hideProgressDialog();
             }
