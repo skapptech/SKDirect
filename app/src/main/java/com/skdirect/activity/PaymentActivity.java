@@ -181,6 +181,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         });
 
         AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
         dialog.show();
     }
 
