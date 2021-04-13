@@ -8,7 +8,7 @@ public class OrderPlaceMainModel {
     private boolean IsSuccess;
 
     @SerializedName("ResultItem")
-    private OrderPlaceModel ResultItem;
+    private Boolean ResultItem;
 
     @SerializedName("SuccessMessage")
     private String SuccessMessage;
@@ -24,11 +24,11 @@ public class OrderPlaceMainModel {
         IsSuccess = success;
     }
 
-    public OrderPlaceModel getResultItem() {
+    public Boolean getResultItem() {
         return ResultItem;
     }
 
-    public void setResultItem(OrderPlaceModel resultItem) {
+    public void setResultItem(Boolean resultItem) {
         ResultItem = resultItem;
     }
 

@@ -218,4 +218,6 @@
     <string name="no_address_found">कोई पता नहीं मिला</string>
     <string name="cash_on_delivery">डिलवरी पर नकदी</string>
     <string name="delivery_option">डिलीवरी विकल्प</string>
+
+    <string name="no_mall_availble">वर्तमान में हम इस पिनकोड की सेवा नहीं करते हैं। कृपया अपना स्थान बदलें!</string>
 </resources>
