@@ -59,10 +59,11 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     private boolean loading = true;
     public DBHelper dbHelper;
     public int categoryId = 0;
-    private final String brand = "";
+
     private ArrayList<FilterCategoryDetails> categoryList;
     private ArrayList<String> selectedBrandList = new ArrayList<>();
-    private final ArrayList<Integer> selectedPriceList = new ArrayList<>();
+    private ArrayList<Integer> selectedPriceList = new ArrayList<>();
+    private ArrayList<FilterCategoryDetails> discountList;
     private String discount = "";
     boolean sideTabBrandClick = true;
     private boolean sideTabDiscountClick = true;
@@ -78,7 +79,13 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
 
         if (getIntent().getExtras() != null) {
             categoryId = getIntent().getIntExtra("categoryId", 0);
+            discount = getIntent().getStringExtra("discount");
             selectedBrandList = getIntent().getStringArrayListExtra("brandList");
+            selectedPriceList = getIntent().getIntegerArrayListExtra("priceList");
+            if (selectedPriceList != null && selectedPriceList.size() > 0) {
+                mBinding.rangeSeekbar.setMinThumbValue(selectedPriceList.get(0));
+                mBinding.rangeSeekbar.setMaxThumbValue(selectedPriceList.get(1));
+            }
         }
 
         initView();
@@ -117,6 +124,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         mBinding.rvFilterDiscountData.setAdapter(filterDiscountAdapter);
 
         mBinding.tvApply.setOnClickListener(v -> {
+            selectedPriceList.clear();
             selectedPriceList.add(minprice);
             selectedPriceList.add(maxprice);
             Intent intent = new Intent();
@@ -342,7 +350,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                 if (sideTabDiscountClick) {
                     sideTabDiscountClick = false;
                     viewVisibility(3);
-                    ArrayList<FilterCategoryDetails> discountList = new ArrayList<>();
+                    discountList = new ArrayList<>();
                     discountList.add(new FilterCategoryDetails(0, "Any"));
                     discountList.add(new FilterCategoryDetails(0, "10% and above"));
                     discountList.add(new FilterCategoryDetails(0, "20% and above"));
@@ -352,6 +360,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                     discountList.add(new FilterCategoryDetails(0, "60% and above"));
                     discountList.add(new FilterCategoryDetails(0, "70% and above"));
                     filterDiscountAdapter.setData(discountList);
+                    setSelectedDiscount();
                 } else {
                     viewVisibility(3);
 
@@ -438,6 +447,16 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                     filterCateDataList.get(i).setSelected(true);
                     break;
                 }
+            }
+        }
+    }
+
+    private void setSelectedDiscount() {
+        for (int i = 0; i < discountList.size(); i++) {
+            if (discountList.get(i).getLabel().equals(discount)) {
+                discount = discountList.get(i).getLabel();
+                filterDiscountAdapter.lastSelectedPosition = i;
+                break;
             }
         }
     }

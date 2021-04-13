@@ -51,7 +51,9 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
     FilterPostModel filterPostModel;
     // filer variable
     private int categoryId = 0;
+    private String discount = "";
     private ArrayList<String> brandList = new ArrayList<>();
+    private ArrayList<Integer> priceList = new ArrayList<>();
 
 
     @Override
@@ -162,6 +164,8 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
             Intent intent = new Intent(getApplicationContext(), FilterActivity.class);
             intent.putExtra("categoryId", categoryId);
             intent.putStringArrayListExtra("brandList", brandList);
+            intent.putIntegerArrayListExtra("priceList", priceList);
+            intent.putExtra("discount", discount);
             startActivityForResult(intent, REQUEST);
         });
     }
@@ -172,17 +176,18 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
         if (requestCode == REQUEST) {
             if (data != null && resultCode == RESULT_OK) {
                 categoryId = data.getExtras().getInt(Constant.Category);
-                ArrayList<Integer> price = data.getExtras().getIntegerArrayList(Constant.Price);
+                priceList = data.getExtras().getIntegerArrayList(Constant.Price);
                 brandList = data.getExtras().getStringArrayList(Constant.Brands);
-                String discount = data.getExtras().getString(Constant.Discount);
-                Log.e("ProductList", "Cate>>" + categoryId + "\n Price Min>>" + price.toString()
+                discount = data.getExtras().getString(Constant.Discount);
+                Log.e("ProductList", "Cate>>" + categoryId + "\n Price Min>>" + priceList.toString()
                         + "\n Brand>>" + brandList.toString() + "\n Discount>>" + discount);
                 nearProductList.clear();
                 paginationFlag = true;
-                filterPostModel = new FilterPostModel(categoryId, false, skipCount, takeCount, 0, 0, brandList, price, discount);
+                filterPostModel = new FilterPostModel(categoryId, false, skipCount, takeCount,
+                        0, 0, brandList, priceList, discount);
                 callFilterAPI();
             } else {
-                System.out.println("Canceld by user");
+                System.out.println("Cancelled by user");
             }
         }
     }

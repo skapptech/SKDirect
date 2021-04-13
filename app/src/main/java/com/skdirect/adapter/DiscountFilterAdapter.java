@@ -17,9 +17,9 @@ import com.skdirect.model.FilterCategoryDetails;
 import java.util.ArrayList;
 
 public class DiscountFilterAdapter extends RecyclerView.Adapter<DiscountFilterAdapter.ViewHolder> {
-    private Context context;
-    private ArrayList<FilterCategoryDetails>filterTypelist;
-    private int lastSelectedPosition = 0;
+    private final Context context;
+    private ArrayList<FilterCategoryDetails> filterTypelist;
+    public int lastSelectedPosition = 0;
     private final FilterCategoryInterface filterCategoryInterface;
 
     public DiscountFilterAdapter(Context context, ArrayList<FilterCategoryDetails>  filterTypelist, FilterCategoryInterface filterCategoryInterface) {
