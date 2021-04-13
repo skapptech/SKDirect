@@ -189,6 +189,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void orderPlaceAPI() {
+        if (isSelfPickup){
+            userLocationId=0;
+        }
         OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASH", deliveryOption, cartItemModel.getId(), userLocationId);
         paymentViewMode.getOrderPlaceVMRequest(orderPlaceRequestModel);
         paymentViewMode.getOrderPlaceVM().observe(this, response -> {
@@ -326,6 +329,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onOnClick(DeliveryOptionModel deliveryOptionModel, int position) {
+        deliveryOption = deliveryOptionModel.getId();
         if (deliveryOptionModel.getDelivery().equals("Self Pickup")){
             mBinding.liAddressV.setVisibility(View.GONE);
             isSelfPickup = true;
