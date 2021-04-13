@@ -297,6 +297,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void initViews() {
+
         dbHelper = MyApplication.getInstance().dbHelper;
         mBinding.etSearchSeller.setHint(dbHelper.getString(R.string.search_seller));
 
