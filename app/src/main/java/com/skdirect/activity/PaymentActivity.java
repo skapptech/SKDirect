@@ -322,9 +322,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onOnClick(DeliveryOptionModel deliveryOptionModel, int position) {
+        deliveryOption = deliveryOptionModel.getId();
         if (deliveryOptionModel.getDelivery().equals("Self Pickup")){
             mBinding.liAddressV.setVisibility(View.GONE);
             isSelfPickup = true;
+            userLocationId = 0;
         }else {
             mBinding.liAddressV.setVisibility(View.VISIBLE);
             isSelfPickup = false;
