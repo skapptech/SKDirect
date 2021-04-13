@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.skdirect.R;
 import com.skdirect.databinding.ItemAllCategoriesBinding;
 import com.skdirect.databinding.ItemDeliveryOptionBinding;
+import com.skdirect.interfacee.DeliveryOptionInterface;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.DeliveryOptionModel;
 import com.squareup.picasso.Picasso;
@@ -23,10 +24,12 @@ public class DeliveryOptionAdapter extends RecyclerView.Adapter<DeliveryOptionAd
     private Context context;
     private ArrayList<DeliveryOptionModel>deliveryOptionList;
     public int selectedPosition = 0;
+    DeliveryOptionInterface deliveryOptionInterface;
 
-    public DeliveryOptionAdapter(Context context, ArrayList<DeliveryOptionModel>deliveryOptionList) {
+    public DeliveryOptionAdapter(Context context, ArrayList<DeliveryOptionModel>deliveryOptionList, DeliveryOptionInterface deliveryOptionInterface) {
         this.context = context;
         this.deliveryOptionList = deliveryOptionList;
+        this.deliveryOptionInterface = deliveryOptionInterface;
     }
 
     @NonNull
@@ -69,7 +72,7 @@ public class DeliveryOptionAdapter extends RecyclerView.Adapter<DeliveryOptionAd
                     selectedPosition = getAdapterPosition();
                     notifyItemChanged(copyOfLastCheckedPosition);
                     notifyItemChanged(selectedPosition);
-
+                    deliveryOptionInterface.onOnClick(deliveryOptionList.get(selectedPosition), selectedPosition);
                 }
             });
         }
