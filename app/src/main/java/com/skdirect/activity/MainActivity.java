@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setlocationInHader() {
-        setLocationTV.setText(Utils.getCityName(this, Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LAT)), Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LON))));
+        setLocationTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.CITYNAME)+" "+SharePrefs.getInstance(this).getString(SharePrefs.PIN_CODE));
     }
 
     @Override
@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void callLocationAPI(double latitude, double longitude) {
+   /* private void callLocationAPI(double latitude, double longitude) {
         mainActivityViewMode.getMapViewModelRequest(latitude, longitude);
         mainActivityViewMode.getMapViewModel().observe(this, new Observer<JsonObject>() {
             @Override
@@ -379,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void callRunTimePermissions() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
-        Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
+        Permissions.check(this*//*context*//*, permissions, null*//*rationale*//*, null*//*options*//*, new PermissionHandler() {
             @Override
             public void onGranted() {
                 Log.e("onDenied", "onGranted");
@@ -396,5 +396,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
-    }
+    }*/
 }
