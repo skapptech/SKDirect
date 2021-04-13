@@ -425,14 +425,15 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         } else {
                             activity.mBinding.llSignIn.setVisibility(View.VISIBLE);
                             activity.mBinding.llLogout.setVisibility(View.GONE);
+                            activity.mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.log_in));
                             activity.mobileNumberTV.setText("");
-
                         }
 
 
                     } else {
                         activity.userNameTV.setText(R.string.guest_user);
                         activity.mBinding.llSignIn.setVisibility(View.VISIBLE);
+                        activity.mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
                         activity.mBinding.llLogout.setVisibility(View.GONE);
                         activity.mobileNumberTV.setText("");
 

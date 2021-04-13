@@ -9,7 +9,8 @@
     <string name="rate_app">एप्लिकेशन की श्रेणी बताओ</string>
     <string name="privacy_policy">गोपनीयता नीति</string>
     <string name="about_direct">डायरेक्ट के बारे में</string>
-    <string name="sign_in">लॉगिन</string>
+    <string name="sign_in"> साइन इन</string>
+    <string name="log_in">लॉग इन</string>
     <string name="get_otp">ओटीपी प्राप्त करें</string>
     <string name="skip">स्किप</string>
     <string name="other_settings">अन्य सेटिंग</string>
