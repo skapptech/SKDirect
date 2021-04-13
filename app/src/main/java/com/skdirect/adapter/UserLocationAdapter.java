@@ -79,6 +79,15 @@ public class UserLocationAdapter extends RecyclerView.Adapter<UserLocationAdapte
             super(Binding.getRoot());
             this.mBinding = Binding;
 
+            mBinding.LLAddress.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int copyOfLastCheckedPosition = selectedPosition;
+                    selectedPosition = getAdapterPosition();
+                    notifyItemChanged(copyOfLastCheckedPosition);
+                    notifyItemChanged(selectedPosition);
+                }
+            });
             mBinding.imgVerified.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
