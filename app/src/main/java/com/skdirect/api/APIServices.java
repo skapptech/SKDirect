@@ -188,7 +188,7 @@ public interface APIServices {
     @GET("api/NativeBuyer/SellerProfile/DeleteCartItems")
     Observable<CartMainModel> deleteCartItems(@Query("id") int id);
 
-    @GET("api/buyer/Profile/GetLocation")
+    @GET("api/NativeBuyer/Address/GetLocation")
     Call<JsonObject> GetLocation(@Query("lat") double lat, @Query("lng") double log);
 
     @GET("api/NativeBuyer/Address/GetAddress")
@@ -203,8 +203,8 @@ public interface APIServices {
     @POST("api/NativeBuyer/Order/PlaceOrder")
     Call<OrderPlaceMainModel> PlaceOrder(@Body OrderPlaceRequestModel placeRequestModel);
 
-    @POST("api/buyer/Profile/AddLocation")
-    Call<Boolean> AddLocation(@Body JsonArray jsonArray);
+    @POST("api/NativeBuyer/Address/AddBuyerLocation")
+    Call<JsonObject> AddLocation(@Body JsonObject jsonObject);
 
     @POST("api/NativeBuyer/Address/UpdateBuyerLocation")
     Call<UpdateEditeAddreshMainModel> UpdateBuyerLocation(@Body JsonObject jsonArray);

@@ -109,12 +109,15 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
 
     private void setLocationAPI() {
         newAddressViewMode.getAddLocationVMRequest(setUserValue());
-        newAddressViewMode.getAddLocationVM().observe(this, new Observer<Boolean>() {
+        newAddressViewMode.getAddLocationVM().observe(this, new Observer<JsonObject>() {
             @Override
-            public void onChanged(Boolean status) {
+            public void onChanged(JsonObject jsonObject) {
                 Utils.hideProgressDialog();
-                if (status) {
+                if (jsonObject.get("IsSuccess").getAsBoolean()) {
                     onBackPressed();
+                }else
+                {
+                    Utils.setToast(getApplicationContext(), jsonObject.get("ErrorMessage").getAsString());
                 }
             }
 
@@ -123,7 +126,7 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
     }
 
 
-    private JsonArray setUserValue() {
+    private JsonObject setUserValue() {
         gpsTracker = new GPSTracker(getApplicationContext());
         JsonObject jsonObject = new JsonObject();
         try {
@@ -146,10 +149,10 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
 
             e.printStackTrace();
         }
-        JsonArray jsonArray = new JsonArray();
-        jsonArray.add(jsonObject);
+     //   JsonArray jsonArray = new JsonArray();
+       // jsonArray.add(jsonObject);
 
-        return jsonArray;
+        return jsonObject;
     }
 
     private void callLocationAPI() {
@@ -177,9 +180,50 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
                 JSONObject jsonResponse = null;
                 try {
                     jsonResponse = new JSONObject(data.toString());
-                    JSONObject components = jsonResponse.getJSONObject("geometry");
-                    JSONObject location = components.getJSONObject("location");
-                    double lat = location.getDouble("lat");
+                    if(jsonResponse.getBoolean("IsSuccess"))
+                    {
+                        JSONObject resultItemObject = jsonResponse.getJSONObject("ResultItem");
+                        if(resultItemObject!=null)
+                        {
+                         String StateName = resultItemObject.getString("StateName");
+                         String CityName = resultItemObject.getString("CityName");
+                         String Pincode = resultItemObject.getString("Pincode");
+                         String Addressone = resultItemObject.getString("Addressone");
+                         String Addresstwo = resultItemObject.getString("Addresstwo");
+                         String Addressthree = resultItemObject.getString("Addressthree");
+                            if(!TextUtils.isNullOrEmpty(Pincode))
+                            {
+                                mBinding.etPinCode.setText(Pincode);
+                            }
+                            if(!TextUtils.isNullOrEmpty(CityName))
+                            {
+                                mBinding.etPinCity.setText(CityName);
+                            }
+                            if(!TextUtils.isNullOrEmpty(StateName))
+                            {
+                                mBinding.etPinState.setText(StateName);
+                            }
+                            if(!TextUtils.isNullOrEmpty(Addressone))
+                            {
+                                mBinding.etStreetAddresh.setText(Addressone);
+                            }
+                            if(!TextUtils.isNullOrEmpty(Addresstwo))
+                            {
+                                mBinding.etLandmark.setText(Addresstwo);
+                            }
+
+                        }
+
+                    }
+
+                  //  JSONObject location = components.getJSONObject("location");
+
+                   // JSONObject addressComponents = components.getJSONObject("address_components");
+                   // if(data!=null)
+
+
+
+                   /* double lat = location.getDouble("lat");
                     double lng = location.getDouble("lng");
                     Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
                     List<Address> addresses = null;
@@ -192,12 +236,8 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
                     String address = addresses.get(0).getAddressLine(0);
                     String postalCode = addresses.get(0).getPostalCode();
                     String Premises = addresses.get(0).getAdminArea();
+*/
 
-
-                    mBinding.etPinCode.setText(postalCode);
-                    mBinding.etPinCity.setText(cityName);
-                    mBinding.etStreetAddresh.setText(address);
-                    mBinding.etPinState.setText(Premises);
 
 
                 } catch (JSONException e) {
