@@ -56,7 +56,6 @@ public class ShowImagesAdapter extends PagerAdapter {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.setToast(context,"Bhagwan");
                 context.startActivity(new Intent(context, ShowImageActivity.class).putExtra("ImageData",imageListModels));
             }
         });
