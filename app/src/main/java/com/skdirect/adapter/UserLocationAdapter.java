@@ -40,8 +40,10 @@ public class UserLocationAdapter extends RecyclerView.Adapter<UserLocationAdapte
         holder.mBinding.imgVerified.setChecked(selectedPosition == position);
 
         if (selectedPosition == position) {
+            holder.mBinding.imgVerified.setVisibility(View.VISIBLE);
             holder.mBinding.imgVerified.setBackground(context.getResources().getDrawable(R.drawable.correct));
         } else {
+            holder.mBinding.imgVerified.setVisibility(View.GONE);
             //holder.mBinding.imgVerified.setBackground(context.getResources().getDrawable(R.drawable.ic_right));
         }
 
