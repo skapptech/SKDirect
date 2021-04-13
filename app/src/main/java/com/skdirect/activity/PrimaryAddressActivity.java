@@ -77,6 +77,7 @@ public class PrimaryAddressActivity extends AppCompatActivity implements View.On
 
         mBinding.btAddNewAddresh.setText(dbHelper.getString(R.string.add_new_address));
         mBinding.btSelectedProcess.setText(dbHelper.getString(R.string.select_amp_proceed));
+        mBinding.tvEmpty.setText(dbHelper.getString(R.string.no_address_found));
     }
 
     private void getSharedData() {

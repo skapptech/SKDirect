@@ -203,6 +203,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         mBinding.tvOtherSellers.setText(dbHelper.getString(R.string.other_sellers));
         mBinding.tvSellersOtherProduct.setText(dbHelper.getString(R.string.seller_s_others_product));
         mBinding.btAddToCart.setText(dbHelper.getString(R.string.add_to_cart));
+        mBinding.tvVarientButton.setText(dbHelper.getString(R.string.variants));
+        mBinding.tvDeliveryOptionsTitle.setText(dbHelper.getString(R.string.txt_delivery));
 
 
         mBinding.rvNearByItem.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
