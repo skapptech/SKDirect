@@ -440,7 +440,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                             SharePrefs.getInstance(activity).putString(SharePrefs.DELIVERY, customerDataModel.getResultItem().getUserDeliveryDC().get(i).getDelivery());
                         }
 
-
                     }
                     if (customerDataModel.getResultItem().getIsRegistrationComplete()) {
                         activity.userNameTV.setText(customerDataModel.getResultItem().getFirstName());
@@ -456,14 +455,12 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                             activity.mobileNumberTV.setText("");
                         }
 
-
                     } else {
                         activity.userNameTV.setText(R.string.guest_user);
                         activity.mBinding.llSignIn.setVisibility(View.VISIBLE);
                         activity.mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
                         activity.mBinding.llLogout.setVisibility(View.GONE);
                         activity.mobileNumberTV.setText("");
-
 
                     }
                 }

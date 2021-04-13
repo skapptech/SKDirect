@@ -221,4 +221,6 @@
     <string name="no_mall_availble">वर्तमान में हम इस पिनकोड की सेवा नहीं करते हैं। कृपया अपना स्थान बदलें!</string>
     <string name="clear_all_done">सभी फ़िल्टर साफ़ कर दिए गए हैं</string>
     <string name="no_items_available">कोई वस्तु उपलब्ध नहीं है</string>
+    <string name="webview_title_name_privacy">प्राइवेसी पॉलिसी</string>
+    <string name="webview_title_name_about_direct">एप्स के बारे में</string>
 </resources>
