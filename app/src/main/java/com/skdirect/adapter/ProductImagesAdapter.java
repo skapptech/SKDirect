@@ -3,7 +3,6 @@ package com.skdirect.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.bumptech.glide.Glide;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.activity.ShowImageActivity;
@@ -23,12 +21,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class ShowImagesAdapter extends PagerAdapter {
+public class ProductImagesAdapter extends PagerAdapter {
     private Context context;
     private ArrayList<ImageListModel> imageListModels;
     private LayoutInflater inflater;
 
-    public ShowImagesAdapter(Context context, ArrayList<ImageListModel> imageListModels1) {
+    public ProductImagesAdapter(Context context, ArrayList<ImageListModel> imageListModels1) {
         this.context = context;
         this.imageListModels = imageListModels1;
         inflater = LayoutInflater.from(context);
@@ -52,13 +50,6 @@ public class ShowImagesAdapter extends PagerAdapter {
         }else {
             Picasso.get().load(imageListModels.get(position).getImagePath()).into(imageView);
         }
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.startActivity(new Intent(context, ShowImageActivity.class).putExtra("ImageData",imageListModels));
-            }
-        });
 
         view.addView(imageLayout, 0);
 

@@ -157,6 +157,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 if (mallMainModel.isSuccess()) {
                     if (mallMainModel.getResultItem() != null) {
                         SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_Mall, true);
+                        SharePrefs.getInstance(getActivity()).putString(SharePrefs.MALL_ID, mallMainModel.getResultItem().getId());
                         MallCategorieBannerAdapter mallCategorieBannerAdapter = new MallCategorieBannerAdapter(getActivity(), mallMainModel.getResultItem().getStoreCategoryList());
                         mBinding.rvStoreCategoryList.setAdapter(mallCategorieBannerAdapter);
                         mBinding.llMainAppHome.setVisibility(View.GONE);
@@ -164,19 +165,22 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     } else {
                         mBinding.llMainAppHome.setVisibility(View.VISIBLE);
                         mBinding.llMallHome.setVisibility(View.GONE);
-                        topNearByItem();
+                        /*topNearByItem();
                         getSellerAPi();
-                        getAllCategoriesAPi();
+                        getAllCategoriesAPi();*/
                     }
                 } else {
                     mBinding.llMainAppHome.setVisibility(View.VISIBLE);
                     mBinding.llMallHome.setVisibility(View.GONE);
-                    topNearByItem();
+
+
+
+                   /* topNearByItem();
                     getSellerAPi();
                     getAllCategoriesAPi();
                     nearBySeller();
                     mostVisitedSeller();
-                    newSeller();
+                    newSeller();*/
                 }
             }
         });
@@ -435,7 +439,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                             SharePrefs.getInstance(activity).putString(SharePrefs.DELIVERY, customerDataModel.getResultItem().getUserDeliveryDC().get(i).getDelivery());
                         }
 
-
                     }
                     if (customerDataModel.getResultItem().getIsRegistrationComplete()) {
                         activity.userNameTV.setText(customerDataModel.getResultItem().getFirstName());
@@ -451,14 +454,12 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                             activity.mobileNumberTV.setText("");
                         }
 
-
                     } else {
                         activity.userNameTV.setText(R.string.guest_user);
                         activity.mBinding.llSignIn.setVisibility(View.VISIBLE);
                         activity.mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
                         activity.mBinding.llLogout.setVisibility(View.GONE);
                         activity.mobileNumberTV.setText("");
-
 
                     }
                 }

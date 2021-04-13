@@ -104,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.llHowtoUse.setOnClickListener(this);
         mBinding.llChangeLanguage.setOnClickListener(this);
         mBinding.llRateThisApp.setOnClickListener(this);
+        mBinding.llPrivatePolcy.setOnClickListener(this);
+        mBinding.llAboutApp.setOnClickListener(this);
     }
 
 
@@ -192,7 +194,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setLocationTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(MainActivity.this, MapsExtendedActivity.class), 2);
+                Intent intent=new Intent(MainActivity.this, MapsExtendedActivity.class);
+                intent.putExtra("Lat", Double.parseDouble(SharePrefs.getStringSharedPreferences(MainActivity.this,SharePrefs.LAT)));
+                intent.putExtra("Lon", Double.parseDouble(SharePrefs.getStringSharedPreferences(MainActivity.this,SharePrefs.LON)));
+                startActivityForResult(intent,2);
             }
         });
 
@@ -306,6 +311,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.llChangeLanguage:
                 startActivity(new Intent(MainActivity.this, ChangeLanguageActivity.class));
+                mBinding.drawer.closeDrawers();
+                break;
+            case R.id.ll_private_polcy:
+                startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName","PrivacyPolicy"));
+                mBinding.drawer.closeDrawers();
+                break;
+            case R.id.ll_about_app:
+                startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName","AboutApp"));
                 mBinding.drawer.closeDrawers();
                 break;
         }

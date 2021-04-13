@@ -232,6 +232,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         mBinding.tvQtyMinus.setOnClickListener(this);
         mBinding.tvVarientButton.setOnClickListener(this);
         mBinding.tvShopName.setOnClickListener(this);
+
+
     }
 
     private void openBottomSheetDialog() {

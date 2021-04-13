@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 public class SharePrefs {
 
     public static String PREFERENCE = "Direct";
-
     public static final String IS_SHOW_INTRO = "IsShowIntro";
     public static final String BUYER_URL = "BuyerUrl";
     public static final String SELLER_URL = "SellerUrl";
@@ -44,6 +43,7 @@ public class SharePrefs {
     public static final String IS_CONTACTREAD ="IscontactRead";
     public static final String IS_SUPER_ADMIN ="IsSuperAdmin";
     public static final String ID ="id";
+    public static final String MALL_ID ="mall_id";
     public static final String USER_DC_ID ="_user_id";
     public static final String USER_DC_USER_ID ="user_dc_id";
     public static final String ENCRIPTED_ID ="encrited_id";

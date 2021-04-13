@@ -117,6 +117,10 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
     }
 
     private void initializeViews() {
+        if(getIntent()!=null){
+            latitude=getIntent().getDoubleExtra("Lat",0.0);
+            longitude=getIntent().getDoubleExtra("Lon",0.0);
+        }
         utils = new Utils(MapsExtendedActivity.this);
         dbHelper = MyApplication.getInstance().dbHelper;
         mapViewViewMode = ViewModelProviders.of(this).get(MapViewViewMode.class);
@@ -157,7 +161,15 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
             isGPS = isGPSEnable;
         });
 
-        mBinding.tvChangeMe.setOnClickListener(V -> startActivityForResult(new Intent(this, PlacesActivity.class), LAUNCH_PLACES_ACTIVITY));
+        mBinding.tvChangeMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(MapsExtendedActivity.this, PlacesActivity.class), LAUNCH_PLACES_ACTIVITY);
+
+
+            }
+        });
+
 
 
     }
@@ -492,9 +504,17 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
             }
 
             if (!selectedLocation) {
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(16f).build();
-                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            }
+                if(latitude==0.0 && longitude==0.0){
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(16f).build();
+                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                }
+                else{
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latitude, longitude)).zoom(16f).build();
+                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                }
+                }
+
             if (mGoogleApiClient.isConnected()) {
                 LocationServices.FusedLocationApi.removeLocationUpdates(
                         mGoogleApiClient, this);

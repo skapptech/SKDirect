@@ -40,8 +40,10 @@ public class UserLocationAdapter extends RecyclerView.Adapter<UserLocationAdapte
         holder.mBinding.imgVerified.setChecked(selectedPosition == position);
 
         if (selectedPosition == position) {
+            holder.mBinding.imgVerified.setVisibility(View.VISIBLE);
             holder.mBinding.imgVerified.setBackground(context.getResources().getDrawable(R.drawable.correct));
         } else {
+            holder.mBinding.imgVerified.setVisibility(View.GONE);
             //holder.mBinding.imgVerified.setBackground(context.getResources().getDrawable(R.drawable.ic_right));
         }
 
@@ -74,11 +76,9 @@ public class UserLocationAdapter extends RecyclerView.Adapter<UserLocationAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ItemUserLocationBinding mBinding;
-
         public ViewHolder(ItemUserLocationBinding Binding) {
             super(Binding.getRoot());
             this.mBinding = Binding;
-
             mBinding.LLAddress.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

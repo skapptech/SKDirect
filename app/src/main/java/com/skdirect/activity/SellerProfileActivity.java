@@ -52,6 +52,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     private SellerProductAdapter sellerShopListAdapter;
     private String searchSellerName;
     private DBHelper dbHelper;
+    String sellerImagePath;
 
 
     @Override
@@ -96,6 +97,9 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             case R.id.btShare:
                 Utils.showShareWhatsappDialog(this, SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/seller/" + sellerID, "");
                 break;
+            case R.id.iv_s_shop_image:
+                startActivity(new Intent(getApplicationContext(), SellerImageGalleryActivity.class).putExtra("ImageData",sellerImagePath));
+                break;
 
         }
     }
@@ -133,6 +137,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
         mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.seller_items));
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
+        mBinding.ivSShopImage.setOnClickListener(this);
         mBinding.toolbarTittle.notifictionCount.setOnClickListener(this);
         mBinding.btShare.setOnClickListener(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
@@ -188,6 +193,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             if (sellerDetailsModel.isSuccess()) {
                 if (sellerDetailsModel.getSellerInfoModel().getRating() > 0.0) {
                     Double deg = sellerDetailsModel.getSellerInfoModel().getRating();
+                     sellerImagePath =sellerDetailsModel.getSellerInfoModel().getImagePath();
                     float rating = deg.floatValue();
                     mBinding.ratingbarSeller.setRating(rating);
                 } else {
