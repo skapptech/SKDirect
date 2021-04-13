@@ -42,9 +42,11 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.btSavePassword.setOnClickListener(this);
 
+        mBinding.etNewPassword.setHint(dbHelper.getString(R.string.enter_new_password));
         mBinding.etConfirmPassword.setHint(dbHelper.getString(R.string.enter_confirm_password));
         mBinding.etOtp.setHint(dbHelper.getString(R.string.enter_otp));
         mBinding.btSavePassword.setText(dbHelper.getString(R.string.save));
+        mBinding.tvGetOtp.setText(dbHelper.getString(R.string.get_otp));
         mBinding.tvGetOtp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

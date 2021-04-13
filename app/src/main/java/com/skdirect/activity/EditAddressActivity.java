@@ -53,7 +53,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
 
         if (userLocationModel != null) {
 
-            mBinding.etFullName.setText(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME));
+            mBinding.etFullName.setText(userLocationModel.getAddressOne());
             mBinding.etStreetAddresh.setText(userLocationModel.getAddressThree());
             mBinding.etLandmark.setText(userLocationModel.getAddressTwo());
             mBinding.etPinCode.setText(userLocationModel.getPincode());
