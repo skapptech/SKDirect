@@ -100,7 +100,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     SharePrefs.getInstance(ProfileActivity.this).putInt(SharePrefs.PIN_CODE_master, customerDataModel.getResultItem().getPinCodeMasterId());
                     SharePrefs.getInstance(ProfileActivity.this).putBoolean(SharePrefs.IS_ACTIVE, customerDataModel.getResultItem().getIsActive());
                     SharePrefs.getInstance(ProfileActivity.this).putBoolean(SharePrefs.IS_DELETE, customerDataModel.getResultItem().getIsDelete());
-                    SharePrefs.getInstance(ProfileActivity.this).putString(SharePrefs.CITY_NAME, customerDataModel.getResultItem().getCity());
+                    SharePrefs.getInstance(ProfileActivity.this).putString(SharePrefs.CITYNAME, customerDataModel.getResultItem().getCity());
                     SharePrefs.setSharedPreference(ProfileActivity.this, SharePrefs.IS_REGISTRATIONCOMPLETE, customerDataModel.getResultItem().getIsRegistrationComplete());
                     SharePrefs.setStringSharedPreference(ProfileActivity.this, SharePrefs.LAT, String.valueOf(customerDataModel.getResultItem().getLatitiute()));
                     SharePrefs.setStringSharedPreference(ProfileActivity.this, SharePrefs.LON, String.valueOf(customerDataModel.getResultItem().getLongitude()));

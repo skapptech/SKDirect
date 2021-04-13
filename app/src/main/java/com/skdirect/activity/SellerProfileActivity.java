@@ -395,7 +395,8 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         });
 
         builder.setNegativeButton("No", (dialog, which) -> {
-
+            sellerProductModel.setQty(0);
+            dialog.dismiss();
         });
 
         AlertDialog dialog = builder.create();

@@ -427,7 +427,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     SharePrefs.getInstance(activity).putInt(SharePrefs.PIN_CODE_master, customerDataModel.getResultItem().getPinCodeMasterId());
                     SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_ACTIVE, customerDataModel.getResultItem().getIsActive());
                     SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_DELETE, customerDataModel.getResultItem().getIsDelete());
-                    SharePrefs.getInstance(activity).putString(SharePrefs.CITY_NAME, customerDataModel.getResultItem().getCity());
                     SharePrefs.setSharedPreference(activity, SharePrefs.IS_REGISTRATIONCOMPLETE, customerDataModel.getResultItem().getIsRegistrationComplete());
                     SharePrefs.setStringSharedPreference(activity, SharePrefs.LAT, String.valueOf(customerDataModel.getResultItem().getLatitiute()));
                     SharePrefs.setStringSharedPreference(activity, SharePrefs.LON, String.valueOf(customerDataModel.getResultItem().getLongitude()));
