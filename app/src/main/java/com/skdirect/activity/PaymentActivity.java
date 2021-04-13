@@ -262,10 +262,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             public void onChanged(DeliveryMainModel deliveryMainModel) {
                 Utils.hideProgressDialog();
                 if (deliveryMainModel.isSuccess())
-                    if (deliveryMainModel.getResultItem().size() == 1 && deliveryMainModel.getResultItem().get(0).getDelivery().equals("Self Pickup")) {
+                    if (deliveryMainModel.getResultItem().get(0).getDelivery().equals("Self Pickup")) {
                         mBinding.liAddressV.setVisibility(View.GONE);
                         isSelfPickup = true;
                     }
+
                 if (deliveryMainModel.getResultItem().size() > 0) {
                     for (int i = 0; i < deliveryMainModel.getResultItem().size(); i++) {
                         deliveryOption = deliveryMainModel.getResultItem().get(i).getId();
