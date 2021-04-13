@@ -2,7 +2,9 @@ package com.skdirect.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ImageListModel {
+import java.io.Serializable;
+
+public class ImageListModel implements Serializable {
 
     @SerializedName("IsActive")
     private boolean IsActive;

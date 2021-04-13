@@ -116,7 +116,7 @@
     <string name="please_enter_password">Please Enter Password</string>
     <string name="update_location">Update Location</string>
     <string name="your_location">Your location</string>
-    <string name="change">change</string>
+    <string name="change">Change</string>
     <string name="flat_no">flat_no</string>
     <string name="name">name</string>
     <string name="confirm_location">Confirm Location</string>
@@ -220,6 +220,9 @@
     <string name="no_address_found">No Address Found</string>
     <string name="cash_on_delivery">Cash on delivery</string>
     <string name="delivery_option">Delivery Option</string>
+    <string name="no_mall_availble">we dont serve for this pincode currently. Please change your location!</string>
     <string name="clear_all_done">All filters have been cleared</string>
     <string name="no_items_available">No items available</string>
+    <string name="webview_title_name_privacy">Privacy Policy</string>
+    <string name="webview_title_name_about_direct">About App</string>
 </resources>

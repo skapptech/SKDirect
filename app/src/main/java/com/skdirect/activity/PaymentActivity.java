@@ -23,6 +23,7 @@ import com.nabinbhandari.android.permissions.Permissions;
 import com.skdirect.R;
 import com.skdirect.adapter.DeliveryOptionAdapter;
 import com.skdirect.databinding.ActivityPaymentBinding;
+import com.skdirect.interfacee.DeliveryOptionInterface;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.DeliveryMainModel;
 import com.skdirect.model.DeliveryOptionModel;
@@ -37,7 +38,7 @@ import com.skdirect.viewmodel.PaymentViewMode;
 
 import java.util.ArrayList;
 
-public class PaymentActivity extends AppCompatActivity implements View.OnClickListener {
+public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, DeliveryOptionInterface {
     private ActivityPaymentBinding mBinding;
     private int itemSize;
     private PaymentViewMode paymentViewMode;
@@ -80,14 +81,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 startActivityForResult(new Intent(getApplicationContext(), OfferActivity.class), 9);
                 break;
             case R.id.btnPlaceOrder:
-                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                    if (userLocationId != 0 || isSelfPickup) {
-                        orderPlaceAlertDialog();
-                    } else {
-                        Utils.setToast(getApplicationContext(), MyApplication.getInstance().dbHelper.getString(R.string.please_select_address));
-                    }
+                if (userLocationId != 0 || isSelfPickup) {
+                    orderPlaceAlertDialog();
                 } else {
-                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    startActivityForResult(new Intent(getApplicationContext(),
+                            PrimaryAddressActivity.class).putExtra("UserLocationId", userLocationId), 2);
+                    //Utils.setToast(getApplicationContext(), MyApplication.getInstance().dbHelper.getString(R.string.please_select_address));
                 }
                 break;
             case R.id.btnAdd:
@@ -133,6 +132,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mBinding.tvSelectPromoTitle.setText(MyApplication.getInstance().dbHelper.getString(R.string.select_a_promo_code));
         mBinding.btnOffer.setText(MyApplication.getInstance().dbHelper.getString(R.string.view_offer));
         mBinding.tvPaymentTitle.setText(MyApplication.getInstance().dbHelper.getString(R.string.title_activity_payment));
+        mBinding.btnAdd.setText(MyApplication.getInstance().dbHelper.getString(R.string.change));
         mBinding.btnOffer.setOnClickListener(this);
         mBinding.btnRemove.setOnClickListener(this);
         mBinding.btnPlaceOrder.setOnClickListener(this);
@@ -181,11 +181,15 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         });
 
         AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
         dialog.show();
     }
 
     private void orderPlaceAPI() {
-        OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASH", deliveryOption, cartItemModel.getId(), userLocationId);
+        if (isSelfPickup){
+            userLocationId=0;
+        }
+        OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASH", deliveryOption, cartItemModel.getId(), userLocationId,SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
         paymentViewMode.getOrderPlaceVMRequest(orderPlaceRequestModel);
         paymentViewMode.getOrderPlaceVM().observe(this, response -> {
             Utils.hideProgressDialog();
@@ -213,7 +217,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     private void updateViews(boolean isApplied, OfferResponse.Coupon coupon) {
         if (isApplied) {
-            mBinding.rlApplyOffer.setVisibility(View.GONE);
+            //mBinding.rlApplyOffer.setVisibility(View.GONE);
             mBinding.liOffer.setVisibility(View.VISIBLE);
             mBinding.liCoupon.setVisibility(View.VISIBLE);
             mBinding.tvOffer.setText("Code " + coupon.getCouponCode() + " Applied");
@@ -222,7 +226,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mBinding.tvOfferTotal.setText("-₹ " + discount);
         } else {
             cartTotal = totalAmount;
-            mBinding.rlApplyOffer.setVisibility(View.VISIBLE);
+           // mBinding.rlApplyOffer.setVisibility(View.VISIBLE);
             mBinding.liOffer.setVisibility(View.GONE);
             mBinding.liCoupon.setVisibility(View.GONE);
         }
@@ -258,10 +262,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             public void onChanged(DeliveryMainModel deliveryMainModel) {
                 Utils.hideProgressDialog();
                 if (deliveryMainModel.isSuccess())
-                    if (deliveryMainModel.getResultItem().size() == 1 && deliveryMainModel.getResultItem().get(0).getDelivery().equals("Self Pickup")) {
+                    if (deliveryMainModel.getResultItem().get(0).getDelivery().equals("Self Pickup")) {
                         mBinding.liAddressV.setVisibility(View.GONE);
                         isSelfPickup = true;
                     }
+
                 if (deliveryMainModel.getResultItem().size() > 0) {
                     for (int i = 0; i < deliveryMainModel.getResultItem().size(); i++) {
                         deliveryOption = deliveryMainModel.getResultItem().get(i).getId();
@@ -269,7 +274,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     deliveryOptionList.addAll(deliveryMainModel.getResultItem());
 
                 }
-                deliveryOptionAdapter = new DeliveryOptionAdapter(getApplicationContext(), deliveryOptionList);
+                deliveryOptionAdapter = new DeliveryOptionAdapter(getApplicationContext(), deliveryOptionList, PaymentActivity.this);
                 mBinding.rvDeliveryOption.setAdapter(deliveryOptionAdapter);
             }
         });
@@ -317,5 +322,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
+    }
+
+    @Override
+    public void onOnClick(DeliveryOptionModel deliveryOptionModel, int position) {
+        deliveryOption = deliveryOptionModel.getId();
+        if (deliveryOptionModel.getDelivery().equals("Self Pickup")){
+            mBinding.liAddressV.setVisibility(View.GONE);
+            isSelfPickup = true;
+        }else {
+            mBinding.liAddressV.setVisibility(View.VISIBLE);
+            isSelfPickup = false;
+        }
     }
 }

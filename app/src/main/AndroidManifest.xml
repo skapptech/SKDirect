@@ -32,7 +32,9 @@
         android:usesCleartextTraffic="true"
         android:windowDisablePreview="true"
         android:windowSoftInputMode="adjustResize">
-        <activity android:name=".activity.WebviewActivity"></activity>
+        <activity android:name=".activity.WebviewActivity"
+            android:label=""
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
@@ -44,6 +46,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.UserLocationActvity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SellerImageGalleryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ShowImageActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.FilterActivity"

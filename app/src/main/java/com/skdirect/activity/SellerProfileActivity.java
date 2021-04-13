@@ -52,6 +52,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     private SellerProductAdapter sellerShopListAdapter;
     private String searchSellerName;
     private DBHelper dbHelper;
+    String sellerImagePath;
 
 
     @Override
@@ -96,6 +97,9 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             case R.id.btShare:
                 Utils.showShareWhatsappDialog(this, SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/seller/" + sellerID, "");
                 break;
+            case R.id.iv_s_shop_image:
+                startActivity(new Intent(getApplicationContext(), SellerImageGalleryActivity.class).putExtra("ImageData",sellerImagePath));
+                break;
 
         }
     }
@@ -133,6 +137,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
         mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.seller_items));
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
+        mBinding.ivSShopImage.setOnClickListener(this);
         mBinding.toolbarTittle.notifictionCount.setOnClickListener(this);
         mBinding.btShare.setOnClickListener(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
@@ -188,6 +193,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             if (sellerDetailsModel.isSuccess()) {
                 if (sellerDetailsModel.getSellerInfoModel().getRating() > 0.0) {
                     Double deg = sellerDetailsModel.getSellerInfoModel().getRating();
+                     sellerImagePath =sellerDetailsModel.getSellerInfoModel().getImagePath();
                     float rating = deg.floatValue();
                     mBinding.ratingbarSeller.setRating(rating);
                 } else {
@@ -285,7 +291,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 false, model.isStockRequired(), model.getStock(), model.getMeasurement(),
                 model.getUom(), model.getImagePath(), 0, model.getProductName(),
                 0, 0, false, 0, 0, 0,
-                model.getQty(), model.getCreatedBy(), null, model.getSellerId(), 0,
+                model.getQty(), model.getCreatedBy(), null, sellerID, 0,
                 0, model.getMargin(), model.getMrp(), model.getMOQ(), model.getId());
         MyApplication.getInstance().cartRepository.addToCart(cartModel);
         addItemInCart(model.getQty(), model);
@@ -306,8 +312,8 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(),
                 sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(),
                 0, sellerProductModel.getProductName(), 0, 0,
-                false, 0, 0, 0, sellerProductModel.getQty(), sellerProductModel.getCreatedBy(),
-                null, sellerProductModel.getSellerId(), 0, 0,
+                false, 0, 0, 0, sellerProductModel.getQty(),
+                sellerProductModel.getCreatedBy(), null, sellerID, 0, 0,
                 sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
         if (qty > 0) {
             MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
@@ -330,7 +336,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                         sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(),
                         0, sellerProductModel.getProductName(), 0, 0, false,
                         0, 0, 0, sellerProductModel.getQty(), sellerProductModel.getCreatedBy(),
-                        null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(),
+                        null, sellerID, 0, 0, sellerProductModel.getMargin(),
                         sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
                 MyApplication.getInstance().cartRepository.addToCart(cartModel);
                 SellerProfileActivity.this.plusButtonOnClick(sellerProductModel, tvSelectedQty);
@@ -342,14 +348,21 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             LLPlusMinus.setVisibility(View.VISIBLE);
             tvSelectedQty.setText("1");
             // add item  to cart
-            CartModel cartModel = new CartModel(null, 0, null, false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(), 0, 0, false, 0, 0, 0, 1, sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0, sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
+            CartModel cartModel = new CartModel(null, 0, null,
+                    false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(),
+                    sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(),
+                    0, sellerProductModel.getProductName(), 0, 0, false,
+                    0, 0, 0, 1, sellerProductModel.getCreatedBy(), null,
+                    sellerID, 0, 0, sellerProductModel.getMargin(),
+                    sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerID);
             MyApplication.getInstance().cartRepository.addToCart(cartModel);
             addItemInCart(1, sellerProductModel);
         }
     }
 
     private void addItemInCart(int QTY, SellerProductList sellerProductModel) {
-        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(), 0, 0);
+        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(),
+                0, 0);
         sellerProfileViewMode.getAddItemsInCardVMRequest(paginationModel);
         sellerProfileViewMode.getAddItemsInCardVM().observe(this, addCartItemModel -> {
             Utils.hideProgressDialog();
@@ -372,7 +385,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                     sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(),
                     sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(),
                     0, 0, false, 0, 0, 0, sellerProductModel.getQty(),
-                    sellerProductModel.getCreatedBy(), null, sellerProductModel.getSellerId(), 0, 0,
+                    sellerProductModel.getCreatedBy(), null, sellerID, 0, 0,
                     sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
             MyApplication.getInstance().cartRepository.addToCart(cartItemModel);
             sellerShopListAdapter.notifyDataSetChanged();
@@ -382,7 +395,8 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         });
 
         builder.setNegativeButton("No", (dialog, which) -> {
-
+            sellerProductModel.setQty(0);
+            dialog.dismiss();
         });
 
         AlertDialog dialog = builder.create();

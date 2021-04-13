@@ -63,8 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public TextView userNameTV, mobileNumberTV, setLocationTV;
     private MainActivityViewMode mainActivityViewMode;
     public DBHelper dbHelper;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,13 +77,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setupBadge();
         ///callRunTimePermissions();
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         setupBadge();
     }
-
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -93,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             new FirebaseLanguageFetch(getApplicationContext()).fetchLanguage();
         }
     }
-
-
     private void clickListener() {
         mBinding.llProfile.setOnClickListener(this);
         mBinding.llChnagePassword.setOnClickListener(this);
@@ -104,9 +98,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.llHowtoUse.setOnClickListener(this);
         mBinding.llChangeLanguage.setOnClickListener(this);
         mBinding.llRateThisApp.setOnClickListener(this);
+        mBinding.llPrivatePolcy.setOnClickListener(this);
+        mBinding.llAboutApp.setOnClickListener(this);
     }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -121,8 +115,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
-
-
     private void initView() {
         dbHelper = MyApplication.getInstance().dbHelper;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -223,11 +215,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.tvLogoutTitle.setText(dbHelper.getString(R.string.logout));
         mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
     }
-
     private void setlocationInHader() {
         setLocationTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.CITYNAME)+" "+SharePrefs.getInstance(this).getString(SharePrefs.PIN_CODE));
     }
-
     @Override
     public void onBackPressed() {
         if (mBinding.drawer.isDrawerOpen(GravityCompat.START)) {
@@ -254,14 +244,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
-
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.home_frame, fragment);
         //transaction.addToBackStack(null);
         transaction.commit();
     }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -309,6 +297,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.llChangeLanguage:
                 startActivity(new Intent(MainActivity.this, ChangeLanguageActivity.class));
+                mBinding.drawer.closeDrawers();
+                break;
+            case R.id.ll_private_polcy:
+                startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName","PrivacyPolicy"));
+                mBinding.drawer.closeDrawers();
+                break;
+            case R.id.ll_about_app:
+                startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName","AboutApp"));
                 mBinding.drawer.closeDrawers();
                 break;
         }
@@ -388,7 +384,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     callLocationAPI(gpsTracker.getLatitude(), gpsTracker.getLongitude());
                 }
             }
-
             @Override
             public void onDenied(Context context, ArrayList<String> deniedPermissions) {
                 super.onDenied(context, deniedPermissions);
