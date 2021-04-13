@@ -180,6 +180,7 @@ public class ProfilePrimaryAddressActivity extends AppCompatActivity implements 
                     public void onChanged(Boolean aBoolean) {
                         Utils.hideProgressDialog();
                         if (aBoolean){
+                            locationModelArrayList.clear();
                             userLocationAdapter.notifyDataSetChanged();
                             callUserLocation();
                         }
