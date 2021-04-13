@@ -224,6 +224,10 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
                             loading = true;
                         });
+                        for (CartModel itemModel : cartMainModel.getResultItem().getCart()) {
+                            itemModel.setCarId(cartMainModel.getResultItem().getId());
+                        }
+                        MyApplication.getInstance().cartRepository.addToCart(cartMainModel.getResultItem().getCart());
                     } else {
                         loading = false;
                     }
