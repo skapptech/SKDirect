@@ -48,6 +48,12 @@
             android:name=".activity.UserLocationActvity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.SellerImageGalleryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ShowImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.FilterActivity"
             android:screenOrientation="portrait" />
         <activity

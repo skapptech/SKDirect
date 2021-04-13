@@ -94,19 +94,33 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/tv_no_mall_availble"
+                    style="@style/font_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:padding="5dp"
+                    android:visibility="visible"
+                    android:text="@string/no_mall_availble"
+                    android:textColor="@color/seller_button_color"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:id="@+id/tv_near_item"
                     style="@style/font_normal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:padding="5dp"
+                    android:visibility="gone"
                     android:text="@string/near_by_item"
                     android:textColor="@color/seller_button_color"
                     android:textStyle="bold" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_near_by_item"
@@ -173,13 +187,15 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:padding="5dp"
+                    android:visibility="gone"
                     android:text="@string/near_by_seller"
                     android:textColor="@color/seller_button_color"
                     android:textStyle="bold" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_top_seller"
@@ -245,6 +261,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:padding="5dp"
+                    android:visibility="gone"
                     android:id="@+id/tvAllCat"
                     android:text="@string/all_categories"
                     android:textColor="@color/seller_button_color"
@@ -252,7 +269,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_all_cetegory"
@@ -317,6 +335,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
+                    android:visibility="gone"
                     android:layout_margin="10dp"
                     android:padding="5dp"
                     android:id="@+id/tvNearSeller2"
@@ -326,7 +345,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_near_by_seller"
@@ -391,6 +411,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:padding="5dp"
+                    android:visibility="gone"
                     android:id="@+id/tvMaxSeller"
                     android:text="@string/most_visted_seller"
                     android:textColor="@color/seller_button_color"
@@ -398,7 +419,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_most_visited_seller"
@@ -465,6 +487,7 @@
                     android:layout_margin="10dp"
                     android:padding="5dp"
                     android:text="@string/new_seller"
+                    android:visibility="gone"
                     android:id="@+id/tvNewSellerTitle"
                     android:textColor="@color/seller_button_color"
                     android:textStyle="bold" />
@@ -472,6 +495,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:layout_marginBottom="5dp">
 
                     <androidx.recyclerview.widget.RecyclerView

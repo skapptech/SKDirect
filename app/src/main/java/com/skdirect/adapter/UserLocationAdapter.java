@@ -76,11 +76,9 @@ public class UserLocationAdapter extends RecyclerView.Adapter<UserLocationAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ItemUserLocationBinding mBinding;
-
         public ViewHolder(ItemUserLocationBinding Binding) {
             super(Binding.getRoot());
             this.mBinding = Binding;
-
             mBinding.LLAddress.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

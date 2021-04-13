@@ -61,9 +61,6 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
 
         }
 
-
-
-
         if (model.getImagePath()!=null && !model.getImagePath().contains("http")) {
             Picasso.get().load(BuildConfig.apiEndpoint+model.getImagePath()).error(R.drawable.ic_top_seller).into(holder.mBinding.ivItemImage);
         }else {
