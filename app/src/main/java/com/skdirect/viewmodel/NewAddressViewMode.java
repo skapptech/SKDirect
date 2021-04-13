@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.AllCategoriesModel;
 import com.skdirect.model.PaginationModel;
+import com.skdirect.model.UpdateEditeAddreshMainModel;
 import com.skdirect.utils.Utils;
 
 import org.json.JSONArray;
@@ -25,7 +26,7 @@ public class NewAddressViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
     private MutableLiveData<JsonObject> mapViewModel;
     private MutableLiveData<Boolean> addLocationVM;
-    private MutableLiveData<Boolean> addUpdateLocationVM;
+    private MutableLiveData<UpdateEditeAddreshMainModel> addUpdateLocationVM;
 
     public LiveData<JsonObject> getMapViewModel() {
         mapViewModel=null;
@@ -39,7 +40,7 @@ public class NewAddressViewMode extends ViewModel {
         return addLocationVM;
     }
 
-    public LiveData<Boolean> getUpdateLocationVM() {
+    public LiveData<UpdateEditeAddreshMainModel> getUpdateLocationVM() {
         addUpdateLocationVM=null;
         addUpdateLocationVM = new MutableLiveData<>();
         return addUpdateLocationVM;
@@ -85,10 +86,10 @@ public class NewAddressViewMode extends ViewModel {
         return addLocationVM;
     }
 
-    public MutableLiveData<Boolean> getupdateLocationVMRequest(JsonArray jsonArray) {
-        RestClient.getInstance().getService().UpdateBuyerLocation(jsonArray).enqueue(new Callback<Boolean>() {
+    public MutableLiveData<UpdateEditeAddreshMainModel> getupdateLocationVMRequest(JsonObject jsonArray) {
+        RestClient.getInstance().getService().UpdateBuyerLocation(jsonArray).enqueue(new Callback<UpdateEditeAddreshMainModel>() {
             @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+            public void onResponse(Call<UpdateEditeAddreshMainModel> call, Response<UpdateEditeAddreshMainModel> response) {
                 if (response.isSuccessful() && response.body()!=null ) {
                     Log.e(TAG, "request response="+response.body());
                     addUpdateLocationVM.setValue(response.body());
@@ -96,7 +97,7 @@ public class NewAddressViewMode extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
+            public void onFailure(Call<UpdateEditeAddreshMainModel> call, Throwable t) {
                 Log.e(TAG, "onFailure Responce" + call.toString());
                 Utils.hideProgressDialog();
             }

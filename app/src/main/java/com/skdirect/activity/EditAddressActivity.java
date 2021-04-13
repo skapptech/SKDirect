@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityEditAddreshBinding;
+import com.skdirect.model.UpdateEditeAddreshMainModel;
 import com.skdirect.model.UserLocationModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.GPSTracker;
@@ -55,8 +56,8 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
             mBinding.etFullName.setText(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME));
             mBinding.etStreetAddresh.setText(userLocationModel.getAddressThree());
             mBinding.etLandmark.setText(userLocationModel.getAddressTwo());
-            mBinding.etPinCity.setText(userLocationModel.getPincode());
-            mBinding.etPinCode.setText(userLocationModel.getCity());
+            mBinding.etPinCode.setText(userLocationModel.getPincode());
+            mBinding.etPinCity.setText(userLocationModel.getCity());
             mBinding.etPinState.setText(userLocationModel.getState());
         }
 
@@ -119,47 +120,41 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
 
     private void setLocationAPI() {
         newAddressViewMode.getupdateLocationVMRequest(setUserValue());
-        newAddressViewMode.getUpdateLocationVM().observe(this, new Observer<Boolean>() {
+        newAddressViewMode.getUpdateLocationVM().observe(this, new Observer<UpdateEditeAddreshMainModel>() {
             @Override
-            public void onChanged(Boolean status) {
+            public void onChanged(UpdateEditeAddreshMainModel status) {
                 Utils.hideProgressDialog();
-                if (status) {
+                if (status.getResultItem()) {
                     onBackPressed();
+                    Utils.setToast(getApplicationContext(),status.getSuccessMessage());
                 }
             }
-
         });
-
     }
 
 
-    private JsonArray setUserValue() {
+    private JsonObject setUserValue() {
         gpsTracker = new GPSTracker(getApplicationContext());
         JsonObject jsonObject = new JsonObject();
         try {
             jsonObject.addProperty("AddressOne", mBinding.etFullName.getText().toString());
             jsonObject.addProperty("AddressThree", mBinding.etStreetAddresh.getText().toString());
             jsonObject.addProperty("AddressTwo", mBinding.etLandmark.getText().toString());
-            jsonObject.addProperty("Id", "");
-            jsonObject.addProperty("IsActive", SharePrefs.getInstance(EditAddressActivity.this).getBoolean(SharePrefs.IS_ACTIVE));
-            jsonObject.addProperty("IsDelete", SharePrefs.getInstance(EditAddressActivity.this).getBoolean(SharePrefs.IS_DELETE));
-            jsonObject.addProperty("IsPrimaryAddress", userLocationModel.getId());
+            jsonObject.addProperty("Id", userLocationModel.getId());
             jsonObject.addProperty("Latitiute", gpsTracker.getLatitude());
             jsonObject.addProperty("Longitude", gpsTracker.getLongitude());
-            jsonObject.addProperty("LocationType", "");
             jsonObject.addProperty("Pincode", mBinding.etPinCode.getText().toString());
-            jsonObject.addProperty("UserDetailId", "");
             jsonObject.addProperty("City", mBinding.etPinCity.getText().toString());
             jsonObject.addProperty("State", mBinding.etPinState.getText().toString());
 
-        } catch (Exception e) {
 
+        } catch (Exception e) {
             e.printStackTrace();
         }
         JsonArray jsonArray = new JsonArray();
         jsonArray.add(jsonObject);
 
-        return jsonArray;
+        return jsonObject;
     }
 
     private void callLocationAPI() {
