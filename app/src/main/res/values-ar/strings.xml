@@ -222,4 +222,6 @@
     <string name="delivery_option">Delivery Option</string>
     <string name="clear_all_done">All filters have been cleared</string>
     <string name="no_items_available">No items available</string>
+    <string name="webview_title_name_privacy">Privacy Policy</string>
+    <string name="webview_title_name_about_direct">About App</string>
 </resources>
