@@ -81,16 +81,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 startActivityForResult(new Intent(getApplicationContext(), OfferActivity.class), 9);
                 break;
             case R.id.btnPlaceOrder:
-                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                    if (userLocationId != 0 || isSelfPickup) {
-                        orderPlaceAlertDialog();
-                    } else {
-                        startActivityForResult(new Intent(getApplicationContext(),
-                                PrimaryAddressActivity.class).putExtra("UserLocationId", userLocationId), 2);
-                        //Utils.setToast(getApplicationContext(), MyApplication.getInstance().dbHelper.getString(R.string.please_select_address));
-                    }
+                if (userLocationId != 0 || isSelfPickup) {
+                    orderPlaceAlertDialog();
                 } else {
-                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    startActivityForResult(new Intent(getApplicationContext(),
+                            PrimaryAddressActivity.class).putExtra("UserLocationId", userLocationId), 2);
+                    //Utils.setToast(getApplicationContext(), MyApplication.getInstance().dbHelper.getString(R.string.please_select_address));
                 }
                 break;
             case R.id.btnAdd:
@@ -189,7 +185,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void orderPlaceAPI() {
-        OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASH", deliveryOption, cartItemModel.getId(), userLocationId);
+        OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASH", deliveryOption, cartItemModel.getId(), userLocationId,SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
         paymentViewMode.getOrderPlaceVMRequest(orderPlaceRequestModel);
         paymentViewMode.getOrderPlaceVM().observe(this, response -> {
             Utils.hideProgressDialog();

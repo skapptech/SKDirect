@@ -27,6 +27,7 @@ import com.skdirect.model.CartModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
+import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.CartItemViewMode;
 
@@ -50,8 +51,6 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     private double totalAmount;
     private DBHelper dbHelper;
     private CommonClassForAPI commonClassForAPI;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,10 +100,15 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 onBackPressed();
                 break;
             case R.id.btnCheckout:
-                startActivity(new Intent(getApplicationContext(), PaymentActivity.class)
-                        .putExtra("cartItemSize", cartItemDataModel)
-                        .putExtra("totalAmount", totalAmount));
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                    startActivity(new Intent(getApplicationContext(), PaymentActivity.class)
+                            .putExtra("cartItemSize", cartItemDataModel)
+                            .putExtra("totalAmount", totalAmount));
+                } else {
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                }
                 break;
+
             case R.id.tv_keep_shopping:
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();

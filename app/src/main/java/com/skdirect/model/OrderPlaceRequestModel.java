@@ -13,10 +13,14 @@ public class OrderPlaceRequestModel {
     @SerializedName("UserLocationId")
     private int UserLocationId;
 
-    public OrderPlaceRequestModel(String paymentMode, int deliveryOption, String mongoId, int userLocationId) {
+    @SerializedName("MallId")
+    private String MallId;
+
+    public OrderPlaceRequestModel(String paymentMode, int deliveryOption, String mongoId, int userLocationId,String mallId) {
         PaymentMode = paymentMode;
         DeliveryOption = deliveryOption;
         MongoId = mongoId;
         UserLocationId = userLocationId;
+        MallId= mallId;
     }
 }
