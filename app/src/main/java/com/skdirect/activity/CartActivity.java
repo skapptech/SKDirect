@@ -303,7 +303,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onComplete() {
-
+                Utils.hideProgressDialog();
             }
         }, cartModel.getId());
     }
