@@ -58,10 +58,10 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
     private int totalItemCount = 0;
     private boolean loading = true;
     public DBHelper dbHelper;
-    public int categoryId = 14;
+    public int categoryId = 0;
     private final String brand = "";
     private ArrayList<FilterCategoryDetails> categoryList;
-    private final ArrayList<String> selectedBrandList = new ArrayList<>();
+    private ArrayList<String> selectedBrandList = new ArrayList<>();
     private final ArrayList<Integer> selectedPriceList = new ArrayList<>();
     private String discount = "";
     boolean sideTabBrandClick = true;
@@ -75,6 +75,11 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_filter);
         dbHelper = MyApplication.getInstance().dbHelper;
+
+        if (getIntent().getExtras() != null) {
+            categoryId = getIntent().getIntExtra("categoryId", 0);
+            selectedBrandList = getIntent().getStringArrayListExtra("brandList");
+        }
 
         initView();
         setString();
@@ -248,6 +253,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                         if (detailsList.size() > 0) {
                             viewVisibility(2);
                             filterCateDataList.addAll(detailsList);
+                            setSelectedBrands();
                             filterBrandAdapter.setData(filterCateDataList);
                             // filterCategoryAdapter.notifyDataSetChanged();
                             loading = true;
@@ -264,7 +270,7 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                 }
 
                 @Override
-                public void onError(Throwable e) {
+                public void onError(@NotNull Throwable e) {
                     e.printStackTrace();
                     viewVisibility(4);
                 }
@@ -421,6 +427,17 @@ public class FilterActivity extends AppCompatActivity implements FilterTypeInter
                 categoryId = categoryList.get(i).getValue();
                 filterCategoryAdapter.lastSelectedPosition = i;
                 break;
+            }
+        }
+    }
+
+    private void setSelectedBrands() {
+        for (String brand : selectedBrandList) {
+            for (int i = 0; i < filterCateDataList.size(); i++) {
+                if (brand.equals(filterCateDataList.get(i).getLabel())) {
+                    filterCateDataList.get(i).setSelected(true);
+                    break;
+                }
             }
         }
     }

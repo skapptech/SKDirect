@@ -49,6 +49,10 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
     public String searchString;
     public boolean paginationFlag = false;
     FilterPostModel filterPostModel;
+    // filer variable
+    private int categoryId = 0;
+    private ArrayList<String> brandList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,12 +158,11 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
                 return false;
             }
         });
-        mBinding.llFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), FilterActivity.class);
-                startActivityForResult(intent, REQUEST);
-            }
+        mBinding.llFilter.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), FilterActivity.class);
+            intent.putExtra("categoryId", categoryId);
+            intent.putStringArrayListExtra("brandList", brandList);
+            startActivityForResult(intent, REQUEST);
         });
     }
 
@@ -168,20 +171,19 @@ public class NearByItemProductListActivity extends AppCompatActivity implements 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST) {
             if (data != null && resultCode == RESULT_OK) {
-                int category = data.getExtras().getInt(Constant.Category);
+                categoryId = data.getExtras().getInt(Constant.Category);
                 ArrayList<Integer> price = data.getExtras().getIntegerArrayList(Constant.Price);
-                ArrayList<String> brand = data.getExtras().getStringArrayList(Constant.Brands);
+                brandList = data.getExtras().getStringArrayList(Constant.Brands);
                 String discount = data.getExtras().getString(Constant.Discount);
-                Log.e("ProductList", "Cate>>" + category + "\n Price Min>>" + price.toString()
-                        + "\n Brand>>" + brand.toString() + "\n Discount>>" + discount);
+                Log.e("ProductList", "Cate>>" + categoryId + "\n Price Min>>" + price.toString()
+                        + "\n Brand>>" + brandList.toString() + "\n Discount>>" + discount);
                 nearProductList.clear();
                 paginationFlag = true;
-                filterPostModel = new FilterPostModel(category, false, skipCount, takeCount, 0, 0, brand, price, discount);
+                filterPostModel = new FilterPostModel(categoryId, false, skipCount, takeCount, 0, 0, brandList, price, discount);
                 callFilterAPI();
             } else {
                 System.out.println("Canceld by user");
             }
-
         }
     }
 
