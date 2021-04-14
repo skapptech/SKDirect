@@ -147,7 +147,6 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN_PASSWORD, model.getPwd());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
                     commonClassForAPI.getUpdateToken(updatecallToken, fcmToken);
                     if(!TextUtils.isNullOrEmpty(MyApplication.getInstance().cartRepository.getCartId())){

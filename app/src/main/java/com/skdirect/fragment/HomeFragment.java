@@ -338,7 +338,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mBinding.rvTopSeller.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         activity.appBarLayout.setVisibility(View.VISIBLE);
 
-
         viewAllButtonClick();
 
         mBinding.etSearchSeller.setOnEditorActionListener(new TextView.OnEditorActionListener() {

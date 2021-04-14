@@ -51,8 +51,8 @@ public class CommonClassForAPI {
 
     }
 
-    public void getToken(final DisposableObserver observer, String password, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp, boolean isDevice, String deviceID, double lat, double log, String pincode, String type) {
-        RestClient.getInstance().getService().getToken(password, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp, isDevice, deviceID, lat, log, pincode,
+    public void getToken(final DisposableObserver observer, String grant_type, String mobileNumber, String passwordString, boolean ISOTP, boolean ISBUYER, String buyerapp, boolean isDevice, String deviceID, double lat, double log, String pincode, String type) {
+        RestClient.getInstance().getService().getToken(grant_type, mobileNumber, passwordString, ISOTP, ISBUYER, buyerapp, isDevice, deviceID, lat, log, pincode,
                 MyApplication.getInstance().dbHelper.getString(R.string.language_code), type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -314,7 +314,7 @@ public class CommonClassForAPI {
                 });
     }
 
-    public void getUserDetail(DisposableObserver<UserDetailResponseModel> observer) {
+  /*  public void getUserDetail(DisposableObserver<UserDetailResponseModel> observer) {
         RestClient.getInstance().getService().getUserDetail()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -338,7 +338,7 @@ public class CommonClassForAPI {
                         observer.onComplete();
                     }
                 });
-    }
+    }*/
 
 
     public void deleteCartItems(DisposableObserver<CartMainModel> observer, int productId) {

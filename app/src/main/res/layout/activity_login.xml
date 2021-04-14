@@ -116,6 +116,7 @@
                 android:background="@null"
                 android:drawablePadding="10dp"
                 android:paddingEnd="10dp"
+                android:visibility="gone"
                 android:text="@string/login_using_password"
                 android:textAllCaps="false"
                 android:textColor="@color/teal_200"

@@ -30,37 +30,11 @@ public class MainActivityViewMode extends ViewModel {
         CardItemVM = new MutableLiveData<>();
         return CardItemVM;
     }
-    public LiveData<UserDetailResponseModel> GetUserDetail() {
-        if (userDetailViewModel == null) {
-            userDetailViewModel = new MutableLiveData<>();
-        }
-        userDetailViewModel = getUserDetailRequest();
-        return userDetailViewModel;
-    }
 
     public LiveData<JsonObject> getMapViewModel() {
         mapViewModel = null;
         mapViewModel = new MutableLiveData<>();
         return mapViewModel;
-    }
-    public MutableLiveData<UserDetailResponseModel> getUserDetailRequest() {
-        RestClient.getInstance().getService().GetUserDetail().enqueue(new Callback<UserDetailResponseModel>() {
-            @Override
-            public void onResponse(Call<UserDetailResponseModel> call, Response<UserDetailResponseModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.e(TAG, "request response=" + response.body());
-                    userDetailViewModel.setValue(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserDetailResponseModel> call, Throwable t) {
-                Log.e(TAG, "onFailure Responce" + call.toString());
-                Utils.hideProgressDialog();
-            }
-        });
-
-        return userDetailViewModel;
     }
 
     public MutableLiveData<CartMainModel> getCartItemsRequest() {
