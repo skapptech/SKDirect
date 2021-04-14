@@ -77,7 +77,7 @@ public interface APIServices {
     @POST("/api/NativeBuyer/Login/verifyOtp")
     Observable<OtpResponceModel> getVerfiyOtp(@Body OtpVerificationModel OtpVerificationModel);
 
-    @POST("/api/NativeBuyFer/Login/GenerateOtp")
+    @POST("/api/NativeBuyer/Login/GenerateOtp")
     Call<GenerateOtpResponseModel> GenerateOtp(@Body GenerateOtpModel generateOtpModel);
 
     @FormUrlEncoded
