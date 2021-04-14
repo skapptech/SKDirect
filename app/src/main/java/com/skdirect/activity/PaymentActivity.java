@@ -199,7 +199,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 MyApplication.getInstance().cartRepository.truncateCart();
                 orderPlaceDialog();
             } else {
-                Toast.makeText(PaymentActivity.this, response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), response.getErrorMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
