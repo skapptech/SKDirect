@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setVarible() {
+        setLocationTV.setText(SharePrefs.getInstance(MainActivity.this).getString(SharePrefs.CITYNAME)+" "+SharePrefs.getInstance(MainActivity.this).getString(SharePrefs.PIN_CODE));
         if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)) {
             userNameTV.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.FIRST_NAME));
             if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {

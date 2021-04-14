@@ -182,8 +182,8 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN, model.getAccess_token());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.USER_NAME, model.getUserName());
                     SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE, model.getIsRegistrationComplete());
-                    SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LAT, model.getLatitiute());
-                    SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LON, model.getLongitude());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LAT, String.valueOf(model.getLatitiute()));
+                    SharePrefs.setStringSharedPreference(getApplicationContext(),SharePrefs.LON, String.valueOf(model.getLongitude()));
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
