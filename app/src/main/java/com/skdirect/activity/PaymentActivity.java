@@ -40,7 +40,7 @@ import java.util.ArrayList;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, DeliveryOptionInterface {
     private ActivityPaymentBinding mBinding;
-    private int itemSize;
+
     private PaymentViewMode paymentViewMode;
     private CartItemModel cartItemModel;
     private final ArrayList<DeliveryOptionModel> deliveryOptionList = new ArrayList<>();
@@ -147,7 +147,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         Log.e("Total Amount ", "##### " + cartItemModel.getTotalAmount());
 
-        mBinding.tvItemPrice.setText("Price Details ( " + (itemSize = cartItemModel.getCart().size()) + " items)");
+        mBinding.tvItemPrice.setText("Price Details ( " + cartItemModel.getCart().size() + " items)");
         mBinding.tvOrderValue.setText("₹ " + cartTotal);
         mBinding.tvTotalAmount.setText("₹ " + totalAmount);
         mBinding.tvTotal.setText("₹ " + totalAmount);
@@ -273,13 +273,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         deliveryOption = deliveryMainModel.getResultItem().get(i).getId();
                     }
                     deliveryOptionList.addAll(deliveryMainModel.getResultItem());
-
                 }
                 deliveryOptionAdapter = new DeliveryOptionAdapter(getApplicationContext(), deliveryOptionList, PaymentActivity.this);
                 mBinding.rvDeliveryOption.setAdapter(deliveryOptionAdapter);
             }
         });
-
     }
 
     private void checkOutItemApi() {
