@@ -195,6 +195,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         paymentViewMode.getOrderPlaceVM().observe(this, response -> {
             Utils.hideProgressDialog();
             if (response.isSuccess()) {
+                // clear cart
+                MyApplication.getInstance().cartRepository.truncateCart();
                 orderPlaceDialog();
             } else {
                 Toast.makeText(PaymentActivity.this, response.getErrorMessage(), Toast.LENGTH_SHORT).show();
@@ -212,8 +214,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     finish();
                 });
         dialog.show();
-        // clear cart
-        MyApplication.getInstance().cartRepository.truncateCart();
     }
 
     private void updateViews(boolean isApplied, OfferResponse.Coupon coupon) {
