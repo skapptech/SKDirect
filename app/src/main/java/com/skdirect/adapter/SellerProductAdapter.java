@@ -46,7 +46,6 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
         SellerProductList model = sellerProductModels.get(position);
         holder.mBinding.tvSallerName.setText(model.getProductName());
         holder.mBinding.tvMrp.setText("₹ " + model.getMrp());
-        holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         holder.mBinding.tvSellingPrice.setText("₹ " + model.getSellingPrice());
         holder.mBinding.tvQuantity.setText(MyApplication.getInstance().dbHelper.getString(R.string.qty)+" " + model.getMeasurement() + model.getUom());
 
