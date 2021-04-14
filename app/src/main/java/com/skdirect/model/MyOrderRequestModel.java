@@ -14,11 +14,11 @@ public class MyOrderRequestModel {
     @SerializedName("Skip")
     private int Skip;
     @SerializedName("Status")
-    private int Status;
+    private String Status;
     @SerializedName("Id")
     private int Id;
 
-    public MyOrderRequestModel(String filter, int sellerId, int take, int skip, int status, int id) {
+    public MyOrderRequestModel(String filter, int sellerId, int take, int skip, String status, int id) {
         Filter = filter;
         SellerId = sellerId;
         Take = take;

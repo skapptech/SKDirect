@@ -47,7 +47,6 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     private FragmentAllOrderBinding mBinding;
     private MyOrderViewMode myOrderViewMode;
     private final ArrayList<MyOrderModel> orderModelArrayList = new ArrayList<>();
-    private int type;
     private int skipCount = 0;
     private int takeCount = 10;
     private int pastVisiblesItems = 0;
@@ -58,8 +57,9 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     private MyOrderAdapter myOrderAdapter;
     boolean handled = false;
     public DBHelper dbHelper;
-    public AllOrderFragment(int type) {
-        this.type = type;
+    private String statusId;
+    public AllOrderFragment(String id) {
+        this.statusId = id;
         handled = false;
     }
 
@@ -187,7 +187,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void myOrderAPI() {
-        MyOrderRequestModel myOrderRequestModel = new MyOrderRequestModel("",0,takeCount,skipCount,type, orderId);
+        MyOrderRequestModel myOrderRequestModel = new MyOrderRequestModel("",0,takeCount,skipCount,statusId, orderId);
         myOrderViewMode.getCategoriesViewModelRequest(myOrderRequestModel);
         myOrderViewMode.getCategoriesViewModel().observe(this, new Observer<OrderModel>() {
             @Override
