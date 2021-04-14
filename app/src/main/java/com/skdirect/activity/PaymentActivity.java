@@ -40,7 +40,7 @@ import java.util.ArrayList;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, DeliveryOptionInterface {
     private ActivityPaymentBinding mBinding;
-    private int itemSize;
+
     private PaymentViewMode paymentViewMode;
     private CartItemModel cartItemModel;
     private final ArrayList<DeliveryOptionModel> deliveryOptionList = new ArrayList<>();
@@ -147,7 +147,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         Log.e("Total Amount ", "##### " + cartItemModel.getTotalAmount());
 
-        mBinding.tvItemPrice.setText("Price Details ( " + (itemSize = cartItemModel.getCart().size()) + " items)");
+        mBinding.tvItemPrice.setText("Price Details ( " + cartItemModel.getCart().size() + " items)");
         mBinding.tvOrderValue.setText("₹ " + cartTotal);
         mBinding.tvTotalAmount.setText("₹ " + totalAmount);
         mBinding.tvTotal.setText("₹ " + totalAmount);
@@ -262,24 +262,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onChanged(DeliveryMainModel deliveryMainModel) {
                 Utils.hideProgressDialog();
-                if (deliveryMainModel.isSuccess())
+                if (deliveryMainModel.isSuccess()) {
                     if (deliveryMainModel.getResultItem().get(0).getDelivery().equals("Self Pickup")) {
+                        deliveryOption = deliveryMainModel.getResultItem().get(0).getId();
                         mBinding.liAddressV.setVisibility(View.GONE);
                         isSelfPickup = true;
                     }
-
-                if (deliveryMainModel.getResultItem().size() > 0) {
-                    for (int i = 0; i < deliveryMainModel.getResultItem().size(); i++) {
-                        deliveryOption = deliveryMainModel.getResultItem().get(i).getId();
-                    }
                     deliveryOptionList.addAll(deliveryMainModel.getResultItem());
-
+                    deliveryOptionAdapter = new DeliveryOptionAdapter(getApplicationContext(), deliveryOptionList, PaymentActivity.this);
+                    mBinding.rvDeliveryOption.setAdapter(deliveryOptionAdapter);
                 }
-                deliveryOptionAdapter = new DeliveryOptionAdapter(getApplicationContext(), deliveryOptionList, PaymentActivity.this);
-                mBinding.rvDeliveryOption.setAdapter(deliveryOptionAdapter);
             }
         });
-
     }
 
     private void checkOutItemApi() {
