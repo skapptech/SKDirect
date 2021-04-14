@@ -75,7 +75,10 @@ public class ProfileUserLocationAdapter extends RecyclerView.Adapter<ProfileUser
     private void PopupMenuView(ViewHolder holder, UserLocationModel userLocationModel, int position) {
         PopupMenu popup = new PopupMenu(context,holder.mBinding.ivOpcationValue);
         popup.inflate(R.menu.options_menu);
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+        if (selectedPosition==position){
+            popup.getMenu().findItem(R.id.menu_delet).setVisible(false);
+        }
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
