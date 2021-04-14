@@ -50,8 +50,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private int deliveryOption, userLocationId;
     private double cartTotal, totalAmount, discount = 0;
     private boolean isSelfPickup = false;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +62,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         initView();
         callUserLocation();
     }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         onBackPressed();
@@ -119,8 +116,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             }
         }
     }
-
-
+    
     private void initView() {
         mBinding.tvOrderValueH.setText(MyApplication.getInstance().dbHelper.getString(R.string.total_order_value));
         mBinding.tvAmountH.setText(MyApplication.getInstance().dbHelper.getString(R.string.total_amount));
