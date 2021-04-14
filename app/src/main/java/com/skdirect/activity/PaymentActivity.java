@@ -48,7 +48,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     private OfferResponse.Coupon coupon;
     private int deliveryOption;
-    private Integer userLocationId;
+    private Integer userLocationId = null;
     private double cartTotal, totalAmount, discount = 0;
     private boolean isSelfPickup = false;
 
@@ -82,7 +82,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 startActivityForResult(new Intent(getApplicationContext(), OfferActivity.class), 9);
                 break;
             case R.id.btnPlaceOrder:
-                if (userLocationId != 0 || isSelfPickup) {
+                if ((userLocationId != null && userLocationId != 0) || isSelfPickup) {
                     orderPlaceAlertDialog();
                 } else {
                     startActivityForResult(new Intent(getApplicationContext(),
@@ -195,9 +195,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         paymentViewMode.getOrderPlaceVM().observe(this, response -> {
             Utils.hideProgressDialog();
             if (response.isSuccess()) {
+                // clear cart
+                MyApplication.getInstance().cartRepository.truncateCart();
                 orderPlaceDialog();
             } else {
-                Toast.makeText(PaymentActivity.this, response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), response.getErrorMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -212,8 +214,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     finish();
                 });
         dialog.show();
-        // clear cart
-        MyApplication.getInstance().cartRepository.truncateCart();
     }
 
     private void updateViews(boolean isApplied, OfferResponse.Coupon coupon) {
