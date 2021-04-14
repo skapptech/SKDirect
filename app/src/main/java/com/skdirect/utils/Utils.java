@@ -24,6 +24,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
+import com.skdirect.model.TokenModel;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -311,5 +315,45 @@ public class Utils {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static void getTokenData(Context activity, TokenModel model){
+        SharePrefs.getInstance(activity).putString(SharePrefs.TOKEN, model.getAccess_token());
+        SharePrefs.getInstance(activity).putString(SharePrefs.USER_NAME, model.getUserName());
+        SharePrefs.setSharedPreference(activity, SharePrefs.IS_REGISTRATIONCOMPLETE, model.getIsRegistrationComplete());
+        SharePrefs.setStringSharedPreference(activity,SharePrefs.LAT, String.valueOf(model.getLatitiute()));
+        SharePrefs.setStringSharedPreference(activity,SharePrefs.LON, String.valueOf(model.getLongitude()));
+        SharePrefs.getInstance(activity).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
+        SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
+        SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
+        SharePrefs.getInstance(activity).putString(SharePrefs.ASP_NET_USER_ID, model.getAspNetuserId());
+        try {
+            JSONObject jsonObject = new JSONObject(model.getUserDetail());
+            SharePrefs.getInstance(activity).putString(SharePrefs.FIRST_NAME, jsonObject.getString("FirstName"));
+            SharePrefs.getInstance(activity).putInt(SharePrefs.ID, jsonObject.getInt("Id"));
+            SharePrefs.getInstance(activity).putString(SharePrefs.MOBILE_NUMBER, jsonObject.getString("MobileNo"));
+            SharePrefs.getInstance(activity).putString(SharePrefs.EMAIL_ID, jsonObject.getString("Email"));
+            SharePrefs.getInstance(activity).putString(SharePrefs.STATE, jsonObject.getString("State"));
+            SharePrefs.getInstance(activity).putString(SharePrefs.CITYNAME, jsonObject.getString("City"));
+            SharePrefs.getInstance(activity).putString(SharePrefs.PIN_CODE, jsonObject.getString("Pincode"));
+            SharePrefs.getInstance(activity).putInt(SharePrefs.PIN_CODE_master, jsonObject.getInt("PinCodeMasterId"));
+            SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_ACTIVE, jsonObject.getBoolean("IsActive"));
+            SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_DELETE, jsonObject.getBoolean("IsDelete"));
+            JSONArray jsonArray = jsonObject.getJSONArray("UserDeliveryDC");
+            if (jsonArray != null && jsonArray.length() > 0) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    SharePrefs.getInstance(activity).putBoolean(SharePrefs.USER_IS_DELETE, object.getBoolean("IsDelete"));
+                    SharePrefs.getInstance(activity).putBoolean(SharePrefs.USER_IS_ACTIVE, object.getBoolean("IsActive"));
+                    SharePrefs.getInstance(activity).putInt(SharePrefs.USER_DC_ID, object.getInt("Id"));
+                    SharePrefs.getInstance(activity).putInt(SharePrefs.USER_DC_USER_ID, object.getInt("UserId"));
+                    SharePrefs.getInstance(activity).putString(SharePrefs.DELIVERY, object.getString("Delivery"));
+
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 }
