@@ -226,7 +226,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, model.getResultItem().getIsUserExist());
                     SharePrefs.getInstance(GenerateOTPActivity.this).putString(SharePrefs.USER_ID, model.getResultItem().getUserid());
                     commonClassForAPI
-                            .getTokenwithphoneNo(callToken, "password", SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.MOBILE_NUMBER),
+                            .getTokenwithphoneNo(callToken, "password", Utils.getDeviceUniqueID(GenerateOTPActivity.this),
                                     Utils.getDeviceUniqueID(GenerateOTPActivity.this), true, true, "BUYERAPP", true,
                                     Utils.getDeviceUniqueID(GenerateOTPActivity.this), Double.parseDouble(SharePrefs.getStringSharedPreferences(GenerateOTPActivity.this, SharePrefs.LAT)), Double.parseDouble(SharePrefs.getStringSharedPreferences(GenerateOTPActivity.this, SharePrefs.LON)), SharePrefs.getInstance(GenerateOTPActivity.this).getString(SharePrefs.PIN_CODE), "GET", mobileNumber);
 
@@ -266,6 +266,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.ASP_NET_USER_ID, model.getAspNetuserId());
                     try {
                         JSONObject jsonObject = new JSONObject(model.getUserDetail());
                         SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FIRST_NAME, jsonObject.getString("FirstName"));

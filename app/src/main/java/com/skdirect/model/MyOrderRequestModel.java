@@ -9,21 +9,25 @@ public class MyOrderRequestModel {
     private String Filter;
     @SerializedName("SellerId")
     private int SellerId;
+    @SerializedName("Buyerid")
+    private String buyerid;
     @SerializedName("Take")
     private int Take;
     @SerializedName("Skip")
     private int Skip;
-    @SerializedName("Status")
-    private String Status;
+    @SerializedName("OrderStatus")
+    private String OrderStatus;
     @SerializedName("Id")
     private int Id;
 
-    public MyOrderRequestModel(String filter, int sellerId, int take, int skip, String status, int id) {
+    public MyOrderRequestModel(String filter, int sellerId, int take, int skip, String OrderStatus, int id,String Buyerid) {
+
         Filter = filter;
         SellerId = sellerId;
+        buyerid = Buyerid;
         Take = take;
         Skip = skip;
-        Status = status;
+        this.OrderStatus = OrderStatus;
         Id = id;
     }
 }

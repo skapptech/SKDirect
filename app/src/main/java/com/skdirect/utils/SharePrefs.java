@@ -41,6 +41,7 @@ public class SharePrefs {
     public static final String IS_REGISTRATIONCOMPLETE ="IsRegistrationcomplete";
     public static final String IS_CONTACTREAD ="IscontactRead";
     public static final String IS_SUPER_ADMIN ="IsSuperAdmin";
+    public static final String ASP_NET_USER_ID ="AspNetuserId";
     public static final String ID ="id";
     public static final String MALL_ID ="mall_id";
     public static final String USER_DC_ID ="_user_id";
