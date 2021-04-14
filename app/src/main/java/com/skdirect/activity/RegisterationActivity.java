@@ -27,6 +27,7 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
     private ActivityRegistrationBinding mBinding;
     private UpdateProfileViewMode updateProfileViewMode;
     DBHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +42,15 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
         mBinding.tilPincode.setHint(dbHelper.getString(R.string.pincode));
         mBinding.btSaveAddresh.setHint(dbHelper.getString(R.string.save));
         mBinding.btSaveAddresh.setOnClickListener(this);
-        mBinding.etName.setText(SharePrefs.getInstance(RegisterationActivity.this).getString(SharePrefs.FIRST_NAME));
-        mBinding.etEmailId.setText(SharePrefs.getInstance(RegisterationActivity.this).getString(SharePrefs.EMAIL_ID));
-        mBinding.etPinCode.setText(SharePrefs.getInstance(RegisterationActivity.this).getString(SharePrefs.PIN_CODE));
+        String name = SharePrefs.getInstance(RegisterationActivity.this).getString(SharePrefs.FIRST_NAME);
+        String email = SharePrefs.getInstance(RegisterationActivity.this).getString(SharePrefs.EMAIL_ID);
+        if (!TextUtils.isNullOrEmpty(name)) {
+            mBinding.etName.setText(name);
+        }
+        if (!TextUtils.isNullOrEmpty(email)) {
+            mBinding.etEmailId.setText(email);
+        }
+       // mBinding.etPinCode.setText(SharePrefs.getInstance(RegisterationActivity.this).getString(SharePrefs.PIN_CODE));
     }
 
     @Override
@@ -61,11 +68,10 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
     private void upDateProfile() {
         if (TextUtils.isNullOrEmpty(mBinding.etName.getText().toString().trim())) {
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_name));
-        } else if (mBinding.etEmailId.getText().toString().trim().length()>0) {
-            if(!TextUtils.isValidEmail(mBinding.etEmailId.getText().toString().trim())){
+        } else if (mBinding.etEmailId.getText().toString().trim().length() > 0) {
+            if (!TextUtils.isValidEmail(mBinding.etEmailId.getText().toString().trim())) {
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_email));
-             }
-            else{
+            } else {
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     Utils.showProgressDialog(RegisterationActivity.this);
                     // updateUserData();
@@ -96,7 +102,7 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
                 if (model != null) {
                     if (model.isSuccess()) {
                         Utils.setToast(RegisterationActivity.this, model.getSuccessMessage());
-                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN,true);
+                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
                         Utils.setToast(RegisterationActivity.this, model.getSuccessMessage());
                         startActivity(new Intent(RegisterationActivity.this, MainActivity.class));
                         finish();
