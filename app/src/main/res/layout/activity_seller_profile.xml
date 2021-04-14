@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,15 +42,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorAccent">
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+
+            <RelativeLayout
+                android:layout_width="100dp"
+                android:layout_height="40dp"
                 android:layout_alignParentRight="true"
                 android:layout_margin="10dp"
-                android:id="@+id/btShare"
+                android:id="@+id/RLShare"
                 android:background="@drawable/button_drawer_li"
-                android:text="@string/share" />
+                android:backgroundTint="#3FCB50">
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_centerInParent="true">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/whatsapp_logo"
+                    android:layout_gravity="center_vertical"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/btShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/share"
+                    android:textColor="@color/white" />
+                </LinearLayout>
+            </RelativeLayout>
         </RelativeLayout>
 
         <LinearLayout
@@ -71,9 +96,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
+                android:orientation="vertical"
                 android:paddingStart="10dp"
-                android:paddingEnd="5dp"
-                android:orientation="vertical">
+                android:paddingEnd="5dp">
+
                 <TextView
                     android:id="@+id/tv_seller_name"
                     style="@style/font_Bold"
@@ -93,24 +119,25 @@
                     android:layout_marginBottom="2dp"
                     android:maxLines="3"
                     android:text=""
+                    android:visibility="gone"
                     android:textSize="13sp" />
 
                 <LinearLayout
                     android:id="@+id/ll_deliver_option"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="2"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
                     <TextView
+                        android:id="@+id/tvDeliveryTitle"
                         style="@style/font_normal_sami_bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="2dp"
-                        android:layout_weight="1.3"
+                        android:layout_weight="1.1"
                         android:text="@string/delivery_options"
-                        android:id="@+id/tvDeliveryTitle"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
 
@@ -120,9 +147,9 @@
                         style="@style/font_normal_sami_bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.7"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="2dp"
+                        android:layout_weight="0.9"
                         android:text=""
                         android:textSize="12sp" />
 
@@ -132,18 +159,18 @@
                     android:id="@+id/ll_mini_order"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="2"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
                     <TextView
+                        android:id="@+id/tvMinOrderTitle"
                         style="@style/font_normal_sami_bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="2dp"
+                        android:layout_weight="1.1"
                         android:text="@string/minimum_order_amount"
-                        android:layout_weight="1.3"
-                        android:id="@+id/tvMinOrderTitle"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
 
@@ -154,8 +181,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:layout_weight="0.7"
                         android:layout_marginBottom="2dp"
+                        android:layout_weight="0.9"
                         android:text=""
                         android:textSize="12sp" />
 
@@ -165,18 +192,19 @@
                     android:id="@+id/ll_delivert"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="2"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="2">
 
                     <TextView
+                        android:id="@+id/tvDeliverDistanceTitle"
                         style="@style/font_normal_sami_bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="2dp"
+                        android:layout_weight="1.1"
                         android:text="@string/delivered_till_distance"
-                        android:layout_weight="1.3"
-                        android:id="@+id/tvDeliverDistanceTitle"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
 
@@ -186,9 +214,9 @@
                         style="@style/font_normal_sami_bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.7"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="2dp"
+                        android:layout_weight="0.9"
                         android:text=""
                         android:textSize="12sp" />
 
@@ -199,11 +227,12 @@
                     style="@style/font_normal_sami_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="5dp"
-                    android:drawableLeft="@drawable/ic_location"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
+                    android:drawableLeft="@drawable/ic_location"
+                    android:drawablePadding="5dp"
                     android:text=""
+                    android:visibility="gone"
                     android:textColor="@color/black"
                     android:textSize="13sp" />
 
@@ -212,13 +241,12 @@
 
         <RatingBar
             android:id="@+id/ratingbar_seller"
+            style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_margin="5dp"
-            style="?android:attr/ratingBarStyleSmall"
-            android:numStars="5"
-            />
+            android:numStars="5" />
 
         <View
             android:layout_width="match_parent"
@@ -241,20 +269,18 @@
 
             <TextView
                 android:id="@+id/tv_item_not_found"
+                style="@style/font_normal_sami_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/searched_item_is_not_available"
-                android:layout_centerVertical="true"
                 android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:text="@string/searched_item_is_not_available"
                 android:textColor="@color/colorAccent"
-                style="@style/font_normal_sami_bold"
                 android:textSize="14dp"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
 
         </RelativeLayout>
-
 
 
     </LinearLayout>

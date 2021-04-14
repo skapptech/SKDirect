@@ -94,7 +94,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             case R.id.notifiction_count:
                 startActivity(new Intent(getApplicationContext(), CartActivity.class));
                 break;
-            case R.id.btShare:
+            case R.id.RLShare:
                 Utils.showShareWhatsappDialog(this, SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/seller/" + sellerID, "");
                 break;
             case R.id.iv_s_shop_image:
@@ -139,7 +139,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.ivSShopImage.setOnClickListener(this);
         mBinding.toolbarTittle.notifictionCount.setOnClickListener(this);
-        mBinding.btShare.setOnClickListener(this);
+        mBinding.RLShare.setOnClickListener(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         mBinding.rvCategories.setLayoutManager(layoutManager);
 
