@@ -51,6 +51,8 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     private double totalAmount;
     private DBHelper dbHelper;
     private CommonClassForAPI commonClassForAPI;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,11 +82,9 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.clearCart) {
-            if(cartItemList.size()>0)
-            {
+            if (cartItemList.size() > 0) {
                 showClearCartDialog();
-            }else
-            {
+            } else {
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_items_available));
             }
 
@@ -108,7 +108,6 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 }
                 break;
-
             case R.id.tv_keep_shopping:
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
@@ -323,6 +322,8 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             cartListAdapter.notifyDataSetChanged();
             mBinding.rlCheckOut.setVisibility(View.GONE);
             mBinding.blankBasket.setVisibility(View.VISIBLE);
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
         });
     }
 }
