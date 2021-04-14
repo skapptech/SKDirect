@@ -54,7 +54,9 @@ public class RestClient {
                     try {
                         request = chain.request();
                         response = chain.proceed(request);
-
+                        if (response.code() == 401) {
+                            MyApplication.getInstance().token();
+                        }
                         if (response.code() == 200) {
                             if (!request.url().toString().contains("/token") && !request.url().toString().contains("/appVersion") && !request.url().toString().contains("/imageupload")) {
                                 try {
