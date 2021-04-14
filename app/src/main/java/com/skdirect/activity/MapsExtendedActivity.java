@@ -45,6 +45,7 @@ import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.GpsUtils;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
+import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.MapViewViewMode;
 
@@ -165,42 +166,34 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
             @Override
             public void onClick(View v) {
                 startActivityForResult(new Intent(MapsExtendedActivity.this, PlacesActivity.class), LAUNCH_PLACES_ACTIVITY);
-
-
             }
         });
-
-
 
     }
 
     private void callLocationAPI(double latitude, double longitude) {
         mapViewViewMode.getMapViewModelRequest(latitude, longitude);
-
         mapViewViewMode.getMapViewModel().observe(this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject data) {
                 Utils.hideProgressDialog();
-
                 JSONObject jsonResponse = null;
                 try {
                     jsonResponse = new JSONObject(data.toString());
-                    JSONObject components = jsonResponse.getJSONObject("geometry");
-                    JSONObject location = components.getJSONObject("location");
-                    double lat = location.getDouble("lat");
-                    double lng = location.getDouble("lng");
-                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-                    List<Address> addresses = null;
-                    try {
-                        addresses = geocoder.getFromLocation(lat, lng, 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    String cityName = addresses.get(0).getLocality();
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CITYNAME, cityName);
-                    SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LAT, String.valueOf(lat));
-                    SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LON, String.valueOf(lng));
+                    if(jsonResponse.getBoolean("IsSuccess"))
+                    {
+                        JSONObject resultItemObject = jsonResponse.getJSONObject("ResultItem");
+                        if(resultItemObject!=null)
+                        {
+                            String CityName = resultItemObject.getString("CityName");
+                            SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CITYNAME, CityName);
+                            SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LAT, String.valueOf(latitude));
+                            SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LON, String.valueOf(longitude));
 
+
+                        }
+
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();

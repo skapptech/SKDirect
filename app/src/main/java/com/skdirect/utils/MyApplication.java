@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleObserver;
 
 import com.facebook.soloader.SoLoader;
 import com.google.gson.JsonObject;
+import com.skdirect.activity.LoginActivity;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.db.CartRepository;
 import com.skdirect.model.TokenModel;
@@ -37,10 +38,13 @@ public class MyApplication extends Application implements LifecycleObserver {
         dbHelper = new DBHelper(this);
     }
 
-   /* public void token() {
-        new CommonClassForAPI().getToken(callToken, "password", Utils.getDeviceUniqueID(activity),
-                "", true, true, "BUYERAPP", true,
-                Utils.getDeviceUniqueID(activity), 28.0, 72.00, "452011");
+    public void token() {
+        new CommonClassForAPI().getToken(callToken, "password", Utils.getDeviceUniqueID(getApplicationContext()),
+                "", false, true, "BUYERAPP", true,
+                Utils.getDeviceUniqueID(getApplicationContext()),
+                Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)),
+                Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LON)),
+                SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.PIN_CODE),"");
     }
 
 
@@ -58,6 +62,7 @@ public class MyApplication extends Application implements LifecycleObserver {
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN_PASSWORD, model.getPwd());
                     new CommonClassForAPI().getUpdateToken(updatecallToken, Utils.getFcmToken());
                     SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.IS_LOGIN,true);
                     if (activity != null)
@@ -82,7 +87,6 @@ public class MyApplication extends Application implements LifecycleObserver {
             Utils.hideProgressDialog();
         }
     };
-*/
     private final DisposableObserver<JsonObject> updatecallToken = new DisposableObserver<JsonObject>() {
         @Override
         public void onNext(JsonObject model) {

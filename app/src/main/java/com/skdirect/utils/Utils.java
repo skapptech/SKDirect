@@ -168,7 +168,7 @@ public class Utils {
 
     }
 
-    public static String getDeviceUniqueID(Activity activity) {
+    public static String getDeviceUniqueID(Context activity) {
         if (BuildConfig.DEBUG) {
             return Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID) + "shinoo";
             // return Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
