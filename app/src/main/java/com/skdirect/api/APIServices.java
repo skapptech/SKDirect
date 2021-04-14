@@ -89,11 +89,11 @@ public interface APIServices {
     Observable<TokenModel> getTokenwithphoneno(@Field("grant_type") String grant_type, @Field("username") String username, @Field("password") String password, @Field("ISOTP") boolean isOTp, @Field("ISBUYER") boolean isBuyer, @Field("LOGINTYPE") String LOGINTYPE, @Field("ISDEVICE") boolean ISDEVICE, @Field("DEVICEID") String DEVICEID, @Field("LAT") double LAT, @Field("LNG") double LNG, @Field("PINCODE") String pincode, @Field("lang") String lang, @Field("TYPE") String TYPE, @Field("PHONENUMBER") String PHONENUMBER);
 
 
-    @GET("api/NativeBuyer/BuyerProfile/GetUserDetail")
+   /* @GET("api/NativeBuyer/BuyerProfile/GetUserDetail")
     Call<UserDetailResponseModel> GetUserDetail();
 
     @GET("api/NativeBuyer/BuyerProfile/GetUserDetail")
-    Observable<UserDetailResponseModel> getUserDetail();
+    Observable<UserDetailResponseModel> getUserDetail();*/
 
     /*Home Page APi*/
     @GET("api/NativeBuyer/AppHome/GetNearByItem")

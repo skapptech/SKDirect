@@ -34,6 +34,9 @@ import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.OTPVerificationViewModel;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import io.reactivex.observers.DisposableObserver;
 
 public class GenerateOTPActivity extends AppCompatActivity implements OtpReceivedInterface, View.OnClickListener {
@@ -223,8 +226,8 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     SharePrefs.getInstance(GenerateOTPActivity.this).putBoolean(SharePrefs.IS_USER_EXISTS, model.getResultItem().getIsUserExist());
                     SharePrefs.getInstance(GenerateOTPActivity.this).putString(SharePrefs.USER_ID, model.getResultItem().getUserid());
                     commonClassForAPI
-                            .getTokenwithphoneNo(callToken, "password", Utils.getDeviceUniqueID(GenerateOTPActivity.this),
-                                    otpString, true, true, "BUYERAPP", true,
+                            .getTokenwithphoneNo(callToken, "password", SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.MOBILE_NUMBER),
+                                    Utils.getDeviceUniqueID(GenerateOTPActivity.this), true, true, "BUYERAPP", true,
                                     Utils.getDeviceUniqueID(GenerateOTPActivity.this), Double.parseDouble(SharePrefs.getStringSharedPreferences(GenerateOTPActivity.this, SharePrefs.LAT)), Double.parseDouble(SharePrefs.getStringSharedPreferences(GenerateOTPActivity.this, SharePrefs.LON)), SharePrefs.getInstance(GenerateOTPActivity.this).getString(SharePrefs.PIN_CODE), "GET", mobileNumber);
 
 
@@ -263,7 +266,34 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN_PASSWORD, model.getPwd());
+                    try {
+                        JSONObject jsonObject = new JSONObject(model.getUserDetail());
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FIRST_NAME, jsonObject.getString("FirstName"));
+                        SharePrefs.getInstance(getApplicationContext()).putInt(SharePrefs.ID, jsonObject.getInt("Id"));
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.MOBILE_NUMBER, jsonObject.getString("MobileNo"));
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.EMAIL_ID, jsonObject.getString("Email"));
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.STATE, jsonObject.getString("State"));
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CITYNAME, jsonObject.getString("City"));
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.PIN_CODE, jsonObject.getString("Pincode"));
+                        SharePrefs.getInstance(getApplicationContext()).putInt(SharePrefs.PIN_CODE_master, jsonObject.getInt("PinCodeMasterId"));
+                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_ACTIVE, jsonObject.getBoolean("IsActive"));
+                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_DELETE, jsonObject.getBoolean("IsDelete"));
+                        JSONArray jsonArray = jsonObject.getJSONArray("UserDeliveryDC");
+                        if (jsonArray != null && jsonArray.length() > 0) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject object = jsonArray.getJSONObject(i);
+                                SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.USER_IS_DELETE, object.getBoolean("IsDelete"));
+                                SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.USER_IS_ACTIVE, object.getBoolean("IsActive"));
+                                SharePrefs.getInstance(getApplicationContext()).putInt(SharePrefs.USER_DC_ID, object.getInt("Id"));
+                                SharePrefs.getInstance(getApplicationContext()).putInt(SharePrefs.USER_DC_USER_ID, object.getInt("UserId"));
+                                SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.DELIVERY, object.getString("Delivery"));
+
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
                     commonClassForAPI.getUpdateToken(updatecallToken, fcmToken);
                     if(!TextUtils.isNullOrEmpty(MyApplication.getInstance().cartRepository.getCartId())){
                         commonClassForAPI.assignCart(new DisposableObserver<JsonObject>() {

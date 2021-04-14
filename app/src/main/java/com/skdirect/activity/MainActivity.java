@@ -71,12 +71,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         openFragment(new HomeFragment());
         Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
         initView();
+        setVarible();
         openFragment(new HomeFragment());
         setlocationInHader();
         clickListener();
         setupBadge();
         ///callRunTimePermissions();
     }
+
+    private void setVarible() {
+        if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)) {
+            userNameTV.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.FIRST_NAME));
+            if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                mBinding.llLogout.setVisibility(View.VISIBLE);
+                mBinding.llSignIn.setVisibility(View.GONE);
+                mobileNumberTV.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.MOBILE_NUMBER));
+
+            } else {
+                mBinding.llSignIn.setVisibility(View.VISIBLE);
+                mBinding.llLogout.setVisibility(View.GONE);
+                mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.log_in));
+                mobileNumberTV.setText("");
+            }
+
+        } else {
+            userNameTV.setText(R.string.guest_user);
+            mBinding.llSignIn.setVisibility(View.VISIBLE);
+            mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
+            mBinding.llLogout.setVisibility(View.GONE);
+            mobileNumberTV.setText("");
+
+        }
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();

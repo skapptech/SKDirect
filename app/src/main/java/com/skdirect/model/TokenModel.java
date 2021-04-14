@@ -1,5 +1,6 @@
 package com.skdirect.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class TokenModel {
@@ -34,16 +35,16 @@ public class TokenModel {
     private String token_type;
     @SerializedName("access_token")
     private String access_token;
+    @Expose
+    @SerializedName("UserDetail")
+    private String UserDetail;
 
-    @SerializedName("Pwd")
-    private String Pwd;
-
-    public String getPwd() {
-        return Pwd;
+    public String getUserDetail() {
+        return UserDetail;
     }
 
-    public void setPwd(String pwd) {
-        Pwd = pwd;
+    public void setUserDetail(String userDetail) {
+        UserDetail = userDetail;
     }
 
     public String getExpires() {

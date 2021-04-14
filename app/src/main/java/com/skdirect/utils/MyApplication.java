@@ -14,6 +14,8 @@ import com.skdirect.db.CartRepository;
 import com.skdirect.model.TokenModel;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import io.reactivex.observers.DisposableObserver;
 
@@ -39,7 +41,7 @@ public class MyApplication extends Application implements LifecycleObserver {
     }
 
     public void token() {
-        new CommonClassForAPI().getToken(callToken, "password", Utils.getDeviceUniqueID(getApplicationContext()),
+        new CommonClassForAPI().getToken(callToken, "password",!TextUtils.isNullOrEmpty(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.MOBILE_NUMBER))?SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.MOBILE_NUMBER): Utils.getDeviceUniqueID(getApplicationContext()),
                 "", false, true, "BUYERAPP", true,
                 Utils.getDeviceUniqueID(getApplicationContext()),
                 Double.parseDouble(SharePrefs.getStringSharedPreferences(this,SharePrefs.LAT)),
@@ -62,9 +64,36 @@ public class MyApplication extends Application implements LifecycleObserver {
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
-                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN_PASSWORD, model.getPwd());
                     new CommonClassForAPI().getUpdateToken(updatecallToken, Utils.getFcmToken());
                     SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.IS_LOGIN,true);
+                    try {
+                        JSONObject jsonObject = new JSONObject(model.getUserDetail());
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FIRST_NAME, jsonObject.getString("FirstName"));
+                        SharePrefs.getInstance(getApplicationContext()).putInt(SharePrefs.ID, jsonObject.getInt("Id"));
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.MOBILE_NUMBER, jsonObject.getString("MobileNo"));
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.EMAIL_ID, jsonObject.getString("Email"));
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.STATE, jsonObject.getString("State"));
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CITYNAME, jsonObject.getString("City"));
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.PIN_CODE, jsonObject.getString("Pincode"));
+                        SharePrefs.getInstance(getApplicationContext()).putInt(SharePrefs.PIN_CODE_master, jsonObject.getInt("PinCodeMasterId"));
+                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_ACTIVE, jsonObject.getBoolean("IsActive"));
+                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_DELETE, jsonObject.getBoolean("IsDelete"));
+                        JSONArray jsonArray = jsonObject.getJSONArray("UserDeliveryDC");
+                        if (jsonArray != null && jsonArray.length() > 0) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject object = jsonArray.getJSONObject(i);
+                                SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.USER_IS_DELETE, object.getBoolean("IsDelete"));
+                                SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.USER_IS_ACTIVE, object.getBoolean("IsActive"));
+                                SharePrefs.getInstance(getApplicationContext()).putInt(SharePrefs.USER_DC_ID, object.getInt("Id"));
+                                SharePrefs.getInstance(getApplicationContext()).putInt(SharePrefs.USER_DC_USER_ID, object.getInt("UserId"));
+                                SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.DELIVERY, object.getString("Delivery"));
+
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
                     if (activity != null)
                         activity.recreate();
                 }

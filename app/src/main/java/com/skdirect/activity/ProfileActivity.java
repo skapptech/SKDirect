@@ -36,7 +36,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        getProfileData();
+       // getProfileData();
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mBinding.tvMobileNumber.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.MOBILE_NUMBER));
     }
 
-    private void getProfileData() {
+    /*private void getProfileData() {
         CommonClassForAPI.getInstance(this).getUserDetail(new DisposableObserver<UserDetailResponseModel>() {
             @Override
             public void onNext(@NonNull UserDetailResponseModel customerDataModel) {
@@ -132,5 +132,5 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
-    }
+    }*/
 }

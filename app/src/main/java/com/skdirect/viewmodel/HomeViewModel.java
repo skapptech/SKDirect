@@ -32,13 +32,14 @@ public class HomeViewModel extends ViewModel {
     private MutableLiveData<MallMainModel> mallDataViewModel;
 
 
-    public LiveData<UserDetailResponseModel> GetUserDetail() {
+    /*public LiveData<UserDetailResponseModel> GetUserDetail() {
         if (userDetailViewModel == null) {
             userDetailViewModel = new MutableLiveData<>();
+            userDetailViewModel = getUserDetailRequest();
         }
-        userDetailViewModel = getUserDetailRequest();
+
         return userDetailViewModel;
-    }
+    }*/
 
     public LiveData<NearByMainModel> GetTopNearByItem() {
         if (topNearByItem == null) {
@@ -103,7 +104,7 @@ public class HomeViewModel extends ViewModel {
     }
 
 
-    public MutableLiveData<UserDetailResponseModel> getUserDetailRequest() {
+   /* public MutableLiveData<UserDetailResponseModel> getUserDetailRequest() {
         RestClient.getInstance().getService().GetUserDetail().enqueue(new Callback<UserDetailResponseModel>() {
             @Override
             public void onResponse(Call<UserDetailResponseModel> call, Response<UserDetailResponseModel> response) {
@@ -121,7 +122,7 @@ public class HomeViewModel extends ViewModel {
         });
 
         return userDetailViewModel;
-    }
+    }*/
 
     public MutableLiveData<NearByMainModel> getGetTopNearByItemRequest() {
         RestClient.getInstance().getService().GetTopNearByItem().enqueue(new Callback<NearByMainModel>() {
