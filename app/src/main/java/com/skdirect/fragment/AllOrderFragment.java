@@ -25,6 +25,7 @@ import com.google.gson.JsonArray;
 import com.skdirect.R;
 import com.skdirect.activity.MyOrderActivity;
 import com.skdirect.activity.PaymentActivity;
+import com.skdirect.activity.UpdateProfileActivity;
 import com.skdirect.adapter.MyOrderAdapter;
 import com.skdirect.databinding.FragmentAllOrderBinding;
 import com.skdirect.model.MyOrderModel;
@@ -33,6 +34,7 @@ import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.OrderModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
+import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.MyOrderViewMode;
@@ -187,7 +189,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void myOrderAPI() {
-        MyOrderRequestModel myOrderRequestModel = new MyOrderRequestModel("",0,takeCount,skipCount,type, orderId);
+        MyOrderRequestModel myOrderRequestModel = new MyOrderRequestModel("",0,takeCount,skipCount,type, orderId, SharePrefs.getInstance(getActivity()).getString(SharePrefs.ASP_NET_USER_ID));
         myOrderViewMode.getCategoriesViewModelRequest(myOrderRequestModel);
         myOrderViewMode.getCategoriesViewModel().observe(this, new Observer<OrderModel>() {
             @Override

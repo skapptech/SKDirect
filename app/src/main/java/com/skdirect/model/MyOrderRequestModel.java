@@ -9,6 +9,8 @@ public class MyOrderRequestModel {
     private String Filter;
     @SerializedName("SellerId")
     private int SellerId;
+    @SerializedName("Buyerid")
+    private String buyerid;
     @SerializedName("Take")
     private int Take;
     @SerializedName("Skip")
@@ -18,9 +20,10 @@ public class MyOrderRequestModel {
     @SerializedName("Id")
     private int Id;
 
-    public MyOrderRequestModel(String filter, int sellerId, int take, int skip, int status, int id) {
+    public MyOrderRequestModel(String filter, int sellerId, int take, int skip, int status, int id,String Buyerid) {
         Filter = filter;
         SellerId = sellerId;
+        buyerid = Buyerid;
         Take = take;
         Skip = skip;
         Status = status;
