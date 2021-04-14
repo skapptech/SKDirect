@@ -149,7 +149,6 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
         mBinding.tvSubmit.setOnClickListener(v -> {
             if (Utils.isNetworkAvailable(getApplicationContext())) {
                 Utils.showProgressDialog(MapsExtendedActivity.this);
-                callLocationAPI(latitude, longitude);
                 setLocationAPI(latitude, longitude);
             } else {
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
@@ -186,10 +185,23 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                         if(resultItemObject!=null)
                         {
                             String CityName = resultItemObject.getString("CityName");
-                            SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CITYNAME, CityName);
+                            String StateName = resultItemObject.getString("StateName");
+                            String Pincode = resultItemObject.getString("Pincode");
+                            int PincodeMasterId = resultItemObject.getInt("PincodeMasterId");
+
                             SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LAT, String.valueOf(latitude));
                             SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.LON, String.valueOf(longitude));
+                            SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.STATE, StateName);
+                            SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.CITYNAME, CityName);
+                            SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.PIN_CODE, Pincode);
+                            SharePrefs.getInstance(getApplicationContext()).putInt(SharePrefs.PIN_CODE_master, PincodeMasterId);
 
+                            Intent intent = new Intent();
+                            intent.putExtra("LOCATION",CityName+" "+Pincode);
+                            setResult(Activity.RESULT_OK, intent);
+                            finish();
+                          //  startActivity(new Intent(MapsExtendedActivity.this, MainActivity.class));
+                         //   finish();
 
                         }
 
@@ -216,8 +228,8 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                     if (data != null) {
                         if (data.isSuccess()) {
                             SharePrefs.getInstance(MapsExtendedActivity.this).putBoolean(SharePrefs.IS_Mall, false);
-                            startActivity(new Intent(MapsExtendedActivity.this, MainActivity.class));
-                            finish();
+                            callLocationAPI(latitude, longitude);
+
                         } else {
                             Utils.setLongToast(MapsExtendedActivity.this, data.getErrorMessage());
                         }

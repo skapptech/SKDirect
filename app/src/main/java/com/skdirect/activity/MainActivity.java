@@ -136,10 +136,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // check if the request code is same as what is passed  here it is 2
         if (requestCode == 2) {
             if (requestCode == 2 && resultCode == RESULT_OK) {
-                Address address = data.getParcelableExtra("address");
-                double lat = address.getLatitude();
-                double log = address.getLongitude();
-                setLocationTV.setText(Utils.getCityName(this, lat, log));
+                String LOCATION = data.getStringExtra("LOCATION");
+                if(!TextUtils.isNullOrEmpty(LOCATION)){
+                    setLocationTV.setText(LOCATION);
+                }
+
             }
 
         }
