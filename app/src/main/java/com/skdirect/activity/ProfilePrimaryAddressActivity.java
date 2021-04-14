@@ -127,13 +127,13 @@ public class ProfilePrimaryAddressActivity extends AppCompatActivity implements 
             builder.setPositiveButton(dbHelper.getString(R.string.yes), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
                     primaryAddressViewMode.getMakeDefaultLocationVMRequest(userLocationModel.getId());
                     primaryAddressViewMode.getMakeDefaultLocationVM().observe(ProfilePrimaryAddressActivity.this, new Observer<Boolean>() {
                         @Override
                         public void onChanged(Boolean aBoolean) {
                             Utils.hideProgressDialog();
                             if (aBoolean){
+
                                 userLocationAdapter.selectedPosition=position;
                                 userLocationAdapter.notifyDataSetChanged();
 
