@@ -37,6 +37,7 @@ import com.skdirect.databinding.ActivityMainBinding;
 import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.fragment.HomeFragment;
 import com.skdirect.model.CartModel;
+import com.skdirect.model.UserDetailResponseModel;
 import com.skdirect.utils.AppSignatureHelper;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.GPSTracker;
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         setVarible();
         openFragment(new HomeFragment());
-        setlocationInHader();
+
         clickListener();
         setupBadge();
         ///callRunTimePermissions();
@@ -243,9 +244,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.tvLogoutTitle.setText(dbHelper.getString(R.string.logout));
         mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
     }
-    private void setlocationInHader() {
-        setLocationTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.CITYNAME)+" "+SharePrefs.getInstance(this).getString(SharePrefs.PIN_CODE));
-    }
+
     @Override
     public void onBackPressed() {
         if (mBinding.drawer.isDrawerOpen(GravityCompat.START)) {
@@ -352,6 +351,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mBinding.toolbarId.cartBadge.setText(String.valueOf(Math.min(count, 99)));
         }
     }
+
 
     private void getCartItemApi() {
         mainActivityViewMode.getCartItemsRequest();

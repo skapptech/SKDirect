@@ -191,7 +191,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         sellerProfileViewMode.getSellerDetailsVM().observe(this, sellerDetailsModel -> {
             Utils.hideProgressDialog();
             if (sellerDetailsModel.isSuccess()) {
-                if (sellerDetailsModel.getSellerInfoModel().getRating() > 0.0) {
+                if (sellerDetailsModel.getSellerInfoModel().getRating() >= 0.0) {
                     Double deg = sellerDetailsModel.getSellerInfoModel().getRating();
                      sellerImagePath =sellerDetailsModel.getSellerInfoModel().getImagePath();
                     float rating = deg.floatValue();
