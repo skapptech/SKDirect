@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.google.gson.JsonObject;
 import com.skdirect.api.RestClient;
 import com.skdirect.model.CartMainModel;
+import com.skdirect.model.UserDetailResponseModel;
 import com.skdirect.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,7 @@ import retrofit2.Response;
 
 public class MainActivityViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
+    private MutableLiveData<UserDetailResponseModel> userDetailViewModel;
 
     private MutableLiveData<CartMainModel> CardItemVM;
     private MutableLiveData<JsonObject> mapViewModel;
@@ -28,12 +30,37 @@ public class MainActivityViewMode extends ViewModel {
         CardItemVM = new MutableLiveData<>();
         return CardItemVM;
     }
-
+    public LiveData<UserDetailResponseModel> GetUserDetail() {
+        if (userDetailViewModel == null) {
+            userDetailViewModel = new MutableLiveData<>();
+        }
+        userDetailViewModel = getUserDetailRequest();
+        return userDetailViewModel;
+    }
 
     public LiveData<JsonObject> getMapViewModel() {
         mapViewModel = null;
         mapViewModel = new MutableLiveData<>();
         return mapViewModel;
+    }
+    public MutableLiveData<UserDetailResponseModel> getUserDetailRequest() {
+        RestClient.getInstance().getService().GetUserDetail().enqueue(new Callback<UserDetailResponseModel>() {
+            @Override
+            public void onResponse(Call<UserDetailResponseModel> call, Response<UserDetailResponseModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
+                    userDetailViewModel.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserDetailResponseModel> call, Throwable t) {
+                Log.e(TAG, "onFailure Responce" + call.toString());
+                Utils.hideProgressDialog();
+            }
+        });
+
+        return userDetailViewModel;
     }
 
     public MutableLiveData<CartMainModel> getCartItemsRequest() {

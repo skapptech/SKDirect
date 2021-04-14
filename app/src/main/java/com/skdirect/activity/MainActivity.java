@@ -37,6 +37,7 @@ import com.skdirect.databinding.ActivityMainBinding;
 import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.fragment.HomeFragment;
 import com.skdirect.model.CartModel;
+import com.skdirect.model.UserDetailResponseModel;
 import com.skdirect.utils.AppSignatureHelper;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.GPSTracker;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
         initView();
         openFragment(new HomeFragment());
-        setlocationInHader();
+        GetUserDetail();
         clickListener();
         setupBadge();
         ///callRunTimePermissions();
@@ -215,9 +216,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.tvLogoutTitle.setText(dbHelper.getString(R.string.logout));
         mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
     }
-    private void setlocationInHader() {
-        setLocationTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.CITYNAME)+" "+SharePrefs.getInstance(this).getString(SharePrefs.PIN_CODE));
-    }
+
     @Override
     public void onBackPressed() {
         if (mBinding.drawer.isDrawerOpen(GravityCompat.START)) {
@@ -323,6 +322,65 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mBinding.toolbarId.cartBadge.setVisibility(View.VISIBLE);
             mBinding.toolbarId.cartBadge.setText(String.valueOf(Math.min(count, 99)));
         }
+    }
+
+    private void GetUserDetail() {
+        mainActivityViewMode.GetUserDetail().observe(this, new Observer<UserDetailResponseModel>() {
+            @Override
+            public void onChanged(UserDetailResponseModel customerDataModel) {
+                Utils.hideProgressDialog();
+                if (customerDataModel .getIsSuccess()) {
+                    mobileNumberTV.setText(customerDataModel.getResultItem().getMobileNo());
+                    SharePrefs.getInstance(MainActivity.this).putString(SharePrefs.FIRST_NAME, customerDataModel.getResultItem().getFirstName());
+                    SharePrefs.getInstance(MainActivity.this).putInt(SharePrefs.ID, customerDataModel.getResultItem().getId());
+                    SharePrefs.getInstance(MainActivity.this).putString(SharePrefs.MOBILE_NUMBER, customerDataModel.getResultItem().getMobileNo());
+                    SharePrefs.getInstance(MainActivity.this).putString(SharePrefs.EMAIL_ID, customerDataModel.getResultItem().getEmail());
+                    SharePrefs.getInstance(MainActivity.this).putString(SharePrefs.STATE, customerDataModel.getResultItem().getState());
+                    SharePrefs.getInstance(MainActivity.this).putString(SharePrefs.CITYNAME, customerDataModel.getResultItem().getCity());
+                    SharePrefs.getInstance(MainActivity.this).putString(SharePrefs.PIN_CODE, customerDataModel.getResultItem().getPincode());
+                    SharePrefs.getInstance(MainActivity.this).putInt(SharePrefs.PIN_CODE_master, customerDataModel.getResultItem().getPinCodeMasterId());
+                    SharePrefs.getInstance(MainActivity.this).putBoolean(SharePrefs.IS_ACTIVE, customerDataModel.getResultItem().getIsActive());
+                    SharePrefs.getInstance(MainActivity.this).putBoolean(SharePrefs.IS_DELETE, customerDataModel.getResultItem().getIsDelete());
+                    SharePrefs.setSharedPreference(MainActivity.this, SharePrefs.IS_REGISTRATIONCOMPLETE, customerDataModel.getResultItem().getIsRegistrationComplete());
+                    SharePrefs.setStringSharedPreference(MainActivity.this, SharePrefs.LAT, String.valueOf(customerDataModel.getResultItem().getLatitiute()));
+                    SharePrefs.setStringSharedPreference(MainActivity.this, SharePrefs.LON, String.valueOf(customerDataModel.getResultItem().getLongitude()));
+                    setLocationTV.setText(SharePrefs.getInstance(MainActivity.this).getString(SharePrefs.CITYNAME)+" "+SharePrefs.getInstance(MainActivity.this).getString(SharePrefs.PIN_CODE));
+                    if (customerDataModel.getResultItem().getUserDeliveryDC() != null && customerDataModel.getResultItem().getUserDeliveryDC().size() > 0) {
+                        for (int i = 0; i < customerDataModel.getResultItem().getUserDeliveryDC().size(); i++) {
+                            SharePrefs.getInstance(MainActivity.this).putBoolean(SharePrefs.USER_IS_DELETE, customerDataModel.getResultItem().getUserDeliveryDC().get(i).getIsDelete());
+                            SharePrefs.getInstance(MainActivity.this).putBoolean(SharePrefs.USER_IS_ACTIVE, customerDataModel.getResultItem().getUserDeliveryDC().get(i).getIsActive());
+                            SharePrefs.getInstance(MainActivity.this).putInt(SharePrefs.USER_DC_ID, customerDataModel.getResultItem().getUserDeliveryDC().get(i).getId());
+                            SharePrefs.getInstance(MainActivity.this).putInt(SharePrefs.USER_DC_USER_ID, customerDataModel.getResultItem().getUserDeliveryDC().get(i).getUserId());
+                            SharePrefs.getInstance(MainActivity.this).putString(SharePrefs.DELIVERY, customerDataModel.getResultItem().getUserDeliveryDC().get(i).getDelivery());
+                        }
+
+                    }
+                    if (customerDataModel.getResultItem().getIsRegistrationComplete()) {
+                     userNameTV.setText(customerDataModel.getResultItem().getFirstName());
+                        if (SharePrefs.getInstance(MainActivity.this).getBoolean(SharePrefs.IS_LOGIN)) {
+                           mBinding.llLogout.setVisibility(View.VISIBLE);
+                            mBinding.llSignIn.setVisibility(View.GONE);
+                           mobileNumberTV.setText(SharePrefs.getInstance(MainActivity.this).getString(SharePrefs.MOBILE_NUMBER));
+
+                        } else {
+                            mBinding.llSignIn.setVisibility(View.VISIBLE);
+                            mBinding.llLogout.setVisibility(View.GONE);
+                            mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.log_in));
+                            mobileNumberTV.setText("");
+                        }
+
+                    } else {
+                        userNameTV.setText(R.string.guest_user);
+                        mBinding.llSignIn.setVisibility(View.VISIBLE);
+                        mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
+                        mBinding.llLogout.setVisibility(View.GONE);
+                        mobileNumberTV.setText("");
+
+                    }
+                }
+            }
+        });
+
     }
 
     private void getCartItemApi() {

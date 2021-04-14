@@ -35,6 +35,17 @@ public class TokenModel {
     @SerializedName("access_token")
     private String access_token;
 
+    @SerializedName("Pwd")
+    private String Pwd;
+
+    public String getPwd() {
+        return Pwd;
+    }
+
+    public void setPwd(String pwd) {
+        Pwd = pwd;
+    }
+
     public String getExpires() {
         return expires;
     }

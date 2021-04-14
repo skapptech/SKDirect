@@ -62,6 +62,7 @@ public class MyApplication extends Application implements LifecycleObserver {
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN_PASSWORD, model.getPwd());
                     new CommonClassForAPI().getUpdateToken(updatecallToken, Utils.getFcmToken());
                     SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.IS_LOGIN,true);
                     if (activity != null)
