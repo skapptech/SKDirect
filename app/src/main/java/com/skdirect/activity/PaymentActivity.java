@@ -47,9 +47,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private DeliveryOptionAdapter deliveryOptionAdapter;
 
     private OfferResponse.Coupon coupon;
-    private int deliveryOption, userLocationId;
+    private int deliveryOption;
+    private Integer userLocationId;
     private double cartTotal, totalAmount, discount = 0;
     private boolean isSelfPickup = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +65,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         initView();
         callUserLocation();
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         onBackPressed();
@@ -116,7 +120,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             }
         }
     }
-    
+
+
     private void initView() {
         mBinding.tvOrderValueH.setText(MyApplication.getInstance().dbHelper.getString(R.string.total_order_value));
         mBinding.tvAmountH.setText(MyApplication.getInstance().dbHelper.getString(R.string.total_amount));
@@ -182,10 +187,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void orderPlaceAPI() {
-        if (isSelfPickup){
-            userLocationId=0;
+        if (isSelfPickup) {
+            userLocationId = null;
         }
-        OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASH", deliveryOption, cartItemModel.getId(), userLocationId,SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
+        OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASH", deliveryOption, cartItemModel.getId(), userLocationId, SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
         paymentViewMode.getOrderPlaceVMRequest(orderPlaceRequestModel);
         paymentViewMode.getOrderPlaceVM().observe(this, response -> {
             Utils.hideProgressDialog();
@@ -222,7 +227,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mBinding.tvOfferTotal.setText("-₹ " + discount);
         } else {
             cartTotal = totalAmount;
-           // mBinding.rlApplyOffer.setVisibility(View.VISIBLE);
+            // mBinding.rlApplyOffer.setVisibility(View.VISIBLE);
             mBinding.liOffer.setVisibility(View.GONE);
             mBinding.liCoupon.setVisibility(View.GONE);
         }
@@ -323,11 +328,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onOnClick(DeliveryOptionModel deliveryOptionModel, int position) {
         deliveryOption = deliveryOptionModel.getId();
-        if (deliveryOptionModel.getDelivery().equals("Self Pickup")){
+        if (deliveryOptionModel.getDelivery().equals("Self Pickup")) {
             mBinding.liAddressV.setVisibility(View.GONE);
             isSelfPickup = true;
-            userLocationId = 0;
-        }else {
+        } else {
             mBinding.liAddressV.setVisibility(View.VISIBLE);
             isSelfPickup = false;
         }
