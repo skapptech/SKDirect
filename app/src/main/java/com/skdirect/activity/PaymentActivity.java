@@ -40,18 +40,15 @@ import java.util.ArrayList;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, DeliveryOptionInterface {
     private ActivityPaymentBinding mBinding;
-
     private PaymentViewMode paymentViewMode;
     private CartItemModel cartItemModel;
     private final ArrayList<DeliveryOptionModel> deliveryOptionList = new ArrayList<>();
     private DeliveryOptionAdapter deliveryOptionAdapter;
-
     private OfferResponse.Coupon coupon;
     private int deliveryOption;
     private Integer userLocationId = null;
     private double cartTotal, totalAmount, discount = 0;
     private boolean isSelfPickup = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +117,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             }
         }
     }
-
 
     private void initView() {
         mBinding.tvOrderValueH.setText(MyApplication.getInstance().dbHelper.getString(R.string.total_order_value));
@@ -263,6 +259,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             public void onChanged(DeliveryMainModel deliveryMainModel) {
                 Utils.hideProgressDialog();
                 if (deliveryMainModel.isSuccess()) {
+                    deliveryOption = deliveryMainModel.getResultItem().get(0).getId();
                     if (deliveryMainModel.getResultItem().get(0).getDelivery().equals("Self Pickup")) {
                         deliveryOption = deliveryMainModel.getResultItem().get(0).getId();
                         mBinding.liAddressV.setVisibility(View.GONE);
@@ -282,27 +279,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onChanged(JsonObject aBoolean) {
                 Utils.hideProgressDialog();
-
-            }
-        });
-    }
-
-    public void callRunTimePermissions() {
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
-        Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
-            @Override
-            public void onGranted() {
-                Log.e("onDenied", "onGranted");
-                GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
-                if (gpsTracker != null) {
-                    callLocationAPI(gpsTracker.getLatitude(), gpsTracker.getLongitude());
-                }
-            }
-
-            @Override
-            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
-                super.onDenied(context, deniedPermissions);
-                Log.e("onDenied", "onDenied" + deniedPermissions);
 
             }
         });
