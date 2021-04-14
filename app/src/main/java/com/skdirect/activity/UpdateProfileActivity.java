@@ -1,5 +1,6 @@
 package com.skdirect.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -61,6 +62,12 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+    }
+
     private void upDateProfile() {
         if (TextUtils.isNullOrEmpty(mBinding.etName.getText().toString())) {
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_name));
@@ -97,6 +104,9 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
                 Utils.hideProgressDialog();
                 if (customerDataModel != null) {
                     if (customerDataModel) {
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FIRST_NAME, mBinding.etName.getText().toString());
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.EMAIL_ID,  mBinding.etEmailId.getText().toString());
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.PIN_CODE,  mBinding.etPinCode.getText().toString());
                         onBackPressed();
                     }
                 }
