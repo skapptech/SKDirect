@@ -17,6 +17,7 @@ import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityMyOrderBinding;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
+import com.skdirect.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +48,7 @@ public class MyOrderActivity extends AppCompatActivity implements View.OnClickLi
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         //mBinding.tabLayout.setupWithViewPager(mBinding.viewPager);
         if (commonClassForAPI!=null) {
+            Utils.showProgressDialog(this);
             commonClassForAPI.getAllOrderStatusList(observer);
         }
     }
@@ -54,6 +56,7 @@ public class MyOrderActivity extends AppCompatActivity implements View.OnClickLi
     private final DisposableObserver<JsonObject> observer = new DisposableObserver<JsonObject>() {
         @Override
         public void onNext(@NotNull JsonObject jsonObject) {
+            Utils.hideProgressDialog();
             try {
                 if (jsonObject != null) {
                     if (jsonObject.get("IsSuccess").getAsBoolean()) {
@@ -70,12 +73,12 @@ public class MyOrderActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         public void onError(Throwable e) {
+            Utils.hideProgressDialog();
             e.printStackTrace();
         }
 
         @Override
         public void onComplete() {
-
         }
     };
 
