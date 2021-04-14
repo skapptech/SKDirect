@@ -30,6 +30,7 @@ import com.skdirect.model.TokenModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
+import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.OTPVerificationViewModel;
 
@@ -264,19 +265,22 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN_PASSWORD, model.getPwd());
                     commonClassForAPI.getUpdateToken(updatecallToken, fcmToken);
-                    commonClassForAPI.assignCart(new DisposableObserver<JsonObject>() {
-                        @Override
-                        public void onNext(JsonObject model) { }
-                        @Override
-                        public void onError(Throwable e) {
-                            Utils.hideProgressDialog();
-                            e.printStackTrace();
-                        }
-                        @Override
-                        public void onComplete() {
-                            Utils.hideProgressDialog();
-                        }
-                    }, MyApplication.getInstance().cartRepository.getCartId());
+                    if(!TextUtils.isNullOrEmpty(MyApplication.getInstance().cartRepository.getCartId())){
+                        commonClassForAPI.assignCart(new DisposableObserver<JsonObject>() {
+                            @Override
+                            public void onNext(JsonObject model) { }
+                            @Override
+                            public void onError(Throwable e) {
+                                Utils.hideProgressDialog();
+                                e.printStackTrace();
+                            }
+                            @Override
+                            public void onComplete() {
+                                Utils.hideProgressDialog();
+                            }
+                        }, MyApplication.getInstance().cartRepository.getCartId());
+                    }
+
 
                 }
             } catch (Exception e) {

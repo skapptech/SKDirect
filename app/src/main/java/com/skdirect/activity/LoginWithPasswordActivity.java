@@ -18,6 +18,7 @@ import com.skdirect.model.UpdateTokenModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
+import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 
 import io.reactivex.observers.DisposableObserver;
@@ -149,19 +150,21 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.TOKEN_PASSWORD, model.getPwd());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
                     commonClassForAPI.getUpdateToken(updatecallToken, fcmToken);
-                    commonClassForAPI.assignCart(new DisposableObserver<JsonObject>() {
-                        @Override
-                        public void onNext(JsonObject model) { }
-                        @Override
-                        public void onError(Throwable e) {
-                            Utils.hideProgressDialog();
-                            e.printStackTrace();
-                        }
-                        @Override
-                        public void onComplete() {
-                            Utils.hideProgressDialog();
-                        }
-                    }, MyApplication.getInstance().cartRepository.getCartId());
+                    if(!TextUtils.isNullOrEmpty(MyApplication.getInstance().cartRepository.getCartId())){
+                        commonClassForAPI.assignCart(new DisposableObserver<JsonObject>() {
+                            @Override
+                            public void onNext(JsonObject model) { }
+                            @Override
+                            public void onError(Throwable e) {
+                                Utils.hideProgressDialog();
+                                e.printStackTrace();
+                            }
+                            @Override
+                            public void onComplete() {
+                                Utils.hideProgressDialog();
+                            }
+                        }, MyApplication.getInstance().cartRepository.getCartId());
+                    }
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
                 }
