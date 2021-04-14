@@ -187,6 +187,7 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
+                    SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.ASP_NET_USER_ID, model.getAspNetuserId());
 
                     try {
                         JSONObject jsonObject = new JSONObject(model.getUserDetail());

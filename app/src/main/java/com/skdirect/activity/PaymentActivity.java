@@ -284,16 +284,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-    private void callLocationAPI(double latitude, double longitude) {
-        paymentViewMode.getMapViewModelRequest(latitude, longitude);
-        paymentViewMode.getMapViewModel().observe(this, new Observer<JsonObject>() {
-            @Override
-            public void onChanged(JsonObject data) {
-                Utils.hideProgressDialog();
-
-            }
-        });
-    }
 
     @Override
     public void onOnClick(DeliveryOptionModel deliveryOptionModel, int position) {

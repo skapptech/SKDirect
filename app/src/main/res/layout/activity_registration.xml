@@ -47,7 +47,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:padding="10dp"
-                    android:textColorHint="@color/seller_button_color" />
+                    />
 
 
             <com.google.android.material.textfield.TextInputLayout
