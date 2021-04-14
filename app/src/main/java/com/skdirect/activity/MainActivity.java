@@ -138,13 +138,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (requestCode == 2) {
             if (requestCode == 2 && resultCode == RESULT_OK) {
                 String LOCATION = data.getStringExtra("LOCATION");
-                if(!TextUtils.isNullOrEmpty(LOCATION)){
+                if (!TextUtils.isNullOrEmpty(LOCATION)) {
                     setLocationTV.setText(LOCATION);
                 }
-
             }
-
         }
+        openFragment(new HomeFragment());
     }
     private void initView() {
         dbHelper = MyApplication.getInstance().dbHelper;
