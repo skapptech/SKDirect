@@ -263,7 +263,19 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
                     commonClassForAPI.getUpdateToken(updatecallToken, fcmToken);
-
+                    commonClassForAPI.assignCart(new DisposableObserver<JsonObject>() {
+                        @Override
+                        public void onNext(JsonObject model) { }
+                        @Override
+                        public void onError(Throwable e) {
+                            Utils.hideProgressDialog();
+                            e.printStackTrace();
+                        }
+                        @Override
+                        public void onComplete() {
+                            Utils.hideProgressDialog();
+                        }
+                    }, MyApplication.getInstance().cartRepository.getCartId());
 
                 }
             } catch (Exception e) {

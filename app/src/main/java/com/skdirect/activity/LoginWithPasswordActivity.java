@@ -68,7 +68,6 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
     }
 
     private void loginWithPassword() {
-
         mBinding.btLoddingOtp.setText(dbHelper.getString(R.string.loading));
         passwordString = mBinding.etPassword.getText().toString().trim();
         if (passwordString.isEmpty()) {
@@ -82,19 +81,56 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
     private void checkPasswordApi() {
         if (Utils.isNetworkAvailable(this)) {
             if (commonClassForAPI != null) {
-                commonClassForAPI
-                        .getTokenwithphoneNo(callToken, "password", Utils.getDeviceUniqueID(LoginWithPasswordActivity.this),
-                                passwordString, false, true, "BUYERAPP", true,
-                                Utils.getDeviceUniqueID(LoginWithPasswordActivity.this), Double.parseDouble(SharePrefs.getStringSharedPreferences(LoginWithPasswordActivity.this,SharePrefs.LAT)),Double.parseDouble(SharePrefs.getStringSharedPreferences(LoginWithPasswordActivity.this,SharePrefs.LON)), SharePrefs.getInstance(LoginWithPasswordActivity.this).getString(SharePrefs.PIN_CODE),"GET",mobileNumber);
-
-
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("Password", passwordString);
+                jsonObject.addProperty("UserName", mobileNumber);
+                commonClassForAPI.VerfiyPassword(passwordDes, jsonObject);
             }
-
         } else {
-                Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
+            Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
+        }
+    }
+
+
+    private final DisposableObserver<JsonObject> passwordDes = new DisposableObserver<JsonObject>() {
+        @Override
+        public void onNext(JsonObject jsonObject) {
+            try {
+                Utils.hideProgressDialog();
+                if (jsonObject.get("IsSuccess").getAsBoolean()) {
+                    Utils.setToast(getApplicationContext(), jsonObject.get("SuccessMessage").getAsString());
+                    if (Utils.isNetworkAvailable(getApplicationContext())) {
+                        if (commonClassForAPI != null) {
+                            commonClassForAPI
+                                    .getTokenwithphoneNo(callToken, "password", Utils.getDeviceUniqueID(LoginWithPasswordActivity.this),
+                                            passwordString, false, true, "BUYERAPP", true,
+                                            Utils.getDeviceUniqueID(LoginWithPasswordActivity.this), Double.parseDouble(SharePrefs.getStringSharedPreferences(LoginWithPasswordActivity.this, SharePrefs.LAT)), Double.parseDouble(SharePrefs.getStringSharedPreferences(LoginWithPasswordActivity.this, SharePrefs.LON)), SharePrefs.getInstance(LoginWithPasswordActivity.this).getString(SharePrefs.PIN_CODE), "GET", mobileNumber);
+                        }
+
+                    } else {
+                        Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
+                    }
+                } else {
+                    mBinding.btLoddingOtp.setText(dbHelper.getString(R.string.next));
+                    Utils.setToast(getApplicationContext(), jsonObject.get("ErrorMessage").getAsString());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+
             }
         }
+        @Override
+        public void onError(Throwable e) {
+            mBinding.btLoddingOtp.setText(dbHelper.getString(R.string.next));
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
 
+        @Override
+        public void onComplete() {
+            Utils.hideProgressDialog();
+        }
+    };
 
     private final DisposableObserver<TokenModel> callToken = new DisposableObserver<TokenModel>() {
         @Override
@@ -110,22 +146,32 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
                     SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.BUSINESS_TYPE, model.getBusinessType());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_CONTACTREAD, model.getIscontactRead());
                     SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_SUPER_ADMIN, model.getIsSuperAdmin());
-
-                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN,true);
+                    SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
                     commonClassForAPI.getUpdateToken(updatecallToken, fcmToken);
+                    commonClassForAPI.assignCart(new DisposableObserver<JsonObject>() {
+                        @Override
+                        public void onNext(JsonObject model) { }
+                        @Override
+                        public void onError(Throwable e) {
+                            Utils.hideProgressDialog();
+                            e.printStackTrace();
+                        }
+                        @Override
+                        public void onComplete() {
+                            Utils.hideProgressDialog();
+                        }
+                    }, MyApplication.getInstance().cartRepository.getCartId());
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
 
             }
         }
 
         @Override
         public void onError(Throwable e) {
-            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_pass));
             Utils.hideProgressDialog();
             e.printStackTrace();
         }
@@ -135,7 +181,6 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
             Utils.hideProgressDialog();
         }
     };
-
     private final DisposableObserver<JsonObject> updatecallToken = new DisposableObserver<JsonObject>() {
         @Override
         public void onNext(JsonObject model) {

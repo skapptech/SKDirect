@@ -207,7 +207,7 @@ public interface APIServices {
     Call<JsonObject> AddLocation(@Body JsonObject jsonObject);
 
     @POST("api/NativeBuyer/Address/UpdateBuyerLocation")
-    Call<UpdateEditeAddreshMainModel> UpdateBuyerLocation(@Body JsonObject jsonArray);
+    Call<UpdateEditeAddreshMainModel> UpdateBuyerLocation(@Body JsonObject jsonObject);
 
     @POST("api/Buyer/SellerProductDetail/AddCartItem/")
     Call<AddCartItemModel> AddCartItem(@Body ItemAddModel itemAddModel);
@@ -270,5 +270,11 @@ public interface APIServices {
 
     @POST("api/NativeBuyer/GlobalFilter/GetBrandListAsync")
     Observable<JsonObject> getFilterBrandList(@Body PostBrandModel postBrandModel);
+
+    @POST("api/NativeBuyer/Login/VerifyByPassword")
+    Observable<JsonObject> getVerifyPassword(@Body JsonObject jsonObject);
+
+    @GET("api/NativeBuyer/SellerProfile/AsssignCart")
+    Observable<JsonObject> getAssignCart(@Query("id") String id);
 
 }
