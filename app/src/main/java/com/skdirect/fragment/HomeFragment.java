@@ -33,11 +33,9 @@ import com.skdirect.adapter.TopNearByItemAdapter;
 import com.skdirect.adapter.TopSellerAdapter;
 import com.skdirect.databinding.FragmentHomeBinding;
 import com.skdirect.model.AllCategoresMainModel;
-import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.MallMainModel;
 import com.skdirect.model.NearByMainModel;
 import com.skdirect.model.TopSellerMainModel;
-import com.skdirect.model.UserDetailResponseModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
@@ -344,16 +342,13 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mBinding.etSearchSeller.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
                     searchData();
-                    handled = true;
+                    return true;
                 }
-                return handled;
+                return false;
             }
         });
-
-
     }
 
     private void viewAllButtonClick() {

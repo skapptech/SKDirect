@@ -6,18 +6,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.gson.JsonArray;
 import com.skdirect.api.RestClient;
-import com.skdirect.model.AllCategoriesModel;
-import com.skdirect.model.PaginationModel;
-import com.skdirect.model.SearchDataModel;
 import com.skdirect.model.SearchMainModel;
 import com.skdirect.model.SearchRequestModel;
 import com.skdirect.model.ShopMainModel;
-import com.skdirect.model.TopSellerModel;
 import com.skdirect.utils.Utils;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +24,10 @@ public class SearchViewMode extends ViewModel {
     private MutableLiveData<ShopMainModel> shopDataViewModel;
 
     public LiveData<SearchMainModel> getSearchViewModel() {
-        if(searchViewModel==null){
+        if (searchViewModel != null) {
+            searchViewModel.setValue(null);
+        }
+        if (searchViewModel == null) {
             searchViewModel = new MutableLiveData<>();
         }
         if (searchViewModel.getValue() != null) {
@@ -41,7 +37,7 @@ public class SearchViewMode extends ViewModel {
     }
 
     public LiveData<ShopMainModel> getShopDataViewModel() {
-        if(shopDataViewModel==null){
+        if (shopDataViewModel == null) {
             shopDataViewModel = new MutableLiveData<>();
         }
         if (shopDataViewModel.getValue() != null) {
@@ -54,8 +50,8 @@ public class SearchViewMode extends ViewModel {
         RestClient.getInstance().getService().GetSellerListWithItem(searchRequestModel).enqueue(new Callback<SearchMainModel>() {
             @Override
             public void onResponse(Call<SearchMainModel> call, Response<SearchMainModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     searchViewModel.setValue(response.body());
                 }
             }
@@ -72,11 +68,11 @@ public class SearchViewMode extends ViewModel {
 
 
     public MutableLiveData<ShopMainModel> getShopDataViewModelRequest(int skipCount, int takeCount, String s, String cateogryId) {
-        RestClient.getInstance().getService().GetTopSellerItem(skipCount,takeCount,s,cateogryId).enqueue(new Callback<ShopMainModel>() {
+        RestClient.getInstance().getService().GetTopSellerItem(skipCount, takeCount, s, cateogryId).enqueue(new Callback<ShopMainModel>() {
             @Override
             public void onResponse(Call<ShopMainModel> call, Response<ShopMainModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     shopDataViewModel.setValue(response.body());
                 }
             }
