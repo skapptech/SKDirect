@@ -11,6 +11,8 @@ import com.skdirect.model.CartMainModel;
 import com.skdirect.model.CommonResponseModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.MallMainPriceModel;
+import com.skdirect.model.MyOrderRequestModel;
+import com.skdirect.model.OrderModel;
 import com.skdirect.model.OrderStatusMainModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
@@ -444,4 +446,29 @@ public class CommonClassForAPI {
                 });
     }
 
+    public void GetOrderMaster(final DisposableObserver<OrderModel> observer, MyOrderRequestModel myOrderRequestModel) {
+        RestClient.getInstance().getService().GetOrderMaster(myOrderRequestModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<OrderModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull OrderModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
 }
