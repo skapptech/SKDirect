@@ -126,7 +126,6 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
                     pinCode = addresses.get(0).getPostalCode();
                     city = addresses.get(0).getLocality();
                     state = addresses.get(0).getAdminArea();
-
                     String tempCity = addresses.get(0).getLocality();
                     mBinding.etPinCode.setText(pinCode);
                     if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString())) {
@@ -136,7 +135,6 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
                         mBinding.etPinCode.setFocusable(false);
                     }
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
