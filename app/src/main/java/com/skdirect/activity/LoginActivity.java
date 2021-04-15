@@ -178,8 +178,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Utils.setToast(LoginActivity.this,model.getErrorMessage());
                     }
                 }
-
-
             }
         });
 

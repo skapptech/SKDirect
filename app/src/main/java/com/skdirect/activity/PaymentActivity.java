@@ -208,7 +208,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         dialog.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.order_place__popoup));
         dialog.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.ok),
                 (dialog1, which) -> {
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
                 });
         dialog.show();

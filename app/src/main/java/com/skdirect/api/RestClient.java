@@ -31,11 +31,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class RestClient {
     private static Retrofit retrofit = null;
-
     private static final RestClient ourInstance = new RestClient();
     private static Activity mActivity;
     private Request request;
-
     public static RestClient getInstance() {
         //mActivity = activity;
         return ourInstance;
@@ -100,13 +98,9 @@ public class RestClient {
         }
     }
 
-
-
     public APIServices getService() {
         return retrofit.create(APIServices.class);
     }
-
-
 
     private void printMsg(String msg) {
         int chunkCount = msg.length() / 4050;     // integer division
