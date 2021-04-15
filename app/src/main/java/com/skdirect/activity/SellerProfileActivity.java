@@ -98,7 +98,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 Utils.showShareWhatsappDialog(this, SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/seller/" + sellerID, "");
                 break;
             case R.id.iv_s_shop_image:
-                startActivity(new Intent(getApplicationContext(), SellerImageGalleryActivity.class).putExtra("ImageData",sellerImagePath));
+                startActivity(new Intent(getApplicationContext(), SellerImageGalleryActivity.class).putExtra("ImageData", sellerImagePath));
                 break;
 
         }
@@ -193,7 +193,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             if (sellerDetailsModel.isSuccess()) {
                 if (sellerDetailsModel.getSellerInfoModel().getRating() >= 0.0) {
                     Double deg = sellerDetailsModel.getSellerInfoModel().getRating();
-                     sellerImagePath =sellerDetailsModel.getSellerInfoModel().getImagePath();
+                    sellerImagePath = sellerDetailsModel.getSellerInfoModel().getImagePath();
                     float rating = deg.floatValue();
                     mBinding.ratingbarSeller.setRating(rating);
                 } else {

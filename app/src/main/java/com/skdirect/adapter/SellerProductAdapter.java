@@ -66,7 +66,7 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
             holder.mBinding.tvMagrginOff.setVisibility(View.GONE);
         }
 
-        if (model.getDiscountAmount()>0.0) {
+        if (model.getDiscountAmount() > 0.0) {
             double DiscountAmount = model.getSellingPrice() - model.getDiscountAmount();
             holder.mBinding.llDescountAmount.setVisibility(View.VISIBLE);
             holder.mBinding.tvDiscount.setText("₹ " + DiscountAmount);
