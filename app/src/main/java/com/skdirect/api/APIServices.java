@@ -31,6 +31,7 @@ import com.skdirect.model.OrderItemModel;
 import com.skdirect.model.OrderModel;
 import com.skdirect.model.OrderPlaceMainModel;
 import com.skdirect.model.OrderPlaceRequestModel;
+import com.skdirect.model.OrderStatusMainModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PaginationModel;
@@ -275,5 +276,5 @@ public interface APIServices {
     Observable<JsonObject> getAssignCart(@Query("id") String id);
 
     @GET("api/NativeBuyer/MyOrder/GetOrderStatus")
-    Observable<JsonObject> getOrderStatusList();
+    Observable<OrderStatusMainModel> getOrderStatusList();
 }
