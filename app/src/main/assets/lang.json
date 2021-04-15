@@ -216,7 +216,16 @@
       "are_you_sure_clear_cart": "क्या आपको यकीन है, आप कार्ट खाली करना चाहते हैं।",
       "no_address_found": "कोई पता नहीं मिला",
       "cash_on_delivery": "डिलवरी पर नकदी",
-      "delivery_option": "डिलीवरी विकल्प"
+      "delivery_option": "डिलीवरी विकल्प",
+      "clear_all_done": "सभी फ़िल्टर साफ़ कर दिए गए हैं",
+      "no_items_available": "कोई वस्तु उपलब्ध नहीं है",
+      "webview_title_name_privacy": "प्राइवेसी पॉलिसी",
+      "webview_title_name_about_direct": "एप्स के बारे में",
+      "shop_name": "विक्रेता",
+      "Confirmation": "पुष्टीकरण",
+      "order_place": "क्या आप वाकई ऑर्डर देना चाहते हैं?",
+      "congratulation": "बधाई",
+      "order_place__popoup": "आदेश जगह सफलतापूर्वक"
     },
     "English": {
       "language_code": "en",
@@ -434,7 +443,16 @@
       "are_you_sure_clear_cart": "Are You Sure, You want clear cart.",
       "no_address_found": "No Address Found",
       "cash_on_delivery": "Cash on delivery",
-      "delivery_option": "Delivery Option"
+      "delivery_option": "we dont serve for this pincode currently. Please change your location!",
+      "clear_all_done": "All filters have been cleared",
+      "no_items_available": "No items available",
+      "webview_title_name_privacy": "Privacy Policy",
+      "webview_title_name_about_direct": "About App",
+      "shop_name": "Seller",
+      "Confirmation": "Confirmation",
+      "order_place": "Are you sure you want to place order?",
+      "congratulation": "Congratulation",
+      "order_place__popoup": "Order Placed Successfully"
     }
   }
 }
