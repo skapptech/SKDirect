@@ -100,7 +100,7 @@
                             style="@style/font_normal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="MRP"
+                            android:text="@string/txt_mrp"
                             android:textColor="@color/black"
                             android:textSize="15dp"
                             android:textStyle="normal" />
@@ -131,13 +131,44 @@
                             style="@style/font_normal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Selling Price"
+                            android:text="@string/txt_selling_price"
                             android:textColor="@color/black"
                             android:textSize="15dp"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/tv_selling_price"
+                            style="@style/font_normal_sami_bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text=""
+                            android:textColor="@color/teal_200"
+                            android:textSize="13dp"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_descount_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            style="@style/font_normal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/discount"
+                            android:textColor="@color/black"
+                            android:textSize="15dp"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/tv_discount"
                             style="@style/font_normal_sami_bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

@@ -228,4 +228,5 @@
     <string name="order_place">क्या आप वाकई ऑर्डर देना चाहते हैं?</string>
     <string name="congratulation">बधाई</string>
     <string name="order_place__popoup">आदेश जगह सफलतापूर्वक</string>
+    <string name="discount">डिस्काउंट कीमत</string>
 </resources>

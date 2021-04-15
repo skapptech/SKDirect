@@ -71,6 +71,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         holder.mBinding.LLMainCat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID",model.getId()));
 
             }

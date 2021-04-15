@@ -58,6 +58,27 @@ public class SellerProductList {
     private int SellerProductId;
     @SerializedName("Id")
     private int Id;
+    @SerializedName("ParentProductId")
+    private int ParentProductId;
+
+    @SerializedName("DiscountAmount")
+    private int DiscountAmount;
+
+    public int getDiscountAmount() {
+        return DiscountAmount;
+    }
+
+    public void setDiscountAmount(int discountAmount) {
+        DiscountAmount = discountAmount;
+    }
+
+    public int getParentProductId() {
+        return ParentProductId;
+    }
+
+    public void setParentProductId(int parentProductId) {
+        ParentProductId = parentProductId;
+    }
 
     @SerializedName("NoofView")
     private int NoofView;

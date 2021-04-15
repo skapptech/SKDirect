@@ -47,7 +47,7 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
         holder.mBinding.tvSallerName.setText(model.getProductName());
         holder.mBinding.tvMrp.setText("₹ " + model.getMrp());
         holder.mBinding.tvSellingPrice.setText("₹ " + model.getSellingPrice());
-        holder.mBinding.tvQuantity.setText(MyApplication.getInstance().dbHelper.getString(R.string.qty)+" " + model.getMeasurement() + model.getUom());
+        holder.mBinding.tvQuantity.setText(MyApplication.getInstance().dbHelper.getString(R.string.qty) + " " + model.getMeasurement() + model.getUom());
 
         if (model.getMrp() == model.getSellingPrice()) {
             holder.mBinding.llSellingPrice.setVisibility(View.GONE);
@@ -64,6 +64,17 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
             holder.mBinding.tvMagrginOff.setText("" + model.getOffPercentage() + "%\n OFF");
         } else {
             holder.mBinding.tvMagrginOff.setVisibility(View.GONE);
+        }
+
+        if (model.getDiscountAmount()>0.0) {
+            double DiscountAmount = model.getSellingPrice() - model.getDiscountAmount();
+            holder.mBinding.llDescountAmount.setVisibility(View.VISIBLE);
+            holder.mBinding.tvDiscount.setText("₹ " + DiscountAmount);
+            holder.mBinding.tvMrp.setText("₹ " + model.getMrp());
+            holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.mBinding.tvSellingPrice.setText(String.valueOf(model.getSellingPrice()));
+            holder.mBinding.tvSellingPrice.setPaintFlags(holder.mBinding.tvSellingPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
         }
 
 
@@ -107,7 +118,12 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
             addItemInterface.addButtonOnClick(model, holder.mBinding.tvSelectedQty, holder.mBinding.tvAdd, holder.mBinding.LLPlusMinus);
         });
 
-        holder.mBinding.LLMainCat.setOnClickListener(view -> context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID", model.getSellerProductId())));
+        if (model.getParentProductId() > 0) {
+            holder.mBinding.LLMainCat.setOnClickListener(view -> context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID", model.getParentProductId())));
+        } else {
+            holder.mBinding.LLMainCat.setOnClickListener(view -> context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID", model.getSellerProductId())));
+        }
+
     }
 
     @Override

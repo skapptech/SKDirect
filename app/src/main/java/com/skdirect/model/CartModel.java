@@ -84,6 +84,16 @@ public class CartModel implements Serializable {
     private int Id;
     private String carId;
 
+    @SerializedName("DiscountAmount")
+    private int DiscountAmount;
+
+    public int getDiscountAmount() {
+        return DiscountAmount;
+    }
+
+    public void setDiscountAmount(int discountAmount) {
+        DiscountAmount = discountAmount;
+    }
 
     public CartModel() {
     }

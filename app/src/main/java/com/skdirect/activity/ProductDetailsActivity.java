@@ -3,6 +3,7 @@ package com.skdirect.activity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -114,11 +115,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         callProductData();
         GetCartItems();
         if (SharePrefs.getInstance(this).getBoolean(SharePrefs.IS_Mall)) {
-            mBinding.llSimilarProduct.setVisibility(View.VISIBLE);
+            mBinding.llSellarsOtherProducs.setVisibility(View.VISIBLE);
             GetSellarOtherProducts();
         } else {
             mBinding.llOtherSellar.setVisibility(View.GONE);
-            mBinding.llSellarsOtherProducs.setVisibility(View.GONE);
+            mBinding.llSimilarProduct.setVisibility(View.GONE);
             GetTopSellar();
             GetSellarOtherProducts();
             GetTopSimilarProduct();
@@ -410,9 +411,15 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                             }
                             mBinding.tvDeliveryOption.setText("Home Delivery");
                         }
-                        if (productDataModel.getResultItem().getDiscountAmount() == 0.0) {
+                        if (productDataModel.getResultItem().getDiscountAmount()>0.0) {
                             double DiscountAmount = productDataModel.getResultItem().getSellingPrice() - productDataModel.getResultItem().getDiscountAmount();
-                            mBinding.tvDiscount.setText("" + DiscountAmount + "OFF");
+                            mBinding.llDescountAmount.setVisibility(View.VISIBLE);
+                            mBinding.tvDiscount.setText("₹ " + DiscountAmount);
+                            mBinding.tvItemMrp.setText("₹ " + productDataModel.getResultItem().getMrp());
+                            mBinding.tvItemMrp.setPaintFlags(mBinding.tvItemMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                            mBinding.tvSellingPrice.setText(String.valueOf(productDataModel.getResultItem().getSellingPrice()));
+                            mBinding.tvSellingPrice.setPaintFlags(mBinding.tvSellingPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
                         }
                         if (productDataModel.getResultItem().getOffPercentage() != 0.0) {
                             mBinding.tvMagrginOff.setVisibility(View.VISIBLE);
@@ -488,10 +495,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             imageListModels = variationListModel.getImageList();
         }
 
-        if (variationListModel.getDiscountAmount() == 0.0) {
-            mBinding.tvDiscount.setVisibility(View.VISIBLE);
+        if (variationListModel.getDiscountAmount()> 0.0) {
+            mBinding.llDescountAmount.setVisibility(View.VISIBLE);
             double DiscountAmount = variationListModel.getSellingPrice() - variationListModel.getDiscountAmount();
-            mBinding.tvDiscount.setText("" + DiscountAmount + "OFF");
+            mBinding.tvDiscount.setText("₹ " + DiscountAmount );
+
             //mBinding.tvItemMrpOff.setPaintFlags(mBinding.tvItemMrpOff.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
 

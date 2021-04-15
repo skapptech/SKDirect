@@ -1,7 +1,9 @@
 package com.skdirect.adapter;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -50,6 +52,17 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
             Picasso.get().load(BuildConfig.apiEndpoint + cartModel.getImagePath()).into(holder.mBinding.imItemImage);
         } else {
             Picasso.get().load(cartModel.getImagePath()).into(holder.mBinding.imItemImage);
+        }
+
+        if (cartModel.getDiscountAmount()>0.0) {
+            double DiscountAmount = cartModel.getPrice() - cartModel.getDiscountAmount();
+            holder.mBinding.tvDiscount.setVisibility(View.VISIBLE);
+            holder.mBinding.tvDiscount.setText("₹ " + DiscountAmount);
+            holder.mBinding.tvMrp.setText("₹ " + cartModel.getMrp());
+            holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+           // holder.mBinding.tvSellingPrice.setText(String.valueOf(model.getSellingPrice()));
+            //holder.mBinding.tvSellingPrice.setPaintFlags(holder.mBinding.tvSellingPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
         }
 
         holder.mBinding.tvQtyPlus.setOnClickListener(view -> {
