@@ -115,7 +115,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         GetCartItems();
         if (SharePrefs.getInstance(this).getBoolean(SharePrefs.IS_Mall)) {
             mBinding.llSimilarProduct.setVisibility(View.VISIBLE);
-            GetTopSimilarProduct();
+            GetSellarOtherProducts();
         } else {
             mBinding.llOtherSellar.setVisibility(View.GONE);
             mBinding.llSellarsOtherProducs.setVisibility(View.GONE);

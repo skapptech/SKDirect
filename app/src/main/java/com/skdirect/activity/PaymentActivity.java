@@ -30,6 +30,7 @@ import com.skdirect.model.DeliveryOptionModel;
 import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.UserLocationModel;
 import com.skdirect.model.response.OfferResponse;
+import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
@@ -49,6 +50,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private Integer userLocationId = null;
     private double cartTotal, totalAmount, discount = 0;
     private boolean isSelfPickup = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,9 +164,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     public void orderPlaceAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Confirmation");
-        builder.setMessage("Are you sure you want to place order?");
-        builder.setPositiveButton("Yes", (dialog, which) -> {
+        builder.setTitle(MyApplication.getInstance().dbHelper.getString(R.string.Confirmation));
+        builder.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.order_place));
+        builder.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.yes), (dialog, which) -> {
             if (Utils.isNetworkAvailable(getApplicationContext())) {
                 Utils.showProgressDialog(this);
                 orderPlaceAPI();
@@ -173,7 +175,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        builder.setNegativeButton("No", (dialog, which) -> {
+        builder.setNegativeButton(MyApplication.getInstance().dbHelper.getString(R.string.no), (dialog, which) -> {
 
         });
 
@@ -202,9 +204,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     private void orderPlaceDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Congratulation");
-        dialog.setMessage("Order Place Successfully");
-        dialog.setPositiveButton("OK",
+        dialog.setTitle(MyApplication.getInstance().dbHelper.getString(R.string.congratulation));
+        dialog.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.order_place__popoup));
+        dialog.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.ok),
                 (dialog1, which) -> {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();

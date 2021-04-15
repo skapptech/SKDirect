@@ -115,6 +115,7 @@ public class ShopFragment extends Fragment implements SearchInterface {
     }
 
     private void callShopAPi() {
+        Utils.hideKeyboard(getActivity());
         if (Utils.isNetworkAvailable(activity)) {
             Utils.showProgressDialog(activity);
             sallerShopList.clear();
