@@ -74,9 +74,7 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
             holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             holder.mBinding.tvSellingPrice.setText(String.valueOf(model.getSellingPrice()));
             holder.mBinding.tvSellingPrice.setPaintFlags(holder.mBinding.tvSellingPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
         }
-
 
         if (model.getNoofView() > 0) {
             holder.mBinding.llNoOfView.setVisibility(View.VISIBLE);
@@ -91,6 +89,7 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
             holder.mBinding.tvAdd.setVisibility(View.GONE);
             holder.mBinding.tvSelectedQty.setText("" + model.getQty());
         } else {
+            model.setQty(0);
             holder.mBinding.LLPlusMinus.setVisibility(View.GONE);
             holder.mBinding.tvAdd.setVisibility(View.VISIBLE);
             holder.mBinding.tvSelectedQty.setText("0");
@@ -102,28 +101,23 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
             Picasso.get().load(model.getImagePath()).into(holder.mBinding.imItemImage);
         }
 
-
         holder.mBinding.tvQtyPlus.setOnClickListener(view -> {
             model.setQty(model.getQty() + 1);
             addItemInterface.plusButtonOnClick(model, holder.mBinding.tvSelectedQty);
         });
-
         holder.mBinding.tvQtyMinus.setOnClickListener(view -> {
             model.setQty(model.getQty() - 1);
             addItemInterface.minusButtonOnClick(model, holder.mBinding.tvSelectedQty, holder.mBinding.tvAdd, holder.mBinding.LLPlusMinus);
         });
-
         holder.mBinding.tvAdd.setOnClickListener(view -> {
             model.setQty(model.getQty() + 1);
             addItemInterface.addButtonOnClick(model, holder.mBinding.tvSelectedQty, holder.mBinding.tvAdd, holder.mBinding.LLPlusMinus);
         });
-
         if (model.getParentProductId() > 0) {
             holder.mBinding.LLMainCat.setOnClickListener(view -> context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID", model.getParentProductId())));
         } else {
             holder.mBinding.LLMainCat.setOnClickListener(view -> context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID", model.getSellerProductId())));
         }
-
     }
 
     @Override
