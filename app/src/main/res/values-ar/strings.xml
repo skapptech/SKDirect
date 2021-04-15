@@ -135,7 +135,7 @@
     <string name="total_amount">Total Amount</string>
     <string name="cancel_order">Cancel Order</string>
     <string name="order_no">Order No :</string>
-    <string name="order_on">Order on</string>
+    <string name="order_on">Order Date</string>
     <string name="sell_by">Seller</string>
     <string name="payment_mode">Payment Mode</string>
     <string name="price_details_order">Price Details (</string>
@@ -225,4 +225,5 @@
     <string name="no_items_available">No items available</string>
     <string name="webview_title_name_privacy">Privacy Policy</string>
     <string name="webview_title_name_about_direct">About App</string>
+    <string name="shop_name">Seller</string>
 </resources>

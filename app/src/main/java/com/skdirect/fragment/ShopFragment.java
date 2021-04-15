@@ -16,8 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.R;
+import com.skdirect.activity.SearchActivity;
 import com.skdirect.adapter.SellerShopListAdapter;
 import com.skdirect.databinding.FragmentShopBinding;
+import com.skdirect.interfacee.SearchInterface;
 import com.skdirect.model.ShopMainModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.utils.MyApplication;
@@ -28,8 +30,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class ShopFragment extends Fragment {
+public class ShopFragment extends Fragment implements SearchInterface {
     private FragmentShopBinding mBinding;
+    private SearchActivity activity;
+
     private int skipCount = 0;
     private final int takeCount = 7;
     private int pastVisiblesItems = 0;
@@ -46,8 +50,7 @@ public class ShopFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
-
+        activity = (SearchActivity) context;
     }
 
     @SuppressLint("ValidFragment")
@@ -63,8 +66,15 @@ public class ShopFragment extends Fragment {
         searchViewMode = ViewModelProviders.of(this).get(SearchViewMode.class);
         initViews();
         callShopAPi();
+        activity.searchInterfaceS = this;
 
         return mBinding.getRoot();
+    }
+
+
+    @Override
+    public void onSearchClick(String query, int categoryId) {
+        callShopAPi();
     }
 
 
@@ -119,8 +129,8 @@ public class ShopFragment extends Fragment {
             @Override
             public void onChanged(ShopMainModel shopMainModel) {
                 Utils.hideProgressDialog();
-                if (shopMainModel.isSuccess()) {
-                    if (shopMainModel != null && shopMainModel.getResultItem().size() > 0) {
+                if (shopMainModel != null && shopMainModel.getResultItem() != null && shopMainModel.getResultItem().size() > 0) {
+                    if (shopMainModel.isSuccess()) {
                         mBinding.rvSearch.post(new Runnable() {
                             public void run() {
                                 sallerShopList.addAll(shopMainModel.getResultItem());

@@ -25,7 +25,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private String searchSellerName;
     private int allCategoriesID;
     private DBHelper dbHelper;
-    public SearchInterface searchInterface;
+    public SearchInterface searchInterface, searchInterfaceS;
 
 
     @Override
@@ -60,6 +60,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
                 if (!TextUtils.isNullOrEmpty(mBinding.etSearchSeller.getText().toString())) {
                     searchInterface.onSearchClick(mBinding.etSearchSeller.getText().toString(), allCategoriesID);
+                    searchInterfaceS.onSearchClick(mBinding.etSearchSeller.getText().toString(), allCategoriesID);
                 }
                 return true;
             }
