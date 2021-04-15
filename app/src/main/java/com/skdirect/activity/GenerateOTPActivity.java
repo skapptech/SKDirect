@@ -20,10 +20,8 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.gson.JsonObject;
 import com.skdirect.R;
@@ -44,8 +42,6 @@ import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.OTPVerificationViewModel;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.observers.DisposableObserver;
 
@@ -118,21 +114,33 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
 
             @Override
             public void run() {
+                Binding.etOtp.setText(MyApplication.getInstance().otp);
                 //TODO Set your button auto perform click.
                 Binding.btLoddingOtp.performClick();
             }
         }, noOfSecond * 1000);
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        mAuth.setLanguageCode("en");
-        PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder()
-                        .setPhoneNumber("+91" + mobileNumber)       // Phone number to verify
-                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                        .setActivity(this)                 // Activity (for callback binding)
-                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-                        .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
+//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//        mAuth.setLanguageCode("en");
+//        PhoneAuthOptions options =
+//                PhoneAuthOptions.newBuilder()
+//                        .setPhoneNumber("+91" + mobileNumber)       // Phone number to verify
+//                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+//                        .setActivity(this)                 // Activity (for callback binding)
+//                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+//                        .build();
+//        PhoneAuthProvider.verifyPhoneNumber(options);
+//        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                System.out.println("asd " + firebaseAuth.getPendingAuthResult());
+//                if (firebaseAuth.getPendingAuthResult() != null) {
+//                    System.out.println("asd " + firebaseAuth.getPendingAuthResult().getResult());
+//                    System.out.println("asd " + firebaseAuth.getPendingAuthResult().getResult().getUser());
+//                    System.out.println("asd " + firebaseAuth.getCurrentUser().getPhoneNumber());
+//                }
+//            }
+//        });
     }
 
     void startTimer(TextView tvResendOtpTimer, TextView resendotp) {

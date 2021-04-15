@@ -8,14 +8,11 @@ import androidx.lifecycle.LifecycleObserver;
 
 import com.facebook.soloader.SoLoader;
 import com.google.gson.JsonObject;
-import com.skdirect.activity.LoginActivity;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.db.CartRepository;
 import com.skdirect.model.TokenModel;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import io.reactivex.observers.DisposableObserver;
 
@@ -25,6 +22,7 @@ public class MyApplication extends Application implements LifecycleObserver {
     public Activity activity;
     public CartRepository cartRepository;
     public DBHelper dbHelper;
+    public String otp = "1234";
 
     public static synchronized MyApplication getInstance() {
         return mInstance;

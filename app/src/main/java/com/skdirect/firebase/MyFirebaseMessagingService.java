@@ -22,6 +22,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.skdirect.R;
 import com.skdirect.activity.MyOrderActivity;
+import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 
@@ -53,38 +54,45 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
         JSONObject object = new JSONObject(remoteMessage.getData());
         try {
-            String redirectUrl = "";
+            String redirectUrl = "", type = null;
             if (object.has("redirecturl")) {
                 redirectUrl = object.getString("redirecturl");
             }
+            if (object.has("Type")) {
+                type = object.getString("Type");
+            }
 
+            if (type != null && type.equals("OTP")) {
+                MyApplication.getInstance().otp = object.getString("body");
+                MyApplication.getInstance().otp.replaceAll("[^0-9]", "");
+            } else {
+                showNotification(object.getString("icon"),
+                        object.getString("body"),
+                        object.getString("title"), 0);
 
-            showNotification(object.getString("icon"),
-                    object.getString("body"),
-                    object.getString("title"), 0);
-
-            if (object.has("languageUpdateDate")) {
-                String localLastLanguageUpdateDate = SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.LAST_LANGUAGE_UPDATE_DATE);
-                String serverLastLanguageUpdateDate =object.getString("languageUpdateDate");
-                DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-                try {
-                    if (TextUtils.isNullOrEmpty(localLastLanguageUpdateDate)) {
-                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAST_LANGUAGE_UPDATE_DATE, serverLastLanguageUpdateDate);
-                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_FETCH_LANGUAGE, true);
-                    } else {
-                        Date serverdate = originalFormat.parse(serverLastLanguageUpdateDate);
-                        Date localdate = originalFormat.parse(localLastLanguageUpdateDate);
-                        if (serverdate.after(localdate)) {
+                if (object.has("languageUpdateDate")) {
+                    String localLastLanguageUpdateDate = SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.LAST_LANGUAGE_UPDATE_DATE);
+                    String serverLastLanguageUpdateDate = object.getString("languageUpdateDate");
+                    DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                    try {
+                        if (TextUtils.isNullOrEmpty(localLastLanguageUpdateDate)) {
                             SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAST_LANGUAGE_UPDATE_DATE, serverLastLanguageUpdateDate);
                             SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_FETCH_LANGUAGE, true);
+                        } else {
+                            Date serverdate = originalFormat.parse(serverLastLanguageUpdateDate);
+                            Date localdate = originalFormat.parse(localLastLanguageUpdateDate);
+                            if (serverdate.after(localdate)) {
+                                SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.LAST_LANGUAGE_UPDATE_DATE, serverLastLanguageUpdateDate);
+                                SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_FETCH_LANGUAGE, true);
+                            }
                         }
-                    }
 
-                    if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_FETCH_LANGUAGE)) {
-                        new FirebaseLanguageFetch(getApplicationContext()).fetchLanguage();
+                        if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_FETCH_LANGUAGE)) {
+                            new FirebaseLanguageFetch(getApplicationContext()).fetchLanguage();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
         } catch (Exception e) {
