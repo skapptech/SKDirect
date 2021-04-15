@@ -82,7 +82,7 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
         mBinding.btSaveAddresh.setText(dbHelper.getString(R.string.save));
         mBinding.toolbarTittle.tvUsingLocation.setText(dbHelper.getString(R.string.use_current_location));
 
-        mBinding.etStreet.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+      /*  mBinding.etStreet.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 startActivityForResult(new Intent(getApplicationContext(), UserLocationActvity.class)
@@ -90,8 +90,7 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
                         .putExtra("searchCity", false), 1001);
 
             }
-        });
-
+        });*/
         mBinding.etStreet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
