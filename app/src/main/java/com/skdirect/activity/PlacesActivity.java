@@ -20,7 +20,9 @@ import com.skdirect.R;
 import com.skdirect.adapter.PlacesAutoCompleteMapsAdapter;
 import com.skdirect.databinding.ActivityPlacesBinding;
 import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.GpsUtils;
 import com.skdirect.utils.MyApplication;
+import com.skdirect.utils.Utils;
 
 
 public class PlacesActivity extends AppCompatActivity implements PlacesAutoCompleteMapsAdapter.ClickListener {
@@ -28,6 +30,7 @@ public class PlacesActivity extends AppCompatActivity implements PlacesAutoCompl
     private PlacesAutoCompleteMapsAdapter mAutoCompleteAdapter;
     private Boolean searchCity = false;
     DBHelper dbHelper;
+    Boolean isGPS = false;
 
     @Override
     public void applyOverrideConfiguration(Configuration overrideConfiguration) {
@@ -45,8 +48,18 @@ public class PlacesActivity extends AppCompatActivity implements PlacesAutoCompl
         dbHelper = MyApplication.getInstance().dbHelper;
 
         binding.llGps.setOnClickListener(V -> {
-            startActivityForResult(new Intent(PlacesActivity.this, MapsExtendedActivity.class),2000);
-            finish();
+            if(Utils.ISGPSON(PlacesActivity.this)){
+                startActivityForResult(new Intent(PlacesActivity.this, MapsExtendedActivity.class),2000);
+                finish();
+            }
+            else{
+                new GpsUtils(PlacesActivity.this).turnGPSOn(isGPSEnable -> {
+                    // turn on GPS
+                    isGPS = isGPSEnable;
+
+                });
+            }
+
         });
         binding.ivBack.setOnClickListener(V -> finish());
         initPlaces();

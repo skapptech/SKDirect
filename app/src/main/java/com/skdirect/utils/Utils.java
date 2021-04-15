@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
@@ -25,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
+import com.skdirect.activity.MainActivity;
 import com.skdirect.model.TokenModel;
 
 import org.json.JSONArray;
@@ -49,6 +51,7 @@ public class Utils {
     private static boolean status;
     private static Context context;
     public static String pattern = "##.##";
+    public static Boolean isGPS = false;
 
     public Utils(Context _mContext) {
         context = _mContext;
@@ -145,6 +148,18 @@ public class Utils {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+    public static boolean ISGPSON(Context context) {
+        final LocationManager manager = (LocationManager) context.getSystemService( Context.LOCATION_SERVICE );
+
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            isGPS=false;
+
+        }
+        else{
+            isGPS=true;
+        }
+        return isGPS;
     }
 
     public static String getToken(Context context) {

@@ -159,6 +159,9 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
         new GpsUtils(this).turnGPSOn(isGPSEnable -> {
             // turn on GPS
             isGPS = isGPSEnable;
+            if (!isGPS) {
+                finish();
+            }
         });
 
         mBinding.tvChangeMe.setOnClickListener(new View.OnClickListener() {
