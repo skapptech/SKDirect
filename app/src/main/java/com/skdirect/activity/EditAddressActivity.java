@@ -1,15 +1,19 @@
 package com.skdirect.activity;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.model.Place;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.R;
@@ -37,7 +41,8 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
     private GPSTracker gpsTracker;
     DBHelper dbHelper;
     private UserLocationModel userLocationModel;
-
+    private Place place;
+    private LatLng latLng;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,15 +55,14 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
 
     private void getIntentData() {
         userLocationModel = (UserLocationModel) getIntent().getSerializableExtra("UserEditData");
-
         if (userLocationModel != null) {
-
             mBinding.etFullName.setText(userLocationModel.getAddressOne());
-            mBinding.etStreetAddresh.setText(userLocationModel.getAddressThree());
+            mBinding.etStreet.setText(userLocationModel.getAddressThree());
             mBinding.etLandmark.setText(userLocationModel.getAddressTwo());
             mBinding.etPinCode.setText(userLocationModel.getPincode());
             mBinding.etPinCity.setText(userLocationModel.getCity());
             mBinding.etPinState.setText(userLocationModel.getState());
+            latLng = new LatLng(userLocationModel.getLatitiute(), userLocationModel.getLongitude());
         }
 
     }
@@ -78,6 +82,16 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.toolbarTittle.tvUsingLocation.setOnClickListener(this);
         mBinding.btSaveAddresh.setOnClickListener(this);
+
+        mBinding.etStreet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(getApplicationContext(), UserLocationActvity.class)
+                        .putExtra("cityname", "")
+                        .putExtra("searchCity", false), 1001);
+
+            }
+        });
 
     }
 
@@ -100,7 +114,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
     private void addLocation() {
         if (TextUtils.isNullOrEmpty(mBinding.etFullName.getText().toString().trim())) {
             Utils.setToast(getApplicationContext(), "Please enter full name.");
-        } else if (TextUtils.isNullOrEmpty(mBinding.etStreetAddresh.getText().toString().trim())) {
+        } else if (TextUtils.isNullOrEmpty(mBinding.etStreet.getText().toString().trim())) {
             Utils.setToast(getApplicationContext(), "Please enter street address.");
         } else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString().trim())) {
             Utils.setToast(getApplicationContext(), "Please enter pin code.");
@@ -138,11 +152,11 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
         JsonObject jsonObject = new JsonObject();
         try {
             jsonObject.addProperty("AddressOne", mBinding.etFullName.getText().toString());
-            jsonObject.addProperty("AddressThree", mBinding.etStreetAddresh.getText().toString());
+            jsonObject.addProperty("AddressThree", mBinding.etStreet.getText().toString());
             jsonObject.addProperty("AddressTwo", mBinding.etLandmark.getText().toString());
             jsonObject.addProperty("Id", userLocationModel.getId());
-            jsonObject.addProperty("Latitiute", gpsTracker.getLatitude());
-            jsonObject.addProperty("Longitude", gpsTracker.getLongitude());
+            jsonObject.addProperty("Latitiute", latLng.latitude);
+            jsonObject.addProperty("Longitude", latLng.longitude);
             jsonObject.addProperty("Pincode", mBinding.etPinCode.getText().toString());
             jsonObject.addProperty("City", mBinding.etPinCity.getText().toString());
             jsonObject.addProperty("State", mBinding.etPinState.getText().toString());
@@ -164,6 +178,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
         if (Utils.isNetworkAvailable(getApplicationContext())) {
             if (gpsTracker != null) {
                 Utils.showProgressDialog(this);
+                latLng = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
                 callLocation(gpsTracker.getLatitude(), gpsTracker.getLongitude());
             }
 
@@ -182,28 +197,34 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                 JSONObject jsonResponse = null;
                 try {
                     jsonResponse = new JSONObject(data.toString());
-                    JSONObject components = jsonResponse.getJSONObject("geometry");
-                    JSONObject location = components.getJSONObject("location");
-                    double lat = location.getDouble("lat");
-                    double lng = location.getDouble("lng");
-                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-                    List<Address> addresses = null;
-                    try {
-                        addresses = geocoder.getFromLocation(lat, lng, 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (jsonResponse.getBoolean("IsSuccess")) {
+                        JSONObject resultItemObject = jsonResponse.getJSONObject("ResultItem");
+                        if (resultItemObject != null) {
+                            String StateName = resultItemObject.getString("StateName");
+                            String CityName = resultItemObject.getString("CityName");
+                            String Pincode = resultItemObject.getString("Pincode");
+                            String Addressone = resultItemObject.getString("Addressone");
+                            String Addresstwo = resultItemObject.getString("Addresstwo");
+                            String Addressthree = resultItemObject.getString("Addressthree");
+                            if (!TextUtils.isNullOrEmpty(Pincode)) {
+                                mBinding.etPinCode.setText(Pincode);
+                            }
+                            if (!TextUtils.isNullOrEmpty(CityName)) {
+                                mBinding.etPinCity.setText(CityName);
+                            }
+                            if (!TextUtils.isNullOrEmpty(StateName)) {
+                                mBinding.etPinState.setText(StateName);
+                            }
+                            if (!TextUtils.isNullOrEmpty(Addressone)) {
+                                mBinding.etStreet.setText(Addressone);
+                            }
+                            if (!TextUtils.isNullOrEmpty(Addresstwo)) {
+                                mBinding.etLandmark.setText(Addresstwo);
+                            }
+
+                        }
+
                     }
-                    String cityName = addresses.get(0).getLocality();
-                    String address = addresses.get(0).getAddressLine(0);
-                    String postalCode = addresses.get(0).getPostalCode();
-                    String Premises = addresses.get(0).getAdminArea();
-
-
-                    mBinding.etPinCode.setText(postalCode);
-                    mBinding.etPinCity.setText(cityName);
-                    mBinding.etStreetAddresh.setText(address);
-                    mBinding.etPinState.setText(Premises);
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -214,5 +235,18 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1001 & resultCode == RESULT_OK) {
+            place = data.getParcelableExtra("PlaceResult");
+            latLng = place.getLatLng();
+            callLocation(latLng.latitude, latLng.longitude);
+           /* mBinding.etStreetAddresh.setText(place.getAddress());
+            mBinding.etPinCity.setText(city);
+            mBinding.etPinState.setText(state);
+            mBinding.etPinCode.setText(pincode);*/
 
+        }
+    }
 }
