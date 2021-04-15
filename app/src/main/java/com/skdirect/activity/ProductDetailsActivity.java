@@ -102,7 +102,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 startActivity(new Intent(getApplicationContext(), CartActivity.class));
                 break;
             case R.id.tv_shop_name:
-                startActivity(new Intent(getApplicationContext(), SellerProfileActivity.class).putExtra("ID", resultModel.getEncryptSellerId()));
+                startActivity(new Intent(getApplicationContext(), SellerProfileActivity.class).putExtra("ID", resultModel.getSellerId()));
                 break;
             case R.id.imShare:
                 Utils.shareProduct(this, SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/product/" + productID);
@@ -322,6 +322,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                     } else {
                         mBinding.llSellarsOtherProducs.setVisibility(View.GONE);
                     }
+                }else {
+                    mBinding.llSellarsOtherProducs.setVisibility(View.GONE);
                 }
             }
         });

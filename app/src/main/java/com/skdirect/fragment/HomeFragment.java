@@ -154,6 +154,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 Utils.hideProgressDialog();
                 if (mallMainModel.isSuccess()) {
                     if (mallMainModel.getResultItem() != null) {
+                        mBinding.rlHomeSearch.setVisibility(View.VISIBLE);
                         SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_Mall, true);
                         SharePrefs.getInstance(getActivity()).putString(SharePrefs.MALL_ID, mallMainModel.getResultItem().getId());
                         MallCategorieBannerAdapter mallCategorieBannerAdapter = new MallCategorieBannerAdapter(getActivity(), mallMainModel.getResultItem().getStoreCategoryList());
@@ -300,6 +301,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         } else {
             mBinding.rlHomeSearch.setVisibility(View.GONE);
         }
+
         dbHelper = MyApplication.getInstance().dbHelper;
         mBinding.etSearchSeller.setHint(dbHelper.getString(R.string.search_seller));
 
