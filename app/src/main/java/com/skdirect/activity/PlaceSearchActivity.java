@@ -1,6 +1,7 @@
 package com.skdirect.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
@@ -43,10 +44,11 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
     private ActivityPlacesSearchBinding mBinding;
     private Place place;
     private Geocoder mGeocoder;
-    private CommonClassForAPI commonClassForAPI;
-    private String fcmToken;
     private LatLng latLng;
-    private String pinCode;
+
+    private CommonClassForAPI commonClassForAPI;
+    private String fcmToken,type;
+    private String pinCode,city,state;
     private DBHelper dbHelper;
 
 
@@ -63,12 +65,13 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
         mBinding.etLocation.setHint(dbHelper.getString(R.string.enter_your_address));
         mBinding.etPinCode.setHint(dbHelper.getString(R.string.enter_pin_code));
         mBinding.btSave.setHint(dbHelper.getString(R.string.save));
-
         commonClassForAPI = CommonClassForAPI.getInstance(this);
         fcmToken = Utils.getFcmToken();
         mGeocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         mBinding.etLocation.setOnClickListener(this);
         mBinding.btSave.setOnClickListener(this);
+
+
     }
 
     @Override
@@ -121,6 +124,9 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
                 List<Address> addresses = mGeocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
                 if (addresses.get(0).getLocality() != null) {
                     pinCode = addresses.get(0).getPostalCode();
+                    city = addresses.get(0).getLocality();
+                    state = addresses.get(0).getAdminArea();
+
                     String tempCity = addresses.get(0).getLocality();
                     mBinding.etPinCode.setText(pinCode);
                     if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString())) {
@@ -130,6 +136,7 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
                         mBinding.etPinCode.setFocusable(false);
                     }
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
