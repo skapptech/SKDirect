@@ -43,12 +43,15 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
     private UserLocationModel userLocationModel;
     private Place place;
     private LatLng latLng;
+    private Geocoder mGeocoder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_addresh);
         newAddressViewMode = ViewModelProviders.of(this).get(NewAddressViewMode.class);
         dbHelper = MyApplication.getInstance().dbHelper;
+        mGeocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         getIntentData();
         initView();
     }
@@ -140,7 +143,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                 Utils.hideProgressDialog();
                 if (status.getResultItem()) {
                     onBackPressed();
-                    Utils.setToast(getApplicationContext(),status.getSuccessMessage());
+                    Utils.setToast(getApplicationContext(), status.getSuccessMessage());
                 }
             }
         });
@@ -217,6 +220,18 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                             }
                             if (!TextUtils.isNullOrEmpty(Addressone)) {
                                 mBinding.etStreet.setText(Addressone);
+                            } else {
+                                try {
+                                    List<Address> addresses = mGeocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                                    if (!TextUtils.isNullOrEmpty(addresses.get(0).getFeatureName())) {
+                                        mBinding.etStreet.setText(addresses.get(0).getFeatureName());
+                                    }
+                                    if (!TextUtils.isNullOrEmpty(addresses.get(0).getSubAdminArea())) {
+                                        mBinding.etPinCity.setText(addresses.get(0).getSubAdminArea());
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                             if (!TextUtils.isNullOrEmpty(Addresstwo)) {
                                 mBinding.etLandmark.setText(Addresstwo);

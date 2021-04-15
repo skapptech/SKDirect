@@ -49,16 +49,15 @@ public  class AppVersionModel implements Serializable {
         @Expose
         @SerializedName("Version")
         private String Version;
-
-       /* @Expose
-        @SerializedName("BuyerUrl")
-        private String BuyerUrl;
         @Expose
-        @SerializedName("SellerUrl")
-        private String SellerUrl;
+        @SerializedName("AboutApp")
+        private String AboutApp;
         @Expose
-        @SerializedName("Version")
-        private String Version;*/
+        @SerializedName("TermsCondition")
+        private String TermsCondition;
+        @Expose
+        @SerializedName("PrivacyPolicy")
+        private String PrivacyPolicy;
 
         public boolean isCompulsory() {
             return IsCompulsory;
@@ -76,5 +75,28 @@ public  class AppVersionModel implements Serializable {
             return Version;
         }
 
+        public String getAboutApp() {
+            return AboutApp;
+        }
+
+        public void setAboutApp(String aboutApp) {
+            AboutApp = aboutApp;
+        }
+
+        public String getTermsCondition() {
+            return TermsCondition;
+        }
+
+        public void setTermsCondition(String termsCondition) {
+            TermsCondition = termsCondition;
+        }
+
+        public String getPrivacyPolicy() {
+            return PrivacyPolicy;
+        }
+
+        public void setPrivacyPolicy(String privacyPolicy) {
+            PrivacyPolicy = privacyPolicy;
+        }
     }
 }
