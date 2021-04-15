@@ -205,15 +205,11 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
                     mBinding.rMyOrder.setVisibility(View.VISIBLE);
                     if(orderStatusMainModel.isSuccess())
                     {
+                        orderModelArrayList.clear();
                         if (orderStatusMainModel.getMyOrderModelsList()!=null && orderStatusMainModel.getMyOrderModelsList().size()>0){
-                            mBinding.rMyOrder.post(new Runnable() {
-                                public void run() {
-                                    orderModelArrayList.addAll(orderStatusMainModel.getMyOrderModelsList());
-                                    myOrderAdapter.notifyDataSetChanged();
-                                    loading = true;
-                                }
-                            });
-
+                            orderModelArrayList.addAll(orderStatusMainModel.getMyOrderModelsList());
+                            myOrderAdapter.notifyDataSetChanged();
+                            loading = true;
                         }else {
                             loading = false;
                             mBinding.tlEmptyView.setVisibility(View.VISIBLE);

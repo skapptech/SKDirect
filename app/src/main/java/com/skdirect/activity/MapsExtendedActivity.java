@@ -196,12 +196,12 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                             SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.PIN_CODE, Pincode);
                             SharePrefs.getInstance(getApplicationContext()).putInt(SharePrefs.PIN_CODE_master, PincodeMasterId);
 
-                            Intent intent = new Intent();
+                          /*  Intent intent = new Intent();
                             intent.putExtra("LOCATION",CityName+" "+Pincode);
                             setResult(Activity.RESULT_OK, intent);
+                            finish();*/
+                            startActivity(new Intent(MapsExtendedActivity.this, MainActivity.class));
                             finish();
-                          //  startActivity(new Intent(MapsExtendedActivity.this, MainActivity.class));
-                         //   finish();
 
                         }
 
