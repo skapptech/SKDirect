@@ -15,6 +15,8 @@ import com.skdirect.R;
 import com.skdirect.adapter.DynamicTabAdapter;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityMyOrderBinding;
+import com.skdirect.model.OrderStatusDetails;
+import com.skdirect.model.OrderStatusMainModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.Utils;
@@ -53,24 +55,23 @@ public class MyOrderActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private final DisposableObserver<JsonObject> observer = new DisposableObserver<JsonObject>() {
+    private final DisposableObserver<OrderStatusMainModel> observer = new DisposableObserver<OrderStatusMainModel>() {
         @Override
-        public void onNext(@NotNull JsonObject jsonObject) {
+        public void onNext(@NotNull OrderStatusMainModel orderStatusMainModel) {
             Utils.hideProgressDialog();
             try {
-                if (jsonObject != null) {
-                    if (jsonObject.get("IsSuccess").getAsBoolean()) {
-                        JsonArray jsonArray = jsonObject.get("ResultItem").getAsJsonArray();
-                        Type listType = new TypeToken<ArrayList<String>>() {}.getType();
-                        ArrayList<String> list = new Gson().fromJson(jsonArray, listType);
-                        setupViewPager(mBinding.viewPager,list);
+                if (orderStatusMainModel.isSuccess()) {
+                    ArrayList<String> orderStatus = new ArrayList<>();
+                    ArrayList<OrderStatusDetails> list = orderStatusMainModel.getResultItem();
+                    for (int i = 0; i <list.size() ; i++) {
+                        orderStatus.add(list.get(i).getStatus());
                     }
+                    setupViewPager(mBinding.viewPager,orderStatus);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
         @Override
         public void onError(Throwable e) {
             Utils.hideProgressDialog();

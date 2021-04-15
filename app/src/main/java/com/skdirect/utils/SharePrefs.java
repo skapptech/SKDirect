@@ -57,6 +57,7 @@ public class SharePrefs {
     public static final String FILTER_CATEGORY_LIST = "filter_category_list";
     public static final String FILTER_PRICE = "filter_price";
     public static final String TOKEN_PASSWORD = "Pwd";
+    public static final String CAME_FROM_CART = "came_from_cart";
 
 
     private Context ctx;

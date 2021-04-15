@@ -75,9 +75,10 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
         }
 
         if (MyApplication.getInstance().cartRepository.isItemInCart(model.getId())) {
+            model.setQty(MyApplication.getInstance().cartRepository.getItemQty(model.getId()));
             holder.mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
             holder.mBinding.tvAdd.setVisibility(View.GONE);
-            holder.mBinding.tvSelectedQty.setText("" + MyApplication.getInstance().cartRepository.getItemQty(model.getId()));
+            holder.mBinding.tvSelectedQty.setText("" + model.getQty());
         } else {
             holder.mBinding.LLPlusMinus.setVisibility(View.GONE);
             holder.mBinding.tvAdd.setVisibility(View.VISIBLE);

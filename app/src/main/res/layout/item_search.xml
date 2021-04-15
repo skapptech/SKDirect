@@ -6,6 +6,7 @@
         android:id="@+id/LLMainCat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -51,6 +52,7 @@
                     android:layout_marginStart="5dp"
                     android:maxLines="3"
                     android:padding="2dp"
+                    android:visibility="visible"
                     android:text=""
                     style="@style/font_normal"
                     android:textColor="@color/black"
@@ -63,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:maxLines="3"
+                    android:visibility="gone"
                     android:padding="2dp"
                     android:text=""
                     style="@style/font_normal"

@@ -8,22 +8,20 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_search"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            />
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/tv_not_data_found"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:padding="5dp"
             android:text="@string/no_record_found"
-            android:visibility="gone"
-            android:textSize="18dp"
             android:textColor="@color/seller_button_color"
-            android:textStyle="bold" />
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
     </RelativeLayout>
 </layout>

@@ -72,7 +72,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         MyApplication.getInstance().cartRepository.getCartCount().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                mBinding.toolbarTittle.cartBadge.setText("" + integer);
+                mBinding.cartBadge.setText("" + integer);
             }
         });
     }
@@ -134,11 +134,11 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         mBinding.tvDeliverDistanceTitle.setText(dbHelper.getString(R.string.delivered_till_distance));
         mBinding.tvItemNotFound.setText(dbHelper.getString(R.string.searched_item_is_not_available));
 
-        mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
-        mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.seller_items));
-        mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
+        mBinding.notifictionCount.setVisibility(View.VISIBLE);
+        mBinding.tvTittle.setText(dbHelper.getString(R.string.seller_items));
+        mBinding.ivBackPress.setOnClickListener(this);
         mBinding.ivSShopImage.setOnClickListener(this);
-        mBinding.toolbarTittle.notifictionCount.setOnClickListener(this);
+        mBinding.notifictionCount.setOnClickListener(this);
         mBinding.RLShare.setOnClickListener(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         mBinding.rvCategories.setLayoutManager(layoutManager);
@@ -249,10 +249,10 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
 
         if (userDetailModel != null) {
             if (userDetailModel.getStoreView() != 0) {
-                mBinding.toolbarTittle.tvStoreView.setVisibility(View.VISIBLE);
-                mBinding.toolbarTittle.tvStoreView.setText(String.valueOf(userDetailModel.getStoreView()));
+                mBinding.tvStoreView.setVisibility(View.VISIBLE);
+                mBinding.tvStoreView.setText(String.valueOf(userDetailModel.getStoreView()));
             } else {
-                mBinding.toolbarTittle.tvStoreView.setVisibility(View.GONE);
+                mBinding.tvStoreView.setVisibility(View.GONE);
             }
             mBinding.tvAddreshOne.setText(userDetailModel.getAddressOne() + " " + userDetailModel.getAddressTwo() + " " + userDetailModel.getCity() + " - " + userDetailModel.getPincode() + " (" + userDetailModel.getState() + ")");
             mBinding.tvDeliveryOption.setText(userDetailModel.getAddressOne() + " " + userDetailModel.getAddressTwo());
@@ -266,7 +266,8 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             for (int i = 0; i < sellerDeliveryModel.size(); i++) {
                 deliveryOption += sellerDeliveryModel.get(i).getDelivery() + ", ";
             }
-            mBinding.tvDeliveryOption.setText(deliveryOption);
+            /*remove condiction*/
+            mBinding.tvDeliveryOption.setText("Home Delivery");
         } else {
             mBinding.llDeliverOption.setVisibility(View.GONE);
         }
@@ -284,7 +285,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void plusButtonOnClick(SellerProductList model, TextView tvSelectedQty) {
-        mBinding.toolbarTittle.cartBadge.setVisibility(View.VISIBLE);
+        mBinding.cartBadge.setVisibility(View.VISIBLE);
         tvSelectedQty.setText("" + model.getQty());
         // add item  to cart
         CartModel cartModel = new CartModel(null, 0, null,
@@ -325,7 +326,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void addButtonOnClick(SellerProductList sellerProductModel, TextView tvSelectedQty, TextView btAddToCart, LinearLayout LLPlusMinus) {
-        mBinding.toolbarTittle.notifictionCount.setVisibility(View.VISIBLE);
+        mBinding.notifictionCount.setVisibility(View.VISIBLE);
         Integer cartSellerId = MyApplication.getInstance().cartRepository.getCartSellerId();
         if (cartSellerId != null && cartSellerId != 0) {
             if (cartSellerId == sellerID) {
@@ -354,7 +355,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                     0, sellerProductModel.getProductName(), 0, 0, false,
                     0, 0, 0, 1, sellerProductModel.getCreatedBy(), null,
                     sellerID, 0, 0, sellerProductModel.getMargin(),
-                    sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerID);
+                    sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
             MyApplication.getInstance().cartRepository.addToCart(cartModel);
             addItemInCart(1, sellerProductModel);
         }

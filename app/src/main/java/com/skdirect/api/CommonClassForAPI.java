@@ -11,6 +11,9 @@ import com.skdirect.model.CartMainModel;
 import com.skdirect.model.CommonResponseModel;
 import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.MallMainPriceModel;
+import com.skdirect.model.MyOrderRequestModel;
+import com.skdirect.model.OrderModel;
+import com.skdirect.model.OrderStatusMainModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PostBrandModel;
@@ -417,17 +420,17 @@ public class CommonClassForAPI {
                     }
                 });
     }
-    public void getAllOrderStatusList(final DisposableObserver<JsonObject> observer) {
+    public void getAllOrderStatusList(final DisposableObserver<OrderStatusMainModel> observer) {
         RestClient.getInstance().getService().getOrderStatusList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<JsonObject>() {
+                .subscribe(new Observer<OrderStatusMainModel>() {
                     @Override
                     public void onSubscribe(@NotNull Disposable d) {
                     }
 
                     @Override
-                    public void onNext(@NotNull JsonObject o) {
+                    public void onNext(@NotNull OrderStatusMainModel o) {
                         observer.onNext(o);
                     }
 
@@ -443,4 +446,29 @@ public class CommonClassForAPI {
                 });
     }
 
+    public void GetOrderMaster(final DisposableObserver<OrderModel> observer, MyOrderRequestModel myOrderRequestModel) {
+        RestClient.getInstance().getService().GetOrderMaster(myOrderRequestModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<OrderModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull OrderModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
 }

@@ -37,13 +37,13 @@
                     android:drawableLeft="@drawable/ic_search"
                     android:drawablePadding="10dp"
                     android:hint="@string/search_seller"
-                    android:imeOptions="actionSearch"
+                    android:imeActionLabel="@string/search_for"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
                     android:maxLines="1"
                     android:padding="8dp"
-                    android:textSize="15dp" />
-
-
+                    android:singleLine="true"
+                    android:textSize="15sp" />
             </RelativeLayout>
 
             <LinearLayout
@@ -100,10 +100,10 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:padding="5dp"
-                    android:visibility="visible"
                     android:text="@string/no_mall_availble"
                     android:textColor="@color/seller_button_color"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/tv_near_item"
@@ -112,10 +112,10 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:padding="5dp"
-                    android:visibility="gone"
                     android:text="@string/near_by_item"
                     android:textColor="@color/seller_button_color"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -152,12 +152,12 @@
                         android:visibility="gone">
 
                         <TextView
+                            android:id="@+id/tvNearNoItem"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:padding="5dp"
-                            android:id="@+id/tvNearNoItem"
                             android:text="@string/no_item_found"
                             android:textColor="@color/red"
                             android:textStyle="bold" />
@@ -187,10 +187,10 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:padding="5dp"
-                    android:visibility="gone"
                     android:text="@string/near_by_seller"
                     android:textColor="@color/seller_button_color"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -227,25 +227,25 @@
                         android:visibility="gone">
 
                         <TextView
+                            android:id="@+id/tvNoSeller"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:padding="5dp"
-                            android:id="@+id/tvNoSeller"
                             android:text="@string/no_item_found"
                             android:textColor="@color/red"
                             android:textStyle="bold" />
 
                         <TextView
 
+                            android:id="@+id/tvNoSellerLocation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:id="@+id/tvNoSellerLocation"
                             android:text="@string/no_loction_found"
                             android:textColor="@color/grid_divder"
                             android:textStyle="bold" />
@@ -257,16 +257,16 @@
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/tvAllCat"
                     style="@style/font_normal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:padding="5dp"
-                    android:visibility="gone"
-                    android:id="@+id/tvAllCat"
                     android:text="@string/all_categories"
                     android:textColor="@color/seller_button_color"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -305,24 +305,24 @@
                         android:visibility="gone">
 
                         <TextView
+                            android:id="@+id/tvNoItemCat"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:padding="5dp"
-                            android:id="@+id/tvNoItemCat"
                             android:text="@string/no_item_found"
                             android:textColor="@color/red"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvNoLocationCat"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:id="@+id/tvNoLocationCat"
                             android:text="@string/no_loction_found"
                             android:textColor="@color/grid_divder"
                             android:textStyle="bold" />
@@ -331,18 +331,18 @@
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/tvNearSeller2"
                     style="@style/font_normal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:visibility="gone"
                     android:layout_margin="10dp"
                     android:padding="5dp"
-                    android:id="@+id/tvNearSeller2"
                     android:text="@string/by_seller"
                     android:textColor="@color/seller_button_color"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -381,24 +381,24 @@
                         android:visibility="gone">
 
                         <TextView
+                            android:id="@+id/tvNoSellerItem"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:padding="5dp"
-                            android:id="@+id/tvNoSellerItem"
                             android:text="@string/no_item_found"
                             android:textColor="@color/red"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvNoSelleronLocation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:id="@+id/tvNoSelleronLocation"
                             android:text="@string/no_loction_found"
                             android:textColor="@color/grid_divder"
                             android:textStyle="bold" />
@@ -407,16 +407,16 @@
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/tvMaxSeller"
                     style="@style/font_normal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:padding="5dp"
-                    android:visibility="gone"
-                    android:id="@+id/tvMaxSeller"
                     android:text="@string/most_visted_seller"
                     android:textColor="@color/seller_button_color"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -455,24 +455,24 @@
                         android:visibility="gone">
 
                         <TextView
+                            android:id="@+id/tvNoMaxSeller"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:padding="5dp"
-                            android:id="@+id/tvNoMaxSeller"
                             android:text="@string/no_item_found"
                             android:textColor="@color/red"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvNoMaxSellerLocation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:id="@+id/tvNoMaxSellerLocation"
                             android:text="@string/no_loction_found"
                             android:textColor="@color/grid_divder"
                             android:textStyle="bold" />
@@ -481,6 +481,7 @@
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/tvNewSellerTitle"
                     style="@style/font_normal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -488,16 +489,15 @@
                     android:layout_margin="10dp"
                     android:padding="5dp"
                     android:text="@string/new_seller"
-                    android:visibility="gone"
-                    android:id="@+id/tvNewSellerTitle"
                     android:textColor="@color/seller_button_color"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:layout_marginBottom="5dp">
+                    android:layout_marginBottom="5dp"
+                    android:visibility="gone">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_new_seller"
@@ -531,24 +531,24 @@
                         android:visibility="gone">
 
                         <TextView
+                            android:id="@+id/tvNoNewSellerItem"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:padding="5dp"
-                            android:id="@+id/tvNoNewSellerItem"
                             android:text="@string/no_item_found"
                             android:textColor="@color/red"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvNoNewSellerItemLocation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:id="@+id/tvNoNewSellerItemLocation"
                             android:text="@string/no_loction_found"
                             android:textColor="@color/grid_divder"
                             android:textStyle="bold" />

@@ -100,11 +100,13 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 onBackPressed();
                 break;
             case R.id.btnCheckout:
+                SharePrefs.setSharedPreference(getApplicationContext(),SharePrefs.CAME_FROM_CART,false);
                 if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
                     startActivity(new Intent(getApplicationContext(), PaymentActivity.class)
                             .putExtra("cartItemSize", cartItemDataModel)
                             .putExtra("totalAmount", totalAmount));
                 } else {
+                    SharePrefs.setSharedPreference(getApplicationContext(),SharePrefs.CAME_FROM_CART,true);
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 }
                 break;

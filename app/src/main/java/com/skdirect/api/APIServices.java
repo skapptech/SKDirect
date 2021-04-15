@@ -31,6 +31,7 @@ import com.skdirect.model.OrderItemModel;
 import com.skdirect.model.OrderModel;
 import com.skdirect.model.OrderPlaceMainModel;
 import com.skdirect.model.OrderPlaceRequestModel;
+import com.skdirect.model.OrderStatusMainModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PaginationModel;
@@ -230,7 +231,7 @@ public interface APIServices {
     Call<CommonResponseModel> ChangePassword(@Body ChangePasswordRequestModel passwordRequestModel);
 
     @POST("api/NativeBuyer/MyOrder/GetMyOrder")
-    Call<OrderModel> GetOrderMaster(@Body MyOrderRequestModel myOrderRequestModel);
+    Observable<OrderModel> GetOrderMaster(@Body MyOrderRequestModel myOrderRequestModel);
 
     @POST("api/buyer/OrderReview/Rating")
     Call<Boolean> getRating(@Body AddReviewModel reViewViewMode);
@@ -275,5 +276,5 @@ public interface APIServices {
     Observable<JsonObject> getAssignCart(@Query("id") String id);
 
     @GET("api/NativeBuyer/MyOrder/GetOrderStatus")
-    Observable<JsonObject> getOrderStatusList();
+    Observable<OrderStatusMainModel> getOrderStatusList();
 }
