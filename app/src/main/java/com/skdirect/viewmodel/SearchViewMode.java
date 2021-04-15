@@ -1,20 +1,12 @@
 package com.skdirect.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.skdirect.api.RestClient;
 import com.skdirect.model.SearchMainModel;
 import com.skdirect.model.SearchRequestModel;
 import com.skdirect.model.ShopMainModel;
-import com.skdirect.utils.Utils;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SearchViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
@@ -47,43 +39,43 @@ public class SearchViewMode extends ViewModel {
     }
 
     public MutableLiveData<SearchMainModel> getSearchRequest(SearchRequestModel searchRequestModel) {
-        RestClient.getInstance().getService().GetSellerListWithItem(searchRequestModel).enqueue(new Callback<SearchMainModel>() {
-            @Override
-            public void onResponse(Call<SearchMainModel> call, Response<SearchMainModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.e(TAG, "request response=" + response.body());
-                    searchViewModel.setValue(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SearchMainModel> call, Throwable t) {
-                Log.e(TAG, "onFailure Responce" + t.toString());
-                Utils.hideProgressDialog();
-            }
-        });
+//        RestClient.getInstance().getService().GetSellerListWithItem(searchRequestModel).enqueue(new Callback<SearchMainModel>() {
+//            @Override
+//            public void onResponse(Call<SearchMainModel> call, Response<SearchMainModel> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    Log.e(TAG, "request response=" + response.body());
+//                    searchViewModel.setValue(response.body());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<SearchMainModel> call, Throwable t) {
+//                Log.e(TAG, "onFailure Responce" + t.toString());
+//                Utils.hideProgressDialog();
+//            }
+//        });
 
         return searchViewModel;
     }
 
 
     public MutableLiveData<ShopMainModel> getShopDataViewModelRequest(int skipCount, int takeCount, String s, String cateogryId) {
-        RestClient.getInstance().getService().GetTopSellerItem(skipCount, takeCount, s, cateogryId).enqueue(new Callback<ShopMainModel>() {
-            @Override
-            public void onResponse(Call<ShopMainModel> call, Response<ShopMainModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.e(TAG, "request response=" + response.body());
-                    shopDataViewModel.setValue(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ShopMainModel> call, Throwable t) {
-                Log.e(TAG, "onFailure Responce" + t.toString());
-                Utils.hideProgressDialog();
-            }
-        });
-
+//        RestClient.getInstance().getService().GetTopSellerItem(skipCount, takeCount, s, cateogryId).enqueue(new Callback<ShopMainModel>() {
+//            @Override
+//            public void onResponse(Call<ShopMainModel> call, Response<ShopMainModel> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    Log.e(TAG, "request response=" + response.body());
+//                    shopDataViewModel.setValue(response.body());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ShopMainModel> call, Throwable t) {
+//                Log.e(TAG, "onFailure Responce" + t.toString());
+//                Utils.hideProgressDialog();
+//            }
+//        });
+//
         return shopDataViewModel;
     }
 }

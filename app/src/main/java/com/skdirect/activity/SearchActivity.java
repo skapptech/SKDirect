@@ -17,11 +17,13 @@ import com.skdirect.interfacee.SearchInterface;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.TextUtils;
+import com.skdirect.utils.Utils;
 
 import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivitySearchBinding mBinding;
+
     private String searchSellerName;
     private int allCategoriesID;
     private DBHelper dbHelper;
@@ -61,6 +63,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 if (!TextUtils.isNullOrEmpty(mBinding.etSearchSeller.getText().toString())) {
                     searchInterface.onSearchClick(mBinding.etSearchSeller.getText().toString(), allCategoriesID);
                     searchInterfaceS.onSearchClick(mBinding.etSearchSeller.getText().toString(), allCategoriesID);
+                    Utils.hideKeyboard(SearchActivity.this);
                 }
                 return true;
             }

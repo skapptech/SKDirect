@@ -204,12 +204,10 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
                 latLng = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
                 callLocation(gpsTracker.getLatitude(), gpsTracker.getLongitude());
             }
-
         } else {
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_connection));
         }
     }
-
 
     private void callLocation(double latitude, double longitude) {
         newAddressViewMode.getMapViewModelRequest(latitude, longitude);

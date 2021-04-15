@@ -225,4 +225,8 @@
     <string name="webview_title_name_privacy">प्राइवेसी पॉलिसी</string>
     <string name="webview_title_name_about_direct">एप्स के बारे में</string>
     <string name="shop_name">विक्रेता</string>
+    <string name="Confirmation">पुष्टीकरण</string>
+    <string name="order_place">क्या आप वाकई ऑर्डर देना चाहते हैं?</string>
+    <string name="congratulation">बधाई</string>
+    <string name="order_place__popoup">आदेश जगह सफलतापूर्वक</string>
 </resources>
