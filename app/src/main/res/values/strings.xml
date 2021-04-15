@@ -133,7 +133,7 @@
     <string name="total_amount">कुल राशि</string>
     <string name="cancel_order">ऑर्डर रद्द</string>
     <string name="order_no">ऑर्डर नंबर :</string>
-    <string name="order_on">ऑर्डर पर</string>
+    <string name="order_on">ऑर्डर तारीख</string>
     <string name="sell_by">विक्रेता</string>
     <string name="payment_mode">भुगतान का प्रकार</string>
     <string name="price_details_order">मूल्य विवरण (</string>
@@ -223,4 +223,5 @@
     <string name="no_items_available">कोई वस्तु उपलब्ध नहीं है</string>
     <string name="webview_title_name_privacy">प्राइवेसी पॉलिसी</string>
     <string name="webview_title_name_about_direct">एप्स के बारे में</string>
+    <string name="shop_name">विक्रेता</string>
 </resources>

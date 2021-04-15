@@ -111,9 +111,9 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
                     OrderStatusDCList.add(new OrderStatusDC(orderDetailsModel.getOrderDate(), "Ordered"));
                     OrderStatusDCList.addAll(orderDetailsModel.getOrderStatusDC());
                     mBinding.tvOrderNumber.setText(dbHelper.getString(R.string.order_no)+" " + orderDetailsModel.getId());
-                    mBinding.tvCreatedOrder.setText(dbHelper.getString(R.string.order_on) +" "+ Utils.getDateFormate(orderDetailsModel.getOrderDate()));
-                    mBinding.tvSellerName.setText(dbHelper.getString(R.string.sell_by) +" "+ orderDetailsModel.getSellerName());
-                    mBinding.tvPaymentType.setText(dbHelper.getString(R.string.payment_mode)+" "+ orderDetailsModel.getPaymentMode());
+                    mBinding.tvCreatedOrder.setText(dbHelper.getString(R.string.order_on) +" : "+ Utils.getDateFormate(orderDetailsModel.getOrderDate()));
+                    mBinding.tvSellerName.setText(dbHelper.getString(R.string.shop_name) +" : "+ orderDetailsModel.getShopName());
+                    mBinding.tvPaymentType.setText(dbHelper.getString(R.string.payment_mode)+" :  "+ orderDetailsModel.getPaymentMode());
                     mBinding.tvAddreshOne.setText(orderDetailsModel.getAddressOne());
                     mBinding.tvSellerAddress.setText(orderDetailsModel.getAddressThree());
                     mBinding.tvCity.setText(orderDetailsModel.getCity());
