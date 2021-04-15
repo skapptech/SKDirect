@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityWebviewBinding;
 import com.skdirect.utils.MyApplication;
+import com.skdirect.utils.SharePrefs;
+import com.skdirect.utils.TextUtils;
 
 public class WebviewActivity extends AppCompatActivity {
     ActivityWebviewBinding mBinding;
@@ -18,16 +20,30 @@ public class WebviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_webview);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
         if (getIntent().getExtras() != null) {
             if(getIntent().getStringExtra("FunctionName").equalsIgnoreCase("PrivacyPolicy"))
             {
-               // mBinding.webView.loadUrl("https://www.google.com/");
+               String privacy = SharePrefs.getInstance(this).getString(SharePrefs.PRIVACY_POLICY);
+               if(!TextUtils.isNullOrEmpty(privacy))
+               {
+                   mBinding.webView.loadUrl(privacy);
+               }
                 setTitle(MyApplication.getInstance().dbHelper.getString(R.string.webview_title_name_privacy));
+            } else if(getIntent().getStringExtra("FunctionName").equalsIgnoreCase("TermsCondition"))
+            {
+                String terms = SharePrefs.getInstance(this).getString(SharePrefs.TERMS_CONDITION);
+                if(!TextUtils.isNullOrEmpty(terms))
+                {
+                    mBinding.webView.loadUrl(terms);
+                }
+                setTitle(MyApplication.getInstance().dbHelper.getString(R.string.terms_and_condition));
             } else
             {
-              //  mBinding.webView.loadUrl("https://www.google.com/");
+                String aboutApp = SharePrefs.getInstance(this).getString(SharePrefs.ABOUT_APP);
+                if(!TextUtils.isNullOrEmpty(aboutApp))
+                {
+                    mBinding.webView.loadUrl(aboutApp);
+                }
                 setTitle(MyApplication.getInstance().dbHelper.getString(R.string.webview_title_name_about_direct));
             }
         }

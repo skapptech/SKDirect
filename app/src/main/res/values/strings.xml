@@ -8,7 +8,8 @@
     <string name="chat">चैट</string>
     <string name="rate_app">एप्लिकेशन की श्रेणी बताओ</string>
     <string name="privacy_policy">गोपनीयता नीति</string>
-    <string name="about_direct">डायरेक्ट के बारे में</string>
+    <string name="about_direct">सोशल मॉल के बारे में</string>
+    <string name="terms_and_condition">नियम व शर्तेंं</string>
     <string name="sign_in"> साइन इन</string>
     <string name="log_in">लॉग इन</string>
     <string name="get_otp">ओटीपी प्राप्त करें</string>
