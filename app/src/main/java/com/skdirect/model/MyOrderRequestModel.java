@@ -3,8 +3,6 @@ package com.skdirect.model;
 import com.google.gson.annotations.SerializedName;
 
 public class MyOrderRequestModel {
-
-
     @SerializedName("Filter")
     private String Filter;
     @SerializedName("SellerId")

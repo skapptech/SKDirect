@@ -103,7 +103,12 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
                     if (model.isSuccess()) {
                         Utils.setToast(RegisterationActivity.this, model.getSuccessMessage());
                         SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
-                        Utils.setToast(RegisterationActivity.this, model.getSuccessMessage());
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FIRST_NAME, mBinding.etName.getText().toString());
+                        if(!TextUtils.isNullOrEmpty( mBinding.etEmailId.getText().toString()))
+                        {
+                            SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.EMAIL_ID,  mBinding.etEmailId.getText().toString());
+                        }
+                        SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE, true);
                         startActivity(new Intent(RegisterationActivity.this, MainActivity.class));
                         finish();
                     } else {

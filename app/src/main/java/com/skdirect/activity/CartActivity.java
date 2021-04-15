@@ -105,6 +105,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                             .putExtra("cartItemSize", cartItemDataModel)
                             .putExtra("totalAmount", totalAmount));
                 } else {
+                    SharePrefs.setSharedPreference(getApplicationContext(),SharePrefs.CAME_FROM_CART,true);
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 }
                 break;
