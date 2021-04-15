@@ -44,7 +44,7 @@ public class SellerShopListAdapter extends RecyclerView.Adapter<SellerShopListAd
         holder.mBinding.tvSallerName.setText(topSellerModel.getShopName());
         holder.mBinding.tvSallerCity.setText(topSellerModel.getAddressOne());
         holder.mBinding.tvSallerState.setText(topSellerModel.getAddressTwo());
-        holder.mBinding.tvState.setText(topSellerModel.getCity()+" - "+topSellerModel.getPincode());
+        holder.mBinding.tvState.setText(topSellerModel.getCity()+"");
 
 
         if (topSellerModel.getImagePath()!=null && !topSellerModel.getImagePath().contains("http")) {

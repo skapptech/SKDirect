@@ -45,7 +45,7 @@ public class SearchDataAdapter extends RecyclerView.Adapter<SearchDataAdapter.Vi
         SearchDataModel.TableOneTwo model = list.get(position);
         holder.mBinding.tvSaller.setText(model.getShopName());
         holder.mBinding.tvViewMore.setText(MyApplication.getInstance().dbHelper.getString(R.string.view_more));
-        holder.mBinding.tvCityName.setText(model.getCityName()+" - "+ model.getPinCode());
+        holder.mBinding.tvCityName.setText(model.getAddressOne()+"\n"+model.getAddressTwo()+", "+model.getCityName());
 
         if (model.getDistance()!=0.0) {
             holder.mBinding.tvLocatin.setText(String.format("%.2f", model.getDistance()) + " " + "Km");
