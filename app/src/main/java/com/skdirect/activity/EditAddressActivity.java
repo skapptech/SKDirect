@@ -229,6 +229,12 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                                     if (!TextUtils.isNullOrEmpty(addresses.get(0).getSubAdminArea())) {
                                         mBinding.etPinCity.setText(addresses.get(0).getSubAdminArea());
                                     }
+                                    if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString()) && !TextUtils.isNullOrEmpty(addresses.get(0).getPostalCode())) {
+                                        mBinding.etPinCode.setText(addresses.get(0).getPostalCode());
+                                    }
+                                    if (TextUtils.isNullOrEmpty(mBinding.etPinState.getText().toString()) && !TextUtils.isNullOrEmpty(addresses.get(0).getAdminArea())) {
+                                        mBinding.etPinState.setText(addresses.get(0).getAdminArea());
+                                    }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
