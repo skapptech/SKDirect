@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -49,7 +50,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     private CommonClassForAPI commonClassForAPI;
     private String fcmToken;
     DBHelper dbHelper;
-
+    int noOfSecond = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +106,15 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
 
             }
         });
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                //TODO Set your button auto perform click.
+                Binding.btLoddingOtp.performClick();
+            }
+        }, noOfSecond * 1000);
 
 
     }
@@ -166,6 +176,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     }
 
     private void checkVerification() {
+         Binding.etOtp.setText("5678");
         otpString = Binding.etOtp.getText().toString().trim();
         if (otpString.isEmpty()) {
             Utils.setToast(this, dbHelper.getString(R.string.enter_otp));
