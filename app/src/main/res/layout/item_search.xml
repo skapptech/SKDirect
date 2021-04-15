@@ -29,7 +29,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/imItemImage"
                 android:orientation="vertical"
                 android:padding="5dp">
@@ -53,7 +52,7 @@
                     android:layout_marginStart="5dp"
                     android:maxLines="3"
                     android:padding="2dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:text=""
                     style="@style/font_normal"
                     android:textColor="@color/black"
