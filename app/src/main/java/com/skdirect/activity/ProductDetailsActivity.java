@@ -408,7 +408,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                             for (int j = 0; j < productDataModel.getResultItem().getDeliveryOptionDC().size(); j++) {
                                 deliveryOption = deliveryOption + " " + productDataModel.getResultItem().getDeliveryOptionDC().get(j).getDelivery();
                             }
-                            mBinding.tvDeliveryOption.setText(deliveryOption);
+                            mBinding.tvDeliveryOption.setText("Home Delivery");
                         }
                         if (productDataModel.getResultItem().getDiscountAmount() == 0.0) {
                             double DiscountAmount = productDataModel.getResultItem().getSellingPrice() - productDataModel.getResultItem().getDiscountAmount();
