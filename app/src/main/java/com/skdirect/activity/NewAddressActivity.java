@@ -161,8 +161,6 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
             latLng = place.getLatLng();
             List<Address> addresses = null;
             callLocation(latLng.latitude, latLng.longitude);
-
-
            /* mBinding.etStreetAddresh.setText(place.getAddress());
             mBinding.etPinCity.setText(city);
             mBinding.etPinState.setText(state);
@@ -182,8 +180,8 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
             jsonObject.addProperty("IsActive", SharePrefs.getInstance(NewAddressActivity.this).getBoolean(SharePrefs.IS_ACTIVE));
             jsonObject.addProperty("IsDelete", SharePrefs.getInstance(NewAddressActivity.this).getBoolean(SharePrefs.IS_DELETE));
             jsonObject.addProperty("IsPrimaryAddress", "");
-            jsonObject.addProperty("Latitiute", gpsTracker.getLatitude());
-            jsonObject.addProperty("Longitude", gpsTracker.getLongitude());
+            jsonObject.addProperty("Latitiute", latLng.latitude);
+            jsonObject.addProperty("Longitude", latLng.longitude);
             jsonObject.addProperty("LocationType", "");
             jsonObject.addProperty("Pincode", mBinding.etPinCode.getText().toString());
             jsonObject.addProperty("UserDetailId", "");
@@ -201,12 +199,11 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void callLocationAPI() {
-
         gpsTracker = new GPSTracker(getApplicationContext());
-
         if (Utils.isNetworkAvailable(getApplicationContext())) {
             if (gpsTracker != null) {
                 Utils.showProgressDialog(this);
+                latLng = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
                 callLocation(gpsTracker.getLatitude(), gpsTracker.getLongitude());
             }
 
