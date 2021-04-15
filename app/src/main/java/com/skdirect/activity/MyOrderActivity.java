@@ -61,14 +61,17 @@ public class MyOrderActivity extends AppCompatActivity implements View.OnClickLi
             Utils.hideProgressDialog();
             try {
                 if (orderStatusMainModel.isSuccess()) {
+                    ArrayList<String> orderStatus = new ArrayList<>();
                     ArrayList<OrderStatusDetails> list = orderStatusMainModel.getResultItem();
-                    setupViewPager(mBinding.viewPager,list);
+                    for (int i = 0; i <list.size() ; i++) {
+                        orderStatus.add(list.get(i).getStatus());
+                    }
+                    setupViewPager(mBinding.viewPager,orderStatus);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
         @Override
         public void onError(Throwable e) {
             Utils.hideProgressDialog();
