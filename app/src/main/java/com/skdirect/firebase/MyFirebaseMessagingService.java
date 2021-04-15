@@ -21,9 +21,7 @@ import androidx.core.content.ContextCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.skdirect.R;
-import com.skdirect.activity.MainActivity;
 import com.skdirect.activity.MyOrderActivity;
-import com.skdirect.activity.SplashActivity;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 
@@ -59,6 +57,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if (object.has("redirecturl")) {
                 redirectUrl = object.getString("redirecturl");
             }
+
 
             showNotification(object.getString("icon"),
                     object.getString("body"),

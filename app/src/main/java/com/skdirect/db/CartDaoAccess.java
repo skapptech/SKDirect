@@ -44,10 +44,10 @@ public interface CartDaoAccess {
     @Query("SELECT SellerId FROM ShoppingCart LIMIT 1")
     Integer getCartSellerId();
 
-    @Query("SELECT SUM(Mrp * Quantity) FROM ShoppingCart")
+    @Query("SELECT SUM(price * Quantity) FROM ShoppingCart")
     LiveData<Double> getCartValue();
 
-    @Query("SELECT SUM(Mrp * Quantity) FROM ShoppingCart")
+    @Query("SELECT SUM(price * Quantity) FROM ShoppingCart")
     Double getCartValue1();
 
     @Query("SELECT SUM(Quantity) FROM ShoppingCart")

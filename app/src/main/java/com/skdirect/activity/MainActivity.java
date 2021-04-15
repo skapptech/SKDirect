@@ -73,21 +73,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBinding.llLogout.setVisibility(View.VISIBLE);
                 mBinding.llSignIn.setVisibility(View.GONE);
                 mobileNumberTV.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.MOBILE_NUMBER));
-
             } else {
                 mBinding.llSignIn.setVisibility(View.VISIBLE);
                 mBinding.llLogout.setVisibility(View.GONE);
                 mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.log_in));
                 mobileNumberTV.setText("");
             }
-
         } else {
             userNameTV.setText(R.string.guest_user);
             mBinding.llSignIn.setVisibility(View.VISIBLE);
             mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
             mBinding.llLogout.setVisibility(View.GONE);
             mobileNumberTV.setText("");
-
         }
     }
 
@@ -182,7 +179,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     } else {
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     }
-
                     break;
                 case R.id.nav_chat:
                     positionChanged = true;
