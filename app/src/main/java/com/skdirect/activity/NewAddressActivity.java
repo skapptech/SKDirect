@@ -39,7 +39,7 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
     private NewAddressViewMode newAddressViewMode;
     private GPSTracker gpsTracker;
     private DBHelper dbHelper;
-    String city,pincode,state,Address;
+    String city, pincode, state, Address;
     private Place place;
     private Geocoder mGeocoder;
     private LatLng latLng;
@@ -68,6 +68,7 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
                 break;
         }
     }
+
     private void initView() {
         mGeocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
 
@@ -111,6 +112,7 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
         mBinding.tilCity.setText(SharePrefs.getInstance(NewAddressActivity.this).getString(SharePrefs.CITY_NAME));
         mBinding.tilState.setText(SharePrefs.getInstance(NewAddressActivity.this).getString(SharePrefs.STATE));*/
     }
+
     private void addLocation() {
         if (TextUtils.isNullOrEmpty(mBinding.etFullName.getText().toString().trim())) {
             Utils.setToast(getApplicationContext(), "Please enter full name.");
@@ -131,6 +133,7 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
 
 
     }
+
     private void setLocationAPI() {
         newAddressViewMode.getAddLocationVMRequest(setUserValue());
         newAddressViewMode.getAddLocationVM().observe(this, new Observer<JsonObject>() {
@@ -147,6 +150,7 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
         });
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -161,6 +165,7 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
 
         }
     }
+
     private JsonObject setUserValue() {
         gpsTracker = new GPSTracker(getApplicationContext());
         JsonObject jsonObject = new JsonObject();
@@ -233,16 +238,22 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
                             }
                             if (!TextUtils.isNullOrEmpty(Addressone)) {
                                 mBinding.etStreet.setText(Addressone);
-                            }else
-                            {
+                            } else {
                                 try {
                                     List<Address> addresses = mGeocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
                                     if (!TextUtils.isNullOrEmpty(addresses.get(0).getFeatureName())) {
                                         mBinding.etStreet.setText(addresses.get(0).getFeatureName());
                                     }
-                                    if (!TextUtils.isNullOrEmpty(addresses.get(0).getSubAdminArea())){
+                                    if (!TextUtils.isNullOrEmpty(addresses.get(0).getSubAdminArea())) {
                                         mBinding.etPinCity.setText(addresses.get(0).getSubAdminArea());
-                                       }
+                                    }
+                                    if (!TextUtils.isNullOrEmpty(addresses.get(0).getPostalCode())) {
+                                        mBinding.etPinCode.setText(addresses.get(0).getPostalCode());
+                                    }
+                                    if (!TextUtils.isNullOrEmpty(addresses.get(0).getAdminArea())) {
+                                        mBinding.etPinState.setText(addresses.get(0).getAdminArea());
+
+                                    }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
