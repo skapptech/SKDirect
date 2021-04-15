@@ -43,10 +43,10 @@ public class ShopFragment extends Fragment implements SearchInterface {
     private final int totalItemCount = 0;
     private boolean loading = true;
     private SearchViewMode searchViewMode;
-    private final String searchSellerName;
+    private String searchSellerName;
     private SellerShopListAdapter sellerShopListAdapter;
     private final ArrayList<TopSellerModel> sallerShopList = new ArrayList<>();
-    private final int cateogryId;
+    private int cateogryId;
 
 
     @Override
@@ -76,6 +76,8 @@ public class ShopFragment extends Fragment implements SearchInterface {
 
     @Override
     public void onSearchClick(String query, int categoryId) {
+        searchSellerName = query;
+        cateogryId = categoryId;
         callShopAPi();
     }
 
