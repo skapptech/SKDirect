@@ -170,7 +170,6 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
         switch (view.getId()) {
             case R.id.bt_lodding_otp:
                 checkVerification();
-
                 break;
         }
     }

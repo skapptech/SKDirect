@@ -295,7 +295,11 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void initViews() {
-
+        if (SharePrefs.getInstance(getActivity()).getBoolean(SharePrefs.IS_Mall)) {
+          mBinding.rlHomeSearch.setVisibility(View.VISIBLE);
+        } else {
+            mBinding.rlHomeSearch.setVisibility(View.GONE);
+        }
         dbHelper = MyApplication.getInstance().dbHelper;
         mBinding.etSearchSeller.setHint(dbHelper.getString(R.string.search_seller));
 
