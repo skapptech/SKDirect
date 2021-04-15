@@ -121,9 +121,11 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onResume() {
         super.onResume();
         if (myOrderAdapter != null) {
-            myOrderAdapter = new MyOrderAdapter(activity, orderModelArrayList);
-            mBinding.rMyOrder.setAdapter(myOrderAdapter);
-            myOrderAdapter.notifyDataSetChanged();
+            orderModelArrayList.clear();
+            /*myOrderAdapter = new MyOrderAdapter(activity, orderModelArrayList);
+            mBinding.rMyOrder.setAdapter(myOrderAdapter);*/
+            orderId = 0;
+            callMyOrder();
         }
     }
 
@@ -174,7 +176,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
         orderModelArrayList.clear();
         orderId = 0;
-        callMyOrder();
+       // callMyOrder();
 
     }
 
