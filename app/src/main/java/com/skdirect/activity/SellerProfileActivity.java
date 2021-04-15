@@ -43,7 +43,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     private SellerProfileViewMode sellerProfileViewMode;
     private int sellerID;
     private int skipCount = 0;
-    private final int takeCount = 5;
+    private final int takeCount = 15;
     private int pastVisiblesItems = 0;
     private int visibleItemCount = 0;
     private int totalItemCount = 0;
@@ -219,7 +219,6 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     }
 
     private void getSellerProductsApi(String searchSellerName) {
-
         SellerProfileDataModel paginationModel = new SellerProfileDataModel(sellerID, 0, 0, "", skipCount, takeCount, 0, searchSellerName, Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LAT)), Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LON)));
         sellerProfileViewMode.getSellerProductRequest(paginationModel);
         sellerProfileViewMode.getSellerProductVM().observe(this, sellerProdList -> {
