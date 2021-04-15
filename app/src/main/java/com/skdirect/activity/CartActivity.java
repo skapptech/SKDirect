@@ -69,6 +69,12 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         commonClassForAPI = CommonClassForAPI.getInstance(this);
+        MyApplication.getInstance().cartRepository.getCartValue().observe(this, aDouble -> {
+            if (aDouble != null) {
+                totalAmount = aDouble;
+                mBinding.tvTotalAmount.setText("₹ " + totalAmount);
+            }
+        });
     }
 
     @Override
@@ -87,7 +93,6 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_items_available));
             }
-
         } else
             onBackPressed();
         return super.onOptionsItemSelected(item);
@@ -100,13 +105,13 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 onBackPressed();
                 break;
             case R.id.btnCheckout:
-                SharePrefs.setSharedPreference(getApplicationContext(),SharePrefs.CAME_FROM_CART,false);
+                SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.CAME_FROM_CART, false);
                 if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
                     startActivity(new Intent(getApplicationContext(), PaymentActivity.class)
                             .putExtra("cartItemSize", cartItemDataModel)
                             .putExtra("totalAmount", totalAmount));
                 } else {
-                    SharePrefs.setSharedPreference(getApplicationContext(),SharePrefs.CAME_FROM_CART,true);
+                    SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.CAME_FROM_CART, true);
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 }
                 break;

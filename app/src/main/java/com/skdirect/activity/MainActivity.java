@@ -1,11 +1,7 @@
 package com.skdirect.activity;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,37 +19,23 @@ import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.JsonObject;
-import com.nabinbhandari.android.permissions.PermissionHandler;
-import com.nabinbhandari.android.permissions.Permissions;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityMainBinding;
 import com.skdirect.firebase.FirebaseLanguageFetch;
 import com.skdirect.fragment.HomeFragment;
 import com.skdirect.model.CartModel;
-import com.skdirect.model.UserDetailResponseModel;
 import com.skdirect.utils.AppSignatureHelper;
 import com.skdirect.utils.DBHelper;
-import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.MainActivityViewMode;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public ActivityMainBinding mBinding;
@@ -64,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public TextView userNameTV, mobileNumberTV, setLocationTV;
     private MainActivityViewMode mainActivityViewMode;
     public DBHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setVarible() {
-        setLocationTV.setText(SharePrefs.getInstance(MainActivity.this).getString(SharePrefs.CITYNAME)+" "+SharePrefs.getInstance(MainActivity.this).getString(SharePrefs.PIN_CODE));
+        setLocationTV.setText(SharePrefs.getInstance(MainActivity.this).getString(SharePrefs.CITYNAME) + " " + SharePrefs.getInstance(MainActivity.this).getString(SharePrefs.PIN_CODE));
         if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)) {
             userNameTV.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.FIRST_NAME));
             if (SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
@@ -111,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         setupBadge();
     }
+
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -118,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             new FirebaseLanguageFetch(getApplicationContext()).fetchLanguage();
         }
     }
+
     private void clickListener() {
         mBinding.llProfile.setOnClickListener(this);
         mBinding.llChnagePassword.setOnClickListener(this);
@@ -131,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.llAboutApp.setOnClickListener(this);
         mBinding.llTermsAndCondition.setOnClickListener(this);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -145,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         openFragment(new HomeFragment());
     }
+
     private void initView() {
         dbHelper = MyApplication.getInstance().dbHelper;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -214,10 +201,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setLocationTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MainActivity.this, MapsExtendedActivity.class);
-                intent.putExtra("Lat", Double.parseDouble(SharePrefs.getStringSharedPreferences(MainActivity.this,SharePrefs.LAT)));
-                intent.putExtra("Lon", Double.parseDouble(SharePrefs.getStringSharedPreferences(MainActivity.this,SharePrefs.LON)));
-                startActivityForResult(intent,2);
+                Intent intent = new Intent(MainActivity.this, MapsExtendedActivity.class);
+                intent.putExtra("Lat", Double.parseDouble(SharePrefs.getStringSharedPreferences(MainActivity.this, SharePrefs.LAT)));
+                intent.putExtra("Lon", Double.parseDouble(SharePrefs.getStringSharedPreferences(MainActivity.this, SharePrefs.LON)));
+                startActivityForResult(intent, 2);
             }
         });
 
@@ -273,12 +260,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.home_frame, fragment);
         //transaction.addToBackStack(null);
         transaction.commit();
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -329,15 +318,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_private_polcy:
-                startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName","PrivacyPolicy"));
+                startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName", "PrivacyPolicy"));
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_about_app:
-                startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName","AboutApp"));
+                startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName", "AboutApp"));
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_terms_and_condition:
-                startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName","TermsCondition"));
+                startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName", "TermsCondition"));
                 mBinding.drawer.closeDrawers();
                 break;
         }
