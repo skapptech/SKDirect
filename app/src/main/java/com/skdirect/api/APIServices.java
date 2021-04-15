@@ -37,6 +37,7 @@ import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.PostBrandModel;
 import com.skdirect.model.ProductDataModel;
+import com.skdirect.model.ReviewMainModel;
 import com.skdirect.model.SearchMainModel;
 import com.skdirect.model.SearchRequestModel;
 import com.skdirect.model.SellerDetailsModel;
@@ -233,8 +234,8 @@ public interface APIServices {
     @POST("api/NativeBuyer/MyOrder/GetMyOrder")
     Observable<OrderModel> GetOrderMaster(@Body MyOrderRequestModel myOrderRequestModel);
 
-    @POST("api/buyer/OrderReview/Rating")
-    Call<Boolean> getRating(@Body AddReviewModel reViewViewMode);
+    @POST("api/NativeBuyer/MyOrder/Rating")
+    Call<ReviewMainModel> getRating(@Body AddReviewModel reViewViewMode);
 
     @GET("api/buyer/MyOrder/GetOrderDetailProcess")
     Call<OrderDetailsModel> GetOrderDetailProcess(@Query("OrderId") int OrderId);

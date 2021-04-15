@@ -328,7 +328,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mBinding.tvNewSeller.setText(dbHelper.getString(R.string.view_more));
         mBinding.tvNoNewSellerItem.setText(dbHelper.getString(R.string.no_item_found));
         mBinding.tvNoNewSellerItemLocation.setText(dbHelper.getString(R.string.no_loction_found));
-        mBinding.tvNoMallAvailble.setText(dbHelper.getString(R.string.no_mall_availble));
+        mBinding.mallNotFound.tvNoMallAvailble.setText(dbHelper.getString(R.string.no_mall_availble));
 
 
 
