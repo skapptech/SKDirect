@@ -266,7 +266,8 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             for (int i = 0; i < sellerDeliveryModel.size(); i++) {
                 deliveryOption += sellerDeliveryModel.get(i).getDelivery() + ", ";
             }
-            mBinding.tvDeliveryOption.setText(deliveryOption);
+            /*remove condiction*/
+            mBinding.tvDeliveryOption.setText("Home Delivery");
         } else {
             mBinding.llDeliverOption.setVisibility(View.GONE);
         }

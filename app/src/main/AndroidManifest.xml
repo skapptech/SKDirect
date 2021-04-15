@@ -101,6 +101,7 @@
         <activity
             android:name=".activity.SearchActivity"
             android:screenOrientation="portrait"
+            android:exported="true"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.NearSellerActivity"
