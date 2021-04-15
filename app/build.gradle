@@ -41,7 +41,7 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFiles 'proguard-rules.pro'
-            resValue "string", "app_name", "Direct"
+            resValue "string", "app_name", "Social Mall"
             buildConfigField("String", "buildVariant", "\"release\"")
             buildConfigField("String", "apiEndpoint", "\"https://directapi.er15.xyz:4436\"")
             buildConfigField("String", "playStoreURL", "\"https://play.google.com/store/apps/details?id=com.skdirect&hl=en_IN&gl=US\"")
@@ -51,7 +51,7 @@ android {
             shrinkResources false
             proguardFiles 'proguard-rules.pro'
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "Direct"
+            resValue "string", "app_name", "Social Mall"
             buildConfigField("String", "buildVariant", "\"DEBUG_STORE_FILE\"")
             buildConfigField("String", "apiEndpoint", "\"https://virtualstockuat.shopkirana.in\"")
             buildConfigField("String", "playStoreURL", "\"https://play.google.com/store/apps/details?id=com.skdirect&hl=en_IN&gl=US\"")
