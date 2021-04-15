@@ -9,7 +9,6 @@ import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.model.CartMainModel;
 import com.skdirect.model.CommonResponseModel;
-import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.MallMainPriceModel;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.OrderModel;
@@ -17,9 +16,11 @@ import com.skdirect.model.OrderStatusMainModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PostBrandModel;
+import com.skdirect.model.SearchMainModel;
+import com.skdirect.model.SearchRequestModel;
+import com.skdirect.model.ShopMainModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateProfilePostModel;
-import com.skdirect.model.UserDetailResponseModel;
 import com.skdirect.model.response.ApplyOfferResponse;
 import com.skdirect.model.response.OfferResponse;
 import com.skdirect.utils.MyApplication;
@@ -395,7 +396,8 @@ public class CommonClassForAPI {
                     }
                 });
     }
-    public void assignCart(final DisposableObserver observer, String  cartId) {
+
+    public void assignCart(final DisposableObserver observer, String cartId) {
         RestClient.getInstance().getService().getAssignCart(cartId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -420,6 +422,7 @@ public class CommonClassForAPI {
                     }
                 });
     }
+
     public void getAllOrderStatusList(final DisposableObserver<OrderStatusMainModel> observer) {
         RestClient.getInstance().getService().getOrderStatusList()
                 .subscribeOn(Schedulers.io())
@@ -457,6 +460,58 @@ public class CommonClassForAPI {
 
                     @Override
                     public void onNext(@NotNull OrderModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void getSellerListWithItem(final DisposableObserver<SearchMainModel> observer, SearchRequestModel model) {
+        RestClient.getInstance().getService().GetSellerListWithItem(model)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<SearchMainModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull SearchMainModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void getTopSellerItem(final DisposableObserver<ShopMainModel> observer, int skipCount, int takeCount, String s, String cateogryId) {
+        RestClient.getInstance().getService().GetTopSellerItem(skipCount, takeCount, s, cateogryId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ShopMainModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull ShopMainModel o) {
                         observer.onNext(o);
                     }
 

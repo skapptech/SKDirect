@@ -138,10 +138,10 @@ public interface APIServices {
 
 
     @GET("/api/NativeBuyer/ShopList/GetShopList")
-    Call<ShopMainModel> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int password, @Query("Keyword") String Keyword, @Query("categoryId") String categoryId);
+    Observable<ShopMainModel> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int take, @Query("Keyword") String Keyword, @Query("categoryId") String categoryId);
 
     @POST("/api/NativeBuyer/ItemList/GetSellerListWithItem")
-    Call<SearchMainModel> GetSellerListWithItem(@Body SearchRequestModel paginationModel);
+    Observable<SearchMainModel> GetSellerListWithItem(@Body SearchRequestModel paginationModel);
 
 
     @GET("api/NativeProductDetail/GetSellerProductById/{GetSellerProductById}")

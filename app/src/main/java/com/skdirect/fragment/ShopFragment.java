@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.skdirect.R;
 import com.skdirect.activity.SearchActivity;
 import com.skdirect.adapter.SellerShopListAdapter;
+import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.FragmentShopBinding;
 import com.skdirect.interfacee.SearchInterface;
 import com.skdirect.model.ShopMainModel;
@@ -30,15 +30,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import io.reactivex.observers.DisposableObserver;
+
 public class ShopFragment extends Fragment implements SearchInterface {
     private FragmentShopBinding mBinding;
     private SearchActivity activity;
 
-    private int skipCount = 0;
+    private final int skipCount = 0;
     private final int takeCount = 7;
-    private int pastVisiblesItems = 0;
-    private int visibleItemCount = 0;
-    private int totalItemCount = 0;
+    private final int pastVisiblesItems = 0;
+    private final int visibleItemCount = 0;
+    private final int totalItemCount = 0;
     private boolean loading = true;
     private SearchViewMode searchViewMode;
     private final String searchSellerName;
@@ -80,7 +82,7 @@ public class ShopFragment extends Fragment implements SearchInterface {
 
     private void initViews() {
         mBinding.tvNotDataFound.setText(MyApplication.getInstance().dbHelper.getString(R.string.no_data_found));
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mBinding.rvSearch.setLayoutManager(layoutManager);
         sellerShopListAdapter = new SellerShopListAdapter(getActivity(), sallerShopList);
         mBinding.rvSearch.setAdapter(sellerShopListAdapter);
@@ -94,50 +96,51 @@ public class ShopFragment extends Fragment implements SearchInterface {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    visibleItemCount = layoutManager.getChildCount();
-                    totalItemCount = layoutManager.getItemCount();
-                    pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-                    if (loading) {
-                        if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
-                            loading = false;
-                            skipCount = skipCount + 7;
-                            // mBinding.progressBar.setVisibility(View.VISIBLE);
-                            callShopAPi();
-                        }
-                    }
-                }
+//                if (dy > 0) {
+//                    visibleItemCount = layoutManager.getChildCount();
+//                    totalItemCount = layoutManager.getItemCount();
+//                    pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+//                    if (loading) {
+//                        if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
+//                            loading = false;
+//                            skipCount = skipCount + 7;
+//                            // mBinding.progressBar.setVisibility(View.VISIBLE);
+//                            callShopAPi();
+//                        }
+//                    }
+//                }
             }
         });
         sallerShopList.clear();
     }
 
     private void callShopAPi() {
-        if (Utils.isNetworkAvailable(getActivity())) {
-            Utils.showProgressDialog(getActivity());
+        if (Utils.isNetworkAvailable(activity)) {
+            Utils.showProgressDialog(activity);
             sallerShopList.clear();
             getShopData();
         } else {
-            Utils.setToast(getActivity(), MyApplication.getInstance().dbHelper.getString(R.string.no_internet_connection));
+            Utils.setToast(activity, MyApplication.getInstance().dbHelper.getString(R.string.no_internet_connection));
         }
-
     }
 
     private void getShopData() {
-        searchViewMode.getShopDataViewModelRequest(skipCount, takeCount, searchSellerName, (String.valueOf(cateogryId).equals("0")) ? null : String.valueOf(cateogryId));
-        searchViewMode.getShopDataViewModel().observe(this, new Observer<ShopMainModel>() {
-            @Override
-            public void onChanged(ShopMainModel shopMainModel) {
+        CommonClassForAPI.getInstance(activity).getTopSellerItem(shopObserver,
+                skipCount, takeCount, searchSellerName,
+                (String.valueOf(cateogryId).equals("0")) ? null : String.valueOf(cateogryId));
+    }
+
+    private final DisposableObserver<ShopMainModel> shopObserver = new DisposableObserver<ShopMainModel>() {
+        @Override
+        public void onNext(@NotNull ShopMainModel shopMainModel) {
+            try {
                 Utils.hideProgressDialog();
                 if (shopMainModel != null && shopMainModel.getResultItem() != null && shopMainModel.getResultItem().size() > 0) {
                     if (shopMainModel.isSuccess()) {
-                        mBinding.rvSearch.post(new Runnable() {
-                            public void run() {
-                                sallerShopList.addAll(shopMainModel.getResultItem());
-                                sellerShopListAdapter.notifyDataSetChanged();
-                                loading = true;
-                            }
-                        });
+                        sallerShopList.clear();
+                        sallerShopList.addAll(shopMainModel.getResultItem());
+                        sellerShopListAdapter.notifyDataSetChanged();
+                        loading = true;
                     } else {
                         if (sallerShopList.size() == 0) {
                             mBinding.rvSearch.setVisibility(View.GONE);
@@ -150,7 +153,20 @@ public class ShopFragment extends Fragment implements SearchInterface {
                         mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
                     }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
-    }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+            Utils.hideProgressDialog();
+        }
+
+        @Override
+        public void onComplete() {
+            Utils.hideProgressDialog();
+        }
+    };
 }

@@ -22,6 +22,7 @@ import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ON
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivitySearchBinding mBinding;
+
     private String searchSellerName;
     private int allCategoriesID;
     private DBHelper dbHelper;
