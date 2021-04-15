@@ -13,18 +13,19 @@ public class MyOrderRequestModel {
     private int Take;
     @SerializedName("Skip")
     private int Skip;
-    @SerializedName("Status")
-    private int Status;
+    @SerializedName("OrderStatus")
+    private String OrderStatus;
     @SerializedName("Id")
     private int Id;
 
-    public MyOrderRequestModel(String filter, int sellerId, int take, int skip, int status, int id,String Buyerid) {
+    public MyOrderRequestModel(String filter, int sellerId, int take, int skip, String OrderStatus, int id,String Buyerid) {
+
         Filter = filter;
         SellerId = sellerId;
         buyerid = Buyerid;
         Take = take;
         Skip = skip;
-        Status = status;
+        this.OrderStatus = OrderStatus;
         Id = id;
     }
 }

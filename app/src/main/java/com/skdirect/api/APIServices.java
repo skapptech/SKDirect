@@ -1,6 +1,5 @@
 package com.skdirect.api;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.AddReviewModel;
@@ -12,7 +11,6 @@ import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CartMainModel;
 import com.skdirect.model.ChangePasswordRequestModel;
 import com.skdirect.model.CommonResponseModel;
-import com.skdirect.model.CustomerDataModel;
 import com.skdirect.model.DeliveryMainModel;
 import com.skdirect.model.FilterPostModel;
 import com.skdirect.model.GenerateOtpModel;
@@ -48,7 +46,6 @@ import com.skdirect.model.TokenModel;
 import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.model.UpdateEditeAddreshMainModel;
 import com.skdirect.model.UpdateProfilePostModel;
-import com.skdirect.model.UserDetailResponseModel;
 import com.skdirect.model.UserLocationModel;
 import com.skdirect.model.response.ApplyOfferResponse;
 import com.skdirect.model.response.OfferResponse;
@@ -277,4 +274,6 @@ public interface APIServices {
     @GET("api/NativeBuyer/SellerProfile/AsssignCart")
     Observable<JsonObject> getAssignCart(@Query("id") String id);
 
+    @GET("api/NativeBuyer/MyOrder/GetOrderStatus")
+    Observable<JsonObject> getOrderStatusList();
 }
