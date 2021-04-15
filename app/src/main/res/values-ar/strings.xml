@@ -122,7 +122,7 @@
     <string name="name">name</string>
     <string name="confirm_location">Confirm Location</string>
     <string name="product_list">Product List</string>
-    <string name="full_name">Full Name</string>
+    <string name="full_name">Full Name,Flat,Building,Apartment</string>
     <string name="street_address">Street Address</string>
     <string name="landmark_optional">Landmark (optional)</string>
     <string name="pincode">Pincode</string>

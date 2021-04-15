@@ -120,7 +120,7 @@
     <string name="flat_no">फ्लैट नंबर</string>
     <string name="name">नाम</string>
     <string name="confirm_location">लोकेशन की पुष्टि करें</string>
-    <string name="full_name">पूरा नाम</string>
+    <string name="full_name">पूरा नाम,फ्लैट, बिल्डिंग, अपार्टमेंट</string>
     <string name="street_address">गली का पता</string>
     <string name="landmark_optional">सीमा चिन्ह (वैकल्पिक)</string>
     <string name="pincode">पिन कोड</string>
