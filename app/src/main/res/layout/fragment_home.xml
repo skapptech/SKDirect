@@ -37,13 +37,13 @@
                     android:drawableLeft="@drawable/ic_search"
                     android:drawablePadding="10dp"
                     android:hint="@string/search_seller"
-                    android:imeOptions="actionSearch"
+                    android:imeActionLabel="@string/search_for"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
                     android:maxLines="1"
                     android:padding="8dp"
-                    android:textSize="15dp" />
-
-
+                    android:singleLine="true"
+                    android:textSize="15sp" />
             </RelativeLayout>
 
             <LinearLayout

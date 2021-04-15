@@ -15,39 +15,33 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.gson.JsonArray;
 import com.skdirect.R;
 import com.skdirect.activity.MyOrderActivity;
-import com.skdirect.activity.PaymentActivity;
-import com.skdirect.activity.UpdateProfileActivity;
 import com.skdirect.adapter.MyOrderAdapter;
+import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.FragmentAllOrderBinding;
 import com.skdirect.model.MyOrderModel;
 import com.skdirect.model.MyOrderRequestModel;
-import com.skdirect.model.NearBySallerModel;
 import com.skdirect.model.OrderModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
-import com.skdirect.viewmodel.MyOrderViewMode;
-import com.skdirect.viewmodel.PaymentViewMode;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import io.reactivex.observers.DisposableObserver;
+
 public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
     private MyOrderActivity activity;
     private FragmentAllOrderBinding mBinding;
-    private MyOrderViewMode myOrderViewMode;
     private final ArrayList<MyOrderModel> orderModelArrayList = new ArrayList<>();
     private int skipCount = 0;
     private int takeCount = 10;
@@ -60,6 +54,8 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     boolean handled = false;
     public DBHelper dbHelper;
     private String statusId;
+    private String orderstatus;
+    private CommonClassForAPI commonClassForAPI;
     public AllOrderFragment(String id) {
         this.statusId = id;
         handled = false;
@@ -75,7 +71,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_all_order, container, false);
-        myOrderViewMode = ViewModelProviders.of(this).get(MyOrderViewMode.class);
+        orderstatus = statusId;
         return mBinding.getRoot();
     }
 
@@ -87,6 +83,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    orderstatus = "";
                     searchData();
                     handled = true;
                 }
@@ -100,6 +97,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
                     orderId = 0;
                     orderModelArrayList.clear();
                     skipCount = 0;
+                    orderstatus = statusId;
                     callMyOrder();
 
                 }
@@ -189,46 +187,58 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void myOrderAPI() {
-        MyOrderRequestModel myOrderRequestModel = new MyOrderRequestModel("",0,takeCount,skipCount,statusId, orderId, SharePrefs.getInstance(getActivity()).getString(SharePrefs.ASP_NET_USER_ID));
-        myOrderViewMode.getCategoriesViewModelRequest(myOrderRequestModel);
-        myOrderViewMode.getCategoriesViewModel().observe(this, new Observer<OrderModel>() {
-            @Override
-            public void onChanged(OrderModel response) {
-                //mBinding.swiperefresh.setRefreshing(false);
-                mBinding.shimmerViewContainer.stopShimmer();
-                mBinding.shimmerViewContainer.setVisibility(View.GONE);
-                mBinding.tlEmptyView.setVisibility(View.GONE);
-                mBinding.rMyOrder.setVisibility(View.VISIBLE);
-                if(response.isSuccess())
-                {
-                    if (response.getMyOrderModelsList()!=null && response.getMyOrderModelsList().size()>0){
-                        mBinding.rMyOrder.post(new Runnable() {
-                            public void run() {
-                                orderModelArrayList.addAll(response.getMyOrderModelsList());
-                                myOrderAdapter.notifyDataSetChanged();
-                                loading = true;
-                            }
-                        });
-
-                    }else {
-                        loading = false;
-                        mBinding.tlEmptyView.setVisibility(View.VISIBLE);
-                        mBinding.rMyOrder.setVisibility(View.GONE);
-                    }
-                }else
-                {
-                    loading = false;
-                    if (orderModelArrayList.size()==0){
-                        mBinding.tlEmptyView.setVisibility(View.VISIBLE);
-                        mBinding.rMyOrder.setVisibility(View.GONE);
-                    }
-
-                }
-
-
-            }
-        });
+        commonClassForAPI = CommonClassForAPI.getInstance(getActivity());
+        if (commonClassForAPI!=null) {
+            MyOrderRequestModel myOrderRequestModel = new MyOrderRequestModel("",0,takeCount,skipCount,orderstatus, orderId, SharePrefs.getInstance(getActivity()).getString(SharePrefs.ASP_NET_USER_ID));
+           // Utils.showProgressDialog(getActivity());
+            commonClassForAPI.GetOrderMaster(observer,myOrderRequestModel);
+        }
     }
+    private final DisposableObserver<OrderModel> observer = new DisposableObserver<OrderModel>() {
+        @Override
+        public void onNext(@NotNull OrderModel orderStatusMainModel) {
+            Utils.hideProgressDialog();
+            try {
+                    mBinding.shimmerViewContainer.stopShimmer();
+                    mBinding.shimmerViewContainer.setVisibility(View.GONE);
+                    mBinding.tlEmptyView.setVisibility(View.GONE);
+                    mBinding.rMyOrder.setVisibility(View.VISIBLE);
+                    if(orderStatusMainModel.isSuccess())
+                    {
+                        orderModelArrayList.clear();
+                        if (orderStatusMainModel.getMyOrderModelsList()!=null && orderStatusMainModel.getMyOrderModelsList().size()>0){
+                            orderModelArrayList.addAll(orderStatusMainModel.getMyOrderModelsList());
+                            myOrderAdapter.notifyDataSetChanged();
+                            loading = true;
+                        }else {
+                            loading = false;
+                            mBinding.tlEmptyView.setVisibility(View.VISIBLE);
+                            mBinding.rMyOrder.setVisibility(View.GONE);
+                        }
+                    }else
+                    {
+                        loading = false;
+                        if (orderModelArrayList.size()==0){
+                            mBinding.tlEmptyView.setVisibility(View.VISIBLE);
+                            mBinding.rMyOrder.setVisibility(View.GONE);
+                        }
+
+                    }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    };
 
 
 }

@@ -231,7 +231,7 @@ public interface APIServices {
     Call<CommonResponseModel> ChangePassword(@Body ChangePasswordRequestModel passwordRequestModel);
 
     @POST("api/NativeBuyer/MyOrder/GetMyOrder")
-    Call<OrderModel> GetOrderMaster(@Body MyOrderRequestModel myOrderRequestModel);
+    Observable<OrderModel> GetOrderMaster(@Body MyOrderRequestModel myOrderRequestModel);
 
     @POST("api/buyer/OrderReview/Rating")
     Call<Boolean> getRating(@Body AddReviewModel reViewViewMode);
