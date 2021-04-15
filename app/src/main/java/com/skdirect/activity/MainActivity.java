@@ -31,6 +31,7 @@ import com.skdirect.fragment.HomeFragment;
 import com.skdirect.model.CartModel;
 import com.skdirect.utils.AppSignatureHelper;
 import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.GpsUtils;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.TextUtils;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public TextView userNameTV, mobileNumberTV, setLocationTV;
     private MainActivityViewMode mainActivityViewMode;
     public DBHelper dbHelper;
+    Boolean isGPS = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,10 +203,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setLocationTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, MapsExtendedActivity.class);
-                intent.putExtra("Lat", Double.parseDouble(SharePrefs.getStringSharedPreferences(MainActivity.this, SharePrefs.LAT)));
-                intent.putExtra("Lon", Double.parseDouble(SharePrefs.getStringSharedPreferences(MainActivity.this, SharePrefs.LON)));
-                startActivityForResult(intent, 2);
+                if(Utils.ISGPSON(MainActivity.this)){
+                    Intent intent = new Intent(MainActivity.this, MapsExtendedActivity.class);
+                    intent.putExtra("Lat", Double.parseDouble(SharePrefs.getStringSharedPreferences(MainActivity.this, SharePrefs.LAT)));
+                    intent.putExtra("Lon", Double.parseDouble(SharePrefs.getStringSharedPreferences(MainActivity.this, SharePrefs.LON)));
+                    startActivityForResult(intent, 2);
+                }
+                else{
+                    new GpsUtils(MainActivity.this).turnGPSOn(isGPSEnable -> {
+                        // turn on GPS
+                        isGPS = isGPSEnable;
+
+                    });
+                }
+
             }
         });
 

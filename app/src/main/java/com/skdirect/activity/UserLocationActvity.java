@@ -21,6 +21,7 @@ import com.skdirect.location.EasyWayLocation;
 import com.skdirect.location.Listener;
 import com.skdirect.location.LocationData;
 import com.skdirect.utils.DBHelper;
+import com.skdirect.utils.GpsUtils;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
@@ -33,6 +34,7 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
     private EasyWayLocation easyWayLocation;
     private DBHelper dbHelper;
 
+    Boolean isGPS = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +80,26 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
     }
 
     private void getLocation() {
-        easyWayLocation.startLocation();
+        int noOfSecond = 1;
+        Utils.showProgressDialog(this);
+        if (Utils.ISGPSON(UserLocationActvity.this)) {
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    //TODO Set your button auto perform click.
+                    Utils.hideProgressDialog();
+                    easyWayLocation.startLocation();
+                }
+            }, noOfSecond * 1000);
+
+        } else {
+            new GpsUtils(UserLocationActvity.this).turnGPSOn(isGPSEnable -> {
+                // turn on GPS
+                isGPS = isGPSEnable;
+            });
+        }
+
     }
 
     @Override
