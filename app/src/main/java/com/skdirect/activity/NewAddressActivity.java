@@ -227,6 +227,7 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
                             String Addressone = resultItemObject.getString("Addressone");
                             String Addresstwo = resultItemObject.getString("Addresstwo");
                             String Addressthree = resultItemObject.getString("Addressthree");
+
                             if (!TextUtils.isNullOrEmpty(Pincode)) {
                                 mBinding.etPinCode.setText(Pincode);
                             }
@@ -238,6 +239,19 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
                             }
                             if (!TextUtils.isNullOrEmpty(Addressone)) {
                                 mBinding.etStreet.setText(Addressone);
+                            }else
+                            {
+                                try {
+                                    List<Address> addresses = mGeocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                                    if (!TextUtils.isNullOrEmpty(addresses.get(0).getFeatureName())) {
+                                        mBinding.etStreet.setText(addresses.get(0).getFeatureName());
+                                    }
+                                    if (!TextUtils.isNullOrEmpty(addresses.get(0).getSubAdminArea())){
+                                        mBinding.etPinCity.setText(addresses.get(0).getSubAdminArea());
+                                       }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                             if (!TextUtils.isNullOrEmpty(Addresstwo)) {
                                 mBinding.etLandmark.setText(Addresstwo);

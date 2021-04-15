@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.llRateThisApp.setOnClickListener(this);
         mBinding.llPrivatePolcy.setOnClickListener(this);
         mBinding.llAboutApp.setOnClickListener(this);
+        mBinding.llTermsAndCondition.setOnClickListener(this);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -239,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.tvRateAppTitle.setText(dbHelper.getString(R.string.rate_app));
         mBinding.tvPrivacyTitle.setText(dbHelper.getString(R.string.privacy_policy));
         mBinding.tvAboutTitle.setText(dbHelper.getString(R.string.about_direct));
+        mBinding.tvTermsAndCondition.setText(dbHelper.getString(R.string.terms_and_condition));
         mBinding.tvHelpTitle.setText(dbHelper.getString(R.string.help));
         mBinding.tvHowToTitle.setText(dbHelper.getString(R.string.how_to_use));
         mBinding.tvLogoutTitle.setText(dbHelper.getString(R.string.logout));
@@ -332,6 +334,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.ll_about_app:
                 startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName","AboutApp"));
+                mBinding.drawer.closeDrawers();
+                break;
+            case R.id.ll_terms_and_condition:
+                startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName","TermsCondition"));
                 mBinding.drawer.closeDrawers();
                 break;
         }

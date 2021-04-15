@@ -50,6 +50,16 @@ public  class AppVersionModel implements Serializable {
         @SerializedName("Version")
         private String Version;
 
+       /* @Expose
+        @SerializedName("BuyerUrl")
+        private String BuyerUrl;
+        @Expose
+        @SerializedName("SellerUrl")
+        private String SellerUrl;
+        @Expose
+        @SerializedName("Version")
+        private String Version;*/
+
         public boolean isCompulsory() {
             return IsCompulsory;
         }

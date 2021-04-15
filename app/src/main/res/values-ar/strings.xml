@@ -8,7 +8,8 @@
     <string name="chat">Chat</string>
     <string name="rate_app">Rate the App</string>
     <string name="privacy_policy">Privacy Policy</string>
-    <string name="about_direct">About Direct</string>
+    <string name="about_direct">About Social Mall</string>
+    <string name="terms_and_condition">Terms and Condition</string>
     <string name="sign_in">Sign In</string>
     <string name="log_in">Log In</string>
     <string name="get_otp">Get Otp</string>
@@ -231,4 +232,5 @@
     <string name="congratulation">Congratulation</string>
     <string name="order_place__popoup">Order Place Successfully</string>
     <string name="discount">Discount Price</string>
+
 </resources>

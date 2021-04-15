@@ -59,6 +59,10 @@ public class SharePrefs {
     public static final String TOKEN_PASSWORD = "Pwd";
     public static final String CAME_FROM_CART = "came_from_cart";
 
+    public static final String PRIVACY_POLICY = "privacy_policy";
+    public static final String TERMS_CONDITION = "terms_condition";
+    public static final String ABOUT_APP = "about_app";
+
 
     private Context ctx;
     public SharedPreferences sharedPreferences;
