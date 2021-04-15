@@ -160,22 +160,13 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
             place = data.getParcelableExtra("PlaceResult");
             latLng = place.getLatLng();
             List<Address> addresses = null;
-            try {
-                addresses = mGeocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-                if (addresses.get(0).getLocality() != null) {
-                    pincode = addresses.get(0).getPostalCode();
-                    city = addresses.get(0).getLocality();
-                    state = addresses.get(0).getAdminArea();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            callLocation(latLng.latitude, latLng.longitude);
 
 
-            mBinding.etStreetAddresh.setText(place.getAddress());
+           /* mBinding.etStreetAddresh.setText(place.getAddress());
             mBinding.etPinCity.setText(city);
             mBinding.etPinState.setText(state);
-            mBinding.etPinCode.setText(pincode);
+            mBinding.etPinCode.setText(pincode);*/
 
         }
     }
