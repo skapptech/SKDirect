@@ -43,10 +43,10 @@ public class ShopFragment extends Fragment implements SearchInterface {
     private final int totalItemCount = 0;
     private boolean loading = true;
     private SearchViewMode searchViewMode;
-    private final String searchSellerName;
+    private String searchSellerName;
     private SellerShopListAdapter sellerShopListAdapter;
     private final ArrayList<TopSellerModel> sallerShopList = new ArrayList<>();
-    private final int cateogryId;
+    private int cateogryId;
 
 
     @Override
@@ -76,6 +76,8 @@ public class ShopFragment extends Fragment implements SearchInterface {
 
     @Override
     public void onSearchClick(String query, int categoryId) {
+        searchSellerName = query;
+        cateogryId = categoryId;
         callShopAPi();
     }
 
@@ -137,22 +139,15 @@ public class ShopFragment extends Fragment implements SearchInterface {
             try {
                 Utils.hideProgressDialog();
                 if (shopMainModel != null && shopMainModel.getResultItem() != null && shopMainModel.getResultItem().size() > 0) {
-                    if (shopMainModel.isSuccess()) {
-                        sallerShopList.clear();
-                        sallerShopList.addAll(shopMainModel.getResultItem());
-                        sellerShopListAdapter.notifyDataSetChanged();
-                        loading = true;
-                    } else {
-                        if (sallerShopList.size() == 0) {
-                            mBinding.rvSearch.setVisibility(View.GONE);
-                            mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
-                        }
-                    }
+                    mBinding.tvNotDataFound.setVisibility(View.GONE);
+                    sallerShopList.clear();
+                    sallerShopList.addAll(shopMainModel.getResultItem());
+                    sellerShopListAdapter.notifyDataSetChanged();
+                    loading = true;
                 } else {
-                    if (sallerShopList.size() == 0) {
-                        mBinding.rvSearch.setVisibility(View.GONE);
-                        mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
-                    }
+                    mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
+                    sallerShopList.clear();
+                    sellerShopListAdapter.notifyDataSetChanged();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
