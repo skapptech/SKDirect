@@ -124,6 +124,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
             orderModelArrayList.clear();
             /*myOrderAdapter = new MyOrderAdapter(activity, orderModelArrayList);
             mBinding.rMyOrder.setAdapter(myOrderAdapter);*/
+            mBinding.shimmerViewContainer.startShimmer();
             orderId = 0;
             callMyOrder();
         }
@@ -147,7 +148,6 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
         mBinding.rMyOrder.setLayoutManager(layoutManager);
         myOrderAdapter = new MyOrderAdapter(activity, orderModelArrayList);
         mBinding.rMyOrder.setAdapter(myOrderAdapter);
-        mBinding.shimmerViewContainer.startShimmer();
 
         mBinding.rMyOrder.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
