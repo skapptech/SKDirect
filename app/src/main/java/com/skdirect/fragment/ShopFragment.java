@@ -139,22 +139,15 @@ public class ShopFragment extends Fragment implements SearchInterface {
             try {
                 Utils.hideProgressDialog();
                 if (shopMainModel != null && shopMainModel.getResultItem() != null && shopMainModel.getResultItem().size() > 0) {
-                    if (shopMainModel.isSuccess()) {
-                        sallerShopList.clear();
-                        sallerShopList.addAll(shopMainModel.getResultItem());
-                        sellerShopListAdapter.notifyDataSetChanged();
-                        loading = true;
-                    } else {
-                        if (sallerShopList.size() == 0) {
-                            mBinding.rvSearch.setVisibility(View.GONE);
-                            mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
-                        }
-                    }
+                    mBinding.tvNotDataFound.setVisibility(View.GONE);
+                    sallerShopList.clear();
+                    sallerShopList.addAll(shopMainModel.getResultItem());
+                    sellerShopListAdapter.notifyDataSetChanged();
+                    loading = true;
                 } else {
-                    if (sallerShopList.size() == 0) {
-                        mBinding.rvSearch.setVisibility(View.GONE);
-                        mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
-                    }
+                    mBinding.tvNotDataFound.setVisibility(View.VISIBLE);
+                    sallerShopList.clear();
+                    sellerShopListAdapter.notifyDataSetChanged();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
