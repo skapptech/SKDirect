@@ -232,4 +232,6 @@
     <string name="discount">डिस्काउंट कीमत</string>
     <string name="product_image">उत्पाद का चित्र</string>
     <string name="delivery_Charge_text">डिलीवरी चार्ज</string>
+    <string name="buy_locally_at_best_prices_and_get_it_home_delivered">खरीदें सब ऑनलाइन अपनी स्थानीय दुकानों से उत्तम रेट पर और पाएं होम डिलीवरी</string>
+    <string name="continue_button">आगे बड़े</string>
 </resources>
