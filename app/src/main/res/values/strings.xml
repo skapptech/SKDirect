@@ -74,7 +74,7 @@
     <string name="order_tab_delivered">Delivered</string>
     <string name="order_tab_cancelled">Cancelled</string>
     <string name="search_order_by_order_id">Search Order by Order Id</string>
-    <string name="no_data_found">NO Data Found</string>
+    <string name="no_data_found">No Data Found</string>
     <string name="add_review">Add Review</string>
     <string name="text_on">" on "</string>
     <string name="text_order_number">"Order No#: "</string>
