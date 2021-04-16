@@ -98,6 +98,20 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (getIntent().getExtras() != null) {
+            if(getIntent().getStringExtra("ComeTo").equalsIgnoreCase("Login"))
+            {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            }
+        }else
+        {
+            finish();
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back_press:
