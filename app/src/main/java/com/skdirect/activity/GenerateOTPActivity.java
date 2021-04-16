@@ -337,13 +337,12 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                 Utils.hideProgressDialog();
                 if (model != null) {
                     if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE)) {
+                        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
                         if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.CAME_FROM_CART)) {
-                            startActivity(new Intent(GenerateOTPActivity.this, CartActivity.class));
+                            startActivity(new Intent(GenerateOTPActivity.this, CartActivity.class).putExtra("ComeTo","Login"));
                             SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.CAME_FROM_CART, false);
-                            SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
                         } else {
                             startActivity(new Intent(GenerateOTPActivity.this, MainActivity.class));
-                            SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_LOGIN, true);
                         }
                     } else {
                         startActivity(new Intent(GenerateOTPActivity.this, RegisterationActivity.class));
