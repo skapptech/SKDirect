@@ -225,7 +225,10 @@
       "Confirmation": "पुष्टीकरण",
       "order_place": "क्या आप वाकई ऑर्डर देना चाहते हैं?",
       "congratulation": "बधाई",
-      "order_place__popoup": "आदेश जगह सफलतापूर्वक"
+      "order_place__popoup": "आदेश सफलतापूर्वक रखा गया",
+      "discount": "डिस्काउंट कीमत",
+      "product_image": "उत्पाद का चित्र",
+      "terms_and_condition": "नियम व शर्तेंं"
     },
     "English": {
       "language_code": "en",
@@ -443,7 +446,7 @@
       "are_you_sure_clear_cart": "Are You Sure, You want clear cart.",
       "no_address_found": "No Address Found",
       "cash_on_delivery": "Cash on delivery",
-      "delivery_option": "we dont serve for this pincode currently. Please change your location!",
+      "delivery_option": "Delivery Option",
       "clear_all_done": "All filters have been cleared",
       "no_items_available": "No items available",
       "webview_title_name_privacy": "Privacy Policy",
@@ -452,7 +455,10 @@
       "Confirmation": "Confirmation",
       "order_place": "Are you sure you want to place order?",
       "congratulation": "Congratulation",
-      "order_place__popoup": "Order Placed Successfully"
+      "order_place__popoup": "Order Placed Successfully",
+      "discount": "Discount Price",
+      "product_image": "Product Image",
+      "terms_and_condition": "Terms and Condition"
     }
   }
 }
