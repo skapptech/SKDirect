@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 
 import com.google.gson.JsonObject;
 import com.skdirect.R;
+import com.skdirect.model.AddReviewModel;
 import com.skdirect.model.CartMainModel;
 import com.skdirect.model.CommonResponseModel;
 import com.skdirect.model.MallMainPriceModel;
@@ -16,6 +17,7 @@ import com.skdirect.model.OrderStatusMainModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PostBrandModel;
+import com.skdirect.model.ReviewMainModel;
 import com.skdirect.model.SearchMainModel;
 import com.skdirect.model.SearchRequestModel;
 import com.skdirect.model.ShopMainModel;
@@ -512,6 +514,32 @@ public class CommonClassForAPI {
 
                     @Override
                     public void onNext(@NotNull ShopMainModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void getRating(final DisposableObserver<JsonObject> observer, AddReviewModel paginationModel) {
+        RestClient.getInstance().getService().getRating(paginationModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JsonObject>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull JsonObject o) {
                         observer.onNext(o);
                     }
 
