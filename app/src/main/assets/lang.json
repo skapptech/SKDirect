@@ -229,7 +229,9 @@
       "discount": "डिस्काउंट कीमत",
       "product_image": "उत्पाद का चित्र",
       "terms_and_condition": "नियम व शर्तेंं",
-      "delivery_Charge_text": "डिलीवरी चार्ज"
+      "delivery_Charge_text": "डिलीवरी चार्ज",
+      "buy_locally_at_best_prices_and_get_it_home_delivered": "खरीदें सब ऑनलाइन अपनी स्थानीय दुकानों से उत्तम रेट पर और पाएं होम डिलीवरी",
+      "continue_button": "आगे बड़े"
     },
     "English": {
       "language_code": "en",
@@ -460,7 +462,9 @@
       "discount": "Discount Price",
       "product_image": "Product Image",
       "terms_and_condition": "Terms and Condition",
-      "delivery_Charge_text": "Delivery Charge"
+      "delivery_Charge_text": "Delivery Charge",
+      "buy_locally_at_best_prices_and_get_it_home_delivered": "Buy locally at best prices and get it home delivered",
+      "continue_button": "Continue"
     }
   }
 }

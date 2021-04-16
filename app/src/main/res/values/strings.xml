@@ -234,4 +234,6 @@
     <string name="discount">Discount Price</string>
     <string name="product_image">Product Image</string>
     <string name="delivery_Charge_text">Delivery Charge</string>
+    <string name="buy_locally_at_best_prices_and_get_it_home_delivered">Buy locally at best prices and get it home delivered</string>
+    <string name="continue_button">Continue</string>
 </resources>
