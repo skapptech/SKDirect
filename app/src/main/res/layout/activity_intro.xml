@@ -235,6 +235,7 @@
                     android:background="@drawable/background_for_buttons"
                     android:gravity="center"
                     android:padding="15dp"
+                    android:visibility="gone"
                     android:text="I'M BUYER"
                     android:textColor="@color/seller_button_color"
                     android:textStyle="bold" />

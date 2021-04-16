@@ -41,7 +41,7 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFiles 'proguard-rules.pro'
-            resValue "string", "app_name", "Direct"
+            resValue "string", "app_name", "B2C Seller"
             buildConfigField("String", "buildVariant", "\"release\"")
             buildConfigField("String", "apiEndpoint", "\"https://awstestdirectbuyer.er15.xyz/\"")
         }
@@ -50,7 +50,7 @@ android {
             shrinkResources false
             proguardFiles 'proguard-rules.pro'
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "Direct UAT"
+            resValue "string", "app_name", "B2C Seller UAT"
             buildConfigField("String", "buildVariant", "\"DEBUG_STORE_FILE\"")
             //buildConfigField("String", "apiEndpoint", "\"https://directapi.er15.xyz:4436\"")
             //buildConfigField("String", "apiEndpoint", "\"https://awstestdirectbuyer.er15.xyz/\"")
