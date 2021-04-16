@@ -109,8 +109,15 @@ public class RegisterationActivity extends AppCompatActivity implements View.OnC
                             SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.EMAIL_ID,  mBinding.etEmailId.getText().toString());
                         }
                         SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE, true);
-                        startActivity(new Intent(RegisterationActivity.this, MainActivity.class));
-                        finish();
+                        if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.CAME_FROM_CART)) {
+                            startActivity(new Intent(RegisterationActivity.this, CartActivity.class).putExtra("ComeTo","Login"));
+                            SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.CAME_FROM_CART, false);
+                            finish();
+                        } else {
+                            startActivity(new Intent(RegisterationActivity.this, MainActivity.class));
+                            finish();
+                        }
+
                     } else {
                         Utils.setToast(RegisterationActivity.this, model.getErrorMessage());
                     }

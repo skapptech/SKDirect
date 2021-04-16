@@ -30,6 +30,8 @@ public class CartItemModel implements Serializable {
     private double TotalAmount;
     @SerializedName("TotalMrp")
     private double TotalMrp;
+    @SerializedName("DeliveryChargePerOrder")
+    private double DeliveryChargePerOrder;
     @SerializedName("Id")
     private String Id;
 
@@ -138,5 +140,9 @@ public class CartItemModel implements Serializable {
 
     public void setId(String id) {
         Id = id;
+    }
+
+    public double getDeliveryChargePerOrder() {
+        return DeliveryChargePerOrder;
     }
 }

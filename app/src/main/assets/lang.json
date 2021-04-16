@@ -225,7 +225,13 @@
       "Confirmation": "पुष्टीकरण",
       "order_place": "क्या आप वाकई ऑर्डर देना चाहते हैं?",
       "congratulation": "बधाई",
-      "order_place__popoup": "आदेश जगह सफलतापूर्वक"
+      "order_place__popoup": "आदेश सफलतापूर्वक रखा गया",
+      "discount": "डिस्काउंट कीमत",
+      "product_image": "उत्पाद का चित्र",
+      "terms_and_condition": "नियम व शर्तेंं",
+      "delivery_Charge_text": "डिलीवरी चार्ज",
+      "buy_locally_at_best_prices_and_get_it_home_delivered": "खरीदें सब ऑनलाइन अपनी स्थानीय दुकानों से उत्तम रेट पर और पाएं होम डिलीवरी",
+      "continue_button": "आगे बड़े"
     },
     "English": {
       "language_code": "en",
@@ -299,7 +305,7 @@
       "order_tab_delivered": "Delivered",
       "order_tab_cancelled": "Cancelled",
       "search_order_by_order_id": "Search Order by Order Id",
-      "no_data_found": "NO Data Found",
+      "no_data_found": "No Data Found",
       "add_review": "Add Review",
       "text_on": " on ",
       "text_order_number": "Order No#: ",
@@ -443,7 +449,7 @@
       "are_you_sure_clear_cart": "Are You Sure, You want clear cart.",
       "no_address_found": "No Address Found",
       "cash_on_delivery": "Cash on delivery",
-      "delivery_option": "we dont serve for this pincode currently. Please change your location!",
+      "delivery_option": "Delivery Option",
       "clear_all_done": "All filters have been cleared",
       "no_items_available": "No items available",
       "webview_title_name_privacy": "Privacy Policy",
@@ -452,7 +458,13 @@
       "Confirmation": "Confirmation",
       "order_place": "Are you sure you want to place order?",
       "congratulation": "Congratulation",
-      "order_place__popoup": "Order Placed Successfully"
+      "order_place__popoup": "Order Placed Successfully",
+      "discount": "Discount Price",
+      "product_image": "Product Image",
+      "terms_and_condition": "Terms and Condition",
+      "delivery_Charge_text": "Delivery Charge",
+      "buy_locally_at_best_prices_and_get_it_home_delivered": "Buy locally at best prices and get it home delivered",
+      "continue_button": "Continue"
     }
   }
 }

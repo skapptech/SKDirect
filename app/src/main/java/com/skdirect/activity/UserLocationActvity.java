@@ -29,7 +29,7 @@ import com.skdirect.utils.Utils;
 public class UserLocationActvity extends AppCompatActivity implements PlacesAutoCompleteAdapter.ClickListener, Listener, LocationData.AddressCallBack {
     private ActivityUserLocationBinding mBinding;
     private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
-    private String cityName = "";
+    private String cityName = "", intentActivity;
     private boolean searchCity = false;
     private EasyWayLocation easyWayLocation;
     private DBHelper dbHelper;
@@ -44,6 +44,7 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
         dbHelper = MyApplication.getInstance().dbHelper;
 
         if (getIntent() != null) {
+            intentActivity = getIntent().getStringExtra("activity");
             cityName = getIntent().getStringExtra("cityname");
             searchCity = getIntent().getBooleanExtra("searchCity", false);
         }
@@ -51,6 +52,14 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
     }
 
     private void initView() {
+
+        if (!TextUtils.isNullOrEmpty(intentActivity)&& intentActivity.equalsIgnoreCase("PlaceSearch")){
+            mBinding.tvOr.setVisibility(View.VISIBLE);
+            mBinding.btUseCurrentLocation.setVisibility(View.VISIBLE);
+        }else {
+            mBinding.tvOr.setVisibility(View.GONE);
+            mBinding.btUseCurrentLocation.setVisibility(View.GONE);
+        }
 
         mBinding.address.setHint(dbHelper.getString(R.string.search_your_address));
         mBinding.tvOr.setText(dbHelper.getString(R.string.or));
@@ -94,6 +103,8 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
             }, noOfSecond * 1000);
 
         } else {
+            Utils.hideProgressDialog();
+
             new GpsUtils(UserLocationActvity.this).turnGPSOn(isGPSEnable -> {
                 // turn on GPS
                 isGPS = isGPSEnable;

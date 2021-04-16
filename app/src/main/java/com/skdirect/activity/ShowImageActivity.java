@@ -14,6 +14,7 @@ import com.skdirect.adapter.ProductImagesAdapter;
 import com.skdirect.adapter.ShowImagesAdapter;
 import com.skdirect.databinding.FragmentImageShoBinding;
 import com.skdirect.model.ImageListModel;
+import com.skdirect.utils.MyApplication;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public class ShowImageActivity extends AppCompatActivity {
 
     private void initialization() {
 
-       // mBinding.toolbarDream.tvUserName.setText(ShowImageActivity.this.getResources().getString(R.string.show_images));
+        mBinding.toolbarTittle.tvTittle.setText(MyApplication.getInstance().dbHelper.getString(R.string.product));
         mBinding.toolbarTittle.arrowToolbar.setOnClickListener(v -> {
             onBackPressed();
         });

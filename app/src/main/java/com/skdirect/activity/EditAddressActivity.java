@@ -91,6 +91,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
             public void onClick(View v) {
                 startActivityForResult(new Intent(getApplicationContext(), UserLocationActvity.class)
                         .putExtra("cityname", "")
+                        .putExtra("activity", "EditAddress")
                         .putExtra("searchCity", false), 1001);
 
             }

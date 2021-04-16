@@ -235,7 +235,7 @@ public interface APIServices {
     Observable<OrderModel> GetOrderMaster(@Body MyOrderRequestModel myOrderRequestModel);
 
     @POST("api/NativeBuyer/MyOrder/Rating")
-    Call<ReviewMainModel> getRating(@Body AddReviewModel reViewViewMode);
+    Observable<JsonObject> getRating(@Body AddReviewModel reViewViewMode);
 
     @GET("api/buyer/MyOrder/GetOrderDetailProcess")
     Call<OrderDetailsModel> GetOrderDetailProcess(@Query("OrderId") int OrderId);

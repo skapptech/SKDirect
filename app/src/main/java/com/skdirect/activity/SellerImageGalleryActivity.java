@@ -13,6 +13,7 @@ import com.skdirect.adapter.ProductImagesAdapter;
 import com.skdirect.databinding.FragmentImageShoBinding;
 import com.skdirect.databinding.FragmentSellerImageBinding;
 import com.skdirect.model.ImageListModel;
+import com.skdirect.utils.TextUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 
 public class SellerImageGalleryActivity extends AppCompatActivity {
     private FragmentSellerImageBinding mBinding;
-    private String irImagesModels;
+    private String irImagesModels, sellerShopName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +29,21 @@ public class SellerImageGalleryActivity extends AppCompatActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.fragment_seller_image);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            irImagesModels =getIntent().getStringExtra("ImageData");
+            irImagesModels = getIntent().getStringExtra("ImageData");
+            sellerShopName = getIntent().getStringExtra("ShopName");
         }
         initialization();
     }
 
     private void initialization() {
 
+        if (!TextUtils.isNullOrEmpty(sellerShopName)) {
+            mBinding.toolbarTittle.tvTittle.setText(sellerShopName);
+        }
+
         if (irImagesModels != null && !irImagesModels.contains("http")) {
-            Picasso.get().load(BuildConfig.apiEndpoint+irImagesModels).into(mBinding.ivItemImage);
-        }else {
+            Picasso.get().load(BuildConfig.apiEndpoint + irImagesModels).into(mBinding.ivItemImage);
+        } else {
             Picasso.get().load(irImagesModels).into(mBinding.ivItemImage);
         }
 

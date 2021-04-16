@@ -52,7 +52,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     private SellerProductAdapter sellerShopListAdapter;
     private String searchSellerName;
     private DBHelper dbHelper;
-    String sellerImagePath;
+    String sellerImagePath, sellerShopName;
 
 
     @Override
@@ -98,7 +98,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 Utils.showShareWhatsappDialog(this, SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/seller/" + sellerID, "");
                 break;
             case R.id.iv_s_shop_image:
-                startActivity(new Intent(getApplicationContext(), SellerImageGalleryActivity.class).putExtra("ImageData", sellerImagePath));
+                startActivity(new Intent(getApplicationContext(), SellerImageGalleryActivity.class).putExtra("ImageData", sellerImagePath).putExtra("ShopName", sellerShopName));
                 break;
 
         }
@@ -201,6 +201,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 }
 
                 mBinding.tvSellerName.setText(sellerDetailsModel.getSellerInfoModel().getShopName());
+                sellerShopName = sellerDetailsModel.getSellerInfoModel().getShopName();
                 if (sellerDetailsModel.getSellerInfoModel().getMinOrderValue() != 0.0 && sellerDetailsModel.getSellerInfoModel().getRadialDistance() != 0.0) {
                     mBinding.tvMinimumOrderAmt.setText("₹ " + Math.round(sellerDetailsModel.getSellerInfoModel().getMinOrderValue()));
                     mBinding.tvDiliverDistance.setText("" + Math.round(sellerDetailsModel.getSellerInfoModel().getRadialDistance()) + " KM");
@@ -362,7 +363,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
 
     private void addItemInCart(int QTY, SellerProductList sellerProductModel) {
         ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(),
-                0, 0);
+                0, 0,SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
         sellerProfileViewMode.getAddItemsInCardVMRequest(paginationModel);
         sellerProfileViewMode.getAddItemsInCardVM().observe(this, addCartItemModel -> {
             Utils.hideProgressDialog();

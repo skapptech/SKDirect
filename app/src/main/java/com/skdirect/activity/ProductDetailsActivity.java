@@ -3,7 +3,6 @@ package com.skdirect.activity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -295,7 +294,13 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             // clear cart
             MyApplication.getInstance().cartRepository.truncateCart();
             // add item in cart
-            CartModel cartModel = new CartModel(null, 0, null, resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(), resultModel.getMeasurement(), resultModel.getUom(), "", 0, resultModel.getProductName(), 0, 0, resultModel.IsDelete, resultModel.getOffPercentage(), 0, 0, 1, 0, null, resultModel.getSellerId(), 0, 0, 0, resultModel.getMrp(), 0, resultModel.getId());
+            CartModel cartModel = new CartModel(null, 0, null,
+                    resultModel.IsActive, resultModel.IsStockRequired, resultModel.getStock(),
+                    resultModel.getMeasurement(), resultModel.getUom(), "", 0,
+                    resultModel.getProductName(), 0, 0, resultModel.IsDelete,
+                    resultModel.getOffPercentage(), 0, 0, 1, 0, null,
+                    resultModel.getSellerId(), 0, 0, 0,
+                    resultModel.getMrp(), 0, resultModel.getId());
             MyApplication.getInstance().cartRepository.addToCart(cartModel);
             addItemInCart(1, SellerItemID);
         }
@@ -322,7 +327,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                     } else {
                         mBinding.llSellarsOtherProducs.setVisibility(View.GONE);
                     }
-                }else {
+                } else {
                     mBinding.llSellarsOtherProducs.setVisibility(View.GONE);
                 }
             }
@@ -413,7 +418,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                             }
                             mBinding.tvDeliveryOption.setText("Home Delivery");
                         }
-                        if (productDataModel.getResultItem().getDiscountAmount()>0.0) {
+                        if (productDataModel.getResultItem().getDiscountAmount() > 0.0) {
                             double DiscountAmount = productDataModel.getResultItem().getSellingPrice() - productDataModel.getResultItem().getDiscountAmount();
                             mBinding.llDescountAmount.setVisibility(View.VISIBLE);
                             mBinding.tvDiscount.setText("₹ " + DiscountAmount);
@@ -497,10 +502,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             imageListModels = variationListModel.getImageList();
         }
 
-        if (variationListModel.getDiscountAmount()> 0.0) {
+        if (variationListModel.getDiscountAmount() > 0.0) {
             mBinding.llDescountAmount.setVisibility(View.VISIBLE);
             double DiscountAmount = variationListModel.getSellingPrice() - variationListModel.getDiscountAmount();
-            mBinding.tvDiscount.setText("₹ " + DiscountAmount );
+            mBinding.tvDiscount.setText("₹ " + DiscountAmount);
 
             //mBinding.tvItemMrpOff.setPaintFlags(mBinding.tvItemMrpOff.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
@@ -542,7 +547,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     }
 
     private void addItemInCart(int QTY, int sellerItemID) {
-        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerItemID, 0, 0);
+        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerItemID, 0, 0,SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
         productDetailsViewMode.getAddItemsInCardVMRequest(paginationModel);
         productDetailsViewMode.getAddItemsInCardVM().observe(this, addCartItemModel -> {
             Utils.hideProgressDialog();
@@ -580,6 +585,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
     private void clearCartItem() {
         String cartId = MyApplication.getInstance().cartRepository.getCartId();
+        MyApplication.getInstance().cartRepository.truncateCart();
         productDetailsViewMode.getClearCartItemVMRequest(cartId);
         productDetailsViewMode.getClearCartItemVM().observe(this, new Observer<Object>() {
             @Override

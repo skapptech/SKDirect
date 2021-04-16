@@ -29,16 +29,9 @@ public class IntroActivity extends AppCompatActivity {
 
     private void initViews() {
 
-        mBinding.tvBuyerHead.setText(dbHelper.getString(R.string.buyer));
-        mBinding.tvBuyerTitle1.setText(dbHelper.getString(R.string.browse_products));
-        mBinding.tvBuyerTitle2.setText(dbHelper.getString(R.string.place_order));
-        mBinding.tvBuyerTitle3.setText(dbHelper.getString(R.string.add_your_favourite_store));
-        mBinding.tvSellerHead.setText(dbHelper.getString(R.string.seller));
-        mBinding.tvSellerTitle1.setText(dbHelper.getString(R.string.display_your_product));
-        mBinding.tvSellerTitle2.setText(dbHelper.getString(R.string.accept_and_manage_order));
-        mBinding.tvSellerTitle3.setText(dbHelper.getString(R.string.invite_customer_to_store));
-        mBinding.tvBuyer.setText(dbHelper.getString(R.string.i_m_buyer));
-        mBinding.tvSeller.setText(dbHelper.getString(R.string.i_m_seller));
+
+        mBinding.tvSellerHead.setText(dbHelper.getString(R.string.buy_locally_at_best_prices_and_get_it_home_delivered));
+        mBinding.tvBuyer.setText(dbHelper.getString(R.string.continue_button));
 
 
         mBinding.tvBuyer.setOnClickListener(view -> {
