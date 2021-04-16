@@ -77,11 +77,12 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
     private void initView() {
         commonClassForAPI = CommonClassForAPI.getInstance(this);
         Binding.btLoddingOtp.setOnClickListener(this);
+        Utils.showProgressDialog(this);
         Binding.tvVerifactionText.setText(dbHelper.getString(R.string.enter_no_txt) + latsFiveNumber);
         Binding.tvVerificationHead.setText(dbHelper.getString(R.string.verification));
         Binding.resendotp.setText(dbHelper.getString(R.string.resend_otp));
         Binding.btLoddingOtp.setText(dbHelper.getString(R.string.next));
-        startTimer(Binding.resendOtpTimer, Binding.resendotp);
+      //  startTimer(Binding.resendOtpTimer, Binding.resendotp);
         // init broadcast receiver
         mSmsBroadcastReceiver = new SmsBroadcastReceiver();
         mSmsBroadcastReceiver.setOnOtpListeners(this);
@@ -94,7 +95,6 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
             public boolean onEditorAction(TextView v, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
                         || keyEvent.getAction() == KeyEvent.ACTION_DOWN || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
-
                     Binding.btLoddingOtp.setText(dbHelper.getString(R.string.loading));
                     checkVerification();
                 }
@@ -111,14 +111,14 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
         });
 
         new Handler().postDelayed(new Runnable() {
-
             @Override
             public void run() {
                 Binding.etOtp.setText(MyApplication.getInstance().otp);
                 //TODO Set your button auto perform click.
                 Binding.btLoddingOtp.performClick();
+
             }
-        }, noOfSecond * 1000);
+        }, noOfSecond * 100);
 
 //        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 //        mAuth.setLanguageCode("en");
