@@ -108,8 +108,8 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         if (Utils.isNetworkAvailable(getApplicationContext())) {
             Utils.showProgressDialog(SellerProfileActivity.this);
             getSellerDetailsAPI();
-            getSellerProductsApi(searchSellerName);
             addProduct();
+            getSellerProductsApi(searchSellerName);
         } else {
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
