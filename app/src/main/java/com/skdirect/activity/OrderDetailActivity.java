@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.skdirect.R;
 import com.skdirect.adapter.OrderDetailsItemAdapter;
+import com.skdirect.adapter.OrderStatusStepperAdapter;
 import com.skdirect.databinding.ActivityOrderDeatilsBinding;
 import com.skdirect.model.MallMainModelBolleanResult;
 import com.skdirect.model.MyOrderModel;
@@ -32,8 +33,9 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
     private ActivityOrderDeatilsBinding mBinding;
     private MyOrderModel myOrderModel;
     private OrderDetailsViewMode orderDetailsViewMode;
-    private List<OrderStatusDC> OrderStatusDCList = new ArrayList<>();
+    private ArrayList<OrderStatusDC> OrderStatusDCList = new ArrayList<>();
     private MainStepperAdapter mainStepperAdapter;
+    private OrderStatusStepperAdapter orderStatusStepperAdapter;
     DBHelper dbHelper;
 
     @Override
@@ -76,6 +78,8 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
         mBinding.tvTotalAmountTitle.setText(dbHelper.getString(R.string.total_amount));
         mBinding.tvCancleOrder.setText(dbHelper.getString(R.string.cancel_order));
 
+        mBinding.rMyOrder.setNestedScrollingEnabled(false);
+
     }
 
     @Override
@@ -93,11 +97,11 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
 
 
     private void setFullHeight() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
+     /*   DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mBinding.stepperList.getLayoutParams();
-        params.height = (int) (displayMetrics.widthPixels / 1.7);
-        mBinding.stepperList.setLayoutParams(params);
+        params.height = (int) (displayMetrics.widthPixels / 1.2);
+        mBinding.stepperList.setLayoutParams(params);*/
     }
 
     private void callOrderDetailsAPI() {
@@ -155,9 +159,9 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
                             mBinding.tvCancleOrder.setVisibility(View.GONE);
                         }
                     }
-                    mainStepperAdapter = new MainStepperAdapter(OrderDetailActivity.this, OrderStatusDCList);
-                    mBinding.stepperList.setAdapter(mainStepperAdapter);
-                    setFullHeight();
+                    orderStatusStepperAdapter = new OrderStatusStepperAdapter(OrderDetailActivity.this, OrderStatusDCList);
+                    mBinding.rvOrderSteps.setAdapter(orderStatusStepperAdapter);
+                    //setFullHeight();
                 } else {
 
                 }
