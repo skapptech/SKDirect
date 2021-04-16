@@ -74,7 +74,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         holder.mBinding.tvQtyMinus.setOnClickListener(view -> {
             cartModel.setQuantity(cartModel.getQuantity() - 1);
             holder.mBinding.tvSelectedQty.setText("" + cartModel.getQuantity());
-            cartItemInterface.minusButtonOnClick(cartModel, holder.mBinding.LLPlusMinus);
+            cartItemInterface.minusButtonOnClick(cartModel, position);
         });
     }
 

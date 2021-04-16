@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -132,7 +131,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void minusButtonOnClick(CartModel cartModel, LinearLayout LLPlusMinus) {
+    public void minusButtonOnClick(CartModel cartModel, int position) {
         int qty = cartModel.getQuantity();
         if (qty >= 1) {
             totalAmount = totalAmount - cartModel.getPrice();
@@ -144,7 +143,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             totalAmount = totalAmount - cartModel.getPrice();
             mBinding.tvTotalAmount.setText("₹ " + totalAmount);
             cartListAdapter.notifyDataSetChanged();
-            addItemInCart(qty, cartModel);
+            removeItemFromCart(cartModel, position);
             MyApplication.getInstance().cartRepository.deleteCartItem(cartModel);
             if (cartItemList.size() == 0) {
                 mBinding.rlCheckOut.setVisibility(View.GONE);
