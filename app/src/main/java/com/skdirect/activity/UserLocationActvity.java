@@ -94,6 +94,8 @@ public class UserLocationActvity extends AppCompatActivity implements PlacesAuto
             }, noOfSecond * 1000);
 
         } else {
+            Utils.hideProgressDialog();
+
             new GpsUtils(UserLocationActvity.this).turnGPSOn(isGPSEnable -> {
                 // turn on GPS
                 isGPS = isGPSEnable;
