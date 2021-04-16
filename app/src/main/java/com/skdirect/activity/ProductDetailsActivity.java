@@ -547,7 +547,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     }
 
     private void addItemInCart(int QTY, int sellerItemID) {
-        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerItemID, 0, 0);
+        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerItemID, 0, 0,SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
         productDetailsViewMode.getAddItemsInCardVMRequest(paginationModel);
         productDetailsViewMode.getAddItemsInCardVM().observe(this, addCartItemModel -> {
             Utils.hideProgressDialog();

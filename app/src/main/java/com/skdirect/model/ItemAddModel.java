@@ -13,18 +13,22 @@ public class ItemAddModel {
     @SerializedName("Id")
     private int Id;
 
+    @SerializedName("MallId")
+    private String MallId;
+
     @SerializedName("ProductVariantAttributeId")
     private int ProductVariantAttributeId;
 
     @SerializedName("ProductVariantId")
     private int ProductVariantId;
 
-    public ItemAddModel(int quantity, String cookieValue, int id, int productVariantAttributeId, int productVariantId) {
+    public ItemAddModel(int quantity, String cookieValue, int id, int productVariantAttributeId, int productVariantId,String mallId) {
         Quantity = quantity;
         CookieValue = cookieValue;
         Id = id;
         ProductVariantAttributeId = productVariantAttributeId;
         ProductVariantId = productVariantId;
+        MallId = mallId;
     }
 
 

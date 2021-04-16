@@ -363,7 +363,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
 
     private void addItemInCart(int QTY, SellerProductList sellerProductModel) {
         ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(),
-                0, 0);
+                0, 0,SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
         sellerProfileViewMode.getAddItemsInCardVMRequest(paginationModel);
         sellerProfileViewMode.getAddItemsInCardVM().observe(this, addCartItemModel -> {
             Utils.hideProgressDialog();

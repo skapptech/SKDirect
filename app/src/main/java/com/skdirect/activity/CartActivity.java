@@ -261,7 +261,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
     private void addItemInCart(int QTY, CartModel sellerProductModel) {
         MyApplication.getInstance().cartRepository.updateCartItem(sellerProductModel);
-        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(), 0, 0);
+        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(), 0, 0,SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
         cartItemViewMode.getAddItemsInCardVMRequest(paginationModel);
         cartItemViewMode.getAddItemsInCardVM().observe(this, sellerProdList -> {
             Utils.hideProgressDialog();

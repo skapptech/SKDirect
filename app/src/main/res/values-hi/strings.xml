@@ -231,4 +231,5 @@
     <string name="order_place__popoup">आदेश सफलतापूर्वक रखा गया</string>
     <string name="discount">डिस्काउंट कीमत</string>
     <string name="product_image">उत्पाद का चित्र</string>
+    <string name="delivery_Charge_text">डिलीवरी चार्ज</string>
 </resources>

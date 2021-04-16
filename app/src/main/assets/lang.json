@@ -458,7 +458,8 @@
       "order_place__popoup": "Order Placed Successfully",
       "discount": "Discount Price",
       "product_image": "Product Image",
-      "terms_and_condition": "Terms and Condition"
+      "terms_and_condition": "Terms and Condition",
+      "delivery_Charge_text": "Delivery Charge"
     }
   }
 }

@@ -37,6 +37,7 @@ import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.PaymentViewMode;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, DeliveryOptionInterface {
@@ -132,6 +133,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mBinding.btnOffer.setText(MyApplication.getInstance().dbHelper.getString(R.string.view_offer));
         mBinding.tvPaymentTitle.setText(MyApplication.getInstance().dbHelper.getString(R.string.title_activity_payment));
         mBinding.btnAdd.setText(MyApplication.getInstance().dbHelper.getString(R.string.change));
+        mBinding.tvDeleveryCharge.setText(MyApplication.getInstance().dbHelper.getString(R.string.delivery_charge));
         mBinding.btnOffer.setOnClickListener(this);
         mBinding.btnRemove.setOnClickListener(this);
         mBinding.btnPlaceOrder.setOnClickListener(this);
@@ -147,8 +149,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         mBinding.tvItemPrice.setText("Price Details ( " + cartItemModel.getCart().size() + " items)");
         mBinding.tvOrderValue.setText("₹ " + cartTotal);
+
+        if(cartItemModel.getDeliveryChargePerOrder()!=0.0 && cartItemModel.getDeliveryChargePerOrder()!=0)
+        {
+            totalAmount = totalAmount+cartItemModel.getDeliveryChargePerOrder();
+            mBinding.tvDeleveryChargeValue.setText(new DecimalFormat("##.##").format(cartItemModel.getDeliveryChargePerOrder()));
+        }else
+        {
+            mBinding.tvDeleveryChargeValue.setText("Free");
+        }
         mBinding.tvTotalAmount.setText("₹ " + totalAmount);
         mBinding.tvTotal.setText("₹ " + totalAmount);
+
     }
 
     private void callUserLocation() {
@@ -198,6 +210,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 orderPlaceDialog();
             } else {
                 Toast.makeText(getApplicationContext(), response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                if(response.getErrorMessage().equalsIgnoreCase("Currently we are not serving your Area"))
+                {
+                    mBinding.btnPlaceOrder.setClickable(false);
+                }
             }
         });
     }

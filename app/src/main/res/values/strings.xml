@@ -233,4 +233,5 @@
     <string name="order_place__popoup">Order Placed Successfully</string>
     <string name="discount">Discount Price</string>
     <string name="product_image">Product Image</string>
+    <string name="delivery_Charge_text">Delivery Charge</string>
 </resources>
