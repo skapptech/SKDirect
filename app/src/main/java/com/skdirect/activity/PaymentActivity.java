@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -111,6 +112,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mBinding.liAddress.setVisibility(View.VISIBLE);
             mBinding.btnAdd.setText(MyApplication.getInstance().dbHelper.getString(R.string.change));
             mBinding.btnPlaceOrder.setClickable(true);
+            mBinding.btnPlaceOrder.setBackgroundResource(R.drawable.rounded_drawer);
+            mBinding.btnPlaceOrder.setTextColor(Color.parseColor("#58ccc1"));
         } else if (requestCode == 9 && resultCode == Activity.RESULT_OK) {
             mBinding.liCoupon.setVisibility(View.VISIBLE);
             coupon = data.getParcelableExtra("list");
@@ -214,6 +217,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 if(response.getErrorMessage().equalsIgnoreCase("Currently we are not serving your Area"))
                 {
                     mBinding.btnPlaceOrder.setClickable(false);
+                    mBinding.btnPlaceOrder.setBackgroundResource(R.drawable.rounded_drawer_desable);
+                    mBinding.btnPlaceOrder.setTextColor(Color.WHITE);
                 }
             }
         });
