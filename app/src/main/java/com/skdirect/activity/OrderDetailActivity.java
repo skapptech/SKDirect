@@ -199,7 +199,11 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
             public void onChanged(MallMainModelBolleanResult result) {
                 Utils.hideProgressDialog();
                 if (result.isSuccess()) {
+                    Utils.setToast(getApplicationContext(), result.getSuccessMessage());
                     onBackPressed();
+                }else
+                {
+                    Utils.setToast(getApplicationContext(), result.getErrorMessage());
                 }
             }
 
