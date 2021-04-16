@@ -139,7 +139,6 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
             addItemInCart(qty, cartModel);
         } else {
-            cartItemList.remove(cartModel);
             totalAmount = totalAmount - cartModel.getPrice();
             mBinding.tvTotalAmount.setText("₹ " + totalAmount);
             cartListAdapter.notifyDataSetChanged();
