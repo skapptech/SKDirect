@@ -228,7 +228,8 @@
       "order_place__popoup": "आदेश सफलतापूर्वक रखा गया",
       "discount": "डिस्काउंट कीमत",
       "product_image": "उत्पाद का चित्र",
-      "terms_and_condition": "नियम व शर्तेंं"
+      "terms_and_condition": "नियम व शर्तेंं",
+      "delivery_Charge_text": "डिलीवरी चार्ज"
     },
     "English": {
       "language_code": "en",
