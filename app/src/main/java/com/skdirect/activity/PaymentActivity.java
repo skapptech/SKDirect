@@ -110,6 +110,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mBinding.tvCityName.setText(userLocationModel.getCity() + " - " + userLocationModel.getPincode() + " (" + userLocationModel.getState() + ")");
             mBinding.liAddress.setVisibility(View.VISIBLE);
             mBinding.btnAdd.setText(MyApplication.getInstance().dbHelper.getString(R.string.change));
+            mBinding.btnPlaceOrder.setClickable(true);
         } else if (requestCode == 9 && resultCode == Activity.RESULT_OK) {
             mBinding.liCoupon.setVisibility(View.VISIBLE);
             coupon = data.getParcelableExtra("list");
