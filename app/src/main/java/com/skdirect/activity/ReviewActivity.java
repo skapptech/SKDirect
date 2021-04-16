@@ -6,10 +6,10 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
+import com.google.gson.JsonObject;
 import com.skdirect.R;
+import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityReviewBinding;
 import com.skdirect.model.AddReviewModel;
 import com.skdirect.model.ReviewMainModel;
@@ -17,19 +17,20 @@ import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
-import com.skdirect.viewmodel.ReViewViewMode;
+
+import org.jetbrains.annotations.NotNull;
+
+import io.reactivex.observers.DisposableObserver;
 
 public class ReviewActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityReviewBinding mBinding;
     private int orderID;
-    private ReViewViewMode reViewViewMode;
     DBHelper dbHelper;
-
+    private CommonClassForAPI commonClassForAPI;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_review);
-        reViewViewMode = ViewModelProviders.of(this).get(ReViewViewMode.class);
         dbHelper = MyApplication.getInstance().dbHelper;
         getIntentData();
         initView();
@@ -86,27 +87,33 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
             if (Utils.isNetworkAvailable(getApplicationContext())) {
                 Utils.showProgressDialog(ReviewActivity.this);
                 addReViewAPI();
-
-
             } else {
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
             }
         }
-
     }
-
     private void addReViewAPI() {
-        reViewViewMode.getReviewModelRequest(new AddReviewModel(orderID, mBinding.etEnterComment.getText().toString(), Math.round(mBinding.ratingBar.getRating())));
-        reViewViewMode.getReviewModel().observe(this, new Observer<ReviewMainModel>() {
-            @Override
-            public void onChanged(ReviewMainModel customerDataModel) {
-                Utils.hideProgressDialog();
-                if (customerDataModel.isSuccess()) {
-                    startActivity(new Intent(ReviewActivity.this, MyOrderActivity.class));
-                    finish();
-                }
-            }
-        });
-
+        commonClassForAPI = CommonClassForAPI.getInstance(this);
+        if (commonClassForAPI!=null) {
+            commonClassForAPI.getRating(observer,new AddReviewModel(orderID, mBinding.etEnterComment.getText().toString(), Math.round(mBinding.ratingBar.getRating())));
+        }
     }
+    private final DisposableObserver<JsonObject> observer = new DisposableObserver<JsonObject>() {
+        @Override
+        public void onNext(@NotNull JsonObject jsonObject) {
+            Utils.hideProgressDialog();
+            if (jsonObject.get("IsSuccess").getAsBoolean()) {
+                startActivity(new Intent(ReviewActivity.this, MyOrderActivity.class));
+                finish();
+            }
+        }
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+        @Override
+        public void onComplete() {
+        }
+    };
 }
