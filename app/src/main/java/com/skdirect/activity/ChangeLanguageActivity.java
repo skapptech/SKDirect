@@ -60,7 +60,7 @@ public class ChangeLanguageActivity extends AppCompatActivity implements View.On
 
         String selectedLanguage = SharePrefs.getInstance(activity).getString(SharePrefs.SELECTED_LANGUAGE);
         if (selectedLanguage == null || selectedLanguage.equals("")) {
-                SharePrefs.getInstance(activity).putString(SharePrefs.SELECTED_LANGUAGE, "हिंदी");
+                SharePrefs.getInstance(activity).putString(SharePrefs.SELECTED_LANGUAGE, "English");
         }
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
