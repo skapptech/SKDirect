@@ -343,6 +343,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void clearSharePrefs() {
         MyApplication.getInstance().cartRepository.truncateCart();
         sharedPreferences.edit().clear().apply();
+        SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_FETCH_LANGUAGE, true);
+        MyApplication.getInstance().dbHelper.deleteDataFromTable();
     }
 
     private void setupBadge() {
