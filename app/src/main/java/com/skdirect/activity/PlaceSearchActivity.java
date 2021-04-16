@@ -107,6 +107,7 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
             Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
         }
         startActivityForResult(new Intent(getApplicationContext(), UserLocationActvity.class)
+                .putExtra("activity", "PlaceSearch")
                 .putExtra("cityname", "")
                 .putExtra("searchCity", false), REQUEST_FOR_ADDRESS);
 

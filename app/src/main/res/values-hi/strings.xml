@@ -230,4 +230,5 @@
     <string name="congratulation">बधाई</string>
     <string name="order_place__popoup">आदेश जगह सफलतापूर्वक</string>
     <string name="discount">डिस्काउंट कीमत</string>
+    <string name="product_image">उत्पाद का चित्र</string>
 </resources>

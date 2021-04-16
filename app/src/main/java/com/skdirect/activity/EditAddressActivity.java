@@ -81,7 +81,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
         mBinding.btSaveAddresh.setText(dbHelper.getString(R.string.save));
         mBinding.toolbarTittle.tvUsingLocation.setText(dbHelper.getString(R.string.use_current_location));
 
-        mBinding.toolbarTittle.tvUsingLocation.setVisibility(View.GONE);
+        mBinding.toolbarTittle.tvUsingLocation.setVisibility(View.VISIBLE);
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.toolbarTittle.tvUsingLocation.setOnClickListener(this);
         mBinding.btSaveAddresh.setOnClickListener(this);
@@ -91,6 +91,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
             public void onClick(View v) {
                 startActivityForResult(new Intent(getApplicationContext(), UserLocationActvity.class)
                         .putExtra("cityname", "")
+                        .putExtra("activity", "EditAddress")
                         .putExtra("searchCity", false), 1001);
 
             }

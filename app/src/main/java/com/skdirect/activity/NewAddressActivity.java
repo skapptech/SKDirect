@@ -100,7 +100,7 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
-        mBinding.toolbarTittle.tvUsingLocation.setVisibility(View.GONE);
+        mBinding.toolbarTittle.tvUsingLocation.setVisibility(View.VISIBLE);
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.toolbarTittle.tvUsingLocation.setOnClickListener(this);
         mBinding.btSaveAddresh.setOnClickListener(this);
