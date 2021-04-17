@@ -82,7 +82,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
         Binding.tvVerificationHead.setText(dbHelper.getString(R.string.verification));
         Binding.resendotp.setText(dbHelper.getString(R.string.resend_otp));
         Binding.btLoddingOtp.setText(dbHelper.getString(R.string.next));
-      //  startTimer(Binding.resendOtpTimer, Binding.resendotp);
+        // startTimer(Binding.resendOtpTimer, Binding.resendotp);
         // init broadcast receiver
         mSmsBroadcastReceiver = new SmsBroadcastReceiver();
         mSmsBroadcastReceiver.setOnOtpListeners(this);
