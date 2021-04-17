@@ -81,7 +81,16 @@ public class ProductResultModel {
     @SerializedName("ShopName")
     public String ShopName;
     public int qty;
+    @SerializedName("MaxOrderQuantity")
+    private String MaxOrderQuantity;
 
+    public String getMaxOrderQuantity() {
+        return MaxOrderQuantity;
+    }
+
+    public void setMaxOrderQuantity(String maxOrderQuantity) {
+        MaxOrderQuantity = maxOrderQuantity;
+    }
 
     public int getQty() {
         return qty;

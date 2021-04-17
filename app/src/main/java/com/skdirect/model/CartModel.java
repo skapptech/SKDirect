@@ -87,6 +87,18 @@ public class CartModel implements Serializable {
     @SerializedName("DiscountAmount")
     private int DiscountAmount;
 
+    @SerializedName("MaxOrderQuantity")
+    private String MaxOrderQuantity;
+
+    public String getMaxOrderQuantity() {
+        return MaxOrderQuantity;
+    }
+
+    public void setMaxOrderQuantity(String maxOrderQuantity) {
+        MaxOrderQuantity = maxOrderQuantity;
+    }
+
+
     public int getDiscountAmount() {
         return DiscountAmount;
     }

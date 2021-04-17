@@ -8,6 +8,39 @@ public class AddCartItemModel {
     @SerializedName("ResultItem")
     private ResultItem resultItem;
 
+    @SerializedName("SuccessMessage")
+    private String SuccessMessage;
+
+    @SerializedName("ErrorMessage")
+    private String ErrorMessage;
+
+    @SerializedName("IsSuccess")
+    private boolean IsSuccess;
+
+    public String getSuccessMessage() {
+        return SuccessMessage;
+    }
+
+    public void setSuccessMessage(String successMessage) {
+        SuccessMessage = successMessage;
+    }
+
+    public String getErrorMessage() {
+        return ErrorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        ErrorMessage = errorMessage;
+    }
+
+    public boolean isSuccess() {
+        return IsSuccess;
+    }
+
+    public void setSuccess(boolean success) {
+        IsSuccess = success;
+    }
+
     public ResultItem getResultItem() {
         return resultItem;
     }

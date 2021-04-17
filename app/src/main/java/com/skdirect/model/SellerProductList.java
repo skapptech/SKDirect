@@ -61,6 +61,17 @@ public class SellerProductList {
     @SerializedName("ParentProductId")
     private int ParentProductId;
 
+    @SerializedName("MaxOrderQuantity")
+    private String MaxOrderQuantity;
+
+    public String getMaxOrderQuantity() {
+        return MaxOrderQuantity;
+    }
+
+    public void setMaxOrderQuantity(String maxOrderQuantity) {
+        MaxOrderQuantity = maxOrderQuantity;
+    }
+
     @SerializedName("DiscountAmount")
     private int DiscountAmount;
 

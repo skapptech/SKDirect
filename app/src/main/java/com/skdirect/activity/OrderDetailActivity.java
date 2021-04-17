@@ -134,9 +134,10 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
                         mBinding.rlTotalSaving.setVisibility(View.GONE);
                     }
 
-                    if (orderDetailsModel.getTotalDeliveryCharge() != 0.0) {
+                    if (orderDetailsModel.getTotalDeliveryCharge()>0.0) {
                         mBinding.rlDeliveryCharge.setVisibility(View.VISIBLE);
-                        double totalSavingDiscountAmount = orderDetailsModel.getTotalPrice() + orderDetailsModel.getTotalSavingAmount();
+                        double totalSavingDiscountAmount = orderDetailsModel.getTotalItemAmount();
+                        double deliveryCharge = orderDetailsModel.getTotalPrice()+ orderDetailsModel.getTotalDeliveryCharge();
                         mBinding.tvOrderAmount.setText("₹ " + totalSavingDiscountAmount);
                         mBinding.tvTotalSaving.setText("-₹ " + orderDetailsModel.getTotalSavingAmount());
                         mBinding.tvDeliveryCharge.setText("" + orderDetailsModel.getTotalDeliveryCharge());

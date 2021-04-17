@@ -86,8 +86,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.tvQtyPlus:
                 resultModel.setQty(resultModel.getQty() + 1);
-                mBinding.tvSelectedQty.setText("" + resultModel.getQty());
-                updateCart();
+                if (resultModel.getMaxOrderQuantity()!=null&&Integer.parseInt(resultModel.getMaxOrderQuantity())>0 && resultModel.getQty() > Integer.parseInt(resultModel.getMaxOrderQuantity())) {
+                    Utils.setToast(this, getString(R.string.order_quantity));
+                } else {
+                    mBinding.tvSelectedQty.setText("" + resultModel.getQty());
+                    updateCart();
+                }
                 break;
             case R.id.tvQtyMinus:
                 resultModel.setQty(resultModel.getQty() - 1);
@@ -551,8 +555,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         productDetailsViewMode.getAddItemsInCardVMRequest(paginationModel);
         productDetailsViewMode.getAddItemsInCardVM().observe(this, addCartItemModel -> {
             Utils.hideProgressDialog();
-            if (addCartItemModel != null && addCartItemModel.getResultItem() != null) {
-                MyApplication.getInstance().cartRepository.updateCartId(addCartItemModel.getResultItem().getId());
+            if (addCartItemModel.isSuccess()) {
+                if (addCartItemModel != null && addCartItemModel.getResultItem() != null) {
+                    MyApplication.getInstance().cartRepository.updateCartId(addCartItemModel.getResultItem().getId());
+                }
+            }else {
+                Utils.setToast(this,addCartItemModel.getErrorMessage());
             }
         });
     }

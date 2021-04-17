@@ -236,4 +236,5 @@
     <string name="delivery_Charge_text">Delivery Charge</string>
     <string name="buy_locally_at_best_prices_and_get_it_home_delivered">Buy locally at best prices and get it home delivered</string>
     <string name="continue_button">Continue</string>
+    <string name="order_quantity">Quantity cannot be greater than more than order quantity</string>
 </resources>

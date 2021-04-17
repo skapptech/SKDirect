@@ -16,6 +16,7 @@ import com.skdirect.databinding.ItemCartListBinding;
 import com.skdirect.interfacee.CartItemInterface;
 import com.skdirect.model.CartModel;
 import com.skdirect.utils.MyApplication;
+import com.skdirect.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -67,8 +68,15 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
 
         holder.mBinding.tvQtyPlus.setOnClickListener(view -> {
             cartModel.setQuantity(cartModel.getQuantity() + 1);
-            holder.mBinding.tvSelectedQty.setText("" + cartModel.getQuantity());
-            cartItemInterface.plusButtonOnClick(cartModel);
+
+
+            if (cartModel.getMaxOrderQuantity()!=null&&Integer.parseInt(cartModel.getMaxOrderQuantity())>0  && cartModel.getQuantity() > Integer.parseInt(cartModel.getMaxOrderQuantity())) {
+                Utils.setToast(context, context.getString(R.string.order_quantity));
+            } else {
+                holder.mBinding.tvSelectedQty.setText("" + cartModel.getQuantity());
+                cartItemInterface.plusButtonOnClick(cartModel);
+            }
+
         });
 
         holder.mBinding.tvQtyMinus.setOnClickListener(view -> {

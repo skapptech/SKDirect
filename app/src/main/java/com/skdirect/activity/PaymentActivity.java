@@ -213,7 +213,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 MyApplication.getInstance().cartRepository.truncateCart();
                 orderPlaceDialog();
             } else {
-                Toast.makeText(getApplicationContext(), response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                Utils.setToast(this,response.getErrorMessage());
                 if(response.getErrorMessage().equalsIgnoreCase("Currently we are not serving your Area"))
                 {
                     mBinding.btnPlaceOrder.setClickable(false);

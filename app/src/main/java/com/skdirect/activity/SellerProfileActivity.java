@@ -286,7 +286,14 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     @Override
     public void plusButtonOnClick(SellerProductList model, TextView tvSelectedQty) {
         mBinding.cartBadge.setVisibility(View.VISIBLE);
-        tvSelectedQty.setText("" + model.getQty());
+
+            if (model.getMaxOrderQuantity()!=null&&Integer.parseInt(model.getMaxOrderQuantity())>0 && model.getQty() > Integer.parseInt(model.getMaxOrderQuantity())) {
+                Utils.setToast(this, getString(R.string.order_quantity));
+            } else {
+                tvSelectedQty.setText("" + model.getQty());
+                addItemInCart(model.getQty(), model);
+            }
+
         // add item  to cart
         CartModel cartModel = new CartModel(null, 0, null,
                 false, model.isStockRequired(), model.getStock(), model.getMeasurement(),
@@ -295,7 +302,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 model.getQty(), model.getCreatedBy(), null, sellerID, 0,
                 0, model.getMargin(), model.getMrp(), model.getMOQ(), model.getId());
         MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
-        addItemInCart(model.getQty(), model);
+
     }
 
     @Override
@@ -363,12 +370,16 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
 
     private void addItemInCart(int QTY, SellerProductList sellerProductModel) {
         ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(),
-                0, 0,SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
+                0, 0, SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
         sellerProfileViewMode.getAddItemsInCardVMRequest(paginationModel);
         sellerProfileViewMode.getAddItemsInCardVM().observe(this, addCartItemModel -> {
             Utils.hideProgressDialog();
-            if (addCartItemModel != null && addCartItemModel.getResultItem() != null) {
-                MyApplication.getInstance().cartRepository.updateCartId(addCartItemModel.getResultItem().getId());
+            if (addCartItemModel.isSuccess()) {
+                if (addCartItemModel != null && addCartItemModel.getResultItem() != null) {
+                    MyApplication.getInstance().cartRepository.updateCartId(addCartItemModel.getResultItem().getId());
+                }
+            } else {
+                Utils.setToast(this, addCartItemModel.getErrorMessage());
             }
         });
     }
