@@ -217,16 +217,21 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 }
 
                 if (sellerDetailsModel.getSellerInfoModel().getImagePath() != null && !sellerDetailsModel.getSellerInfoModel().getImagePath().contains("http")) {
-                    Picasso.get().load(BuildConfig.apiEndpoint + sellerDetailsModel.getSellerInfoModel().getImagePath()).error(R.drawable.ic_top_seller).into(mBinding.ivSShopImage);
+                    Picasso.get().load(BuildConfig.apiEndpoint + sellerDetailsModel.getSellerInfoModel().getImagePath())
+                            .error(R.drawable.ic_top_seller).into(mBinding.ivSShopImage);
                 } else {
-                    Picasso.get().load(sellerDetailsModel.getSellerInfoModel().getImagePath()).placeholder(R.drawable.ic_top_seller).into(mBinding.ivSShopImage);
+                    Picasso.get().load(sellerDetailsModel.getSellerInfoModel().getImagePath()).placeholder(R.drawable.ic_top_seller)
+                            .into(mBinding.ivSShopImage);
                 }
             }
         });
     }
 
     private void getSellerProductsApi(String searchSellerName) {
-        SellerProfileDataModel paginationModel = new SellerProfileDataModel(sellerID, 0, 0, "", skipCount, takeCount, 0, searchSellerName, Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LAT)), Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LON)));
+        SellerProfileDataModel paginationModel = new SellerProfileDataModel(sellerID, 0, 0,
+                "", skipCount, takeCount, 0, searchSellerName,
+                Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LAT)),
+                Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LON)));
         sellerProfileViewMode.getSellerProductRequest(paginationModel);
         sellerProfileViewMode.getSellerProductVM().observe(this, sellerProdList -> {
             Utils.hideProgressDialog();

@@ -1,9 +1,7 @@
 package com.skdirect.activity;
 
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -26,17 +24,16 @@ import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.OrderDetailsViewMode;
 
 import java.util.ArrayList;
-import java.util.List;
-
 
 public class OrderDetailActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityOrderDeatilsBinding mBinding;
     private MyOrderModel myOrderModel;
     private OrderDetailsViewMode orderDetailsViewMode;
-    private ArrayList<OrderStatusDC> OrderStatusDCList = new ArrayList<>();
+    private final ArrayList<OrderStatusDC> OrderStatusDCList = new ArrayList<>();
     private MainStepperAdapter mainStepperAdapter;
     private OrderStatusStepperAdapter orderStatusStepperAdapter;
-    DBHelper dbHelper;
+    private DBHelper dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +46,19 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
         callOrderDetails();
     }
 
-    private void callOrderDetails() {
-        if (Utils.isNetworkAvailable(getApplicationContext())) {
-            Utils.showProgressDialog(OrderDetailActivity.this);
-            callOrderDetailsAPI();
-            callOrderItemsAPI();
-        } else {
-            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back_press:
+                onBackPressed();
+                break;
+
+            case R.id.tv_cancle_order:
+                cancleOrder();
+                break;
         }
     }
 
-
-    private void getIntentData() {
-        myOrderModel = (MyOrderModel) getIntent().getSerializableExtra("myOrderModel");
-
-    }
 
     private void initView() {
         mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.my_order));
@@ -82,26 +77,19 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
+    private void getIntentData() {
+        myOrderModel = (MyOrderModel) getIntent().getSerializableExtra("myOrderModel");
 
-            case R.id.tv_cancle_order:
-                cancleOrder();
-                break;
-        }
     }
 
-
-    private void setFullHeight() {
-     /*   DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mBinding.stepperList.getLayoutParams();
-        params.height = (int) (displayMetrics.widthPixels / 1.2);
-        mBinding.stepperList.setLayoutParams(params);*/
+    private void callOrderDetails() {
+        if (Utils.isNetworkAvailable(getApplicationContext())) {
+            Utils.showProgressDialog(OrderDetailActivity.this);
+            callOrderDetailsAPI();
+            callOrderItemsAPI();
+        } else {
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
+        }
     }
 
     private void callOrderDetailsAPI() {
@@ -114,10 +102,10 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
 
                     OrderStatusDCList.add(new OrderStatusDC(orderDetailsModel.getOrderDate(), "Ordered"));
                     OrderStatusDCList.addAll(orderDetailsModel.getOrderStatusDC());
-                    mBinding.tvOrderNumber.setText(dbHelper.getString(R.string.order_no)+" " + orderDetailsModel.getId());
-                    mBinding.tvCreatedOrder.setText(dbHelper.getString(R.string.order_on) +" : "+ Utils.getDateFormate(orderDetailsModel.getOrderDate()));
-                    mBinding.tvSellerName.setText(dbHelper.getString(R.string.shop_name) +" : "+ orderDetailsModel.getShopName());
-                    mBinding.tvPaymentType.setText(dbHelper.getString(R.string.payment_mode)+" :  "+ orderDetailsModel.getPaymentMode());
+                    mBinding.tvOrderNumber.setText(dbHelper.getString(R.string.order_no) + " " + orderDetailsModel.getId());
+                    mBinding.tvCreatedOrder.setText(dbHelper.getString(R.string.order_on) + " : " + Utils.getDateFormate(orderDetailsModel.getOrderDate()));
+                    mBinding.tvSellerName.setText(dbHelper.getString(R.string.shop_name) + " : " + orderDetailsModel.getShopName());
+                    mBinding.tvPaymentType.setText(dbHelper.getString(R.string.payment_mode) + " :  " + orderDetailsModel.getPaymentMode());
                     mBinding.tvAddreshOne.setText(orderDetailsModel.getAddressOne());
                     mBinding.tvSellerAddress.setText(orderDetailsModel.getAddressThree());
                     mBinding.tvCity.setText(orderDetailsModel.getCity());
@@ -134,10 +122,10 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
                         mBinding.rlTotalSaving.setVisibility(View.GONE);
                     }
 
-                    if (orderDetailsModel.getTotalDeliveryCharge()>0.0) {
+                    if (orderDetailsModel.getTotalDeliveryCharge() > 0.0) {
                         mBinding.rlDeliveryCharge.setVisibility(View.VISIBLE);
                         double totalSavingDiscountAmount = orderDetailsModel.getTotalItemAmount();
-                        double deliveryCharge = orderDetailsModel.getTotalPrice()+ orderDetailsModel.getTotalDeliveryCharge();
+                        double deliveryCharge = orderDetailsModel.getTotalPrice() + orderDetailsModel.getTotalDeliveryCharge();
                         mBinding.tvOrderAmount.setText("₹ " + totalSavingDiscountAmount);
                         mBinding.tvTotalSaving.setText("-₹ " + orderDetailsModel.getTotalSavingAmount());
                         mBinding.tvDeliveryCharge.setText("" + orderDetailsModel.getTotalDeliveryCharge());
@@ -180,7 +168,7 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
                 if (orderItemModels.size() > 0) {
                     OrderDetailsItemAdapter orderDetailsItemAdapter = new OrderDetailsItemAdapter(OrderDetailActivity.this, orderItemModels);
                     mBinding.rMyOrder.setAdapter(orderDetailsItemAdapter);
-                    mBinding.tvItemCount.setText(dbHelper.getString(R.string.price_details_order) + orderItemModels.size() +" "+ dbHelper.getString(R.string.items_order));
+                    mBinding.tvItemCount.setText(dbHelper.getString(R.string.price_details_order) + orderItemModels.size() + " " + dbHelper.getString(R.string.items_order));
                 }
 
             }
@@ -206,8 +194,7 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
                 if (result.isSuccess()) {
                     Utils.setToast(getApplicationContext(), result.getSuccessMessage());
                     onBackPressed();
-                }else
-                {
+                } else {
                     Utils.setToast(getApplicationContext(), result.getErrorMessage());
                 }
             }
@@ -215,6 +202,4 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
         });
 
     }
-
-
 }

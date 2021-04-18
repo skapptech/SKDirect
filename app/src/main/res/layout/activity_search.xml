@@ -17,7 +17,6 @@
             android:background="@color/colorPrimaryDark"
             android:orientation="vertical">
 
-
             <EditText
                 android:id="@+id/et_search_seller"
                 android:layout_width="match_parent"
@@ -33,9 +32,7 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:padding="8dp"
-                android:textSize="15dp" />
-
-
+                android:textSize="15sp" />
         </RelativeLayout>
 
         <LinearLayout
@@ -49,10 +46,9 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorAccent"
                 app:tabGravity="fill"
-                app:tabTextColor="@color/white"
                 app:tabMode="fixed"
                 app:tabSelectedTextColor="@color/seller_button_color"
-               />
+                app:tabTextColor="@color/white" />
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewpager"
@@ -63,10 +59,6 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_search"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            />
-
-
+            android:layout_height="match_parent" />
     </LinearLayout>
 </layout>

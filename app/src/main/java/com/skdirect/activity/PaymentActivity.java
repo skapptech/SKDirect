@@ -1,15 +1,12 @@
 package com.skdirect.activity;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -19,8 +16,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.gson.JsonObject;
-import com.nabinbhandari.android.permissions.PermissionHandler;
-import com.nabinbhandari.android.permissions.Permissions;
 import com.skdirect.R;
 import com.skdirect.adapter.DeliveryOptionAdapter;
 import com.skdirect.databinding.ActivityPaymentBinding;
@@ -31,8 +26,6 @@ import com.skdirect.model.DeliveryOptionModel;
 import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.UserLocationModel;
 import com.skdirect.model.response.OfferResponse;
-import com.skdirect.utils.DBHelper;
-import com.skdirect.utils.GPSTracker;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
@@ -125,6 +118,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+
     private void initView() {
         mBinding.tvOrderValueH.setText(MyApplication.getInstance().dbHelper.getString(R.string.total_order_value));
         mBinding.tvAmountH.setText(MyApplication.getInstance().dbHelper.getString(R.string.total_amount));
@@ -154,12 +148,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mBinding.tvItemPrice.setText("Price Details ( " + cartItemModel.getCart().size() + " items)");
         mBinding.tvOrderValue.setText("₹ " + cartTotal);
 
-        if(cartItemModel.getDeliveryChargePerOrder()!=0.0 && cartItemModel.getDeliveryChargePerOrder()!=0)
-        {
-            totalAmount = totalAmount+cartItemModel.getDeliveryChargePerOrder();
+        if (cartItemModel.getDeliveryChargePerOrder() != 0.0 && cartItemModel.getDeliveryChargePerOrder() != 0) {
+            totalAmount = totalAmount + cartItemModel.getDeliveryChargePerOrder();
             mBinding.tvDeleveryChargeValue.setText(new DecimalFormat("##.##").format(cartItemModel.getDeliveryChargePerOrder()));
-        }else
-        {
+        } else {
             mBinding.tvDeleveryChargeValue.setText("Free");
         }
         mBinding.tvTotalAmount.setText("₹ " + totalAmount);
@@ -213,9 +205,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 MyApplication.getInstance().cartRepository.truncateCart();
                 orderPlaceDialog();
             } else {
-                Utils.setToast(this,response.getErrorMessage());
-                if(response.getErrorMessage().equalsIgnoreCase("Currently we are not serving your Area"))
-                {
+                Utils.setToast(getApplicationContext(), response.getErrorMessage());
+                if (response.getErrorMessage().equalsIgnoreCase("Currently we are not serving your Area") || response.getErrorMessage().equalsIgnoreCase("We don't deliver to your address. Please change your address")) {
                     mBinding.btnPlaceOrder.setClickable(false);
                     mBinding.btnPlaceOrder.setBackgroundResource(R.drawable.rounded_drawer_desable);
                     mBinding.btnPlaceOrder.setTextColor(Color.WHITE);
