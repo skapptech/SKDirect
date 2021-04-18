@@ -94,7 +94,13 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 startActivity(new Intent(getApplicationContext(), CartActivity.class));
                 break;
             case R.id.RLShare:
-                Utils.showShareWhatsappDialog(this, SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/seller/" + sellerID, "");
+                Utils.showShareWhatsappDialog(this,
+                        dbHelper.getString(R.string.hello_check_seller)
+                                +" "+
+                                sellerShopName
+                                +"'"+
+                                dbHelper.getString(R.string.seller_catelogue)+
+                                "\n"+SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/seller/" + sellerID, "");
                 break;
             case R.id.iv_s_shop_image:
                 startActivity(new Intent(getApplicationContext(), SellerImageGalleryActivity.class).putExtra("ImageData", sellerImagePath).putExtra("ShopName", sellerShopName));

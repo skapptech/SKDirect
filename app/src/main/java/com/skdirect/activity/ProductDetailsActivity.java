@@ -53,7 +53,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private ProductResultModel resultModel = new ProductResultModel();
     private String shopName;
     private DBHelper dbHelper;
-
+    private String productName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +109,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         .putExtra("ID", resultModel.getSellerId()));
                 break;
             case R.id.imShare:
-                Utils.shareProduct(getApplicationContext(), SharePrefs.getInstance(this)
-                        .getString(SharePrefs.BUYER_URL) + "/product/" + productID);
+                Utils.shareProduct(ProductDetailsActivity.this,
+                        dbHelper.getString(R.string.hello_check_product)+
+                                " "+ productName +" "+
+                                dbHelper.getString(R.string.social_mall_home)+"\n"+
+                        SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/product/" + productID);
                 break;
         }
     }
@@ -467,7 +470,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                             imageListModels = productDataModel.getResultItem().getImageList();
                         }
                         mBinding.tvItemName.setText(productDataModel.getResultItem().getProductName());
-
+                        productName = productDataModel.getResultItem().getProductName();
                         mBinding.pager.setAdapter(new ShowImagesAdapter(ProductDetailsActivity.this, imageListModels));
                         mBinding.indicator.setViewPager(mBinding.pager);
                         checkAddButtonValidaction();
