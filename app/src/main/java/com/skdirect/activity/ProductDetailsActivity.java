@@ -85,10 +85,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 addToCart();
                 break;
             case R.id.tvQtyPlus:
-                resultModel.setQty(resultModel.getQty() + 1);
-                if (resultModel.getMaxOrderQuantity() != null && Integer.parseInt(resultModel.getMaxOrderQuantity()) > 0 && resultModel.getQty() > Integer.parseInt(resultModel.getMaxOrderQuantity())) {
-                    Utils.setToast(getApplicationContext(), getString(R.string.order_quantity));
+                if (resultModel.getMaxOrderQuantity() != null && Integer.parseInt(resultModel.getMaxOrderQuantity()) > 0 && resultModel.getQty() >= Integer.parseInt(resultModel.getMaxOrderQuantity())) {
+                    Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.order_quantity));
                 } else {
+                    resultModel.setQty(resultModel.getQty() + 1);
                     mBinding.tvSelectedQty.setText("" + resultModel.getQty());
                     updateCart();
                 }
@@ -137,7 +137,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.showProgressDialog(this);
             addProduct();
         } else {
-            Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
@@ -146,7 +146,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.showProgressDialog(this);
             cartItemsAPI();
         } else {
-            Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
@@ -155,7 +155,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.showProgressDialog(this);
             topSimilarProductAPI();
         } else {
-            Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
@@ -164,7 +164,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.showProgressDialog(this);
             SellarOtherProductsAPI();
         } else {
-            Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
@@ -173,7 +173,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.showProgressDialog(this);
             getTopSeller();
         } else {
-            Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
@@ -192,12 +192,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.showProgressDialog(this);
             getProductListAPI();
         } else {
-            Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
 
     private void initView() {
-
         mBinding.tvMrpTitle.setText(dbHelper.getString(R.string.txt_mrp));
         mBinding.tvTax.setText(dbHelper.getString(R.string.txt_Inclusive));
         mBinding.tvQuantity.setText(dbHelper.getString(R.string.txt_Inclusive));
@@ -210,7 +209,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         mBinding.btAddToCart.setText(dbHelper.getString(R.string.add_to_cart));
         mBinding.tvVarientButton.setText(dbHelper.getString(R.string.variants));
         mBinding.tvDeliveryOptionsTitle.setText(dbHelper.getString(R.string.txt_delivery));
-
 
         mBinding.rvNearByItem.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         mBinding.rvOtherSellars.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -238,8 +236,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         mBinding.tvQtyMinus.setOnClickListener(this);
         mBinding.tvVarientButton.setOnClickListener(this);
         mBinding.tvShopName.setOnClickListener(this);
-
-
     }
 
     private void openBottomSheetDialog() {
@@ -252,7 +248,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         recyclerView.setAdapter(bottomListAdapter);
         bottomSheetDialog.setContentView(view);
         bottomSheetDialog.show();
-
     }
 
     private void updateCart() {
@@ -267,6 +262,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
         }
         if (qty == 0) {
+            resultModel.setQty(0);
             mBinding.btAddToCart.setVisibility(View.VISIBLE);
             mBinding.LLPlusMinus.setVisibility(View.GONE);
             MyApplication.getInstance().cartRepository.deleteCartItem(cartModel);
@@ -359,7 +355,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 }
             }
         });
-
     }
 
     private void getTopSeller() {
@@ -481,7 +476,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                             setVariation(productDataModel.getResultItem().getVariationModelList(), 0);
                         } else {
                             mBinding.tvVarientButton.setVisibility(View.GONE);
-
                         }
                     }
                 }
@@ -510,7 +504,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             mBinding.llDescountAmount.setVisibility(View.VISIBLE);
             double DiscountAmount = variationListModel.getSellingPrice() - variationListModel.getDiscountAmount();
             mBinding.tvDiscount.setText("₹ " + DiscountAmount);
-
             //mBinding.tvItemMrpOff.setPaintFlags(mBinding.tvItemMrpOff.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
@@ -560,7 +553,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                     MyApplication.getInstance().cartRepository.updateCartId(addCartItemModel.getResultItem().getId());
                 }
             } else {
-                Utils.setToast(this, addCartItemModel.getErrorMessage());
+                Utils.setToast(getApplicationContext(), addCartItemModel.getErrorMessage());
             }
         });
     }

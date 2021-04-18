@@ -99,14 +99,13 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             case R.id.iv_s_shop_image:
                 startActivity(new Intent(getApplicationContext(), SellerImageGalleryActivity.class).putExtra("ImageData", sellerImagePath).putExtra("ShopName", sellerShopName));
                 break;
-
         }
     }
 
 
     private void callSellerDetails() {
         if (Utils.isNetworkAvailable(getApplicationContext())) {
-            Utils.showProgressDialog(SellerProfileActivity.this);
+            Utils.showProgressDialog(this);
             getSellerDetailsAPI();
             addProduct();
             getSellerProductsApi(searchSellerName);
@@ -143,7 +142,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         mBinding.rvCategories.setLayoutManager(layoutManager);
 
-        sellerShopListAdapter = new SellerProductAdapter(SellerProfileActivity.this, sellerProductModels, this);
+        sellerShopListAdapter = new SellerProductAdapter(this, sellerProductModels, this);
         mBinding.rvCategories.setAdapter(sellerShopListAdapter);
 
         mBinding.etSearchSeller.setOnEditorActionListener((v, actionId, event) -> {

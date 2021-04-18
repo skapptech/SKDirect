@@ -26,7 +26,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
-import com.skdirect.activity.MainActivity;
 import com.skdirect.model.TokenModel;
 
 import org.json.JSONArray;
@@ -47,8 +46,8 @@ public class Utils {
     private static final String MOBILE_NO_PATTERN = "^[+]?[0-9]{10,13}$";
     private static final String EMAIL_NO_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     public static Dialog customDialog;
-    public static String myFormat = "yyyy-MM-dd'T'HH:mm:ss";
-    private static boolean status;
+    public String myFormat = "yyyy-MM-dd'T'HH:mm:ss";
+    private boolean status;
     private static Context context;
     public static String pattern = "##.##";
     public static Boolean isGPS = false;
@@ -152,13 +151,7 @@ public class Utils {
     public static boolean ISGPSON(Context context) {
         final LocationManager manager = (LocationManager) context.getSystemService( Context.LOCATION_SERVICE );
 
-        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-            isGPS=false;
-
-        }
-        else{
-            isGPS=true;
-        }
+        isGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         return isGPS;
     }
 

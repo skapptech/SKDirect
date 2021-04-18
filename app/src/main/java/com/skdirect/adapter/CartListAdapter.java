@@ -44,7 +44,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
     public void onBindViewHolder(@NonNull CartListAdapter.ViewHolder holder, int position) {
         CartModel cartModel = cartItemList.get(position);
         holder.mBinding.tvProductName.setText(cartModel.getProductName());
-        holder.mBinding.tvSellerName.setText(MyApplication.getInstance().dbHelper.getString(R.string.seller_a)+" "+ cartModel.getShopName());
+        holder.mBinding.tvSellerName.setText(MyApplication.getInstance().dbHelper.getString(R.string.seller_a) + " " + cartModel.getShopName());
         holder.mBinding.tvMrp.setText("₹ " + cartModel.getPrice());
         holder.mBinding.tvSelectedQty.setText("" + cartModel.getQuantity());
         holder.mBinding.tvRomove.setText(MyApplication.getInstance().dbHelper.getString(R.string.remove));
@@ -55,30 +55,22 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
             Picasso.get().load(cartModel.getImagePath()).into(holder.mBinding.imItemImage);
         }
 
-        if (cartModel.getDiscountAmount()>0.0) {
+        if (cartModel.getDiscountAmount() > 0.0) {
             double DiscountAmount = cartModel.getPrice() - cartModel.getDiscountAmount();
             holder.mBinding.tvDiscount.setVisibility(View.VISIBLE);
             holder.mBinding.tvDiscount.setText("₹ " + DiscountAmount);
             holder.mBinding.tvMrp.setText("₹ " + cartModel.getMrp());
             holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-           // holder.mBinding.tvSellingPrice.setText(String.valueOf(model.getSellingPrice()));
-            //holder.mBinding.tvSellingPrice.setPaintFlags(holder.mBinding.tvSellingPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
         }
-
         holder.mBinding.tvQtyPlus.setOnClickListener(view -> {
-            cartModel.setQuantity(cartModel.getQuantity() + 1);
-
-
-            if (cartModel.getMaxOrderQuantity()!=null&&Integer.parseInt(cartModel.getMaxOrderQuantity())>0  && cartModel.getQuantity() > Integer.parseInt(cartModel.getMaxOrderQuantity())) {
+            if (cartModel.getMaxOrderQuantity() != null && Integer.parseInt(cartModel.getMaxOrderQuantity()) > 0 && cartModel.getQuantity() >= Integer.parseInt(cartModel.getMaxOrderQuantity())) {
                 Utils.setToast(context, context.getString(R.string.order_quantity));
             } else {
+                cartModel.setQuantity(cartModel.getQuantity() + 1);
                 holder.mBinding.tvSelectedQty.setText("" + cartModel.getQuantity());
                 cartItemInterface.plusButtonOnClick(cartModel);
             }
-
         });
-
         holder.mBinding.tvQtyMinus.setOnClickListener(view -> {
             cartModel.setQuantity(cartModel.getQuantity() - 1);
             holder.mBinding.tvSelectedQty.setText("" + cartModel.getQuantity());
@@ -93,7 +85,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ItemCartListBinding mBinding;
+        private final ItemCartListBinding mBinding;
 
         public ViewHolder(ItemCartListBinding Binding) {
             super(Binding.getRoot());
