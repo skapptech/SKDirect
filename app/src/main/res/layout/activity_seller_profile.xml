@@ -17,13 +17,14 @@
                 android:layout_height="match_parent"
                 app:contentScrim="@color/white"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="55dp"
+                    android:background="@color/white"
                     android:orientation="vertical"
                     app:layout_collapseMode="parallax"
-                    android:background="@color/white"
-                    android:layout_marginTop="55dp"
                     app:layout_collapseParallaxMultiplier="0.7">
 
                     <RelativeLayout
@@ -40,16 +41,14 @@
                             android:layout_marginStart="15dp"
                             android:layout_marginEnd="15dp"
                             android:background="@drawable/bg_white_rounded"
-                            android:drawableLeft="@drawable/ic_search"
+                            android:drawableStart="@drawable/ic_search"
                             android:drawablePadding="10dp"
                             android:hint="@string/search_seller_by_name_or_product"
-                            android:imeOptions="actionSearch"
+                            android:imeOptions="actionDone"
                             android:inputType="text"
                             android:maxLines="1"
                             android:padding="8dp"
-                            android:textSize="15dp" />
-
-
+                            android:textSize="15sp" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -270,12 +269,13 @@
                         android:layout_marginTop="10dp"
                         android:background="@color/divider" />
                 </LinearLayout>
+
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/arrow_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_collapseMode="pin"
-                    android:background="?colorPrimary">
+                    android:background="?colorPrimary"
+                    app:layout_collapseMode="pin">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -385,7 +385,7 @@
                                 android:padding="5dp"
                                 android:text="@string/use_current_location"
                                 android:textColor="@color/seller_button_color"
-                                android:textSize="12dp"
+                                android:textSize="12sp"
                                 android:textStyle="normal"
                                 android:visibility="gone" />
                         </LinearLayout>
@@ -400,13 +400,12 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_categories"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp" />
-
+                android:layout_marginTop="5dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             <TextView
                 android:id="@+id/tv_item_not_found"
@@ -419,8 +418,6 @@
                 android:textColor="@color/colorAccent"
                 android:textSize="14dp"
                 android:visibility="gone" />
-
-
         </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

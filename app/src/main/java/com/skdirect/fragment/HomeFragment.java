@@ -335,9 +335,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mBinding.tvNoNewSellerItem.setText(dbHelper.getString(R.string.no_item_found));
         mBinding.tvNoNewSellerItemLocation.setText(dbHelper.getString(R.string.no_loction_found));
         mBinding.mallNotFound.tvNoMallAvailble.setText(dbHelper.getString(R.string.no_mall_availble));
-
-
-
         //mBinding.swiperefresh.setOnRefreshListener(this);
         mBinding.rvNearByItem.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         mBinding.rvTopSeller.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));

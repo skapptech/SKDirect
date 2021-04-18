@@ -142,12 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             userNameTV.setText(SharePrefs.getInstance(this).getString(SharePrefs.FIRST_NAME));
         }
 
-        mBinding.toolbarId.ivMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mBinding.drawer.openDrawer(GravityCompat.START);
-            }
-        });
+        mBinding.toolbarId.ivMenu.setOnClickListener(view -> mBinding.drawer.openDrawer(GravityCompat.START));
 
         Menu menu = mBinding.toolbarId.bottomNavigation.getMenu();
         MenuItem home = menu.findItem(R.id.nav_home);
@@ -189,30 +184,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         });
 
-        mBinding.toolbarId.notifictionCount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, CartActivity.class));
-            }
-        });
+        mBinding.toolbarId.notifictionCount.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), CartActivity.class)));
 
-        setLocationTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(Utils.ISGPSON(MainActivity.this)){
-                    Intent intent = new Intent(MainActivity.this, MapsExtendedActivity.class);
-                    intent.putExtra("Lat", Double.parseDouble(SharePrefs.getStringSharedPreferences(MainActivity.this, SharePrefs.LAT)));
-                    intent.putExtra("Lon", Double.parseDouble(SharePrefs.getStringSharedPreferences(MainActivity.this, SharePrefs.LON)));
-                    startActivityForResult(intent, 2);
-                }
-                else{
-                    new GpsUtils(MainActivity.this).turnGPSOn(isGPSEnable -> {
-                        // turn on GPS
-                        isGPS = isGPSEnable;
-
-                    });
-                }
-
+        setLocationTV.setOnClickListener(view -> {
+            if (Utils.ISGPSON(MainActivity.this)) {
+                Intent intent = new Intent(MainActivity.this, MapsExtendedActivity.class);
+                intent.putExtra("Lat", Double.parseDouble(SharePrefs.getStringSharedPreferences(MainActivity.this, SharePrefs.LAT)));
+                intent.putExtra("Lon", Double.parseDouble(SharePrefs.getStringSharedPreferences(MainActivity.this, SharePrefs.LON)));
+                startActivityForResult(intent, 2);
+            } else {
+                new GpsUtils(MainActivity.this).turnGPSOn(isGPSEnable -> {
+                    // turn on GPS
+                    isGPS = isGPSEnable;
+                });
             }
         });
 
@@ -281,25 +265,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.ll_profile:
                 if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                 } else {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 }
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_chnage_password:
                 if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                    startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
+                    startActivity(new Intent(getApplicationContext(), ChangePasswordActivity.class));
                 } else {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 }
                 mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_chet:
                 mBinding.drawer.closeDrawers();
-                startActivity(new Intent(MainActivity.this, ChatActivity.class));
+                startActivity(new Intent(getApplicationContext(), ChatActivity.class));
                 break;
             case R.id.ll_rate_this_app:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.playStoreURL)));
@@ -309,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.ll_logout:
                 mBinding.drawer.closeDrawers();
                 clearSharePrefs();
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 finish();
                 break;
             case R.id.ll_sign_in:
@@ -322,19 +306,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.llChangeLanguage:
-                startActivity(new Intent(MainActivity.this, ChangeLanguageActivity.class));
+                startActivity(new Intent(getApplicationContext(), ChangeLanguageActivity.class));
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_private_polcy:
-                startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName", "PrivacyPolicy"));
+                startActivity(new Intent(getApplicationContext(), WebviewActivity.class).putExtra("FunctionName", "PrivacyPolicy"));
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_about_app:
-                startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName", "AboutApp"));
+                startActivity(new Intent(getApplicationContext(), WebviewActivity.class).putExtra("FunctionName", "AboutApp"));
                 mBinding.drawer.closeDrawers();
                 break;
             case R.id.ll_terms_and_condition:
-                startActivity(new Intent(MainActivity.this, WebviewActivity.class).putExtra("FunctionName", "TermsCondition"));
+                startActivity(new Intent(getApplicationContext(), WebviewActivity.class).putExtra("FunctionName", "TermsCondition"));
                 mBinding.drawer.closeDrawers();
                 break;
         }

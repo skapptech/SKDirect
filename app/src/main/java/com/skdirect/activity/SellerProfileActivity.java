@@ -42,8 +42,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     private ActivitySellerProfileBinding mBinding;
     private SellerProfileViewMode sellerProfileViewMode;
     private int sellerID;
-    private int skipCount = 0;
-    private final int takeCount = 15;
+    private int skipCount = 0, takeCount = 15;
     private int pastVisiblesItems = 0;
     private int visibleItemCount = 0;
     private int totalItemCount = 0;
@@ -52,7 +51,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     private SellerProductAdapter sellerShopListAdapter;
     private String searchSellerName;
     private DBHelper dbHelper;
-    String sellerImagePath, sellerShopName;
+    private String sellerImagePath, sellerShopName;
 
 
     @Override
@@ -104,6 +103,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+
     private void callSellerDetails() {
         if (Utils.isNetworkAvailable(getApplicationContext())) {
             Utils.showProgressDialog(SellerProfileActivity.this);
@@ -140,22 +140,23 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         mBinding.ivSShopImage.setOnClickListener(this);
         mBinding.notifictionCount.setOnClickListener(this);
         mBinding.RLShare.setOnClickListener(this);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         mBinding.rvCategories.setLayoutManager(layoutManager);
 
         sellerShopListAdapter = new SellerProductAdapter(SellerProfileActivity.this, sellerProductModels, this);
         mBinding.rvCategories.setAdapter(sellerShopListAdapter);
 
         mBinding.etSearchSeller.setOnEditorActionListener((v, actionId, event) -> {
-            boolean handled = false;
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
+                skipCount = 0;
+                takeCount = 10;
                 searchSellerName = mBinding.etSearchSeller.getText().toString().trim();
                 sellerProductModels.clear();
                 sellerShopListAdapter.notifyDataSetChanged();
                 getSellerProductsApi(searchSellerName);
-                handled = true;
+                return true;
             }
-            return handled;
+            return false;
         });
 
         mBinding.rvCategories.addOnScrollListener(new RecyclerView.OnScrollListener() {
