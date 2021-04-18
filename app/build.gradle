@@ -43,7 +43,7 @@ android {
             proguardFiles 'proguard-rules.pro'
             resValue "string", "app_name", "B2C Seller"
             buildConfigField("String", "buildVariant", "\"release\"")
-            buildConfigField("String", "apiEndpoint", "\"https://awstestdirectbuyer.er15.xyz/\"")
+            buildConfigField("String", "apiEndpoint", "\"https://directb2capi.er15.xyz\"")
         }
         debug {
             minifyEnabled false
