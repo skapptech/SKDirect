@@ -102,15 +102,12 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
         }
 
         holder.mBinding.tvQtyPlus.setOnClickListener(view -> {
-            model.setQty(model.getQty() + 1);
             addItemInterface.plusButtonOnClick(model, holder.mBinding.tvSelectedQty);
         });
         holder.mBinding.tvQtyMinus.setOnClickListener(view -> {
-            model.setQty(model.getQty() - 1);
             addItemInterface.minusButtonOnClick(model, holder.mBinding.tvSelectedQty, holder.mBinding.tvAdd, holder.mBinding.LLPlusMinus);
         });
         holder.mBinding.tvAdd.setOnClickListener(view -> {
-            model.setQty(model.getQty() + 1);
             addItemInterface.addButtonOnClick(model, holder.mBinding.tvSelectedQty, holder.mBinding.tvAdd, holder.mBinding.LLPlusMinus);
         });
         if (model.getParentProductId() > 0) {

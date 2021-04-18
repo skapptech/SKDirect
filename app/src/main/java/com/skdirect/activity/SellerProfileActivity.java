@@ -287,12 +287,13 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     public void plusButtonOnClick(SellerProductList model, TextView tvSelectedQty) {
         mBinding.cartBadge.setVisibility(View.VISIBLE);
 
-            if (model.getMaxOrderQuantity()!=null&&Integer.parseInt(model.getMaxOrderQuantity())>0 && model.getQty() > Integer.parseInt(model.getMaxOrderQuantity())) {
-                Utils.setToast(this, getString(R.string.order_quantity));
-            } else {
-                tvSelectedQty.setText("" + model.getQty());
-                addItemInCart(model.getQty(), model);
-            }
+        if (model.getMaxOrderQuantity() != null && Integer.parseInt(model.getMaxOrderQuantity()) > 0 && model.getQty() >= Integer.parseInt(model.getMaxOrderQuantity())) {
+            Utils.setToast(getApplicationContext(), getString(R.string.order_quantity));
+        } else {
+            model.setQty(model.getQty() + 1);
+            tvSelectedQty.setText("" + model.getQty());
+            addItemInCart(model.getQty(), model);
+        }
 
         // add item  to cart
         CartModel cartModel = new CartModel(null, 0, null,
@@ -302,12 +303,11 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 model.getQty(), model.getCreatedBy(), null, sellerID, 0,
                 0, model.getMargin(), model.getMrp(), model.getMOQ(), model.getId());
         MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
-
     }
 
     @Override
-    public void minusButtonOnClick(SellerProductList sellerProductModel, TextView selectedQty, TextView btAddToCart, LinearLayout LLPlusMinus) {
-        int qty = Integer.parseInt(selectedQty.getText().toString().trim());
+    public void minusButtonOnClick(SellerProductList model, TextView selectedQty, TextView btAddToCart, LinearLayout LLPlusMinus) {
+        int qty = model.getQty();
         qty--;
         if (qty > 0) {
             selectedQty.setText("" + qty);
@@ -315,20 +315,20 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             btAddToCart.setVisibility(View.VISIBLE);
             LLPlusMinus.setVisibility(View.GONE);
         }
+        model.setQty(model.getQty() - 1);
         // add item  to cart
         CartModel cartModel = new CartModel(null, 0, null,
-                false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(),
-                sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(),
-                0, sellerProductModel.getProductName(), 0, 0,
-                false, 0, 0, 0, sellerProductModel.getQty(),
-                sellerProductModel.getCreatedBy(), null, sellerID, 0, 0,
-                sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
+                false, model.isStockRequired(), model.getStock(),
+                model.getMeasurement(), model.getUom(), model.getImagePath(),
+                0, model.getProductName(), 0, 0,
+                false, 0, 0, 0, model.getQty(),
+                model.getCreatedBy(), null, sellerID, 0, 0,
+                model.getMargin(), model.getMrp(), model.getMOQ(), model.getId());
         if (qty > 0) {
             MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
         } else {
             MyApplication.getInstance().cartRepository.deleteCartItem(cartModel);
         }
-        addItemInCart(qty, sellerProductModel);
     }
 
     @Override

@@ -86,8 +86,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.tvQtyPlus:
                 resultModel.setQty(resultModel.getQty() + 1);
-                if (resultModel.getMaxOrderQuantity()!=null&&Integer.parseInt(resultModel.getMaxOrderQuantity())>0 && resultModel.getQty() > Integer.parseInt(resultModel.getMaxOrderQuantity())) {
-                    Utils.setToast(this, getString(R.string.order_quantity));
+                if (resultModel.getMaxOrderQuantity() != null && Integer.parseInt(resultModel.getMaxOrderQuantity()) > 0 && resultModel.getQty() > Integer.parseInt(resultModel.getMaxOrderQuantity())) {
+                    Utils.setToast(getApplicationContext(), getString(R.string.order_quantity));
                 } else {
                     mBinding.tvSelectedQty.setText("" + resultModel.getQty());
                     updateCart();
@@ -105,10 +105,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 startActivity(new Intent(getApplicationContext(), CartActivity.class));
                 break;
             case R.id.tv_shop_name:
-                startActivity(new Intent(getApplicationContext(), SellerProfileActivity.class).putExtra("ID", resultModel.getSellerId()));
+                startActivity(new Intent(getApplicationContext(), SellerProfileActivity.class)
+                        .putExtra("ID", resultModel.getSellerId()));
                 break;
             case R.id.imShare:
-                Utils.shareProduct(this, SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/product/" + productID);
+                Utils.shareProduct(getApplicationContext(), SharePrefs.getInstance(this)
+                        .getString(SharePrefs.BUYER_URL) + "/product/" + productID);
                 break;
         }
     }
@@ -494,8 +496,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         }
         productID = variationList.get(position).getId();
         setVariation(variationList, position);
-
-
     }
 
     public void setVariation(ArrayList<VariationListModel> variationListMain, int position) {
@@ -551,7 +551,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     }
 
     private void addItemInCart(int QTY, int sellerItemID) {
-        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerItemID, 0, 0,SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
+        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerItemID, 0, 0, SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
         productDetailsViewMode.getAddItemsInCardVMRequest(paginationModel);
         productDetailsViewMode.getAddItemsInCardVM().observe(this, addCartItemModel -> {
             Utils.hideProgressDialog();
@@ -559,8 +559,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 if (addCartItemModel != null && addCartItemModel.getResultItem() != null) {
                     MyApplication.getInstance().cartRepository.updateCartId(addCartItemModel.getResultItem().getId());
                 }
-            }else {
-                Utils.setToast(this,addCartItemModel.getErrorMessage());
+            } else {
+                Utils.setToast(this, addCartItemModel.getErrorMessage());
             }
         });
     }
