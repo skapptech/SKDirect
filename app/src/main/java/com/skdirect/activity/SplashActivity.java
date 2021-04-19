@@ -85,10 +85,8 @@ public class SplashActivity extends AppCompatActivity {
                         SharePrefs.getInstance(activity).putString(SharePrefs.ABOUT_APP, appVersionModels.getResultItem().getAboutApp());
                         launchHomeScreen();
                         finish();
-
                     } else {
                         checkVersionData(appVersionModels);
-
                     }
                 }
             }
