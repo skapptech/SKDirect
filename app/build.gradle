@@ -12,21 +12,22 @@ android {
         applicationId "com.skdirect"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0.8"
+        versionCode 11
+        versionName "1.9"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+//        signingConfig signingConfigs.release
     }
 
-    /*signingConfigs {
+    signingConfigs {
         release {
             storeFile file('D:\\Android Projects\\SKDirect\\keystore\\direct_keystore.jks')
             storePassword '12345678'
             keyPassword '12345678'
             keyAlias = 'Direct'
         }
-    }*/
+    }
 
     repositories {
         jcenter()
@@ -36,7 +37,6 @@ android {
         dataBinding = true
     }
 
-
     buildTypes {
         release {
             minifyEnabled false
@@ -45,7 +45,6 @@ android {
             resValue "string", "app_name", "Social Mall"
             buildConfigField("String", "buildVariant", "\"release\"")
             buildConfigField("String", "apiEndpoint", "\"https://directb2capi.er15.xyz\"")
-            buildConfigField("String", "playStoreURL", "\"https://play.google.com/store/apps/details?id=com.skdirect&hl=en_IN&gl=US\"")
         }
         debug {
             minifyEnabled false
@@ -55,18 +54,11 @@ android {
             resValue "string", "app_name", "Social Mall"
             buildConfigField("String", "buildVariant", "\"DEBUG_STORE_FILE\"")
             buildConfigField("String", "apiEndpoint", "\"https://virtualstockuat.shopkirana.in\"")
-            buildConfigField("String", "playStoreURL", "\"https://play.google.com/store/apps/details?id=com.skdirect&hl=en_IN&gl=US\"")
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    allprojects {
-        repositories {
-            maven { url 'https://jitpack.io' }
-        }
     }
 }
 
@@ -97,7 +89,6 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.1.1')
     implementation 'com.google.firebase:firebase-messaging:21.1.0'
     implementation 'com.google.firebase:firebase-database:19.7.0'
-
     // google
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
