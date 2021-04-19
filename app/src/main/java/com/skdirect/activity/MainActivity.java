@@ -286,8 +286,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(getApplicationContext(), ChatActivity.class));
                 break;
             case R.id.ll_rate_this_app:
-//                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.playStoreURL)));
-//                mBinding.drawer.closeDrawers();
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.playStoreURL)));
+                mBinding.drawer.closeDrawers();
                 break;
 
             case R.id.ll_logout:
