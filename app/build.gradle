@@ -45,6 +45,7 @@ android {
             resValue "string", "app_name", "Social Mall"
             buildConfigField("String", "buildVariant", "\"release\"")
             buildConfigField("String", "apiEndpoint", "\"https://directb2capi.er15.xyz\"")
+            buildConfigField("String", "playStoreURL", "\"https://play.google.com/store/apps/details?id=com.skdirect\"")
         }
         debug {
             minifyEnabled false
@@ -54,6 +55,7 @@ android {
             resValue "string", "app_name", "Social Mall"
             buildConfigField("String", "buildVariant", "\"DEBUG_STORE_FILE\"")
             buildConfigField("String", "apiEndpoint", "\"https://virtualstockuat.shopkirana.in\"")
+            buildConfigField("String", "playStoreURL", "\"https://play.google.com/store/apps/details?id=com.skdirect\"")
         }
     }
     compileOptions {
