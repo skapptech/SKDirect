@@ -13,7 +13,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 11
-        versionName "1.9"
+        versionName "1.8.8"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -54,6 +54,7 @@ android {
             resValue "string", "app_name", "Social Mall"
             buildConfigField("String", "buildVariant", "\"DEBUG_STORE_FILE\"")
             buildConfigField("String", "apiEndpoint", "\"https://virtualstockuat.shopkirana.in\"")
+
         }
     }
     compileOptions {

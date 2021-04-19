@@ -91,6 +91,9 @@ public class SplashActivity extends AppCompatActivity {
                                 checkVersionData(appVersionModels);
                             }
                         }
+                    }else {
+                        checkVersionData(appVersionModels);
+
                     }
                 }
             }
