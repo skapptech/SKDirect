@@ -20,14 +20,14 @@ android {
 //        signingConfig signingConfigs.release
     }
 
-    signingConfigs {
-        release {
-            storeFile file('D:\\Android Projects\\SKDirect\\keystore\\direct_keystore.jks')
-            storePassword '12345678'
-            keyPassword '12345678'
-            keyAlias = 'Direct'
-        }
-    }
+//    signingConfigs {
+//        release {
+//            storeFile file('D:\\Android Projects\\SKDirect\\keystore\\direct_keystore.jks')
+//            storePassword '12345678'
+//            keyPassword '12345678'
+//            keyAlias = 'Direct'
+//        }
+//    }
 
     repositories {
         jcenter()
