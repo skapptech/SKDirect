@@ -8,8 +8,10 @@ import androidx.annotation.RequiresApi;
 
 import com.google.gson.Gson;
 import com.skdirect.BuildConfig;
+import com.skdirect.activity.UpdateProfileActivity;
 import com.skdirect.utils.Aes256;
 import com.skdirect.utils.MyApplication;
+import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 
 import org.json.JSONObject;
@@ -81,6 +83,11 @@ public class RestClient {
                 })
                 .addInterceptor(chain -> {
                     request = chain.request().newBuilder()
+                            .header("pincode", SharePrefs.getInstance(MyApplication.getInstance().appContext).getString(SharePrefs.PIN_CODE))
+                            .header("lat", SharePrefs.getStringSharedPreferences(MyApplication.getInstance().appContext,SharePrefs.LAT))
+                            .header("lng", SharePrefs.getStringSharedPreferences(MyApplication.getInstance().appContext,SharePrefs.LON))
+                            .header("mallid", SharePrefs.getInstance(MyApplication.getInstance().appContext).getString(SharePrefs.MALL_ID))
+                            .header("email", SharePrefs.getInstance(MyApplication.getInstance().appContext).getString(SharePrefs.EMAIL_ID))
                             .addHeader("authorization", "Bearer " + Utils.getToken(MyApplication.getInstance().appContext))
                             .build();
                     return chain.proceed(request);
