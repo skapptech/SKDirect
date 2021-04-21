@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.telephony.PhoneNumberUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +22,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.appsflyer.AFInAppEventParameterName;
+import com.appsflyer.AppsFlyerLib;
+import com.appsflyer.attribution.AppsFlyerRequestListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.onesignal.OneSignal;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.model.TokenModel;
@@ -36,8 +45,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -368,5 +379,92 @@ public class Utils {
             ex.printStackTrace();
         }
 
+    }
+
+    public static void logAppsFlayerEventApp(Context context, String keyword, String value) {
+        if (context != null) {
+            Map<String, Object> eventValue = new HashMap<String, Object>();
+            eventValue.put(AFInAppEventParameterName.PARAM_1, value);
+            AppsFlyerLib.getInstance().logEvent(context, keyword, eventValue, new AppsFlyerRequestListener() {
+                @Override
+                public void onSuccess() {
+                    Log.d("LOG_TAG", "Event sent successfully" + keyword + " - " + value);
+                }
+                @Override
+                public void onError(int i, @NonNull String s) {
+                    Log.d("LOG_TAG", "Event failed to be sent:\n" +
+                            "Error code: " + i + "\n"
+                            + "Error description: " + s);
+                }
+            });
+        }
+    }
+    public static void logAppsFlayerEventApp2(Context context,String eventName, String key, String value) {
+        if (context != null) {
+            Map<String, Object> eventValue = new HashMap<String, Object>();
+            eventValue.put(key, value);
+            AppsFlyerLib.getInstance().logEvent(context, eventName, eventValue, new AppsFlyerRequestListener() {
+                @Override
+                public void onSuccess() {
+                    Log.d("LOG_TAG", "Event sent successfully" + key + " - " + value);
+                }
+                @Override
+                public void onError(int i, @NonNull String s) {
+                    /*Log.d("LOG_TAG", "Event failed to be sent:\n" +
+                            "Error code: " + i + "\n"
+                            + "Error description: " + s);*/
+                }
+            });
+        }
+    }
+
+    public static void logAppsFlayerJSONEventApp(Context context, String keyword, String value) {
+        if (context != null) {
+            HashMap<String,Object> eventValue = new Gson().fromJson(value, new TypeToken<HashMap<String, Object>>(){}.getType());
+            AppsFlyerLib.getInstance().logEvent(context, keyword, eventValue, new AppsFlyerRequestListener() {
+                @Override
+                public void onSuccess() {
+                    //Log.d("LOG_TAG", "Event sent successfully" + keyword + " - " + value);
+                }
+                @Override
+                public void onError(int i, @NonNull String s) {
+                    /*Log.d("LOG_TAG", "Event failed to be sent:\n" +
+                            "Error code: " + i + "\n"
+                            + "Error description: " + s);*/
+                }
+            });
+        }
+    }
+    public static String getOneSignalPlayerId() {
+        String playerId = "";
+        try {
+            playerId = OneSignal.getDeviceState().getUserId();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return playerId;
+    }
+    public static void sendOneSignalTag(String key, String value) {
+        if (!TextUtils.isNullOrEmpty(key) && !TextUtils.isNullOrEmpty(value)) {
+            OneSignal.sendTag(key, value);
+        }
+    }
+
+    public static void deleteOneSignalTag(String key) {
+        if (!TextUtils.isNullOrEmpty(key)) {
+            OneSignal.deleteTag(key);
+        }
+    }
+
+    public static void sendOneSignalTrigger(String key, String value) {
+        if (!TextUtils.isNullOrEmpty(key) && !TextUtils.isNullOrEmpty(value)) {
+            OneSignal.addTrigger(key, value);
+        }
+    }
+
+    public static void deleteOneSignalTrigger(String key) {
+        if (!TextUtils.isNullOrEmpty(key)) {
+            OneSignal.removeTriggerForKey(key);
+        }
     }
 }

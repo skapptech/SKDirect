@@ -27,6 +27,8 @@ import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.VersionViewModel;
 
+import okhttp3.internal.Util;
+
 public class SplashActivity extends AppCompatActivity {
     private ActivitySplashBinding mBinding;
     private SplashActivity activity;
