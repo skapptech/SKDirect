@@ -83,11 +83,11 @@ public class RestClient {
                 })
                 .addInterceptor(chain -> {
                     request = chain.request().newBuilder()
-                            .header("pincode", SharePrefs.getInstance(MyApplication.getInstance().appContext).getString(SharePrefs.PIN_CODE))
+                            /*.header("pincode", SharePrefs.getInstance(MyApplication.getInstance().appContext).getString(SharePrefs.PIN_CODE))
                             .header("lat", SharePrefs.getStringSharedPreferences(MyApplication.getInstance().appContext,SharePrefs.LAT))
                             .header("lng", SharePrefs.getStringSharedPreferences(MyApplication.getInstance().appContext,SharePrefs.LON))
                             .header("mallid", SharePrefs.getInstance(MyApplication.getInstance().appContext).getString(SharePrefs.MALL_ID))
-                            .header("email", SharePrefs.getInstance(MyApplication.getInstance().appContext).getString(SharePrefs.EMAIL_ID))
+                            .header("email", SharePrefs.getInstance(MyApplication.getInstance().appContext).getString(SharePrefs.EMAIL_ID))*/
                             .addHeader("authorization", "Bearer " + Utils.getToken(MyApplication.getInstance().appContext))
                             .build();
                     return chain.proceed(request);
