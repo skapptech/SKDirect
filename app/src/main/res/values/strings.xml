@@ -241,4 +241,6 @@
     <string name="seller_catelogue">s catalog order now on the social mall and get home delivery</string>
     <string name="hello_check_product">Hello! Check</string>
     <string name="social_mall_home">only on social mall. Order now and get home delivery</string>
+    <string name="onesignal_app_id" translatable="false">eda68699-028d-403f-8ef8-cd7306db0a09</string>
+
 </resources>

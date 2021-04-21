@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityMainBinding;
@@ -63,6 +64,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         clickListener();
         setupBadge();
         ///callRunTimePermissions();
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        return;
+                    }
+                    Log.e( "onCreate: ", task.getResult());
+                });
     }
 
     private void setVarible() {
