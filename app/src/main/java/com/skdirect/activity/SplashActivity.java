@@ -46,6 +46,7 @@ public class SplashActivity extends AppCompatActivity {
         versionViewModel = ViewModelProviders.of(this).get(VersionViewModel.class);
         activity = this;
         initViews();
+        Utils.logAppsFlayerEventApp(activity,"SplashScreen","SplashScreen");
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.skdirect.databinding.ActivityIntroBinding;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
+import com.skdirect.utils.Utils;
 
 public class IntroActivity extends AppCompatActivity {
     private ActivityIntroBinding mBinding;
@@ -35,6 +36,7 @@ public class IntroActivity extends AppCompatActivity {
 
 
         mBinding.tvBuyer.setOnClickListener(view -> {
+            Utils.logAppsFlayerEventApp(activity,"IntroScreen","ContinueClick");
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SELLER, false);
             SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_SHOW_INTRO, true);
             Intent i = new Intent(activity, PlaceSearchActivity.class);
