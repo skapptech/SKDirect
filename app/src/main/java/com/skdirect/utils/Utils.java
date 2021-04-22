@@ -303,33 +303,6 @@ public class Utils {
         }
     }
     public static void shareProduct(Context context, String text,Bitmap imagePath) {
-       /* Uri bitmapUri = Uri.parse(imagePath);
-        Intent sendInt = new Intent(Intent.ACTION_SEND);
-        sendInt.setType("text/plain");
-        sendInt.setPackage("com.whatsapp");
-        // sendInt.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name));
-        sendInt.putExtra(Intent.EXTRA_TEXT, text);
-        sendInt.putExtra(Intent.EXTRA_STREAM, bitmapUri);
-        sendInt.setType("image/jpeg");
-        sendInt.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        try {
-           context. startActivity(sendInt);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(context, "whatsapp_not_installed", Toast.LENGTH_SHORT).show();
-        }*/
-        /*Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        Uri bitmapUri = Uri.parse(imagePath);
-        intent.putExtra(Intent.EXTRA_STREAM, bitmapUri);
-        intent.putExtra(Intent.EXTRA_TEXT, text);
-        intent.setType("image/*");
-        intent.setType("text/plain");
-      context. startActivity(Intent.createChooser(intent, "send"));*/
-
-
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);

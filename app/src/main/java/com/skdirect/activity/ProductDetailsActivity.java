@@ -1,5 +1,7 @@
 package com.skdirect.activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
@@ -9,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -32,6 +35,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.nabinbhandari.android.permissions.PermissionHandler;
+import com.nabinbhandari.android.permissions.Permissions;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.adapter.BottomListAdapter;
@@ -132,14 +137,30 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         .putExtra("ID", resultModel.getSellerId()));
                 break;
             case R.id.imShare:
-                Getbitmap();
+                callRunTimePermissions();
                 break;
         }
     }
 
-    public void Getbitmap() {
-        if (Utils.checkPermission(ProductDetailsActivity.this)) {
+    public void callRunTimePermissions() {
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+                Log.e("onDenied", "onGranted");
+                shareProductDetails();
+            }
 
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                super.onDenied(context, deniedPermissions);
+                Log.e("onDenied", "onDenied" + deniedPermissions);
+
+            }
+        });
+    }
+
+    public void shareProductDetails() {
             Picasso.get().load(resultModel.getImagePath()).into(mBinding.ivDemo);
             BitmapDrawable drawable = (BitmapDrawable) mBinding.ivDemo.getDrawable();
             bitmapx = drawable.getBitmap();
@@ -149,9 +170,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                             dbHelper.getString(R.string.social_mall_home) + "\n" +
                             SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/product/" + productID, bitmapx);
 
-        } else {
-            Utils.requestPermission(ProductDetailsActivity.this); // Code for permission
-        }
     }
 
 
