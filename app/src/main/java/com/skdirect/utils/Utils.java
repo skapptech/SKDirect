@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -16,6 +17,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.telephony.PhoneNumberUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,10 +29,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.appsflyer.AFInAppEventParameterName;
 import com.appsflyer.AppsFlyerLib;
 import com.appsflyer.attribution.AppsFlyerRequestListener;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -282,16 +290,60 @@ public class Utils {
     private static double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
     }
+    public static boolean checkPermission(Activity context) {
+        int result = ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
 
-    public static void shareProduct(Context context, String text,String imagePath) {
-        Uri bitmapUri = Uri.parse(imagePath);
-
+    public static void requestPermission(Activity context) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            Toast.makeText(context, "write_external_permission_setting", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(context, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+        }
+    }
+    public static void shareProduct(Context context, String text,Bitmap imagePath) {
+       /* Uri bitmapUri = Uri.parse(imagePath);
         Intent sendInt = new Intent(Intent.ACTION_SEND);
-        sendInt.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name));
+        sendInt.setType("text/plain");
+        sendInt.setPackage("com.whatsapp");
+        // sendInt.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name));
         sendInt.putExtra(Intent.EXTRA_TEXT, text);
         sendInt.putExtra(Intent.EXTRA_STREAM, bitmapUri);
-        sendInt.setType("text/plain");
-        context.startActivity(Intent.createChooser(sendInt, "Share"));
+        sendInt.setType("image/jpeg");
+        sendInt.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        try {
+           context. startActivity(sendInt);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(context, "whatsapp_not_installed", Toast.LENGTH_SHORT).show();
+        }*/
+        /*Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Uri bitmapUri = Uri.parse(imagePath);
+        intent.putExtra(Intent.EXTRA_STREAM, bitmapUri);
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+        intent.setType("image/*");
+        intent.setType("text/plain");
+      context. startActivity(Intent.createChooser(intent, "send"));*/
+
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            String bitmapPath = MediaStore.Images.Media.insertImage(context.getContentResolver(), imagePath, "title", null);
+            Uri bitmapUri = Uri.parse(bitmapPath);
+            intent.setAction(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_STREAM, bitmapUri);
+            intent.putExtra(Intent.EXTRA_TEXT, text);
+            intent.setType("image/*");
+            intent.setType("text/plain");
+            context.startActivity(Intent.createChooser(intent, "send"));
+
+
     }
 
 
