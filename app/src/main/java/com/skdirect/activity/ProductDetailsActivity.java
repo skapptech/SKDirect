@@ -243,6 +243,14 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             productID = getIntent().getIntExtra("ID", 0);
         }
     }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getExtras() != null) {
+            productID = getIntent().getIntExtra("ID", 0);
+            apiCalling();
+        }
+    }
 
     private void callProductData() {
         if (Utils.isNetworkAvailable(this)) {
