@@ -17,6 +17,7 @@ import com.skdirect.databinding.ItemApparelsBinding;
 import com.skdirect.databinding.ItemMallCategoriceBannerBinding;
 import com.skdirect.model.StoreCategoryListModel;
 import com.skdirect.model.StoreListModel;
+import com.skdirect.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.View
                 Intent intent = new Intent(context, SellerProfileActivity.class);
                 intent.putExtra("ID",storeListModel.getSellerId());
                 context.startActivity(intent);
+                Utils.logAppsFlayerEventApp(context,"ShopClick","SellerName - "+storeListModel.getSellerName()+", SellerId - "+storeListModel.getSellerId());
             }
         });
 

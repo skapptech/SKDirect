@@ -95,6 +95,7 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
             if (Utils.isNetworkAvailable(this)) {
                 if (commonClassForAPI != null) {
                     commonClassForAPI.getToken(callToken, "password", Utils.getDeviceUniqueID(PlaceSearchActivity.this), Utils.getDeviceUniqueID(PlaceSearchActivity.this), true, true, "BUYERAPP", true, Utils.getDeviceUniqueID(PlaceSearchActivity.this), latLng.latitude, latLng.longitude, pinCode, "");
+                    Utils.logAppsFlayerEventApp(this,"PlaceSelectionScreen","Latitude - "+latLng.latitude+", Longitude - "+latLng.longitude+", Pincode - "+ pinCode);
                 }
             } else {
                 Utils.setToast(this, dbHelper.getString(R.string.no_internet_connection));

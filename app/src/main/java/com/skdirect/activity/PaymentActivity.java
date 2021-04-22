@@ -213,6 +213,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }
         });
+        Utils.logAppsFlayerEventApp(this,"PlaceOrderScreen","CartId - "+ cartItemModel.getId());
     }
 
     private void orderPlaceDialog() {

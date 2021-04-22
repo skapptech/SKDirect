@@ -101,6 +101,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                                 +"'"+
                                 dbHelper.getString(R.string.seller_catelogue)+
                                 "\n"+SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/seller/" + sellerID, "");
+                Utils.logAppsFlayerEventApp(this,"CatalogueShare","SellerName - "+sellerShopName+", SellerId - "+sellerID);
                 break;
             case R.id.iv_s_shop_image:
                 startActivity(new Intent(getApplicationContext(), SellerImageGalleryActivity.class).putExtra("ImageData", sellerImagePath).putExtra("ShopName", sellerShopName));
@@ -377,6 +378,8 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             MyApplication.getInstance().cartRepository.addToCart(cartModel);
             addItemInCart(1, sellerProductModel);
         }
+        Utils.logAppsFlayerEventApp(this,"AddToCartSellerCatelogue",
+                "ProductName - "+sellerProductModel.getProductName()+", ProductId - "+sellerProductModel.getId());
     }
 
     private void addItemInCart(int QTY, SellerProductList sellerProductModel) {

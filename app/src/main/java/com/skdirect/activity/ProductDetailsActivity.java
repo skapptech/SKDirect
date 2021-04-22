@@ -309,6 +309,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             MyApplication.getInstance().cartRepository.addToCart(cartModel);
             addItemInCart(1, SellerItemID);
         }
+        Utils.logAppsFlayerEventApp(this,"AddToCartProductDetails","ProductName - "+resultModel.getProductName()+", ProductId - "+resultModel.getId());
     }
 
     private void addProduct() {
