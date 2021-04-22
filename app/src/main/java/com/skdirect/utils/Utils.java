@@ -5,11 +5,15 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
@@ -36,6 +40,8 @@ import com.onesignal.OneSignal;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.model.TokenModel;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -277,13 +283,17 @@ public class Utils {
         return (rad * 180.0 / Math.PI);
     }
 
-    public static void shareProduct(Context context, String text) {
+    public static void shareProduct(Context context, String text,String imagePath) {
+        Uri bitmapUri = Uri.parse(imagePath);
+
         Intent sendInt = new Intent(Intent.ACTION_SEND);
         sendInt.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name));
         sendInt.putExtra(Intent.EXTRA_TEXT, text);
+        sendInt.putExtra(Intent.EXTRA_STREAM, bitmapUri);
         sendInt.setType("text/plain");
         context.startActivity(Intent.createChooser(sendInt, "Share"));
     }
+
 
     public static void showShareWhatsappDialog(Context context, String textMsg, String number) {
         BottomSheetDialog dialog = new BottomSheetDialog(context, R.style.BottomTheme);

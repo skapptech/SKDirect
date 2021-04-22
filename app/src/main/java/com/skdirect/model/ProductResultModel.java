@@ -84,6 +84,17 @@ public class ProductResultModel {
     @SerializedName("MaxOrderQuantity")
     private String MaxOrderQuantity;
 
+    @SerializedName("ImagePath")
+    private String ImagePath;
+
+    public String getImagePath() {
+        return ImagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        ImagePath = imagePath;
+    }
+
     public String getMaxOrderQuantity() {
         return MaxOrderQuantity;
     }
