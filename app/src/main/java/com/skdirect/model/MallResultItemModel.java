@@ -27,6 +27,18 @@ public class MallResultItemModel {
     private String ModifiedDate;
     @SerializedName("ModifiedBy")
     private String ModifiedBy;
+
+     @SerializedName("Banner")
+    private BannerModel bannerModel;
+
+    public BannerModel getBannerModel() {
+        return bannerModel;
+    }
+
+    public void setBannerModel(BannerModel bannerModel) {
+        this.bannerModel = bannerModel;
+    }
+
     public String getId() {
         return Id;
     }
