@@ -63,7 +63,6 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         dbHelper = MyApplication.getInstance().dbHelper;
         getIntentData();
         initView();
-        observerMethod();
         callSellerDetails();
     }
 
@@ -98,12 +97,12 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             case R.id.RLShare:
                 Utils.showShareWhatsappDialog(this,
                         dbHelper.getString(R.string.hello_check_seller)
-                                + " " +
+                                +" "+
                                 sellerShopName
-                                + "'" +
-                                dbHelper.getString(R.string.seller_catelogue) +
-                                "\n" + SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/seller/" + sellerID, "");
-                Utils.logAppsFlayerEventApp(this, "CatalogueShare", "SellerName - " + sellerShopName + ", SellerId - " + sellerID);
+                                +"'"+
+                                dbHelper.getString(R.string.seller_catelogue)+
+                                "\n"+SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/seller/" + sellerID, "");
+                Utils.logAppsFlayerEventApp(this,"CatalogueShare","SellerName - "+sellerShopName+", SellerId - "+sellerID);
                 break;
             case R.id.iv_s_shop_image:
                 startActivity(new Intent(getApplicationContext(), SellerImageGalleryActivity.class).putExtra("ImageData", sellerImagePath).putExtra("ShopName", sellerShopName));
@@ -203,46 +202,40 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         sellerProductModels.clear();
     }
 
-    public void observerMethod() {
-        sellerProfileViewMode.getSellerDetailsVM().observe(this, sellerDetailsModel -> {
-            Utils.hideProgressDialog();
-            if(sellerDetailsModel!=null){
-                if (sellerDetailsModel.isSuccess()) {
-                    if (sellerDetailsModel.getSellerInfoModel().getRating() >= 0.0) {
-                        Double deg = sellerDetailsModel.getSellerInfoModel().getRating();
-                        sellerImagePath = sellerDetailsModel.getSellerInfoModel().getImagePath();
-                        float rating = deg.floatValue();
-                        mBinding.ratingbarSeller.setRating(rating);
-                    } else {
-                        mBinding.ratingbarSeller.setVisibility(View.GONE);
-                    }
-
-                    mBinding.tvSellerName.setText(sellerDetailsModel.getSellerInfoModel().getShopName());
-                    sellerShopName = sellerDetailsModel.getSellerInfoModel().getShopName();
-                    if (sellerDetailsModel.getSellerInfoModel().getMinOrderValue() != 0.0 && sellerDetailsModel.getSellerInfoModel().getRadialDistance() != 0.0) {
-                        mBinding.tvMinimumOrderAmt.setText("₹ " + Math.round(sellerDetailsModel.getSellerInfoModel().getMinOrderValue()));
-                        mBinding.tvDiliverDistance.setText("" + Math.round(sellerDetailsModel.getSellerInfoModel().getRadialDistance()) + " KM");
-                    } else {
-                        mBinding.llMiniOrder.setVisibility(View.GONE);
-                        mBinding.llDelivert.setVisibility(View.GONE);
-                    }
-
-                    if (sellerDetailsModel.getSellerInfoModel().getImagePath() != null && !sellerDetailsModel.getSellerInfoModel().getImagePath().contains("http")) {
-                        Picasso.get().load(BuildConfig.apiEndpoint + sellerDetailsModel.getSellerInfoModel().getImagePath())
-                                .error(R.drawable.ic_top_seller).into(mBinding.ivSShopImage);
-                    } else {
-                        Picasso.get().load(sellerDetailsModel.getSellerInfoModel().getImagePath()).placeholder(R.drawable.ic_top_seller)
-                                .into(mBinding.ivSShopImage);
-                    }
-                }
-
-            }
-        });
-    }
-
 
     private void getSellerDetailsAPI() {
         sellerProfileViewMode.getSellerDetailsRequest(sellerID);
+        sellerProfileViewMode.getSellerDetailsVM().observe(this, sellerDetailsModel -> {
+            Utils.hideProgressDialog();
+            if (sellerDetailsModel.isSuccess()) {
+                if (sellerDetailsModel.getSellerInfoModel().getRating() >= 0.0) {
+                    Double deg = sellerDetailsModel.getSellerInfoModel().getRating();
+                    sellerImagePath = sellerDetailsModel.getSellerInfoModel().getImagePath();
+                    float rating = deg.floatValue();
+                    mBinding.ratingbarSeller.setRating(rating);
+                } else {
+                    mBinding.ratingbarSeller.setVisibility(View.GONE);
+                }
+
+                mBinding.tvSellerName.setText(sellerDetailsModel.getSellerInfoModel().getShopName());
+                sellerShopName = sellerDetailsModel.getSellerInfoModel().getShopName();
+                if (sellerDetailsModel.getSellerInfoModel().getMinOrderValue() != 0.0 && sellerDetailsModel.getSellerInfoModel().getRadialDistance() != 0.0) {
+                    mBinding.tvMinimumOrderAmt.setText("₹ " + Math.round(sellerDetailsModel.getSellerInfoModel().getMinOrderValue()));
+                    mBinding.tvDiliverDistance.setText("" + Math.round(sellerDetailsModel.getSellerInfoModel().getRadialDistance()) + " KM");
+                } else {
+                    mBinding.llMiniOrder.setVisibility(View.GONE);
+                    mBinding.llDelivert.setVisibility(View.GONE);
+                }
+
+                if (sellerDetailsModel.getSellerInfoModel().getImagePath() != null && !sellerDetailsModel.getSellerInfoModel().getImagePath().contains("http")) {
+                    Picasso.get().load(BuildConfig.apiEndpoint + sellerDetailsModel.getSellerInfoModel().getImagePath())
+                            .error(R.drawable.ic_top_seller).into(mBinding.ivSShopImage);
+                } else {
+                    Picasso.get().load(sellerDetailsModel.getSellerInfoModel().getImagePath()).placeholder(R.drawable.ic_top_seller)
+                            .into(mBinding.ivSShopImage);
+                }
+            }
+        });
     }
 
     private void getSellerProductsApi(String searchSellerName) {
@@ -303,17 +296,13 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     }
 
     private void addProduct() {
+        sellerProfileViewMode.getAddProductVMRequest(new AddViewModel(sellerID));
         sellerProfileViewMode.getAddProductVM().observe(this, aBoolean -> {
             Utils.hideProgressDialog();
-            if(aBoolean!=null){
-                if (aBoolean.isSuccess()) {
+            if (aBoolean.isSuccess()) {
 
-                }
             }
-
         });
-        sellerProfileViewMode.getAddProductVMRequest(new AddViewModel(sellerID));
-
     }
 
     @Override
@@ -399,8 +388,8 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             MyApplication.getInstance().cartRepository.addToCart(cartModel);
             addItemInCart(1, sellerProductModel);
         }
-        Utils.logAppsFlayerEventApp(this, "AddToCartSellerCatelogue",
-                "ProductName - " + sellerProductModel.getProductName() + ", ProductId - " + sellerProductModel.getId());
+        Utils.logAppsFlayerEventApp(this,"AddToCartSellerCatelogue",
+                "ProductName - "+sellerProductModel.getProductName()+", ProductId - "+sellerProductModel.getId());
     }
 
     private void addItemInCart(int QTY, SellerProductList sellerProductModel) {
@@ -409,16 +398,13 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         sellerProfileViewMode.getAddItemsInCardVMRequest(paginationModel);
         sellerProfileViewMode.getAddItemsInCardVM().observe(this, addCartItemModel -> {
             Utils.hideProgressDialog();
-            if(addCartItemModel!=null)
-            { if (addCartItemModel.isSuccess()) {
-                    if (addCartItemModel != null && addCartItemModel.getResultItem() != null) {
-                        MyApplication.getInstance().cartRepository.updateCartId(addCartItemModel.getResultItem().getId());
-                    }
-                } else {
-                    Utils.setToast(this, addCartItemModel.getErrorMessage());
+            if (addCartItemModel.isSuccess()) {
+                if (addCartItemModel != null && addCartItemModel.getResultItem() != null) {
+                    MyApplication.getInstance().cartRepository.updateCartId(addCartItemModel.getResultItem().getId());
                 }
+            } else {
+                Utils.setToast(this, addCartItemModel.getErrorMessage());
             }
-
         });
     }
 
