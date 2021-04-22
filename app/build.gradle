@@ -128,5 +128,6 @@ dependencies {
     implementation 'com.android.installreferrer:installreferrer:2.2'
     implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
-
+    implementation 'com.kenilt.loopingviewpager:loopingviewpager:0.2.0'
+    implementation 'com.kenilt.circleindicator:circleindicator:1.0.1'
 }
