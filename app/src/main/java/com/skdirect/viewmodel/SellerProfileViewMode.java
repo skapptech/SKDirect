@@ -21,8 +21,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SellerProfileViewMode extends ViewModel {
-    final String TAG = getClass().getSimpleName();
 
+    final String TAG = getClass().getSimpleName();
     private MutableLiveData<SellerDetailsModel> sellerDetailsVM;
     private MutableLiveData<SellerProductMainModel> sellerProductVM;
     private MutableLiveData<AddViewMainModel> addProductVM;
@@ -31,7 +31,6 @@ public class SellerProfileViewMode extends ViewModel {
 
 
     public LiveData<SellerDetailsModel> getSellerDetailsVM() {
-
         if (sellerDetailsVM == null) {
             sellerDetailsVM = new MutableLiveData<>();
 
@@ -67,6 +66,7 @@ public class SellerProfileViewMode extends ViewModel {
 
 
     public LiveData<AddCartItemModel> getAddItemsInCardVM() {
+
         if (addItemsInCardVM == null) {
             addItemsInCardVM = new MutableLiveData<>();
 
