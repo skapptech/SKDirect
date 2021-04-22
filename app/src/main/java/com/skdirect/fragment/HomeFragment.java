@@ -147,9 +147,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         });
     }
-
-
-
     private void searchData() {
         String searchSellerName = mBinding.etSearchSeller.getText().toString().trim();
         startActivity(new Intent(getActivity(), SearchActivity.class).putExtra("searchSellerName", searchSellerName));
