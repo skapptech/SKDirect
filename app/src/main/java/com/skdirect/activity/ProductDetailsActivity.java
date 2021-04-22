@@ -1,22 +1,38 @@
 package com.skdirect.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.adapter.BottomListAdapter;
 import com.skdirect.adapter.ShowImagesAdapter;
@@ -33,13 +49,19 @@ import com.skdirect.model.ProductDataModel;
 import com.skdirect.model.ProductResultModel;
 import com.skdirect.model.ProductVariantAttributeDCModel;
 import com.skdirect.model.VariationListModel;
+import com.skdirect.utils.Constant;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.ProductDetailsViewMode;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ProductDetailsActivity extends AppCompatActivity implements View.OnClickListener, BottomBarInterface {
     private ActivityProductDetailsBinding mBinding;
@@ -54,6 +76,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private String shopName;
     private DBHelper dbHelper;
     private String productName;
+    private Bitmap bitmapx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,12 +132,25 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         .putExtra("ID", resultModel.getSellerId()));
                 break;
             case R.id.imShare:
-                Utils.shareProduct(ProductDetailsActivity.this,
-                        dbHelper.getString(R.string.hello_check_product)+
-                                " "+ productName +" "+
-                                dbHelper.getString(R.string.social_mall_home)+"\n"+
-                        SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/product/" + productID,resultModel.getImagePath());
+                Getbitmap();
                 break;
+        }
+    }
+
+    public void Getbitmap() {
+        if (Utils.checkPermission(ProductDetailsActivity.this)) {
+
+            Picasso.get().load(resultModel.getImagePath()).into(mBinding.ivDemo);
+            BitmapDrawable drawable = (BitmapDrawable) mBinding.ivDemo.getDrawable();
+            bitmapx = drawable.getBitmap();
+            Utils.shareProduct(ProductDetailsActivity.this,
+                    dbHelper.getString(R.string.hello_check_product) +
+                            " " + productName + " " +
+                            dbHelper.getString(R.string.social_mall_home) + "\n" +
+                            SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/product/" + productID, bitmapx);
+
+        } else {
+            Utils.requestPermission(ProductDetailsActivity.this); // Code for permission
         }
     }
 
@@ -309,7 +345,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             MyApplication.getInstance().cartRepository.addToCart(cartModel);
             addItemInCart(1, SellerItemID);
         }
-        Utils.logAppsFlayerEventApp(this,"AddToCartProductDetails","ProductName - "+resultModel.getProductName()+", ProductId - "+resultModel.getId());
+        Utils.logAppsFlayerEventApp(this, "AddToCartProductDetails", "ProductName - " + resultModel.getProductName() + ", ProductId - " + resultModel.getId());
     }
 
     private void addProduct() {
