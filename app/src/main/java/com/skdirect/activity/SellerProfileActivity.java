@@ -2,6 +2,7 @@ package com.skdirect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
@@ -128,6 +129,15 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             sellerID = Integer.parseInt(sharedUrl);
         } else {
             sellerID = getIntent().getIntExtra("ID", 0);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getExtras() != null) {
+            sellerID = getIntent().getIntExtra("ID", 0);
+            callSellerDetails();
         }
     }
 
