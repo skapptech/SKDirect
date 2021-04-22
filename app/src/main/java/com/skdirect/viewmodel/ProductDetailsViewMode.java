@@ -33,51 +33,91 @@ public class ProductDetailsViewMode extends ViewModel {
     private MutableLiveData<Object> clearCartItemVM;
 
     public LiveData<ProductDataModel> getProductDetailsVM() {
-        productDetailsVM=null;
-        productDetailsVM = new MutableLiveData<>();
+        if (productDetailsVM == null) {
+            productDetailsVM = new MutableLiveData<>();
+
+        }
+        if (productDetailsVM.getValue() != null) {
+            productDetailsVM.setValue(null);
+        }
         return productDetailsVM;
+
     }
 
     public LiveData<MainTopSimilarSellerModel> getSimilarProductVM() {
-        similarProductVM=null;
-        similarProductVM = new MutableLiveData<>();
+        if (similarProductVM == null) {
+            similarProductVM = new MutableLiveData<>();
+
+        }
+        if (similarProductVM.getValue() != null) {
+            similarProductVM.setValue(null);
+        }
         return similarProductVM;
     }
 
     public LiveData<MainSimilarTopSellerModel> GetTopSellerLiveData() {
-        if(topSellerLiveData==null){
+        if (topSellerLiveData == null) {
             topSellerLiveData = new MutableLiveData<>();
+
+        }
+        if (topSellerLiveData.getValue() != null) {
+            topSellerLiveData.setValue(null);
         }
         return topSellerLiveData;
     }
 
     public LiveData<MainTopSimilarSellerModel> getSallerOtherProducsVM() {
-        sallerOtherProducsVM=null;
-        sallerOtherProducsVM = new MutableLiveData<>();
+        if (sallerOtherProducsVM == null) {
+            sallerOtherProducsVM = new MutableLiveData<>();
+
+        }
+        if (sallerOtherProducsVM.getValue() != null) {
+            sallerOtherProducsVM.setValue(null);
+        }
         return sallerOtherProducsVM;
     }
 
     public LiveData<CartItemModel> getCartItemsVM() {
-        cartItemsVM=null;
-        cartItemsVM = new MutableLiveData<>();
+        if (cartItemsVM == null) {
+            cartItemsVM = new MutableLiveData<>();
+
+        }
+        if (cartItemsVM.getValue() != null) {
+            cartItemsVM.setValue(null);
+        }
         return cartItemsVM;
     }
 
     public LiveData<AddViewMainModel> getAddProductVM() {
-        addProductVM=null;
-        addProductVM = new MutableLiveData<>();
+        if (addProductVM == null) {
+            addProductVM = new MutableLiveData<>();
+
+        }
+        if (addProductVM.getValue() != null) {
+            addProductVM.setValue(null);
+        }
         return addProductVM;
     }
 
     public LiveData<AddCartItemModel> getAddItemsInCardVM() {
-        addItemsInCardVM=null;
-        addItemsInCardVM = new MutableLiveData<>();
+        if (addItemsInCardVM == null) {
+            addItemsInCardVM = new MutableLiveData<>();
+
+        }
+        if (addItemsInCardVM.getValue() != null) {
+            addItemsInCardVM.setValue(null);
+        }
         return addItemsInCardVM;
     }
 
     public LiveData<Object> getClearCartItemVM() {
-        clearCartItemVM=null;
-        clearCartItemVM = new MutableLiveData<>();
+        if (clearCartItemVM == null) {
+            clearCartItemVM = new MutableLiveData<>();
+
+        }
+        if (clearCartItemVM.getValue() != null) {
+            clearCartItemVM.setValue(null);
+        }
         return clearCartItemVM;
     }
 
@@ -85,8 +125,8 @@ public class ProductDetailsViewMode extends ViewModel {
         RestClient.getInstance().getService().GetSellerProductById(productID).enqueue(new Callback<ProductDataModel>() {
             @Override
             public void onResponse(Call<ProductDataModel> call, Response<ProductDataModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     productDetailsVM.setValue(response.body());
                 }
             }
@@ -106,8 +146,8 @@ public class ProductDetailsViewMode extends ViewModel {
         RestClient.getInstance().getService().GetTopSimilarproduct(productID).enqueue(new Callback<MainTopSimilarSellerModel>() {
             @Override
             public void onResponse(Call<MainTopSimilarSellerModel> call, Response<MainTopSimilarSellerModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     similarProductVM.setValue(response.body());
                 }
             }
@@ -126,8 +166,8 @@ public class ProductDetailsViewMode extends ViewModel {
         RestClient.getInstance().getService().GetSimilarProductTopSeller(productID).enqueue(new Callback<MainSimilarTopSellerModel>() {
             @Override
             public void onResponse(Call<MainSimilarTopSellerModel> call, Response<MainSimilarTopSellerModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     topSellerLiveData.setValue(response.body());
                 }
             }
@@ -146,8 +186,8 @@ public class ProductDetailsViewMode extends ViewModel {
         RestClient.getInstance().getService().GetMoreSimilarSellerProduct(productID).enqueue(new Callback<MainTopSimilarSellerModel>() {
             @Override
             public void onResponse(Call<MainTopSimilarSellerModel> call, Response<MainTopSimilarSellerModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     sallerOtherProducsVM.setValue(response.body());
                 }
             }
@@ -167,8 +207,8 @@ public class ProductDetailsViewMode extends ViewModel {
         RestClient.getInstance().getService().GetCartItems().enqueue(new Callback<CartItemModel>() {
             @Override
             public void onResponse(Call<CartItemModel> call, Response<CartItemModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     cartItemsVM.setValue(response.body());
                 }
             }
@@ -187,8 +227,8 @@ public class ProductDetailsViewMode extends ViewModel {
         RestClient.getInstance().getService().AddProductView(productID).enqueue(new Callback<AddViewMainModel>() {
             @Override
             public void onResponse(Call<AddViewMainModel> call, Response<AddViewMainModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     addProductVM.setValue(response.body());
                 }
             }
@@ -207,8 +247,8 @@ public class ProductDetailsViewMode extends ViewModel {
         RestClient.getInstance().getService().AddCartItem(paginationModel).enqueue(new Callback<AddCartItemModel>() {
             @Override
             public void onResponse(Call<AddCartItemModel> call, Response<AddCartItemModel> response) {
-                if (response.isSuccessful() && response.body()!=null ) {
-                    Log.e(TAG, "request response="+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "request response=" + response.body());
                     addItemsInCardVM.setValue(response.body());
                 }
             }

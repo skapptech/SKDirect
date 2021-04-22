@@ -31,34 +31,61 @@ public class SellerProfileViewMode extends ViewModel {
 
 
     public LiveData<SellerDetailsModel> getSellerDetailsVM() {
-        sellerDetailsVM=null;
-        sellerDetailsVM = new MutableLiveData<>();
+
+        if (sellerDetailsVM == null) {
+            sellerDetailsVM = new MutableLiveData<>();
+
+        }
+        if (sellerDetailsVM.getValue() != null) {
+            sellerDetailsVM.setValue(null);
+        }
         return sellerDetailsVM;
     }
 
     public LiveData<SellerProductMainModel> getSellerProductVM() {
-        sellerProductVM=null;
-        sellerProductVM = new MutableLiveData<>();
+
+        if (sellerProductVM == null) {
+            sellerProductVM = new MutableLiveData<>();
+
+        }
+        if (sellerProductVM.getValue() != null) {
+            sellerProductVM.setValue(null);
+        }
         return sellerProductVM;
     }
 
     public LiveData<AddViewMainModel> getAddProductVM() {
-        addProductVM=null;
-        addProductVM = new MutableLiveData<>();
+        if (addProductVM == null) {
+            addProductVM = new MutableLiveData<>();
+
+        }
+        if (addProductVM.getValue() != null) {
+            addProductVM.setValue(null);
+        }
         return addProductVM;
     }
 
 
     public LiveData<AddCartItemModel> getAddItemsInCardVM() {
-        addItemsInCardVM=null;
-        addItemsInCardVM = new MutableLiveData<>();
+        if (addItemsInCardVM == null) {
+            addItemsInCardVM = new MutableLiveData<>();
+
+        }
+        if (addItemsInCardVM.getValue() != null) {
+            addItemsInCardVM.setValue(null);
+        }
         return addItemsInCardVM;
     }
 
 
     public LiveData<Object> getClearCartItemVM() {
-        clearCartItemVM=null;
-        clearCartItemVM = new MutableLiveData<>();
+        if (clearCartItemVM == null) {
+            clearCartItemVM = new MutableLiveData<>();
+
+        }
+        if (clearCartItemVM.getValue() != null) {
+            clearCartItemVM.setValue(null);
+        }
         return clearCartItemVM;
     }
 
