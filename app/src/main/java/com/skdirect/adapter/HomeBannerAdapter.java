@@ -13,6 +13,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.activity.ShowImageActivity;
+import com.skdirect.model.BannerItemListModel;
 import com.skdirect.model.ImageListModel;
 import com.squareup.picasso.Picasso;
 
@@ -22,10 +23,12 @@ import java.util.ArrayList;
 
 public class HomeBannerAdapter extends PagerAdapter {
     private Context context;
+    private ArrayList<BannerItemListModel> bannerItemListModel;
     private LayoutInflater inflater;
 
-    public HomeBannerAdapter(Context context) {
+    public HomeBannerAdapter(Context context,ArrayList<BannerItemListModel> bannerListModel) {
         this.context = context;
+        this.bannerItemListModel=bannerListModel;
         inflater = LayoutInflater.from(context);
     }
 
@@ -41,13 +44,11 @@ public class HomeBannerAdapter extends PagerAdapter {
 
         assert imageLayout != null;
         final ImageView imageView = imageLayout.findViewById(R.id.cat_img);
-        imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.b3));
-
-       /* if (imageListModels.get(position).getImagePath() != null && !imageListModels.get(position).getImagePath().contains("http")) {
-            Picasso.get().load(BuildConfig.apiEndpoint+imageListModels.get(position).getImagePath()).into(imageView);
+        if (bannerItemListModel.get(position).getImagepath() != null && !bannerItemListModel.get(position).getImagepath().contains("http")) {
+            Picasso.get().load(BuildConfig.apiEndpoint+bannerItemListModel.get(position).getImagepath()).into(imageView);
         }else {
-            Picasso.get().load(imageListModels.get(position).getImagePath()).into(imageView);
-        }*/
+            Picasso.get().load(bannerItemListModel.get(position).getImagepath()).into(imageView);
+        }
 
 
         view.addView(imageLayout, 0);
@@ -57,7 +58,8 @@ public class HomeBannerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 10;
+        return bannerItemListModel.size();
+
     }
 
     @Override

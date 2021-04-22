@@ -15,29 +15,17 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.kenilt.loopingviewpager.scroller.AutoScroller;
 import com.skdirect.R;
-import com.skdirect.activity.CategoriesListActivity;
 import com.skdirect.activity.MainActivity;
-import com.skdirect.activity.MostVisitedSellerActivity;
-import com.skdirect.activity.NearByItemProductListActivity;
-import com.skdirect.activity.NearSellerActivity;
-import com.skdirect.activity.NewSellerActivity;
 import com.skdirect.activity.SearchActivity;
-import com.skdirect.activity.SellerProductListActivity;
-import com.skdirect.adapter.AllCategoriesAdapter;
 import com.skdirect.adapter.HomeBannerAdapter;
 import com.skdirect.adapter.MallCategorieBannerAdapter;
-import com.skdirect.adapter.TopNearByItemAdapter;
-import com.skdirect.adapter.TopSellerAdapter;
 import com.skdirect.databinding.FragmentHomeBinding;
-import com.skdirect.model.AllCategoresMainModel;
+import com.skdirect.model.BannerModel;
 import com.skdirect.model.MallMainModel;
-import com.skdirect.model.NearByMainModel;
-import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
@@ -51,6 +39,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private MainActivity activity;
     private HomeViewModel homeViewModel;
     public  DBHelper dbHelper;
+    private BannerModel bannerModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -66,6 +55,8 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         getMall();
         return mBinding.getRoot();
     }
+
+
 
     @Override
     public void onResume() {
@@ -97,6 +88,10 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 if (mallMainModel.isSuccess()) {
                     if (mallMainModel.getResultItem() != null) {
                         mBinding.rlHomeSearch.setVisibility(View.VISIBLE);
+                        if (mallMainModel.getResultItem().getBannerModel()!=null) {
+                            bannerList(mallMainModel.getResultItem().getBannerModel());
+                        }
+
                         SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_Mall, true);
                         SharePrefs.getInstance(getActivity()).putString(SharePrefs.MALL_ID, mallMainModel.getResultItem().getId());
                         MallCategorieBannerAdapter mallCategorieBannerAdapter = new MallCategorieBannerAdapter(getActivity(), mallMainModel.getResultItem().getStoreCategoryList());
@@ -120,12 +115,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
 
     private void initViews() {
-        HomeBannerAdapter homeBannerAdapter  = new HomeBannerAdapter(getActivity());
-        mBinding.pager.setAdapter(homeBannerAdapter);
-
-        AutoScroller autoScroller=new AutoScroller(mBinding.pager,activity.getLifecycle(),5000);
-        autoScroller.setAutoScroll(true);
-
         if (SharePrefs.getInstance(getActivity()).getBoolean(SharePrefs.IS_Mall)) {
           mBinding.rlHomeSearch.setVisibility(View.VISIBLE);
         } else {
@@ -150,6 +139,14 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private void searchData() {
         String searchSellerName = mBinding.etSearchSeller.getText().toString().trim();
         startActivity(new Intent(getActivity(), SearchActivity.class).putExtra("searchSellerName", searchSellerName));
+    }
+
+    private void bannerList(BannerModel bannerModel) {
+        HomeBannerAdapter homeBannerAdapter  = new HomeBannerAdapter(getActivity(), bannerModel.getBannerItemListModel());
+        mBinding.pager.setAdapter(homeBannerAdapter);
+
+        AutoScroller autoScroller=new AutoScroller(mBinding.pager,activity.getLifecycle(),5000);
+        autoScroller.setAutoScroll(true);
     }
 
 }
