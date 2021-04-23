@@ -87,8 +87,8 @@ public class WebviewActivity extends AppCompatActivity {
                     data = jsonObject.get("PrivacyPolicy").getAsString();
                 } else if (name.equalsIgnoreCase("AboutApp")) {
                     data = jsonObject.get("About").getAsString();
-                } else if (name.equalsIgnoreCase("TermsAndCondition")) {
-                    data = jsonObject.get("TermsCondition").getAsString();
+                } else if (name.equalsIgnoreCase("TermsCondition")) {
+                    data = jsonObject.get("TermsAndCondition").getAsString();
                 } else {
                     data = jsonObject.get("extra").getAsString();
                 }
