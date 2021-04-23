@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
+
 import com.google.firebase.database.DataSnapshot;
 import com.skdirect.activity.SplashActivity;
 
@@ -60,6 +61,7 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            value = context.getResources().getString(key);
         }
         return value;
     }
