@@ -16,7 +16,6 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.JsonObject;
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.adapter.SellerProductAdapter;
@@ -485,6 +484,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             clearCartItem();
             MyApplication.getInstance().cartRepository.truncateCart();
             // cartModel.setSellerId(sellerID);
+            sellerProductModel.setQty(1);
             CartModel cartItemModel = new CartModel(null, 0, null, false,
                     sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(),
                     sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(),
