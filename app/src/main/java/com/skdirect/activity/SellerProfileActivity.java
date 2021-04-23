@@ -142,7 +142,8 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.getExtras() != null) {
-            sellerID = getIntent().getIntExtra("ID", 0);
+            sellerID = intent.getIntExtra("ID", 0);
+            sellerProductModels.clear();
             callSellerDetails();
         }
     }

@@ -241,7 +241,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.getExtras() != null) {
-            productID = getIntent().getIntExtra("ID", 0);
+            productID = intent.getIntExtra("ID", 0);
             apiCalling();
         }
     }
