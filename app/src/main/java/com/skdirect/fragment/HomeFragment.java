@@ -67,7 +67,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onRefresh() {
 
-
+        getMall();
 
     }
 
@@ -87,6 +87,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 Utils.hideProgressDialog();
                 if (mallMainModel.isSuccess()) {
                     if (mallMainModel.getResultItem() != null) {
+                        mBinding.swiperefresh.setRefreshing(false);
                         mBinding.rlHomeSearch.setVisibility(View.VISIBLE);
                         if (mallMainModel.getResultItem().getBannerModel()!=null) {
                             bannerList(mallMainModel.getResultItem().getBannerModel());
@@ -115,6 +116,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
 
     private void initViews() {
+        mBinding.swiperefresh.setOnRefreshListener(this);
         if (SharePrefs.getInstance(getActivity()).getBoolean(SharePrefs.IS_Mall)) {
           mBinding.rlHomeSearch.setVisibility(View.VISIBLE);
         } else {

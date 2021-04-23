@@ -219,7 +219,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         public void onNext(@NotNull SellerDetailsModel sellerDetailsModel) {
             Utils.hideProgressDialog();
             if (sellerDetailsModel.isSuccess()) {
-                if (sellerDetailsModel.getSellerInfoModel().getRating() >= 0.0) {
+                if (sellerDetailsModel.getSellerInfoModel().getRating() != 0.0) {
                     Double deg = sellerDetailsModel.getSellerInfoModel().getRating();
                     sellerImagePath = sellerDetailsModel.getSellerInfoModel().getImagePath();
                     float rating = deg.floatValue();
