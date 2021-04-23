@@ -162,7 +162,6 @@ public class MyApplication extends Application implements LifecycleObserver {
                 result -> {
                     try {
                         String type = result.getNotification().getAdditionalData().getString("TYPE");
-                        String link = result.getNotification().getAdditionalData().getString("URL");
                         String id = result.getNotification().getAdditionalData().getString("ID");
 
                         if (type != null && !type.equals("")) {
@@ -181,6 +180,10 @@ public class MyApplication extends Application implements LifecycleObserver {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                             }
+                        }else {
+                            Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
