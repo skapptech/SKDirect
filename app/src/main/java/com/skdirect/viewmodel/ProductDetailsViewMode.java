@@ -27,9 +27,6 @@ public class ProductDetailsViewMode extends ViewModel {
     private MutableLiveData<MainSimilarTopSellerModel> topSellerLiveData;
     private MutableLiveData<MainTopSimilarSellerModel> sallerOtherProducsVM;
 
-
-
-
     public LiveData<MainTopSimilarSellerModel> getSimilarProductVM() {
         similarProductVM=null;
         similarProductVM = new MutableLiveData<>();

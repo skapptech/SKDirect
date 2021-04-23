@@ -216,8 +216,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         }
     }
 
-
-
     private void GetSellarOtherProducts() {
         if (Utils.isNetworkAvailable(this)) {
             Utils.showProgressDialog(this);
@@ -226,7 +224,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
         }
     }
-
 
     private void getIntentData() {
         if (getIntent().getData() != null) {
@@ -389,7 +386,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         }
     };
 
-
     private void SellarOtherProductsAPI() {
 
         commonClassForAPI.getSellarOtherVMRequest(sellarOtherObserver,productID);
@@ -422,7 +418,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         }
     };
 
-
     private void cartItemsAPI() {
         commonClassForAPI.getCartItemsVMRequest(cartItemsObserver);
     }
@@ -446,7 +441,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         public void onComplete() {
         }
     };
-
 
     private void getProductListAPI() {
         commonClassForAPI.getCategoriesViewModelRequest(observer,productID);
@@ -550,7 +544,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         }
     };
 
-
     @Override
     public void onOnClick(ArrayList<VariationListModel> variationList, int position) {
         if (bottomSheetDialog != null) {
@@ -641,7 +634,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         }
     };
 
-
     public void checkCustomerAlertDialog(int id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(dbHelper.getString(R.string.alert));
@@ -691,7 +683,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         public void onComplete() {
         }
     };
-
 
     private void checkAddButtonValidaction() {
         if (MyApplication.getInstance().cartRepository.isItemInCart(SellerItemID)) {
