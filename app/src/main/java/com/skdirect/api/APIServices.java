@@ -37,7 +37,6 @@ import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PaginationModel;
 import com.skdirect.model.PostBrandModel;
 import com.skdirect.model.ProductDataModel;
-import com.skdirect.model.ReviewMainModel;
 import com.skdirect.model.SearchMainModel;
 import com.skdirect.model.SearchRequestModel;
 import com.skdirect.model.SellerDetailsModel;
@@ -278,4 +277,7 @@ public interface APIServices {
 
     @GET("api/NativeBuyer/MyOrder/GetOrderStatus")
     Observable<OrderStatusMainModel> getOrderStatusList();
+
+    @GET("/api/NativeBuyer/Common/GetOtherInfo")
+    Observable<JsonObject> getOtherInfo();
 }

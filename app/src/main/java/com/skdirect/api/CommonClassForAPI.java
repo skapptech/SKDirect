@@ -24,7 +24,6 @@ import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PostBrandModel;
 import com.skdirect.model.ProductDataModel;
-import com.skdirect.model.ReviewMainModel;
 import com.skdirect.model.SearchMainModel;
 import com.skdirect.model.SearchRequestModel;
 import com.skdirect.model.SellerDetailsModel;
@@ -41,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -801,4 +801,30 @@ public class CommonClassForAPI {
     }
 
 
+    public void getOtherInfo(final DisposableObserver<JsonObject> observer) {
+        RestClient.getInstance().getService().getOtherInfo()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JsonObject>() {
+
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    public void onNext(@NotNull JsonObject o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
 }
