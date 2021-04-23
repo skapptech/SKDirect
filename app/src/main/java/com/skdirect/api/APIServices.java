@@ -145,7 +145,7 @@ public interface APIServices {
 
 
     @GET("api/NativeProductDetail/GetSellerProductById/{GetSellerProductById}")
-    Call<ProductDataModel> GetSellerProductById(@Path("GetSellerProductById") int GetSellerProductById);
+    Observable<ProductDataModel> GetSellerProductById(@Path("GetSellerProductById") int GetSellerProductById);
 
     @GET("api/NativeProductDetail/GetTopSimilarproduct/{GetSellerProductById}")
     Call<MainTopSimilarSellerModel> GetTopSimilarproduct(@Path("GetSellerProductById") int GetSellerProductById);
@@ -155,31 +155,31 @@ public interface APIServices {
     Call<MainSimilarTopSellerModel> GetSimilarProductTopSeller(@Path("GetSimilarProductTopSeller") int GetSellerProductById);
 
     @GET("api/NativeProductDetail/GetMoreSimilarSellerProduct/{GetMoreSimilarSellerProduct}")
-    Call<MainTopSimilarSellerModel> GetMoreSimilarSellerProduct(@Path("GetMoreSimilarSellerProduct") int GetSellerProductById);
+    Observable<MainTopSimilarSellerModel> GetMoreSimilarSellerProduct(@Path("GetMoreSimilarSellerProduct") int GetSellerProductById);
 
     @GET("api/NativeBuyer/CartOverview/GetCartItems")
-    Call<CartItemModel> GetCartItems();
+    Observable<CartItemModel> GetCartItems();
 
     @GET("api/NativeBuyer/SellerProfile/AddProductView")
-    Call<AddViewMainModel> AddProductView(@Query("productId") int productID);
+    Observable<AddViewMainModel> AddProductView(@Query("productId") int productID);
 
     @GET("api/NativeBuyer/SellerProfile/GetSellerDetail/{GetSellerDetail}")
-    Call<SellerDetailsModel> GetSellerDetail(@Path("GetSellerDetail") int GetSellerDetail);
+    Observable<SellerDetailsModel> GetSellerDetail(@Path("GetSellerDetail") int GetSellerDetail);
 
     @POST("api/NativeBuyer/SellerProfile/GetSellerProduct")
-    Call<SellerProductMainModel> GetSellerProduct(@Body SellerProfileDataModel paginationModel);
+    Observable<SellerProductMainModel> GetSellerProduct(@Body SellerProfileDataModel paginationModel);
 
     @POST("api/NativeBuyer/SellerProfile/AddStoreView")
-    Call<AddViewMainModel> AddStoreView(@Body AddViewModel paginationModel);
+    Observable<AddViewMainModel> AddStoreView(@Body AddViewModel paginationModel);
 
     @POST("api/NativeBuyer/SellerProfile/AddCart")
-    Call<AddCartItemModel> AddCart(@Body ItemAddModel itemAddModel);
+    Observable<AddCartItemModel> AddCart(@Body ItemAddModel itemAddModel);
 
     @GET("api/NativeBuyer/SellerProfile/GetCartItems")
     Call<CartMainModel> GetCartItem();
 
     @GET("api/NativeBuyer/SellerProfile/ClearCart")
-    Call<Object> ClearCart(@Query("Id") String id);
+    Observable<Object> ClearCart(@Query("Id") String id);
 
     @GET("api/NativeBuyer/CartOverview/GetCartItems")
     Call<CartMainModel> CartItems();
@@ -209,7 +209,7 @@ public interface APIServices {
     Call<UpdateEditeAddreshMainModel> UpdateBuyerLocation(@Body JsonObject jsonObject);
 
     @POST("api/Buyer/SellerProductDetail/AddCartItem/")
-    Call<AddCartItemModel> AddCartItem(@Body ItemAddModel itemAddModel);
+    Observable<AddCartItemModel> AddCartItem(@Body ItemAddModel itemAddModel);
 
 
     @POST("api/buyer/Profile/UpdateUserDetail")

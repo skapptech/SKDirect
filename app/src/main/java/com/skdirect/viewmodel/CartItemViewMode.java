@@ -23,9 +23,7 @@ public class CartItemViewMode extends ViewModel {
     final String TAG = getClass().getSimpleName();
 
     private MutableLiveData<CartMainModel> CartItemModelVM;
-    private MutableLiveData<AddCartItemModel> addItemsInCardVM;
     private MutableLiveData<CartMainModel> removeItemFromCartVM;
-    private MutableLiveData<Object> clearCartItemVM;
 
 
     public LiveData<CartMainModel> getCartItemModelVM() {
@@ -38,14 +36,7 @@ public class CartItemViewMode extends ViewModel {
         return CartItemModelVM;
     }
 
-    public LiveData<AddCartItemModel> getAddItemsInCardVM() {
-        if (addItemsInCardVM == null)
-            addItemsInCardVM = new MutableLiveData<>();
-        if (addItemsInCardVM.getValue() != null) {
-            addItemsInCardVM.setValue(null);
-        }
-        return addItemsInCardVM;
-    }
+
 
     public LiveData<CartMainModel> getRemoveItemFromCartVM() {
         if (removeItemFromCartVM == null)
@@ -56,11 +47,7 @@ public class CartItemViewMode extends ViewModel {
         return removeItemFromCartVM;
     }
 
-    public LiveData<Object> getClearCartItemVM() {
-        clearCartItemVM = null;
-        clearCartItemVM = new MutableLiveData<>();
-        return clearCartItemVM;
-    }
+
 
     public MutableLiveData<CartMainModel> getCartItemModelVMRequest(RecyclerView rvCartItem, LinearLayout blankBasket) {
         RestClient.getInstance().getService().CartItems().enqueue(new Callback<CartMainModel>() {
@@ -88,25 +75,6 @@ public class CartItemViewMode extends ViewModel {
         return CartItemModelVM;
     }
 
-    public MutableLiveData<AddCartItemModel> getAddItemsInCardVMRequest(ItemAddModel paginationModel) {
-        RestClient.getInstance().getService().AddCart(paginationModel).enqueue(new Callback<AddCartItemModel>() {
-            @Override
-            public void onResponse(Call<AddCartItemModel> call, Response<AddCartItemModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.e(TAG, "request response=" + response.body());
-                    addItemsInCardVM.setValue(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AddCartItemModel> call, Throwable t) {
-                Log.e(TAG, "onFailure Responce" + t.toString());
-                Utils.hideProgressDialog();
-            }
-        });
-
-        return addItemsInCardVM;
-    }
 
     public MutableLiveData<CartMainModel> getRemoveItemFromCartVMRequest(int id) {
 //        RestClient.getInstance().getService().deleteCartItems(id).enqueue(new Callback<CartMainModel>() {
@@ -128,23 +96,5 @@ public class CartItemViewMode extends ViewModel {
         return removeItemFromCartVM;
     }
 
-    public MutableLiveData<Object> clearCartItemVMRequest(String id) {
-        RestClient.getInstance().getService().ClearCart(id).enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.e(TAG, "request response=" + response.body());
-                    clearCartItemVM.setValue(response.body());
-                }
-            }
 
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                Log.e(TAG, "onFailure Responce" + t.toString());
-                Utils.hideProgressDialog();
-            }
-        });
-
-        return clearCartItemVM;
-    }
 }

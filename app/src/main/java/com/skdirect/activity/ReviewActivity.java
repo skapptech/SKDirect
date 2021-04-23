@@ -95,7 +95,7 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
     private void addReViewAPI() {
         commonClassForAPI = CommonClassForAPI.getInstance(this);
         if (commonClassForAPI!=null) {
-            commonClassForAPI.getRating(observer,new AddReviewModel(orderID, mBinding.etEnterComment.getText().toString(), Math.round(mBinding.ratingBar.getRating())));
+            commonClassForAPI .getRating(observer,new AddReviewModel(orderID, mBinding.etEnterComment.getText().toString(), Math.round(mBinding.ratingBar.getRating())));
         }
     }
     private final DisposableObserver<JsonObject> observer = new DisposableObserver<JsonObject>() {

@@ -20,6 +20,7 @@ import com.skdirect.adapter.CartListAdapter;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityCartBinding;
 import com.skdirect.interfacee.CartItemInterface;
+import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CartMainModel;
 import com.skdirect.model.CartModel;
@@ -101,12 +102,10 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     public void onBackPressed() {
         super.onBackPressed();
         if (getIntent().getExtras() != null) {
-            if(getIntent().getStringExtra("ComeTo").equalsIgnoreCase("Login"))
-            {
+            if (getIntent().getStringExtra("ComeTo").equalsIgnoreCase("Login")) {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
-        }else
-        {
+        } else {
             finish();
         }
     }
@@ -123,7 +122,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(new Intent(getApplicationContext(), PaymentActivity.class)
                             .putExtra("cartItemSize", cartItemDataModel)
                             .putExtra("totalAmount", totalAmount));
-                    Utils.logAppsFlayerEventApp(this,"CartScreen","CheckOut");
+                    Utils.logAppsFlayerEventApp(this, "CartScreen", "CheckOut");
                 } else {
                     SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.CAME_FROM_CART, true);
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
@@ -276,15 +275,32 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
     private void addItemInCart(int QTY, CartModel sellerProductModel) {
         MyApplication.getInstance().cartRepository.updateCartItem(sellerProductModel);
-        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(), 0, 0,SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
-        cartItemViewMode.getAddItemsInCardVMRequest(paginationModel);
-        cartItemViewMode.getAddItemsInCardVM().observe(this, sellerProdList -> {
+        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(), 0, 0, SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
+        commonClassForAPI.getAddItemsInCardVMRequest(AddItemsInCardObserver, paginationModel);
+
+    }
+
+    private final DisposableObserver<AddCartItemModel> AddItemsInCardObserver = new DisposableObserver<AddCartItemModel>() {
+        @Override
+        public void onNext(@NotNull AddCartItemModel addCartItemModel) {
             Utils.hideProgressDialog();
-            if (sellerProdList != null) {
+            if (addCartItemModel.isSuccess()) {
 
             }
-        });
-    }
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    };
+
 
     public void removeItemAlertDialog(CartModel cartModel, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -334,16 +350,35 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     private void clearCart() {
         Utils.showProgressDialog(this);
         String cartId = MyApplication.getInstance().cartRepository.getCartId();
-        cartItemViewMode.clearCartItemVMRequest(cartId);
-        cartItemViewMode.getClearCartItemVM().observe(this, object -> {
-            MyApplication.getInstance().cartRepository.truncateCart();
-            Utils.hideProgressDialog();
-            cartItemList.clear();
-            cartListAdapter.notifyDataSetChanged();
-            mBinding.rlCheckOut.setVisibility(View.GONE);
-            mBinding.blankBasket.setVisibility(View.VISIBLE);
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            finish();
-        });
+        commonClassForAPI.getClearCartItemVMRequest(clearCartItemObserver, cartId);
+
     }
+
+    private final DisposableObserver<Object> clearCartItemObserver = new DisposableObserver<Object>() {
+        @Override
+        public void onNext(@NotNull Object addCartItemModel) {
+            Utils.hideProgressDialog();
+            if (addCartItemModel != null) {
+                MyApplication.getInstance().cartRepository.truncateCart();
+                Utils.hideProgressDialog();
+                cartItemList.clear();
+                cartListAdapter.notifyDataSetChanged();
+                mBinding.rlCheckOut.setVisibility(View.GONE);
+                mBinding.blankBasket.setVisibility(View.VISIBLE);
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
+            }
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    };
 }

@@ -26,7 +26,6 @@ public class PaymentViewMode extends ViewModel {
     private MutableLiveData<JsonObject> checkOutItemVM;
     private MutableLiveData<JsonObject> mapViewModel;
     private MutableLiveData<OrderPlaceMainModel> orderPlaceVM;
-    private MutableLiveData<Object> clearCartDataVM;
 
     public LiveData<MainLocationModel> getUserLocationVM() {
         userLocationVM=null;
@@ -58,11 +57,7 @@ public class PaymentViewMode extends ViewModel {
         return orderPlaceVM;
     }
 
-    public LiveData<Object> getClearCartData() {
-        clearCartDataVM=null;
-        clearCartDataVM = new MutableLiveData<>();
-        return clearCartDataVM;
-    }
+
 
     public MutableLiveData<MainLocationModel> getUserLocationVMRequest() {
         RestClient.getInstance().getService().GetUserLocation().enqueue(new Callback<MainLocationModel>() {
@@ -165,24 +160,5 @@ public class PaymentViewMode extends ViewModel {
         return orderPlaceVM;
     }
 
-    public MutableLiveData<Object> getClearCartDataRequest() {
-        String cartId = MyApplication.getInstance().cartRepository.getCartId();
-        RestClient.getInstance().getService().ClearCart(cartId).enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.e(TAG, "request response=" + response.body());
-                    clearCartDataVM.setValue(response.body());
-                }
-            }
 
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                Log.e(TAG, "onFailure Responce" + call.toString());
-                Utils.hideProgressDialog();
-            }
-        });
-
-        return clearCartDataVM;
-    }
 }

@@ -7,9 +7,15 @@ import androidx.annotation.RequiresApi;
 
 import com.google.gson.JsonObject;
 import com.skdirect.R;
+import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.AddReviewModel;
+import com.skdirect.model.AddViewMainModel;
+import com.skdirect.model.AddViewModel;
+import com.skdirect.model.CartItemModel;
 import com.skdirect.model.CartMainModel;
 import com.skdirect.model.CommonResponseModel;
+import com.skdirect.model.ItemAddModel;
+import com.skdirect.model.MainTopSimilarSellerModel;
 import com.skdirect.model.MallMainPriceModel;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.OrderModel;
@@ -17,9 +23,13 @@ import com.skdirect.model.OrderStatusMainModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
 import com.skdirect.model.PostBrandModel;
+import com.skdirect.model.ProductDataModel;
 import com.skdirect.model.ReviewMainModel;
 import com.skdirect.model.SearchMainModel;
 import com.skdirect.model.SearchRequestModel;
+import com.skdirect.model.SellerDetailsModel;
+import com.skdirect.model.SellerProductMainModel;
+import com.skdirect.model.SellerProfileDataModel;
 import com.skdirect.model.ShopMainModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateProfilePostModel;
@@ -554,4 +564,241 @@ public class CommonClassForAPI {
                     }
                 });
     }
+
+    public void getSellerDetails(final DisposableObserver<SellerDetailsModel> observer, int id) {
+        RestClient.getInstance().getService().GetSellerDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<SellerDetailsModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull SellerDetailsModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void getSellerProductRequest(final DisposableObserver<SellerProductMainModel> observer, SellerProfileDataModel paginationModel) {
+        RestClient.getInstance().getService().GetSellerProduct(paginationModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<SellerProductMainModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull SellerProductMainModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+
+    public void getAddProductVMRequest(final DisposableObserver<AddViewMainModel> observer, AddViewModel paginationModel) {
+        RestClient.getInstance().getService().AddStoreView(paginationModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<AddViewMainModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull AddViewMainModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void getAddItemsInCardVMRequest(final DisposableObserver<AddCartItemModel> observer, ItemAddModel paginationModel) {
+        RestClient.getInstance().getService().AddCart(paginationModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<AddCartItemModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull AddCartItemModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void getClearCartItemVMRequest(final DisposableObserver<Object> observer, String id) {
+        RestClient.getInstance().getService().ClearCart(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull Object o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void getCategoriesViewModelRequest(final DisposableObserver<ProductDataModel> observer, int productID) {
+        RestClient.getInstance().getService().GetSellerProductById(productID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ProductDataModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull ProductDataModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void getAddProductVMRequest(final DisposableObserver<AddViewMainModel> observer, int productID) {
+        RestClient.getInstance().getService().AddProductView(productID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<AddViewMainModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull AddViewMainModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void getSellarOtherVMRequest(final DisposableObserver<MainTopSimilarSellerModel> observer, int productID) {
+        RestClient.getInstance().getService().GetMoreSimilarSellerProduct(productID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MainTopSimilarSellerModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull MainTopSimilarSellerModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void getCartItemsVMRequest(final DisposableObserver<CartItemModel> observer) {
+        RestClient.getInstance().getService().GetCartItems()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CartItemModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull CartItemModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+
 }
