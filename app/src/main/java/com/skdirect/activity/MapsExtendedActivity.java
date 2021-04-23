@@ -204,6 +204,7 @@ public class MapsExtendedActivity extends AppCompatActivity implements OnMapRead
                             setResult(Activity.RESULT_OK, intent);
                             finish();*/
                             startActivity(new Intent(MapsExtendedActivity.this, MainActivity.class));
+                            Utils.sendOneSignalTag("postcode",Pincode);
                             finish();
 
                         }
