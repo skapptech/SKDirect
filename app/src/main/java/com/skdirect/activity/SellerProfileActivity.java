@@ -116,27 +116,6 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     }
 
 
-    private void callSellerDetails() {
-        if (Utils.isNetworkAvailable(getApplicationContext())) {
-            Utils.showProgressDialog(this);
-            getSellerDetailsAPI();
-            addProduct();
-            getSellerProductsApi(searchSellerName);
-        } else {
-            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
-        }
-    }
-
-    private void getIntentData() {
-        if (getIntent().getData() != null) {
-            String sharedUrl = getIntent().getData().toString();
-            sharedUrl = sharedUrl.substring(sharedUrl.lastIndexOf("/") + 1);
-            sellerID = Integer.parseInt(sharedUrl);
-        } else {
-            sellerID = getIntent().getIntExtra("ID", 0);
-        }
-    }
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -146,6 +125,95 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             callSellerDetails();
         }
     }
+
+    @Override
+    public void plusButtonOnClick(SellerProductList model, TextView tvSelectedQty) {
+        mBinding.cartBadge.setVisibility(View.VISIBLE);
+
+        if (model.getMaxOrderQuantity() != null && Integer.parseInt(model.getMaxOrderQuantity()) > 0 && model.getQty() >= Integer.parseInt(model.getMaxOrderQuantity())) {
+            Utils.setToast(getApplicationContext(), getString(R.string.order_quantity));
+        } else {
+            model.setQty(model.getQty() + 1);
+            tvSelectedQty.setText("" + model.getQty());
+            addItemInCart(model.getQty(), model);
+        }
+
+        // add item  to cart
+        CartModel cartModel = new CartModel(null, 0, null,
+                false, model.isStockRequired(), model.getStock(), model.getMeasurement(),
+                model.getUom(), model.getImagePath(), 0, model.getProductName(),
+                0, 0, false, 0, 0, 0,
+                model.getQty(), model.getCreatedBy(), null, sellerID, 0,
+                0, model.getMargin(), model.getMrp(), model.getMOQ(), model.getId());
+        MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
+    }
+
+    @Override
+    public void minusButtonOnClick(SellerProductList model, TextView selectedQty, TextView btAddToCart, LinearLayout LLPlusMinus) {
+        int qty = model.getQty();
+        qty--;
+        if (qty > 0) {
+            selectedQty.setText("" + qty);
+        } else {
+            btAddToCart.setVisibility(View.VISIBLE);
+            LLPlusMinus.setVisibility(View.GONE);
+        }
+        model.setQty(model.getQty() - 1);
+        // add item  to cart
+        CartModel cartModel = new CartModel(null, 0, null,
+                false, model.isStockRequired(), model.getStock(),
+                model.getMeasurement(), model.getUom(), model.getImagePath(),
+                0, model.getProductName(), 0, 0,
+                false, 0, 0, 0, model.getQty(),
+                model.getCreatedBy(), null, sellerID, 0, 0,
+                model.getMargin(), model.getMrp(), model.getMOQ(), model.getId());
+        if (qty > 0) {
+            MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
+        } else {
+            MyApplication.getInstance().cartRepository.deleteCartItem(cartModel);
+        }
+        addItemInCart(qty, model);
+    }
+
+    @Override
+    public void addButtonOnClick(SellerProductList sellerProductModel, TextView tvSelectedQty, TextView btAddToCart, LinearLayout LLPlusMinus) {
+        mBinding.notifictionCount.setVisibility(View.VISIBLE);
+        Integer cartSellerId = MyApplication.getInstance().cartRepository.getCartSellerId();
+        if (cartSellerId != null && cartSellerId != 0) {
+            if (cartSellerId == sellerID) {
+                btAddToCart.setVisibility(View.GONE);
+                LLPlusMinus.setVisibility(View.VISIBLE);
+                CartModel cartModel = new CartModel(null, 0, null,
+                        false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(),
+                        sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(),
+                        0, sellerProductModel.getProductName(), 0, 0, false,
+                        0, 0, 0, sellerProductModel.getQty(), sellerProductModel.getCreatedBy(),
+                        null, sellerID, 0, 0, sellerProductModel.getMargin(),
+                        sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
+                MyApplication.getInstance().cartRepository.addToCart(cartModel);
+                SellerProfileActivity.this.plusButtonOnClick(sellerProductModel, tvSelectedQty);
+            } else {
+                checkCustomerAlertDialog(cartSellerId, sellerProductModel, btAddToCart, LLPlusMinus);
+            }
+        } else {
+            btAddToCart.setVisibility(View.GONE);
+            LLPlusMinus.setVisibility(View.VISIBLE);
+            tvSelectedQty.setText("1");
+            // add item  to cart
+            CartModel cartModel = new CartModel(null, 0, null,
+                    false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(),
+                    sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(),
+                    0, sellerProductModel.getProductName(), 0, 0, false,
+                    0, 0, 0, 1, sellerProductModel.getCreatedBy(), null,
+                    sellerID, 0, 0, sellerProductModel.getMargin(),
+                    sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
+            MyApplication.getInstance().cartRepository.addToCart(cartModel);
+            addItemInCart(1, sellerProductModel);
+        }
+        Utils.logAppsFlayerEventApp(this, "AddToCartSellerCatelogue",
+                "ProductName - " + sellerProductModel.getProductName() + ", ProductId - " + sellerProductModel.getId());
+    }
+
 
     private void initView() {
         commonClassForAPI = CommonClassForAPI.getInstance(this);
@@ -208,10 +276,121 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         sellerProductModels.clear();
     }
 
+    private void callSellerDetails() {
+        if (Utils.isNetworkAvailable(getApplicationContext())) {
+            Utils.showProgressDialog(this);
+            getSellerDetailsAPI();
+            addProduct();
+            getSellerProductsApi(searchSellerName);
+        } else {
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
+        }
+    }
+
+    private void getIntentData() {
+        if (getIntent().getData() != null) {
+            String sharedUrl = getIntent().getData().toString();
+            sharedUrl = sharedUrl.substring(sharedUrl.lastIndexOf("/") + 1);
+            sellerID = Integer.parseInt(sharedUrl);
+        } else {
+            sellerID = getIntent().getIntExtra("ID", 0);
+        }
+    }
 
     private void getSellerDetailsAPI() {
         commonClassForAPI.getSellerDetails(observer, sellerID);
     }
+
+
+    private void getSellerProductsApi(String searchSellerName) {
+        SellerProfileDataModel paginationModel = new SellerProfileDataModel(sellerID, 0, 0,
+                "", skipCount, takeCount, 0, searchSellerName,
+                Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LAT)),
+                Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LON)));
+
+        commonClassForAPI.getSellerProductRequest(SellerProductObserver, paginationModel);
+
+    }
+
+
+    private void updateUserDetails(UserDetailModel userDetailModel, ArrayList<SellerDeliveryModel> sellerDeliveryModel) {
+        String deliveryOption = "";
+
+        if (userDetailModel != null) {
+            if (userDetailModel.getStoreView() != 0) {
+                mBinding.tvStoreView.setVisibility(View.VISIBLE);
+                mBinding.tvStoreView.setText(String.valueOf(userDetailModel.getStoreView()));
+            } else {
+                mBinding.tvStoreView.setVisibility(View.GONE);
+            }
+            mBinding.tvAddreshOne.setText(userDetailModel.getAddressOne() + " " + userDetailModel.getAddressTwo() + " " + userDetailModel.getCity() + " - " + userDetailModel.getPincode() + " (" + userDetailModel.getState() + ")");
+            mBinding.tvDeliveryOption.setText(userDetailModel.getAddressOne() + " " + userDetailModel.getAddressTwo());
+            mBinding.tvSellerDistance.setText("" + String.format("%.2f", userDetailModel.getDistance()) + " KM");
+
+        } else {
+            mBinding.tvSellerDistance.setVisibility(View.GONE);
+        }
+
+        if (sellerDeliveryModel.size() > 0) {
+            for (int i = 0; i < sellerDeliveryModel.size(); i++) {
+                deliveryOption += sellerDeliveryModel.get(i).getDelivery() + ", ";
+            }
+            /*remove condiction*/
+            mBinding.tvDeliveryOption.setText("Home Delivery");
+        } else {
+            mBinding.llDeliverOption.setVisibility(View.GONE);
+        }
+    }
+
+    private void addProduct() {
+        commonClassForAPI.getAddProductVMRequest(addProductObserver, new AddViewModel(sellerID));
+    }
+
+    public void checkCustomerAlertDialog(int id, SellerProductList sellerProductModel, TextView btAddToCart, LinearLayout LLPlusMinus) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Alert");
+        builder.setMessage("Your Cart has existing items from Another Seller. Do You Want to clear it and add items from this Seller?");
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            clearCartItem();
+            MyApplication.getInstance().cartRepository.truncateCart();
+            // cartModel.setSellerId(sellerID);
+            sellerProductModel.setQty(1);
+            CartModel cartItemModel = new CartModel(null, 0, null, false,
+                    sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(),
+                    sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(),
+                    0, 0, false, 0, 0, 0, sellerProductModel.getQty(),
+                    sellerProductModel.getCreatedBy(), null, sellerID, 0, 0,
+                    sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
+            MyApplication.getInstance().cartRepository.addToCart(cartItemModel);
+            sellerShopListAdapter.notifyDataSetChanged();
+            btAddToCart.setVisibility(View.GONE);
+            LLPlusMinus.setVisibility(View.VISIBLE);
+            addItemInCart(1, sellerProductModel);
+        });
+
+        builder.setNegativeButton("No", (dialog, which) -> {
+            sellerProductModel.setQty(0);
+            dialog.dismiss();
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void clearCartItem() {
+        String cartId = MyApplication.getInstance().cartRepository.getCartId();
+        commonClassForAPI.getClearCartItemVMRequest(clearCartItemObserver, cartId);
+
+    }
+
+    private void addItemInCart(int QTY, SellerProductList sellerProductModel) {
+        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(),
+                0, 0, SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
+
+        commonClassForAPI.getAddItemsInCardVMRequest(AddItemsInCardObserver, paginationModel);
+
+    }
+
 
     private final DisposableObserver<SellerDetailsModel> observer = new DisposableObserver<SellerDetailsModel>() {
         @Override
@@ -259,17 +438,6 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         }
     };
 
-
-    private void getSellerProductsApi(String searchSellerName) {
-        SellerProfileDataModel paginationModel = new SellerProfileDataModel(sellerID, 0, 0,
-                "", skipCount, takeCount, 0, searchSellerName,
-                Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LAT)),
-                Double.parseDouble(SharePrefs.getStringSharedPreferences(this, SharePrefs.LON)));
-
-        commonClassForAPI.getSellerProductRequest(SellerProductObserver, paginationModel);
-
-    }
-
     private final DisposableObserver<SellerProductMainModel> SellerProductObserver = new DisposableObserver<SellerProductMainModel>() {
         @Override
         public void onNext(@NotNull SellerProductMainModel sellerProdList) {
@@ -293,163 +461,17 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             }
 
         }
+
         @Override
         public void onError(Throwable e) {
             Utils.hideProgressDialog();
             e.printStackTrace();
         }
+
         @Override
         public void onComplete() {
         }
     };
-
-    private void updateUserDetails(UserDetailModel userDetailModel, ArrayList<SellerDeliveryModel> sellerDeliveryModel) {
-        String deliveryOption = "";
-
-        if (userDetailModel != null) {
-            if (userDetailModel.getStoreView() != 0) {
-                mBinding.tvStoreView.setVisibility(View.VISIBLE);
-                mBinding.tvStoreView.setText(String.valueOf(userDetailModel.getStoreView()));
-            } else {
-                mBinding.tvStoreView.setVisibility(View.GONE);
-            }
-            mBinding.tvAddreshOne.setText(userDetailModel.getAddressOne() + " " + userDetailModel.getAddressTwo() + " " + userDetailModel.getCity() + " - " + userDetailModel.getPincode() + " (" + userDetailModel.getState() + ")");
-            mBinding.tvDeliveryOption.setText(userDetailModel.getAddressOne() + " " + userDetailModel.getAddressTwo());
-            mBinding.tvSellerDistance.setText("" + String.format("%.2f", userDetailModel.getDistance()) + " KM");
-
-        } else {
-            mBinding.tvSellerDistance.setVisibility(View.GONE);
-        }
-
-        if (sellerDeliveryModel.size() > 0) {
-            for (int i = 0; i < sellerDeliveryModel.size(); i++) {
-                deliveryOption += sellerDeliveryModel.get(i).getDelivery() + ", ";
-            }
-            /*remove condiction*/
-            mBinding.tvDeliveryOption.setText("Home Delivery");
-        } else {
-            mBinding.llDeliverOption.setVisibility(View.GONE);
-        }
-    }
-
-    private void addProduct() {
-        commonClassForAPI.getAddProductVMRequest(addProductObserver, new AddViewModel(sellerID));
-    }
-
-    private final DisposableObserver<AddViewMainModel> addProductObserver = new DisposableObserver<AddViewMainModel>() {
-        @Override
-        public void onNext(@NotNull AddViewMainModel addViewMainModel) {
-            Utils.hideProgressDialog();
-            if (addViewMainModel.isSuccess()){
-
-            }
-
-
-        }
-        @Override
-        public void onError(Throwable e) {
-            Utils.hideProgressDialog();
-            e.printStackTrace();
-        }
-        @Override
-        public void onComplete() {
-        }
-    };
-
-    @Override
-    public void plusButtonOnClick(SellerProductList model, TextView tvSelectedQty) {
-        mBinding.cartBadge.setVisibility(View.VISIBLE);
-
-        if (model.getMaxOrderQuantity() != null && Integer.parseInt(model.getMaxOrderQuantity()) > 0 && model.getQty() >= Integer.parseInt(model.getMaxOrderQuantity())) {
-            Utils.setToast(getApplicationContext(), getString(R.string.order_quantity));
-        } else {
-            model.setQty(model.getQty() + 1);
-            tvSelectedQty.setText("" + model.getQty());
-            addItemInCart(model.getQty(), model);
-        }
-
-        // add item  to cart
-        CartModel cartModel = new CartModel(null, 0, null,
-                false, model.isStockRequired(), model.getStock(), model.getMeasurement(),
-                model.getUom(), model.getImagePath(), 0, model.getProductName(),
-                0, 0, false, 0, 0, 0,
-                model.getQty(), model.getCreatedBy(), null, sellerID, 0,
-                0, model.getMargin(), model.getMrp(), model.getMOQ(), model.getId());
-        MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
-    }
-
-    @Override
-    public void minusButtonOnClick(SellerProductList model, TextView selectedQty, TextView btAddToCart, LinearLayout LLPlusMinus) {
-        int qty = model.getQty();
-        qty--;
-        if (qty > 0) {
-            selectedQty.setText("" + qty);
-        } else {
-            btAddToCart.setVisibility(View.VISIBLE);
-            LLPlusMinus.setVisibility(View.GONE);
-        }
-        model.setQty(model.getQty() - 1);
-        // add item  to cart
-        CartModel cartModel = new CartModel(null, 0, null,
-                false, model.isStockRequired(), model.getStock(),
-                model.getMeasurement(), model.getUom(), model.getImagePath(),
-                0, model.getProductName(), 0, 0,
-                false, 0, 0, 0, model.getQty(),
-                model.getCreatedBy(), null, sellerID, 0, 0,
-                model.getMargin(), model.getMrp(), model.getMOQ(), model.getId());
-        if (qty > 0) {
-            MyApplication.getInstance().cartRepository.updateCartItem(cartModel);
-        } else {
-            MyApplication.getInstance().cartRepository.deleteCartItem(cartModel);
-        }
-    }
-
-    @Override
-    public void addButtonOnClick(SellerProductList sellerProductModel, TextView tvSelectedQty, TextView btAddToCart, LinearLayout LLPlusMinus) {
-        mBinding.notifictionCount.setVisibility(View.VISIBLE);
-        Integer cartSellerId = MyApplication.getInstance().cartRepository.getCartSellerId();
-        if (cartSellerId != null && cartSellerId != 0) {
-            if (cartSellerId == sellerID) {
-                btAddToCart.setVisibility(View.GONE);
-                LLPlusMinus.setVisibility(View.VISIBLE);
-                CartModel cartModel = new CartModel(null, 0, null,
-                        false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(),
-                        sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(),
-                        0, sellerProductModel.getProductName(), 0, 0, false,
-                        0, 0, 0, sellerProductModel.getQty(), sellerProductModel.getCreatedBy(),
-                        null, sellerID, 0, 0, sellerProductModel.getMargin(),
-                        sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
-                MyApplication.getInstance().cartRepository.addToCart(cartModel);
-                SellerProfileActivity.this.plusButtonOnClick(sellerProductModel, tvSelectedQty);
-            } else {
-                checkCustomerAlertDialog(cartSellerId, sellerProductModel, btAddToCart, LLPlusMinus);
-            }
-        } else {
-            btAddToCart.setVisibility(View.GONE);
-            LLPlusMinus.setVisibility(View.VISIBLE);
-            tvSelectedQty.setText("1");
-            // add item  to cart
-            CartModel cartModel = new CartModel(null, 0, null,
-                    false, sellerProductModel.isStockRequired(), sellerProductModel.getStock(),
-                    sellerProductModel.getMeasurement(), sellerProductModel.getUom(), sellerProductModel.getImagePath(),
-                    0, sellerProductModel.getProductName(), 0, 0, false,
-                    0, 0, 0, 1, sellerProductModel.getCreatedBy(), null,
-                    sellerID, 0, 0, sellerProductModel.getMargin(),
-                    sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
-            MyApplication.getInstance().cartRepository.addToCart(cartModel);
-            addItemInCart(1, sellerProductModel);
-        }
-        Utils.logAppsFlayerEventApp(this, "AddToCartSellerCatelogue",
-                "ProductName - " + sellerProductModel.getProductName() + ", ProductId - " + sellerProductModel.getId());
-    }
-
-    private void addItemInCart(int QTY, SellerProductList sellerProductModel) {
-        ItemAddModel paginationModel = new ItemAddModel(QTY, "123", sellerProductModel.getId(),
-                0, 0, SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
-
-        commonClassForAPI.getAddItemsInCardVMRequest(AddItemsInCardObserver, paginationModel);
-
-    }
 
     private final DisposableObserver<AddCartItemModel> AddItemsInCardObserver = new DisposableObserver<AddCartItemModel>() {
         @Override
@@ -465,53 +487,39 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
 
 
         }
+
         @Override
         public void onError(Throwable e) {
             Utils.hideProgressDialog();
             e.printStackTrace();
         }
+
         @Override
         public void onComplete() {
         }
     };
 
+    private final DisposableObserver<AddViewMainModel> addProductObserver = new DisposableObserver<AddViewMainModel>() {
+        @Override
+        public void onNext(@NotNull AddViewMainModel addViewMainModel) {
+            Utils.hideProgressDialog();
+            if (addViewMainModel.isSuccess()) {
 
-    public void checkCustomerAlertDialog(int id, SellerProductList sellerProductModel, TextView btAddToCart, LinearLayout LLPlusMinus) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Alert");
-        builder.setMessage("Your Cart has existing items from Another Seller. Do You Want to clear it and add items from this Seller?");
-        builder.setPositiveButton("Yes", (dialog, which) -> {
-            clearCartItem();
-            MyApplication.getInstance().cartRepository.truncateCart();
-            // cartModel.setSellerId(sellerID);
-            sellerProductModel.setQty(1);
-            CartModel cartItemModel = new CartModel(null, 0, null, false,
-                    sellerProductModel.isStockRequired(), sellerProductModel.getStock(), sellerProductModel.getMeasurement(),
-                    sellerProductModel.getUom(), sellerProductModel.getImagePath(), 0, sellerProductModel.getProductName(),
-                    0, 0, false, 0, 0, 0, sellerProductModel.getQty(),
-                    sellerProductModel.getCreatedBy(), null, sellerID, 0, 0,
-                    sellerProductModel.getMargin(), sellerProductModel.getMrp(), sellerProductModel.getMOQ(), sellerProductModel.getId());
-            MyApplication.getInstance().cartRepository.addToCart(cartItemModel);
-            sellerShopListAdapter.notifyDataSetChanged();
-            btAddToCart.setVisibility(View.GONE);
-            LLPlusMinus.setVisibility(View.VISIBLE);
-            addItemInCart(1, sellerProductModel);
-        });
+            }
 
-        builder.setNegativeButton("No", (dialog, which) -> {
-            sellerProductModel.setQty(0);
-            dialog.dismiss();
-        });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
+        }
 
-    private void clearCartItem() {
-        String cartId = MyApplication.getInstance().cartRepository.getCartId();
-        commonClassForAPI.getClearCartItemVMRequest(clearCartItemObserver, cartId);
-        
-    }
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    };
 
     private final DisposableObserver<Object> clearCartItemObserver = new DisposableObserver<Object>() {
         @Override
@@ -519,11 +527,13 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             Utils.hideProgressDialog();
 
         }
+
         @Override
         public void onError(Throwable e) {
             Utils.hideProgressDialog();
             e.printStackTrace();
         }
+
         @Override
         public void onComplete() {
         }
