@@ -12,6 +12,8 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
+import com.skdirect.activity.ProductDetailsActivity;
+import com.skdirect.activity.SellerProfileActivity;
 import com.skdirect.activity.ShowImageActivity;
 import com.skdirect.model.BannerItemListModel;
 import com.skdirect.model.ImageListModel;
@@ -49,6 +51,19 @@ public class HomeBannerAdapter extends PagerAdapter {
         }else {
             Picasso.get().load(bannerItemListModel.get(position).getImagepath()).into(imageView);
         }
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bannerItemListModel.get(position).getType().equals("SELLER")){
+                    context.startActivity(new Intent(context, SellerProfileActivity.class).putExtra("ID",bannerItemListModel.get(position).getGivenId()));
+
+                }else {
+                    context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID",bannerItemListModel.get(position).getGivenId()));
+
+                }
+            }
+        });
 
 
         view.addView(imageLayout, 0);

@@ -237,10 +237,10 @@
     <string name="buy_locally_at_best_prices_and_get_it_home_delivered">Buy locally at best prices and get it home delivered</string>
     <string name="continue_button">Continue</string>
     <string name="order_quantity">Quantity cannot be greater than more than order quantity</string>
-    <string name="hello_check_seller">Hello! Check</string>
-    <string name="seller_catelogue">s catalog order now on the social mall and get home delivery</string>
-    <string name="hello_check_product">Hello! Check</string>
-    <string name="social_mall_home">only on social mall. Order now and get home delivery</string>
+    <string name="hello_check_seller">हेलो! चेक करे</string>
+    <string name="seller_catelogue">का कैटेलॉग सोशल मॉल पर अभी आर्डर करे और पाए होम डिलीवरी</string>
+    <string name="hello_check_product">हेलो! चेक करे</string>
+    <string name="social_mall_home">सिर्फ सोशल मॉल पर। अभी आर्डर करे और पाए होम डिलीवरी</string>
     <string name="onesignal_app_id" translatable="false">eda68699-028d-403f-8ef8-cd7306db0a09</string>
 
 </resources>

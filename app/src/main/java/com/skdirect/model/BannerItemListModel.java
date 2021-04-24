@@ -16,6 +16,30 @@ public class BannerItemListModel implements Serializable {
     @SerializedName("RedirectUrl")
     private String RedirectUrl;
 
+    @Expose
+    @SerializedName("Type")
+    private String Type;
+
+    @Expose
+    @SerializedName("GivenId")
+    private int GivenId;
+
+    public String getType() {
+        return Type;
+    }
+
+    public void setType(String type) {
+        Type = type;
+    }
+
+    public int getGivenId() {
+        return GivenId;
+    }
+
+    public void setGivenId(int givenId) {
+        GivenId = givenId;
+    }
+
     public String getImagepath() {
         return imagepath;
     }

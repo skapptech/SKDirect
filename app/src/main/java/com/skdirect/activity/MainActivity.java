@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (!task.isSuccessful()) {
                         return;
                     }
-                    Log.e( "onCreate: ", task.getResult());
+                    Log.e("onCreate: ", task.getResult());
                 });
     }
 
@@ -81,13 +81,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBinding.llLogout.setVisibility(View.VISIBLE);
                 mBinding.llSignIn.setVisibility(View.GONE);
                 mobileNumberTV.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.MOBILE_NUMBER));
+                Log.e("BhagwaN", "GastUsers1");
             } else {
                 mBinding.llSignIn.setVisibility(View.VISIBLE);
                 mBinding.llLogout.setVisibility(View.GONE);
                 mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.log_in));
                 mobileNumberTV.setText("");
+                userNameTV.setText(R.string.guest_user);
+                Log.e("BhagwaN", "GastUsers2");
             }
         } else {
+            Log.e("BhagwaN", "GastUsers3");
             userNameTV.setText(R.string.guest_user);
             mBinding.llSignIn.setVisibility(View.VISIBLE);
             mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
