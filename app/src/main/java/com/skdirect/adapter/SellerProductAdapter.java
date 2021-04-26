@@ -52,6 +52,7 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
         if (model.getMrp() == model.getSellingPrice()) {
             holder.mBinding.llSellingPrice.setVisibility(View.GONE);
             holder.mBinding.tvMrp.setText("₹ " + model.getMrp());
+            holder.mBinding.tvMrp.setPaintFlags(0);
         } else {
             holder.mBinding.tvMrp.setText("₹ " + model.getMrp());
             holder.mBinding.tvMrp.setPaintFlags(holder.mBinding.tvMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);

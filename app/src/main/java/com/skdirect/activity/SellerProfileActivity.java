@@ -444,6 +444,8 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             if (sellerProdList.isSuccess()) {
                 updateUserDetails(sellerProdList.getSellerProductModel().getUserDetailModel(), sellerProdList.getSellerProductModel().getSellerDeliveryModel());
                 if (sellerProdList.getSellerProductModel().getSellerProductLists().size() > 0) {
+                    mBinding.tvItemNotFound.setVisibility(View.GONE);
+                    mBinding.rvCategories.setVisibility(View.VISIBLE);
                     mBinding.rvCategories.post(() -> {
                         sellerProductModels.addAll(sellerProdList.getSellerProductModel().getSellerProductLists());
                         sellerShopListAdapter.notifyDataSetChanged();
@@ -458,7 +460,6 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             } else {
                 loading = false;
             }
-
         }
 
         @Override
@@ -537,5 +538,4 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         public void onComplete() {
         }
     };
-
 }
