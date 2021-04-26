@@ -55,13 +55,22 @@ public class BottomListAdapter extends RecyclerView.Adapter<BottomListAdapter.Vi
             }
         }
         holder.mBinding.tvItemName.setText(varientName);
-        if (variationListModel.getImageList() != null && variationListModel.getImageList().size() > 0) {
-
-            if (variationListModel.getImageList().get(position).getImagePath() != null && !variationListModel.getImageList().get(position).getImagePath().contains("http")) {
-                Picasso.get().load(BuildConfig.apiEndpoint+variationListModel.getImageList().get(position).getImagePath()).into(holder.mBinding.ivImage);
-            }else {
-                Picasso.get().load(variationListModel.getImageList().get(position).getImagePath()).into(holder.mBinding.ivImage);
+        try {
+            if (variationListModel.getImageList() != null && variationListModel.getImageList().size() > 0) {
+                for (int k = 0; k < variationListModel.getImageList().size(); k++) {
+                    if (variationListModel.getImageList().get(k).isDefaultShow()) {
+                        if (variationListModel.getImageList().get(k).getImagePath() != null && !variationListModel.getImageList().get(k).getImagePath().contains("http")) {
+                            Picasso.get().load(BuildConfig.apiEndpoint + variationListModel.getImageList().get(k).getImagePath()).into(holder.mBinding.ivImage);
+                        } else {
+                            Picasso.get().load(variationListModel.getImageList().get(k).getImagePath()).into(holder.mBinding.ivImage);
+                        }
+                    } else {
+                        Picasso.get().load(variationListModel.getImageList().get(k).getImagePath()).into(holder.mBinding.ivImage);
+                    }
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         holder.mBinding.llTopNearBySeller.setOnClickListener(new View.OnClickListener() {
             @Override

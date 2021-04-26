@@ -580,9 +580,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         if (variationListModel.getProductVariantAttributeDC() != null && variationListModel.getProductVariantAttributeDC().size() > 0) {
             for (int j = 0; j < variationListModel.getProductVariantAttributeDC().size(); j++) {
                 variantAttributeDCModels = variationListModel.getProductVariantAttributeDC();
-                varientName = varientName + variantAttributeDCModels.get(j).getAttributeName() + " :" + variantAttributeDCModels.get(j).getAttributeValue() + " ";
+                varientName = varientName + variantAttributeDCModels.get(j).getAttributeName() + " : " + variantAttributeDCModels.get(j).getAttributeValue() + " ";
             }
         }
+        mBinding.tvItemColor.setVisibility(View.VISIBLE);
         mBinding.tvItemColor.setText(varientName);
 
         if (variationList.get(0).getProductVariantSpecification() != null && variationList.get(0).getProductVariantSpecification().size() > 0) {
