@@ -137,7 +137,7 @@ public interface APIServices {
 
 
     @GET("/api/NativeBuyer/ShopList/GetShopList")
-    Observable<ShopMainModel> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int take, @Query("Keyword") String Keyword, @Query("categoryId") String categoryId);
+    Observable<ShopMainModel> GetTopSellerItem(@Query("Skip") int Skip, @Query("Take") int take, @Query("Keyword") String Keyword, @Query("categoryId") String categoryId,@Query("pincode") String pincode);
 
     @POST("/api/NativeBuyer/ItemList/GetSellerListWithItem")
     Observable<SearchMainModel> GetSellerListWithItem(@Body SearchRequestModel paginationModel);

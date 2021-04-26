@@ -23,6 +23,7 @@ import com.skdirect.interfacee.SearchInterface;
 import com.skdirect.model.ShopMainModel;
 import com.skdirect.model.TopSellerModel;
 import com.skdirect.utils.MyApplication;
+import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.SearchViewMode;
 
@@ -130,7 +131,7 @@ public class ShopFragment extends Fragment implements SearchInterface {
     private void getShopData() {
         CommonClassForAPI.getInstance(activity).getTopSellerItem(shopObserver,
                 skipCount, takeCount, searchSellerName,
-                (String.valueOf(cateogryId).equals("0")) ? null : String.valueOf(cateogryId));
+                (String.valueOf(cateogryId).equals("0")) ? null : String.valueOf(cateogryId), SharePrefs.getInstance(getActivity()).getString(SharePrefs.PIN_CODE));
     }
 
     private final DisposableObserver<ShopMainModel> shopObserver = new DisposableObserver<ShopMainModel>() {

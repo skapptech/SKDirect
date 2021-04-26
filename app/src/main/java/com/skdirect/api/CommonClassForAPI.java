@@ -513,8 +513,8 @@ public class CommonClassForAPI {
                 });
     }
 
-    public void getTopSellerItem(final DisposableObserver<ShopMainModel> observer, int skipCount, int takeCount, String s, String cateogryId) {
-        RestClient.getInstance().getService().GetTopSellerItem(skipCount, takeCount, s, cateogryId)
+    public void getTopSellerItem(final DisposableObserver<ShopMainModel> observer, int skipCount, int takeCount, String s, String cateogryId,String pincode) {
+        RestClient.getInstance().getService().GetTopSellerItem(skipCount, takeCount, s, cateogryId,pincode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ShopMainModel>() {

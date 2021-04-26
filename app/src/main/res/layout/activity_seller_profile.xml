@@ -134,7 +134,7 @@
                                 android:maxLines="3"
                                 android:text=""
                                 android:textSize="13sp"
-                                android:visibility="gone" />
+                                android:visibility="visible" />
 
                             <LinearLayout
                                 android:id="@+id/ll_deliver_option"
@@ -154,7 +154,6 @@
                                     android:text="@string/delivery_options"
                                     android:textColor="@color/black"
                                     android:textSize="12sp" />
-
 
                                 <TextView
                                     android:id="@+id/tv_delivery_option"
@@ -361,8 +360,8 @@
 
                                 <TextView
                                     android:id="@+id/cart_badge"
-                                    android:layout_width="18dp"
-                                    android:layout_height="18dp"
+                                    android:layout_width="19dp"
+                                    android:layout_height="19dp"
                                     android:layout_gravity="right|end|top"
                                     android:layout_marginTop="3dp"
                                     android:layout_marginEnd="-5dp"

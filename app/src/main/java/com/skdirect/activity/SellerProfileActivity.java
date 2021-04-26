@@ -265,7 +265,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                     if (loading) {
                         if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
                             loading = false;
-                            skipCount = skipCount + 5;
+                            skipCount = skipCount + 15;
                             // mBinding.progressBar.setVisibility(View.VISIBLE);
                             getSellerProductsApi(searchSellerName);
                         }
@@ -315,7 +315,6 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
 
     private void updateUserDetails(UserDetailModel userDetailModel, ArrayList<SellerDeliveryModel> sellerDeliveryModel) {
         String deliveryOption = "";
-
         if (userDetailModel != null) {
             if (userDetailModel.getStoreView() != 0) {
                 mBinding.tvStoreView.setVisibility(View.VISIBLE);
@@ -324,7 +323,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                 mBinding.tvStoreView.setVisibility(View.GONE);
             }
             mBinding.tvAddreshOne.setText(userDetailModel.getAddressOne() + " " + userDetailModel.getAddressTwo() + " " + userDetailModel.getCity() + " - " + userDetailModel.getPincode() + " (" + userDetailModel.getState() + ")");
-            mBinding.tvDeliveryOption.setText(userDetailModel.getAddressOne() + " " + userDetailModel.getAddressTwo());
+            //mBinding.tvDeliveryOption.setText(userDetailModel.getAddressOne() + " " + userDetailModel.getAddressTwo());
             mBinding.tvSellerDistance.setText("" + String.format("%.2f", userDetailModel.getDistance()) + " KM");
 
         } else {
@@ -338,7 +337,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             /*remove condiction*/
             mBinding.tvDeliveryOption.setText("Home Delivery");
         } else {
-            mBinding.llDeliverOption.setVisibility(View.GONE);
+            mBinding.llDeliverOption.setVisibility(View.VISIBLE);
         }
     }
 
@@ -442,7 +441,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         @Override
         public void onNext(@NotNull SellerProductMainModel sellerProdList) {
             Utils.hideProgressDialog();
-            if (sellerProdList != null) {
+            if (sellerProdList.isSuccess()) {
                 updateUserDetails(sellerProdList.getSellerProductModel().getUserDetailModel(), sellerProdList.getSellerProductModel().getSellerDeliveryModel());
                 if (sellerProdList.getSellerProductModel().getSellerProductLists().size() > 0) {
                     mBinding.rvCategories.post(() -> {
