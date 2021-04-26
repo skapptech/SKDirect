@@ -213,8 +213,13 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent.getExtras() != null) {
+        if (intent.getExtras() != null&&intent.hasExtra("ID")) {
             productID = intent.getIntExtra("ID", 0);
+            apiCalling();
+        } else if (intent.getData() != null) {
+            String sharedUrl = intent.getData().toString();
+            sharedUrl = sharedUrl.substring(sharedUrl.lastIndexOf("/") + 1);
+            productID = Integer.parseInt(sharedUrl);
             apiCalling();
         }
     }

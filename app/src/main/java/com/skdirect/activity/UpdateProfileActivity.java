@@ -45,10 +45,15 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.btSaveAddresh.setOnClickListener(this);
         mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.update_profile));
-        mBinding.etName.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.FIRST_NAME));
-        if (TextUtils.isNullOrEmpty(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.EMAIL_ID)))
+        if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.FIRST_NAME))) {
+            mBinding.etName.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.FIRST_NAME));
+        }
+        if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.EMAIL_ID))) {
             mBinding.etEmailId.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.EMAIL_ID));
-        mBinding.etPinCode.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.PIN_CODE));
+        }
+        if (!TextUtils.isNullOrEmpty(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.PIN_CODE))) {
+            mBinding.etPinCode.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.PIN_CODE));
+        }
     }
 
     @Override

@@ -119,8 +119,14 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent.getExtras() != null) {
+        if (intent.getExtras() != null&&intent.hasExtra("ID")) {
             sellerID = intent.getIntExtra("ID", 0);
+            sellerProductModels.clear();
+            callSellerDetails();
+        }else  if (intent.getData() != null) {
+            String sharedUrl = intent.getData().toString();
+            sharedUrl = sharedUrl.substring(sharedUrl.lastIndexOf("/") + 1);
+            sellerID = Integer.parseInt(sharedUrl);
             sellerProductModels.clear();
             callSellerDetails();
         }
