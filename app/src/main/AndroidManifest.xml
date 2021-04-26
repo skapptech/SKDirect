@@ -140,6 +140,11 @@
                     android:host="directbuyer.er15.xyz"
                     android:pathPrefix="/product"
                     android:scheme="https" />
+                <data
+                    android:host="directb2cbuyer.er15.xyz"
+                    android:pathPrefix="/product"
+                    android:scheme="https" />
+
             </intent-filter>
 
             <meta-data
@@ -199,6 +204,11 @@
                     android:host="directbuyer.er15.xyz"
                     android:pathPrefix="/seller"
                     android:scheme="https" />
+                <data
+                    android:host="directb2cbuyer.er15.xyz"
+                    android:pathPrefix="/seller"
+                    android:scheme="https" />
+
             </intent-filter>
 
             <meta-data
