@@ -3,6 +3,7 @@ package com.skdirect.activity;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -15,7 +16,6 @@ import com.skdirect.databinding.ActivityOrderDeatilsBinding;
 import com.skdirect.model.MallMainModelBolleanResult;
 import com.skdirect.model.MyOrderModel;
 import com.skdirect.model.OrderDetailsModel;
-import com.skdirect.model.OrderItemModel;
 import com.skdirect.model.OrderStatusDC;
 import com.skdirect.stepform.MainStepperAdapter;
 import com.skdirect.utils.DBHelper;
@@ -52,9 +52,8 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
             case R.id.iv_back_press:
                 onBackPressed();
                 break;
-
             case R.id.tv_cancle_order:
-                cancleOrder();
+                showOrderCancelAlert();
                 break;
         }
     }
@@ -80,6 +79,22 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
     private void getIntentData() {
         myOrderModel = (MyOrderModel) getIntent().getSerializableExtra("myOrderModel");
 
+    }
+
+    private void showOrderCancelAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Cancel Order");
+        builder.setMessage("Are you sure. You Want to cancel Order?");
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            dialog.dismiss();
+            cancleOrder();
+        });
+        builder.setNegativeButton("No", (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void callOrderDetails() {
@@ -133,8 +148,6 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
                     } else {
                         mBinding.rlDeliveryCharge.setVisibility(View.GONE);
                     }
-
-
                 }
 
                 if (orderDetailsModel.getOrderStatusDC().size() > 0) {
@@ -151,34 +164,26 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
                     orderStatusStepperAdapter = new OrderStatusStepperAdapter(OrderDetailActivity.this, OrderStatusDCList);
                     mBinding.rvOrderSteps.setAdapter(orderStatusStepperAdapter);
                     //setFullHeight();
-                } else {
-
                 }
             }
-
         });
     }
 
     private void callOrderItemsAPI() {
         orderDetailsViewMode.getOrderDetailsItemsRequest(myOrderModel.getId());
-        orderDetailsViewMode.getOrderDetailsItemsViewMode().observe(this, new Observer<ArrayList<OrderItemModel>>() {
-            @Override
-            public void onChanged(ArrayList<OrderItemModel> orderItemModels) {
-                Utils.hideProgressDialog();
-                if (orderItemModels.size() > 0) {
-                    OrderDetailsItemAdapter orderDetailsItemAdapter = new OrderDetailsItemAdapter(OrderDetailActivity.this, orderItemModels);
-                    mBinding.rMyOrder.setAdapter(orderDetailsItemAdapter);
-                    mBinding.tvItemCount.setText(dbHelper.getString(R.string.price_details_order) + orderItemModels.size() + " " + dbHelper.getString(R.string.items_order));
-                }
-
+        orderDetailsViewMode.getOrderDetailsItemsViewMode().observe(this, orderItemModels -> {
+            Utils.hideProgressDialog();
+            if (orderItemModels.size() > 0) {
+                OrderDetailsItemAdapter orderDetailsItemAdapter = new OrderDetailsItemAdapter(OrderDetailActivity.this, orderItemModels);
+                mBinding.rMyOrder.setAdapter(orderDetailsItemAdapter);
+                mBinding.tvItemCount.setText(dbHelper.getString(R.string.price_details_order) + orderItemModels.size() + " " + dbHelper.getString(R.string.items_order));
             }
-
         });
     }
 
     private void cancleOrder() {
         if (Utils.isNetworkAvailable(getApplicationContext())) {
-            Utils.showProgressDialog(OrderDetailActivity.this);
+            Utils.showProgressDialog(this);
             orderCancleFromUser();
         } else {
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.no_internet_connection));
@@ -198,8 +203,6 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
                     Utils.setToast(getApplicationContext(), result.getErrorMessage());
                 }
             }
-
         });
-
     }
 }
