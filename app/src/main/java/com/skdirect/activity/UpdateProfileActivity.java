@@ -45,9 +45,10 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         mBinding.toolbarTittle.ivBackPress.setOnClickListener(this);
         mBinding.btSaveAddresh.setOnClickListener(this);
         mBinding.toolbarTittle.tvTittle.setText(dbHelper.getString(R.string.update_profile));
-        mBinding.etName.setText(SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.FIRST_NAME));
-        mBinding.etEmailId.setText(SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.EMAIL_ID));
-        mBinding.etPinCode.setText(SharePrefs.getInstance(UpdateProfileActivity.this).getString(SharePrefs.PIN_CODE));
+        mBinding.etName.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.FIRST_NAME));
+        if (TextUtils.isNullOrEmpty(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.EMAIL_ID)))
+            mBinding.etEmailId.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.EMAIL_ID));
+        mBinding.etPinCode.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.PIN_CODE));
     }
 
     @Override
@@ -73,12 +74,10 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_name));
         } else if (TextUtils.isNullOrEmpty(mBinding.etPinCode.getText().toString())) {
             Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_pincode));
-        }
-        else if (mBinding.etEmailId.getText().toString().length() > 0) {
+        } else if (mBinding.etEmailId.getText().toString().length() > 0) {
             if (!TextUtils.isValidEmail(mBinding.etEmailId.getText().toString())) {
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.invalid_email));
-            }
-            else {
+            } else {
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     Utils.showProgressDialog(this);
                     updateUserData();
@@ -105,8 +104,8 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
                 if (customerDataModel != null) {
                     if (customerDataModel) {
                         SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.FIRST_NAME, mBinding.etName.getText().toString());
-                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.EMAIL_ID,  mBinding.etEmailId.getText().toString());
-                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.PIN_CODE,  mBinding.etPinCode.getText().toString());
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.EMAIL_ID, mBinding.etEmailId.getText().toString());
+                        SharePrefs.getInstance(getApplicationContext()).putString(SharePrefs.PIN_CODE, mBinding.etPinCode.getText().toString());
                         onBackPressed();
                     }
                 }
