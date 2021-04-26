@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +21,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.skdirect.R;
+import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityNewAddreshBinding;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.GPSTracker;
@@ -27,12 +31,15 @@ import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.NewAddressViewMode;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
+import io.reactivex.observers.DisposableObserver;
 
 public class NewAddressActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityNewAddreshBinding mBinding;
@@ -97,6 +104,38 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
                         .putExtra("cityname", "")
                         .putExtra("searchCity", false), 1001);
 
+            }
+        });
+
+
+        mBinding.etPinCode.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_NULL) {
+                String pincode = mBinding.etPinCode.getText().toString();
+                if (!pincode.equals("") || pincode.length() == 6) {
+                    callPinCodeAPI(pincode);
+                } else {
+                    Utils.setToast(this, dbHelper.getString(R.string.please_enter_pincode));
+                }
+                return true;
+            }
+            return false;
+        });
+
+        mBinding.etPinCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length() == 6){
+                    String pincode = mBinding.etPinCode.getText().toString();
+                    if (!pincode.equals("") || pincode.length() == 6) {
+                        callPinCodeAPI(pincode);
+                    }
+                }
             }
         });
 
@@ -274,6 +313,42 @@ public class NewAddressActivity extends AppCompatActivity implements View.OnClic
             }
         });
     }
+
+    private void callPinCodeAPI(String pincode) {
+        Utils.showProgressDialog(this);
+        CommonClassForAPI.getInstance(this).getCityStatebyPincode(observer, pincode);
+    }
+
+
+    private final DisposableObserver<JsonObject> observer = new DisposableObserver<JsonObject>() {
+        @Override
+        public void onNext(@NotNull JsonObject jsonObject) {
+            Utils.hideProgressDialog();
+            try {
+                String city = jsonObject.get("City").getAsString();
+                String state = jsonObject.get("State").getAsString();
+                if (city != null) {
+                    mBinding.etPinCity.setText(city);
+                }
+                if (state != null) {
+                    mBinding.etPinState.setText(state);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+            Utils.hideProgressDialog();
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    };
 
 
 }

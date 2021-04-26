@@ -827,4 +827,31 @@ public class CommonClassForAPI {
                     }
                 });
     }
+    public void getCityStatebyPincode(final DisposableObserver<JsonObject> observer,String pinCode) {
+        RestClient.getInstance().getService().getCityState(pinCode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JsonObject>() {
+
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    public void onNext(@NotNull JsonObject o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
 }

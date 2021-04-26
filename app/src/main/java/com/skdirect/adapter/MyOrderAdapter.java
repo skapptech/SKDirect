@@ -77,8 +77,14 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
             holder.mBinding.tvAddReview.setVisibility(View.GONE);
             holder.mBinding.ratingbar.setVisibility(View.GONE);
 
-        } else if (myOrderModel.getOrderStatus().equals("Delivered") && myOrderModel.getRating() == 0) {
-            holder.mBinding.tvAddReview.setVisibility(View.VISIBLE);
+        } else if (myOrderModel.getOrderStatus().equals("Delivered")) {
+            if (myOrderModel.getRating() == 0) {
+                holder.mBinding.tvAddReview.setVisibility(View.VISIBLE);
+            }else {
+                holder.mBinding.ratingbar.setVisibility(View.VISIBLE);
+                holder.mBinding.ratingbar.setRating(myOrderModel.getRating());
+                holder.mBinding.tvAddReview.setVisibility(View.GONE);
+            }
         } else {
             holder.mBinding.ratingbar.setVisibility(View.VISIBLE);
             holder.mBinding.ratingbar.setRating(myOrderModel.getRating());
