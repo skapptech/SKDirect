@@ -245,7 +245,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         mBinding.etSearchSeller.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
                 skipCount = 0;
-                takeCount = 10;
+                takeCount = 15;
                 searchSellerName = mBinding.etSearchSeller.getText().toString().trim();
                 sellerProductModels.clear();
                 sellerShopListAdapter.notifyDataSetChanged();

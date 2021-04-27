@@ -27,12 +27,12 @@ import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.VersionViewModel;
 
-import okhttp3.internal.Util;
-
 public class SplashActivity extends AppCompatActivity {
     private ActivitySplashBinding mBinding;
     private SplashActivity activity;
     private VersionViewModel versionViewModel;
+
+    private String cancelString, skipString;
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -46,7 +46,7 @@ public class SplashActivity extends AppCompatActivity {
         versionViewModel = ViewModelProviders.of(this).get(VersionViewModel.class);
         activity = this;
         initViews();
-        Utils.logAppsFlayerEventApp(activity,"SplashScreen","SplashScreen");
+        Utils.logAppsFlayerEventApp(activity, "SplashScreen", "SplashScreen");
     }
 
     @Override
@@ -128,31 +128,38 @@ public class SplashActivity extends AppCompatActivity {
             startActivity(new Intent(activity, MainActivity.class));
         } else {
             startActivity(new Intent(activity, IntroActivity.class));
-}
+        }
     }
 
     private void checkVersionData(AppVersionModel appVersionModels) {
         try {
             SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL, appVersionModels.getResultItem().getSellerUrl());
             SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL, appVersionModels.getResultItem().getBuyerUrl());
-            if (BuildConfig.VERSION_NAME.equalsIgnoreCase(appVersionModels.getResultItem().getVersion())) {
 
+            if (appVersionModels.getResultItem().isCompulsory()) {
+                cancelString = MyApplication.getInstance().dbHelper.getString(R.string.close);
             } else {
-                @SuppressLint("RestrictedApi")
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setTitle(R.string.update_available);
-                alertDialogBuilder.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.update_to_latest_version) + " " + appVersionModels.getResultItem().getVersion() + " " + MyApplication.getInstance().dbHelper.getString(R.string.from_play_store));
-                alertDialogBuilder.setCancelable(false);
-                alertDialogBuilder.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.update), (dialog, id) -> {
-                    dialog.cancel();
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + activity.getPackageName())));
-                });
-                alertDialogBuilder.setNegativeButton(MyApplication.getInstance().dbHelper.getString(R.string.skip), (dialog, i) -> {
+                cancelString = MyApplication.getInstance().dbHelper.getString(R.string.skip);
+            }
+
+            @SuppressLint("RestrictedApi")
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle(R.string.update_available);
+            alertDialogBuilder.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.update_to_latest_version) + " " + appVersionModels.getResultItem().getVersion() + " " + MyApplication.getInstance().dbHelper.getString(R.string.from_play_store));
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.update), (dialog, id) -> {
+                dialog.cancel();
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + activity.getPackageName())));
+            });
+            alertDialogBuilder.setNegativeButton(cancelString, (dialog, i) -> {
+                if (cancelString.equals(MyApplication.getInstance().dbHelper.getString(R.string.skip))) {
                     startActivity(new Intent(activity, MainActivity.class));
                     finish();
-                });
-                alertDialogBuilder.show();
-            }
+                }else {
+                    finish();
+                }
+            });
+            alertDialogBuilder.show();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
