@@ -91,6 +91,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         mBinding.rlHomeSearch.setVisibility(View.VISIBLE);
                         if (mallMainModel.getResultItem().getBannerModel()!=null) {
                             if ( mallMainModel.getResultItem().getBannerModel().getBannerItemListModel().size()>0){
+                                mBinding.rlHomeBanner.setVisibility(View.VISIBLE);
                                 bannerList(mallMainModel.getResultItem().getBannerModel());
                             }else {
                                 mBinding.rlHomeBanner.setVisibility(View.GONE);
@@ -98,13 +99,11 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         }else {
                             mBinding.rlHomeBanner.setVisibility(View.GONE);
                         }
-
                         SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_Mall, true);
                         SharePrefs.getInstance(getActivity()).putString(SharePrefs.MALL_ID, mallMainModel.getResultItem().getId());
                         MallCategorieBannerAdapter mallCategorieBannerAdapter = new MallCategorieBannerAdapter(getActivity(), mallMainModel.getResultItem().getStoreCategoryList());
                         mBinding.rvStoreCategoryList.setAdapter(mallCategorieBannerAdapter);
                         mBinding.llMallHome.setVisibility(View.VISIBLE);
-                        mBinding.rlHomeBanner.setVisibility(View.VISIBLE);
                         mBinding.llMainAppHome.setVisibility(View.GONE);
                     } else {
                         mBinding.llMallHome.setVisibility(View.GONE);
