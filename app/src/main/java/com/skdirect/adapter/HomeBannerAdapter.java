@@ -14,9 +14,7 @@ import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.activity.ProductDetailsActivity;
 import com.skdirect.activity.SellerProfileActivity;
-import com.skdirect.activity.ShowImageActivity;
 import com.skdirect.model.BannerItemListModel;
-import com.skdirect.model.ImageListModel;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,13 +22,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class HomeBannerAdapter extends PagerAdapter {
-    private Context context;
-    private ArrayList<BannerItemListModel> bannerItemListModel;
-    private LayoutInflater inflater;
+    private final Context context;
+    private final ArrayList<BannerItemListModel> bannerItemListModel;
+    private final LayoutInflater inflater;
 
-    public HomeBannerAdapter(Context context,ArrayList<BannerItemListModel> bannerListModel) {
+    public HomeBannerAdapter(Context context, ArrayList<BannerItemListModel> bannerListModel) {
         this.context = context;
-        this.bannerItemListModel=bannerListModel;
+        this.bannerItemListModel = bannerListModel;
         inflater = LayoutInflater.from(context);
     }
 
@@ -47,20 +45,20 @@ public class HomeBannerAdapter extends PagerAdapter {
         assert imageLayout != null;
         final ImageView imageView = imageLayout.findViewById(R.id.cat_img);
         if (bannerItemListModel.get(position).getImagepath() != null && !bannerItemListModel.get(position).getImagepath().contains("http")) {
-            Picasso.get().load(BuildConfig.apiEndpoint+bannerItemListModel.get(position).getImagepath()).into(imageView);
-        }else {
+            Picasso.get().load(BuildConfig.apiEndpoint + bannerItemListModel.get(position).getImagepath()).into(imageView);
+        } else {
             Picasso.get().load(bannerItemListModel.get(position).getImagepath()).into(imageView);
         }
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (bannerItemListModel.get(position).getType().equals("SELLER")){
-                    context.startActivity(new Intent(context, SellerProfileActivity.class).putExtra("ID",bannerItemListModel.get(position).getGivenId()));
-
-                }else {
-                    context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID",bannerItemListModel.get(position).getGivenId()));
-
+                if (bannerItemListModel.get(position).getType() != null) {
+                    if (bannerItemListModel.get(position).getType().equals("SELLER")) {
+                        context.startActivity(new Intent(context, SellerProfileActivity.class).putExtra("ID", bannerItemListModel.get(position).getGivenId()));
+                    } else {
+                        context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID", bannerItemListModel.get(position).getGivenId()));
+                    }
                 }
             }
         });
