@@ -128,7 +128,7 @@ public class SplashActivity extends AppCompatActivity {
             startActivity(new Intent(activity, MainActivity.class));
         } else {
             startActivity(new Intent(activity, IntroActivity.class));
-        }
+}
     }
 
     private void checkVersionData(AppVersionModel appVersionModels) {

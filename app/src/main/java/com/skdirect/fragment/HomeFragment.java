@@ -90,7 +90,13 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         mBinding.swiperefresh.setRefreshing(false);
                         mBinding.rlHomeSearch.setVisibility(View.VISIBLE);
                         if (mallMainModel.getResultItem().getBannerModel()!=null) {
-                            bannerList(mallMainModel.getResultItem().getBannerModel());
+                            if ( mallMainModel.getResultItem().getBannerModel().getBannerItemListModel().size()>0){
+                                bannerList(mallMainModel.getResultItem().getBannerModel());
+                            }else {
+                                mBinding.rlHomeBanner.setVisibility(View.GONE);
+                            }
+                        }else {
+                            mBinding.rlHomeBanner.setVisibility(View.GONE);
                         }
 
                         SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_Mall, true);
