@@ -98,12 +98,11 @@ public class CategoriesListActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
+        if (view.getId() == R.id.iv_back_press) {
+            onBackPressed();
         }
     }
+
 
     private void callProductList() {
         if (Utils.isNetworkAvailable(getApplicationContext())) {

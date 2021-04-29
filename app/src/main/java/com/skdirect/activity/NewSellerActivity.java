@@ -138,10 +138,8 @@ public class NewSellerActivity extends AppCompatActivity implements View.OnClick
     }
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
+        if (view.getId() == R.id.iv_back_press) {
+            onBackPressed();
         }
     }
 

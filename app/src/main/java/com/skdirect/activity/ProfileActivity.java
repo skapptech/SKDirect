@@ -48,25 +48,17 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
-            case R.id.rl_seller_info:
-                startActivity(new Intent(ProfileActivity.this, UpdateProfileActivity.class));
-                break;
-
-            case R.id.rl_my_order:
-                startActivity(new Intent(ProfileActivity.this, MyOrderActivity.class));
-                break;
-
-            case R.id.rl_my_address:
-                startActivity(new Intent(ProfileActivity.this, ProfilePrimaryAddressActivity.class));
-                break;
-
-            case R.id.rl_chnage_password:
-                startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
-                break;
+        int id = view.getId();
+        if (id == R.id.iv_back_press) {
+            onBackPressed();
+        } else if (id == R.id.rl_seller_info) {
+            startActivity(new Intent(ProfileActivity.this, UpdateProfileActivity.class));
+        } else if (id == R.id.rl_my_order) {
+            startActivity(new Intent(ProfileActivity.this, MyOrderActivity.class));
+        } else if (id == R.id.rl_my_address) {
+            startActivity(new Intent(ProfileActivity.this, ProfilePrimaryAddressActivity.class));
+        } else if (id == R.id.rl_chnage_password) {
+            startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
         }
     }
 

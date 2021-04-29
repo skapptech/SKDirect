@@ -1,7 +1,6 @@
 package com.skdirect.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
@@ -21,7 +20,7 @@ import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 import com.skdirect.R;
 import com.skdirect.api.CommonClassForAPI;
-import com.skdirect.databinding.ActivityPlacesSearchBinding;
+import com.skdirect.databinding.ActivityPlacesSearchdBinding;
 import com.skdirect.model.TokenModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
@@ -30,8 +29,6 @@ import com.skdirect.utils.TextUtils;
 import com.skdirect.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +38,7 @@ import io.reactivex.observers.DisposableObserver;
 
 public class PlaceSearchActivity extends AppCompatActivity implements View.OnClickListener {
     private final int REQUEST_FOR_ADDRESS = 1001;
-    private ActivityPlacesSearchBinding mBinding;
+    private ActivityPlacesSearchdBinding mBinding;
     private Place place;
     private Geocoder mGeocoder;
     private LatLng latLng;
@@ -55,7 +52,7 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_places_search);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_places_searchd);
         dbHelper = MyApplication.getInstance().dbHelper;
         initView();
 
@@ -76,15 +73,14 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.et_location:
-                callRunTimePermissions();
-                break;
-            case R.id.bt_save:
-                saveLocationData();
-                break;
+        int id = v.getId();
+        if (id == R.id.et_location) {
+            callRunTimePermissions();
+        } else if (id == R.id.bt_save) {
+            saveLocationData();
         }
     }
+
 
     private void saveLocationData() {
         if (TextUtils.isNullOrEmpty(mBinding.etLocation.getText().toString().trim())) {

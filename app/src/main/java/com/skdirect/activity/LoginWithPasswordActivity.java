@@ -58,13 +58,12 @@ public class LoginWithPasswordActivity extends AppCompatActivity implements View
 
     }
 
+
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.bt_lodding_otp:
-                Utils.hideKeyboard(this, view);
-                loginWithPassword();
-                break;
+        if (view.getId() == R.id.bt_lodding_otp) {
+            Utils.hideKeyboard(this, view);
+            loginWithPassword();
         }
     }
 

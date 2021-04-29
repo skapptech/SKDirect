@@ -59,21 +59,17 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
-            case R.id.bt_save_ratting:
-                checkRatting();
-                break;
-
-            case R.id.ratingBar:
-                addRating();
-                break;
+        int id = view.getId();
+        if (id == R.id.iv_back_press) {
+            onBackPressed();
+        } else if (id == R.id.bt_save_ratting) {
+            checkRatting();
+        } else if (id == R.id.ratingBar) {
+            addRating();
         }
     }
 
-    private void addRating() {
+    void addRating() {
 
 
     }

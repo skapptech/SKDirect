@@ -142,10 +142,8 @@ public class NearSellerActivity extends AppCompatActivity implements View.OnClic
     }
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
+        if (view.getId() == R.id.iv_back_press) {
+            onBackPressed();
         }
     }
 

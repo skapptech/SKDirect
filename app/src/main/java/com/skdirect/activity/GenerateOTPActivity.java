@@ -156,7 +156,7 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
                 resendotp.setBackgroundResource(R.drawable.rectangle);
                 resendotp.setPadding(8, 8, 8, 8);
                 Binding.resendotp.setVisibility(View.VISIBLE);
-                resendotp.setTextColor(getResources().getColor(R.color.colorAccent));
+                resendotp.setTextColor(getResources().getColor(R.color.colorAccentDir));
                 //Toast.makeText(context, getString(R.string.resendotp), Toast.LENGTH_SHORT).show();
             }
         };
@@ -191,10 +191,8 @@ public class GenerateOTPActivity extends AppCompatActivity implements OtpReceive
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.bt_lodding_otp:
-                checkVerification();
-                break;
+        if (view.getId() == R.id.bt_lodding_otp) {
+            checkVerification();
         }
     }
 

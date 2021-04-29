@@ -7,14 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.skdirect.R;
 import com.skdirect.adapter.DynamicTabAdapter;
 import com.skdirect.api.CommonClassForAPI;
-import com.skdirect.databinding.ActivityMyOrderBinding;
+import com.skdirect.databinding.ActivityMyOrderdBinding;
 import com.skdirect.model.OrderStatusDetails;
 import com.skdirect.model.OrderStatusMainModel;
 import com.skdirect.utils.DBHelper;
@@ -23,7 +19,6 @@ import com.skdirect.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import io.reactivex.observers.DisposableObserver;
@@ -31,14 +26,14 @@ import io.reactivex.observers.DisposableObserver;
 import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
 public class MyOrderActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivityMyOrderBinding mBinding;
+    private ActivityMyOrderdBinding mBinding;
     public DBHelper dbHelper;
     private CommonClassForAPI commonClassForAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_my_order);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_my_orderd);
         commonClassForAPI = CommonClassForAPI.getInstance(this);
         initView();
 
@@ -85,12 +80,9 @@ public class MyOrderActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
+        if (view.getId() == R.id.iv_back_press) {
+            onBackPressed();
         }
-
     }
 
     private void setupViewPager(ViewPager viewPager, ArrayList<String> statusList) {

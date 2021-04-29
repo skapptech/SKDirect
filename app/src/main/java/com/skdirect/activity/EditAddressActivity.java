@@ -138,17 +138,13 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
-            case R.id.tv_using_location:
-                callLocationAPI();
-                break;
-
-            case R.id.bt_save_addresh:
-                addLocation();
-                break;
+        int id = view.getId();
+        if (id == R.id.iv_back_press) {
+            onBackPressed();
+        } else if (id == R.id.tv_using_location) {
+            callLocationAPI();
+        } else if (id == R.id.bt_save_addresh) {
+            addLocation();
         }
     }
 

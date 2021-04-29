@@ -37,7 +37,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonObject;
 import com.skdirect.R;
-import com.skdirect.databinding.ActivityMapsBinding;
+import com.skdirect.databinding.ActivityMapsdBinding;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
@@ -59,14 +59,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleApiClient googleApiClient;
     private Address address;
     private MapViewViewMode mapViewViewMode;
-    private ActivityMapsBinding mBinding;
+    private ActivityMapsdBinding mBinding;
     //private PlacesAutoCompleteAdapter placesAutoCompleteAdapter;
     DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_maps);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_mapsd);
         mapViewViewMode = ViewModelProviders.of(this).get(MapViewViewMode.class);
         dbHelper = MyApplication.getInstance().dbHelper;
         initView();
@@ -234,12 +234,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onClick(View view) {
-       switch (view.getId()){
-           case R.id.iv_back_press:
-               onBackPressed();
-               break;
-       }
+        if (view.getId() == R.id.iv_back_press) {
+            onBackPressed();
+        }
     }
+
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {

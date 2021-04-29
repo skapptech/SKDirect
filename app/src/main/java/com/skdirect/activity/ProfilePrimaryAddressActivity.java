@@ -67,14 +67,11 @@ public class ProfilePrimaryAddressActivity extends AppCompatActivity implements 
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
-
-            case R.id.bt_add_new_addresh:
-              startActivity(new Intent(ProfilePrimaryAddressActivity.this,NewAddressActivity.class));
-                break;
+        int id = view.getId();
+        if (id == R.id.iv_back_press) {
+            onBackPressed();
+        } else if (id == R.id.bt_add_new_addresh) {
+            startActivity(new Intent(ProfilePrimaryAddressActivity.this, NewAddressActivity.class));
         }
     }
 

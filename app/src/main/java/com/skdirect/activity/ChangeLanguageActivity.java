@@ -1,15 +1,9 @@
 package com.skdirect.activity;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.ImageView;
+import android.view.View.OnClickListener;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.skdirect.R;
 import com.skdirect.adapter.LanguageListAdapter;
-import com.skdirect.databinding.ActivityChangeLanguageBinding;
+
+import com.skdirect.databinding.ActivityChangeLanguagedBinding;
 import com.skdirect.interfacee.OnLanguageClick;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
@@ -32,8 +27,8 @@ import com.skdirect.utils.Utils;
 import java.util.ArrayList;
 
 
-public class ChangeLanguageActivity extends AppCompatActivity implements View.OnClickListener, OnLanguageClick {
-    private ActivityChangeLanguageBinding mBinding;
+public class ChangeLanguageActivity extends AppCompatActivity implements OnClickListener, OnLanguageClick {
+    private ActivityChangeLanguagedBinding mBinding;
     private ArrayList<DataSnapshot> languageList;
     private LanguageListAdapter adapter;
     private ChangeLanguageActivity activity;
@@ -43,7 +38,7 @@ public class ChangeLanguageActivity extends AppCompatActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_change_language);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_change_languaged);
         activity = this;
         initView();
     }
@@ -99,15 +94,13 @@ public class ChangeLanguageActivity extends AppCompatActivity implements View.On
             Utils.hideProgressDialog();
         }, 2000);
     }
-
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
+        if (v.getId() == R.id.iv_back_press) {
+            onBackPressed();
         }
     }
+
 
     @Override
     public void onSelectLanguage(int position) {

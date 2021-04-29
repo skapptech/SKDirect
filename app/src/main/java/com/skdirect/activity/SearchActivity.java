@@ -42,10 +42,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
+        if (view.getId() == R.id.iv_back_press) {
+            onBackPressed();
         }
     }
 

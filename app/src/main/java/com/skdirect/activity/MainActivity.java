@@ -167,34 +167,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         chat.setTitle(dbHelper.getString(R.string.chat));
 
         mBinding.toolbarId.bottomNavigation.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.nav_home:
-                    openFragment(new HomeFragment());
-                    break;
-                case R.id.nav_profile:
-                    positionChanged = true;
-                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                    } else {
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    }
-                    break;
-                case R.id.nav_my_order:
-                    positionChanged = true;
-                    if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                        startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
-                    } else {
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    }
-                    break;
-                case R.id.nav_chat:
-                    positionChanged = true;
-                    startActivity(new Intent(MainActivity.this, ChatActivity.class));
-                    break;
-
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_home) {
+                openFragment(new HomeFragment());
+            } else if (itemId == R.id.nav_profile) {
+                positionChanged = true;
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                } else {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
+            } else if (itemId == R.id.nav_my_order) {
+                positionChanged = true;
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                    startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
+                } else {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
+            } else if (itemId == R.id.nav_chat) {
+                positionChanged = true;
+                startActivity(new Intent(MainActivity.this, ChatActivity.class));
             }
             return true;
         });
+
 
         mBinding.toolbarId.notifictionCount.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), CartActivity.class)));
 
@@ -274,65 +270,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.ll_profile:
-                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                } else {
-                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                }
-                mBinding.drawer.closeDrawers();
-                break;
-
-            case R.id.ll_chnage_password:
-                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                    startActivity(new Intent(getApplicationContext(), ChangePasswordActivity.class));
-                } else {
-                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                }
-                mBinding.drawer.closeDrawers();
-                break;
-
-            case R.id.ll_chet:
-                mBinding.drawer.closeDrawers();
-                startActivity(new Intent(getApplicationContext(), ChatActivity.class));
-                break;
-            case R.id.ll_rate_this_app:
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.playStoreURL)));
-                mBinding.drawer.closeDrawers();
-                break;
-
-            case R.id.ll_logout:
-                mBinding.drawer.closeDrawers();
-                clearSharePrefs();
+        int id = view.getId();
+        if (id == R.id.ll_profile) {
+            if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            } else {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                finish();
-                break;
-            case R.id.ll_sign_in:
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                mBinding.drawer.closeDrawers();
-                break;
-            case R.id.ll_howto_use:
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop"));
-                startActivity(intent);
-                mBinding.drawer.closeDrawers();
-                break;
-            case R.id.llChangeLanguage:
-                startActivity(new Intent(getApplicationContext(), ChangeLanguageActivity.class));
-                mBinding.drawer.closeDrawers();
-                break;
-            case R.id.ll_private_polcy:
-                startActivity(new Intent(getApplicationContext(), WebviewActivity.class).putExtra("FunctionName", "PrivacyPolicy"));
-                mBinding.drawer.closeDrawers();
-                break;
-            case R.id.ll_about_app:
-                startActivity(new Intent(getApplicationContext(), WebviewActivity.class).putExtra("FunctionName", "AboutApp"));
-                mBinding.drawer.closeDrawers();
-                break;
-            case R.id.ll_terms_and_condition:
-                startActivity(new Intent(getApplicationContext(), WebviewActivity.class).putExtra("FunctionName", "TermsCondition"));
-                mBinding.drawer.closeDrawers();
-                break;
+            }
+            mBinding.drawer.closeDrawers();
+        } else if (id == R.id.ll_chnage_password) {
+            if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                startActivity(new Intent(getApplicationContext(), ChangePasswordActivity.class));
+            } else {
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            }
+            mBinding.drawer.closeDrawers();
+        } else if (id == R.id.ll_chet) {
+            mBinding.drawer.closeDrawers();
+            startActivity(new Intent(getApplicationContext(), ChatActivity.class));
+        } else if (id == R.id.ll_rate_this_app) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
+            mBinding.drawer.closeDrawers();
+        } else if (id == R.id.ll_logout) {
+            mBinding.drawer.closeDrawers();
+            clearSharePrefs();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
+        } else if (id == R.id.ll_sign_in) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            mBinding.drawer.closeDrawers();
+        } else if (id == R.id.ll_howto_use) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UChGqYYqXeuGdNVqQ9MQS2Fw?app=desktop"));
+            startActivity(intent);
+            mBinding.drawer.closeDrawers();
+        } else if (id == R.id.llChangeLanguage) {
+            startActivity(new Intent(getApplicationContext(), ChangeLanguageActivity.class));
+            mBinding.drawer.closeDrawers();
+        } else if (id == R.id.ll_private_polcy) {
+            startActivity(new Intent(getApplicationContext(), WebviewActivity.class).putExtra("FunctionName", "PrivacyPolicy"));
+            mBinding.drawer.closeDrawers();
+        } else if (id == R.id.ll_about_app) {
+            startActivity(new Intent(getApplicationContext(), WebviewActivity.class).putExtra("FunctionName", "AboutApp"));
+            mBinding.drawer.closeDrawers();
+        } else if (id == R.id.ll_terms_and_condition) {
+            startActivity(new Intent(getApplicationContext(), WebviewActivity.class).putExtra("FunctionName", "TermsCondition"));
+            mBinding.drawer.closeDrawers();
         }
     }
 

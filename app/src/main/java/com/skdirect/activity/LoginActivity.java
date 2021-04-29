@@ -56,16 +56,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.bt_get_otp:
-                getOTP();
-                break;
-            case R.id.bt_login_with_password:
-                loginWithPassword();
-                break;
-            case R.id.bt_skip:
-                startActivity(new Intent(this, MainActivity.class));
-                break;
+        int id = view.getId();
+        if (id == R.id.bt_get_otp) {
+            getOTP();
+        } else if (id == R.id.bt_login_with_password) {
+            loginWithPassword();
+        } else if (id == R.id.bt_skip) {
+            startActivity(new Intent(this, MainActivity.class));
         }
 
     }

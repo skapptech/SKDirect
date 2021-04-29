@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.gson.JsonObject;
 import com.skdirect.R;
 import com.skdirect.adapter.DeliveryOptionAdapter;
-import com.skdirect.databinding.ActivityPaymentBinding;
+import com.skdirect.databinding.ActivityPaymentdBinding;
 import com.skdirect.interfacee.DeliveryOptionInterface;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.DeliveryMainModel;
@@ -35,7 +35,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, DeliveryOptionInterface {
-    private ActivityPaymentBinding mBinding;
+    private ActivityPaymentdBinding mBinding;
     private PaymentViewMode paymentViewMode;
     private CartItemModel cartItemModel;
     private final ArrayList<DeliveryOptionModel> deliveryOptionList = new ArrayList<>();
@@ -50,7 +50,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_payment);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_paymentd);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(MyApplication.getInstance().dbHelper.getString(R.string.title_activity_payment));
 
@@ -68,26 +68,22 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btnRemove:
-                updateViews(false, coupon);
-                break;
-            case R.id.btnOffer:
-                startActivityForResult(new Intent(getApplicationContext(), OfferActivity.class), 9);
-                break;
-            case R.id.btnPlaceOrder:
-                if ((userLocationId != null && userLocationId != 0) || isSelfPickup) {
-                    orderPlaceAlertDialog();
-                } else {
-                    startActivityForResult(new Intent(getApplicationContext(),
-                            PrimaryAddressActivity.class).putExtra("UserLocationId", userLocationId), 2);
-                    //Utils.setToast(getApplicationContext(), MyApplication.getInstance().dbHelper.getString(R.string.please_select_address));
-                }
-                break;
-            case R.id.btnAdd:
+        int id = view.getId();
+        if (id == R.id.btnRemove) {
+            updateViews(false, coupon);
+        } else if (id == R.id.btnOffer) {
+            startActivityForResult(new Intent(getApplicationContext(), OfferActivity.class), 9);
+        } else if (id == R.id.btnPlaceOrder) {
+            if ((userLocationId != null && userLocationId != 0) || isSelfPickup) {
+                orderPlaceAlertDialog();
+            } else {
                 startActivityForResult(new Intent(getApplicationContext(),
                         PrimaryAddressActivity.class).putExtra("UserLocationId", userLocationId), 2);
-                break;
+                //Utils.setToast(getApplicationContext(), MyApplication.getInstance().dbHelper.getString(R.string.please_select_address));
+            }
+        } else if (id == R.id.btnAdd) {
+            startActivityForResult(new Intent(getApplicationContext(),
+                    PrimaryAddressActivity.class).putExtra("UserLocationId", userLocationId), 2);
         }
     }
 

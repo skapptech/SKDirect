@@ -22,7 +22,7 @@ import com.skdirect.activity.SearchActivity;
 import com.skdirect.adapter.HomeBannerAdapter;
 import com.skdirect.adapter.MallCategorieBannerAdapter;
 import com.skdirect.api.CommonClassForAPI;
-import com.skdirect.databinding.FragmentHomeBinding;
+import com.skdirect.databinding.FragmentHomedBinding;
 import com.skdirect.model.BannerModel;
 import com.skdirect.model.MallMainModel;
 import com.skdirect.utils.DBHelper;
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import io.reactivex.observers.DisposableObserver;
 
 public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    private FragmentHomeBinding mBinding;
+    private FragmentHomedBinding mBinding;
     private MainActivity activity;
     //private HomeViewModel homeViewModel;
     public DBHelper dbHelper;
@@ -49,7 +49,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_homed, container, false);
         initViews();
         return mBinding.getRoot();
     }

@@ -22,7 +22,7 @@
                     android:id="@+id/rl_home_search"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:background="@color/colorAccent"
+                    android:background="@color/colorAccentDir"
                     android:orientation="vertical"
                     android:visibility="gone">
 
@@ -72,7 +72,7 @@
                         android:layout_marginBottom="3dp"
                         android:padding="5dp"
                         android:scrollbarSize="20dp"
-                        app:fillColor="@color/colorAccent"
+                        app:fillColor="@color/colorAccentDir"
                         app:radius="20dp" />
                 </RelativeLayout>
 

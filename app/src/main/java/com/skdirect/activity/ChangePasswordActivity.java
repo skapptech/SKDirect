@@ -57,17 +57,13 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
-
-            case R.id.bt_save_password:
-                changePassword();
-                break;
+        int id = view.getId();
+        if (id == R.id.iv_back_press) {
+            onBackPressed();
+        } else if (id == R.id.bt_save_password) {
+            changePassword();
         }
     }
-
     private void changePassword() {
         if (TextUtils.isNullOrEmpty(mBinding.etNewPassword.getText().toString().trim())) {
             Utils.setLongToast(getApplicationContext(), dbHelper.getString(R.string.please_enter_new_password));

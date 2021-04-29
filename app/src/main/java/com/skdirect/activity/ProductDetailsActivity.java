@@ -27,7 +27,7 @@ import com.skdirect.adapter.BottomListAdapter;
 import com.skdirect.adapter.ShowImagesAdapter;
 import com.skdirect.adapter.TopSimilarSellerAdapter;
 import com.skdirect.api.CommonClassForAPI;
-import com.skdirect.databinding.ActivityProductDetailsBinding;
+import com.skdirect.databinding.ActivityProductDetailsdBinding;
 import com.skdirect.interfacee.BottomBarInterface;
 import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.AddViewMainModel;
@@ -53,7 +53,7 @@ import java.util.ArrayList;
 import io.reactivex.observers.DisposableObserver;
 
 public class ProductDetailsActivity extends AppCompatActivity implements View.OnClickListener, BottomBarInterface {
-    private ActivityProductDetailsBinding mBinding;
+    private ActivityProductDetailsdBinding mBinding;
     private int productID;
     private ArrayList<ImageListModel> imageListModels = new ArrayList<>();
     private ArrayList<VariationListModel> variationList = new ArrayList<>();
@@ -71,7 +71,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_product_details);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_product_detailsd);
         dbHelper = MyApplication.getInstance().dbHelper;
         getIntentData();
         initView();
@@ -87,42 +87,36 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
-            case R.id.bt_add_to_cart:
-                resultModel.setQty(1);
-                mBinding.tvSelectedQty.setText("" + resultModel.getQty());
-                addToCart();
-                break;
-            case R.id.tvQtyPlus:
-                if (resultModel.getMaxOrderQuantity() != null && Integer.parseInt(resultModel.getMaxOrderQuantity()) > 0 && resultModel.getQty() >= Integer.parseInt(resultModel.getMaxOrderQuantity())) {
-                    Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.order_quantity));
-                } else {
-                    resultModel.setQty(resultModel.getQty() + 1);
-                    mBinding.tvSelectedQty.setText("" + resultModel.getQty());
-                    updateCart();
-                }
-                break;
-            case R.id.tvQtyMinus:
-                resultModel.setQty(resultModel.getQty() - 1);
+        int id = view.getId();
+        if (id == R.id.iv_back_press) {
+            onBackPressed();
+        } else if (id == R.id.bt_add_to_cart) {
+            resultModel.setQty(1);
+            mBinding.tvSelectedQty.setText("" + resultModel.getQty());
+            addToCart();
+        } else if (id == R.id.tvQtyPlus) {
+            if (resultModel.getMaxOrderQuantity() != null && Integer.parseInt(resultModel.getMaxOrderQuantity()) > 0 && resultModel.getQty() >= Integer.parseInt(resultModel.getMaxOrderQuantity())) {
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.order_quantity));
+            } else {
+                resultModel.setQty(resultModel.getQty() + 1);
                 mBinding.tvSelectedQty.setText("" + resultModel.getQty());
                 updateCart();
-                break;
-            case R.id.tv_varient_button:
-                openBottomSheetDialog();
-                break;
-            case R.id.notifiction_count:
-                startActivity(new Intent(getApplicationContext(), CartActivity.class));
-                break;
-            case R.id.tv_shop_name:
-                startActivity(new Intent(getApplicationContext(), SellerProfileActivity.class)
-                        .putExtra("ID", resultModel.getSellerId()));
-                break;
-            case R.id.imShare:
-                callRunTimePermissions();
-                break;
+            }
+        } else if (id == R.id.tvQtyMinus) {
+            resultModel.setQty(resultModel.getQty() - 1);
+            mBinding.tvSelectedQty.setText("" + resultModel.getQty());
+            updateCart(); resultModel.setQty(resultModel.getQty() - 1);
+            mBinding.tvSelectedQty.setText("" + resultModel.getQty());
+            updateCart();
+        } else if (id == R.id.tv_varient_button) {
+            openBottomSheetDialog();
+        } else if (id == R.id.notifiction_count) {
+            startActivity(new Intent(getApplicationContext(), CartActivity.class));
+        } else if (id == R.id.tv_shop_name) {
+            startActivity(new Intent(getApplicationContext(), SellerProfileActivity.class)
+                    .putExtra("ID", resultModel.getSellerId()));
+        } else if (id == R.id.imShare) {
+            callRunTimePermissions();
         }
     }
 
@@ -213,7 +207,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent.getExtras() != null&&intent.hasExtra("ID")) {
+        if (intent.getExtras() != null && intent.hasExtra("ID")) {
             productID = intent.getIntExtra("ID", 0);
             apiCalling();
         } else if (intent.getData() != null) {
@@ -254,7 +248,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         mBinding.toolbarTittle.tvTittle.setText("");
         float density = getResources().getDisplayMetrics().density;
         mBinding.indicator.setRadius(3 * density);
-        mBinding.indicator.setFillColor(getResources().getColor(R.color.colorAccent));
+        mBinding.indicator.setFillColor(getResources().getColor(R.color.colorAccentDir));
         mBinding.pager.startAutoScroll(900);
         mBinding.pager.setInterval(900);
         mBinding.pager.setCycle(true);

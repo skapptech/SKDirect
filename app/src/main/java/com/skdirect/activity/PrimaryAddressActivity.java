@@ -48,23 +48,20 @@ public class PrimaryAddressActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
-            case R.id.bt_selected_process:
-                if (locationModelArrayList.size() > 0) {
-                    Intent intent = new Intent();
-                    intent.putExtra("address", userLocationAdapter.getSelectedData());
-                    setResult(Activity.RESULT_OK, intent);
-                    finish();
-                } else {
-                    Utils.setToast(getApplicationContext(), MyApplication.getInstance().dbHelper.getString(R.string.please_enter_address));
-                }
-                break;
-            case R.id.bt_add_new_addresh:
-                startActivity(new Intent(getApplicationContext(), NewAddressActivity.class));
-                break;
+        int id = view.getId();
+        if (id == R.id.iv_back_press) {
+            onBackPressed();
+        } else if (id == R.id.bt_selected_process) {
+            if (locationModelArrayList.size() > 0) {
+                Intent intent = new Intent();
+                intent.putExtra("address", userLocationAdapter.getSelectedData());
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            } else {
+                Utils.setToast(getApplicationContext(), MyApplication.getInstance().dbHelper.getString(R.string.please_enter_address));
+            }
+        } else if (id == R.id.bt_add_new_addresh) {
+            startActivity(new Intent(getApplicationContext(), NewAddressActivity.class));
         }
     }
 

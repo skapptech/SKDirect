@@ -93,28 +93,25 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
-            case R.id.notifiction_count:
-                startActivity(new Intent(getApplicationContext(), CartActivity.class));
-                break;
-            case R.id.RLShare:
-                Utils.showShareWhatsappDialog(this,
-                        dbHelper.getString(R.string.hello_check_seller)
-                                + " " +
-                                sellerShopName
-                                + "'" +
-                                dbHelper.getString(R.string.seller_catelogue) +
-                                "\n" + SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/seller/" + sellerID, "");
-                Utils.logAppsFlayerEventApp(this, "CatalogueShare", "SellerName - " + sellerShopName + ", SellerId - " + sellerID);
-                break;
-            case R.id.iv_s_shop_image:
-                startActivity(new Intent(getApplicationContext(), SellerImageGalleryActivity.class).putExtra("ImageData", sellerImagePath).putExtra("ShopName", sellerShopName));
-                break;
+        if (view.getId() == R.id.iv_back_press) {
+            onBackPressed();
+        }else if( view.getId() == R.id.notifiction_count){
+            startActivity(new Intent(getApplicationContext(), CartActivity.class));
+        }else if (view.getId() == R.id.RLShare){
+            Utils.showShareWhatsappDialog(this,
+                    dbHelper.getString(R.string.hello_check_seller)
+                            + " " +
+                            sellerShopName
+                            + "'" +
+                            dbHelper.getString(R.string.seller_catelogue) +
+                            "\n" + SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/seller/" + sellerID, "");
+            Utils.logAppsFlayerEventApp(this, "CatalogueShare", "SellerName - " + sellerShopName + ", SellerId - " + sellerID);
+        }else if (view.getId()==R.id.iv_s_shop_image){
+            startActivity(new Intent(getApplicationContext(), SellerImageGalleryActivity.class).putExtra("ImageData", sellerImagePath).putExtra("ShopName", sellerShopName));
         }
     }
+
+
 
 
     @Override

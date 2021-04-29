@@ -5,21 +5,19 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.skdirect.R;
-import com.skdirect.databinding.FragmentChatBinding;
+import com.skdirect.databinding.FragmentChatdBinding;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
-import com.skdirect.viewmodel.LoginViewModel;
 
 public class ChatActivity  extends AppCompatActivity {
-    private FragmentChatBinding mBinding;
+    private FragmentChatdBinding mBinding;
     public DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.fragment_chat);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.fragment_chatd);
         dbHelper = MyApplication.getInstance().dbHelper;
         initViews();
     }

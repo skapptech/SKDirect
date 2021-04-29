@@ -18,7 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.skdirect.R;
 import com.skdirect.adapter.CartListAdapter;
 import com.skdirect.api.CommonClassForAPI;
-import com.skdirect.databinding.ActivityCartBinding;
+
+import com.skdirect.databinding.ActivityCartdBinding;
 import com.skdirect.interfacee.CartItemInterface;
 import com.skdirect.model.AddCartItemModel;
 import com.skdirect.model.CartItemModel;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
 import io.reactivex.observers.DisposableObserver;
 
 public class CartActivity extends AppCompatActivity implements View.OnClickListener, CartItemInterface {
-    private ActivityCartBinding mBinding;
+    private ActivityCartdBinding mBinding;
     private CartItemViewMode cartItemViewMode;
     private final ArrayList<CartModel> cartItemList = new ArrayList<>();
     private CartListAdapter cartListAdapter;
@@ -56,7 +57,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_cart);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_cartd);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(MyApplication.getInstance().dbHelper.getString(R.string.shopping_bag));
 
@@ -112,26 +113,22 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back_press:
-                onBackPressed();
-                break;
-            case R.id.btnCheckout:
-                SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.CAME_FROM_CART, false);
-                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                    startActivity(new Intent(getApplicationContext(), PaymentActivity.class)
-                            .putExtra("cartItemSize", cartItemDataModel)
-                            .putExtra("totalAmount", totalAmount));
-                    Utils.logAppsFlayerEventApp(this, "CartScreen", "CheckOut");
-                } else {
-                    SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.CAME_FROM_CART, true);
-                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                }
-                break;
-            case R.id.tv_keep_shopping:
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
-                break;
+        int id = view.getId();
+        if (id == R.id.iv_back_press) {
+            onBackPressed();
+        } else if (id == R.id.btnCheckout) {
+            SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.CAME_FROM_CART, false);
+            if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                startActivity(new Intent(getApplicationContext(), PaymentActivity.class)
+                        .putExtra("cartItemSize", cartItemDataModel)
+                        .putExtra("totalAmount", totalAmount));
+            } else {
+                SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.CAME_FROM_CART, true);
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            }
+        } else if (id == R.id.tv_keep_shopping) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
         }
     }
 
