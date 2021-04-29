@@ -250,7 +250,7 @@ public interface APIServices {
     Call<CommonResponseModel> setLocation(@Query("latitude") double latitude, @Query("longitude") double longitude);
 
     @GET("api/NativeBuyer/Mall/GetMall")
-    Call<MallMainModel> getMall();
+    Observable<MallMainModel> getMall();
 
     @GET("api/NativeBuyer/SellerCoupon/GetCouponList")
     Observable<OfferResponse> getCouponList(@Query("sellerid") int sellerId);

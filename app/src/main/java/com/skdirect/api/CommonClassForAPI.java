@@ -16,6 +16,7 @@ import com.skdirect.model.CartMainModel;
 import com.skdirect.model.CommonResponseModel;
 import com.skdirect.model.ItemAddModel;
 import com.skdirect.model.MainTopSimilarSellerModel;
+import com.skdirect.model.MallMainModel;
 import com.skdirect.model.MallMainPriceModel;
 import com.skdirect.model.MyOrderRequestModel;
 import com.skdirect.model.OrderModel;
@@ -839,6 +840,32 @@ public class CommonClassForAPI {
                     }
 
                     public void onNext(@NotNull JsonObject o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void getMallData(final DisposableObserver<MallMainModel> observer) {
+        RestClient.getInstance().getService().getMall()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MallMainModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull MallMainModel o) {
                         observer.onNext(o);
                     }
 
