@@ -12,6 +12,7 @@ import com.appsflyer.AppsFlyerLib;
 import com.facebook.soloader.SoLoader;
 import com.google.gson.JsonObject;
 import com.onesignal.OSDeviceState;
+import com.onesignal.OSInAppMessageAction;
 import com.onesignal.OSNotification;
 import com.onesignal.OneSignal;
 import com.skdirect.activity.ProductDetailsActivity;
@@ -167,12 +168,12 @@ public class MyApplication extends Application implements LifecycleObserver {
                         if (type != null && !type.equals("")) {
                             if (type.equals("Product")) {
                                 Intent intent = new Intent(getApplicationContext(), ProductDetailsActivity.class);
-                                intent.putExtra("ID",Integer.parseInt(id));
+                                intent.putExtra("ID", Integer.parseInt(id));
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                             } else if (type.equals("Seller")) {
                                 Intent intent = new Intent(getApplicationContext(), SellerProfileActivity.class);
-                                intent.putExtra("ID",Integer.parseInt(id));
+                                intent.putExtra("ID", Integer.parseInt(id));
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                             } else {
@@ -180,7 +181,7 @@ public class MyApplication extends Application implements LifecycleObserver {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                             }
-                        }else {
+                        } else {
                             Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
@@ -201,5 +202,27 @@ public class MyApplication extends Application implements LifecycleObserver {
                 notificationReceivedEvent.complete(null);
             }
         });
+
+        if (OneSignal.getDeviceState().getUserId() != null) {
+            OneSignal.setInAppMessageClickHandler(new OneSignal.OSInAppMessageClickHandler() {
+                @Override
+                public void inAppMessageClicked(OSInAppMessageAction result) {
+                    String getData = result.getClickName();
+                    getData = getData.substring(getData.lastIndexOf("/") + 1);
+                    int id = Integer.parseInt(getData);
+                    if (result.getClickName().contains("Seller")) {
+                        Intent intent = new Intent(getApplicationContext(), SellerProfileActivity.class);
+                        intent.putExtra("ID", id);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    } else if (result.getClickName().contains("Product")) {
+                        Intent intent = new Intent(getApplicationContext(), ProductDetailsActivity.class);
+                        intent.putExtra("ID", id);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                }
+            });
+        }
     }
 }
