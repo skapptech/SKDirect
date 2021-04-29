@@ -2,6 +2,7 @@ package com.skdirect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
@@ -404,11 +405,14 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
             if (sellerDetailsModel.isSuccess()) {
                 if (sellerDetailsModel.getSellerInfoModel().getRating() != 0.0) {
                     Double deg = sellerDetailsModel.getSellerInfoModel().getRating();
-                    sellerImagePath = sellerDetailsModel.getSellerInfoModel().getImagePath();
                     float rating = deg.floatValue();
                     mBinding.ratingbarSeller.setRating(rating);
                 } else {
                     mBinding.ratingbarSeller.setVisibility(View.GONE);
+                }
+
+                if (sellerDetailsModel.getSellerInfoModel().getImagePath()!=null){
+                    sellerImagePath = sellerDetailsModel.getSellerInfoModel().getImagePath();
                 }
 
                 mBinding.tvSellerName.setText(sellerDetailsModel.getSellerInfoModel().getShopName());
