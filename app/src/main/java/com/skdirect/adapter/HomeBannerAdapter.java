@@ -62,10 +62,7 @@ public class HomeBannerAdapter extends PagerAdapter {
                 }
             }
         });
-
-
         view.addView(imageLayout, 0);
-
         return imageLayout;
     }
 
