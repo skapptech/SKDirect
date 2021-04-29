@@ -1,20 +1,19 @@
 package com.skdirect.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
-import com.skdirect.activity.ShowImageActivity;
+import com.skdirect.databinding.SlidingimagesLayoutdBinding;
 import com.skdirect.model.ImageListModel;
-import com.skdirect.utils.Utils;
+import com.skdirect.utils.TextUtils;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,23 +36,26 @@ public class ProductImagesAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
+
     @NotNull
     @Override
     public Object instantiateItem(@NotNull ViewGroup view, int position) {
-        View imageLayout = inflater.inflate(R.layout.slidingimages_layout, view, false);
-
-        assert imageLayout != null;
-        final ImageView imageView = imageLayout.findViewById(R.id.iv_item_image);
-
-        if (imageListModels.get(position).getImagePath() != null && !imageListModels.get(position).getImagePath().contains("http")) {
-            Picasso.get().load(BuildConfig.apiEndpoint+imageListModels.get(position).getImagePath()).into(imageView);
-        }else {
-            Picasso.get().load(imageListModels.get(position).getImagePath()).into(imageView);
+        SlidingimagesLayoutdBinding mBinding = DataBindingUtil.inflate(LayoutInflater.from(context),
+                R.layout.slidingimages_layoutd, null, false);
+        View itemView = mBinding.getRoot();
+        try {
+            if (!TextUtils.isNullOrEmpty(imageListModels.get(position).getImagePath())) {
+                if (!imageListModels.get(position).getImagePath().contains("http")) {
+                    Picasso.get().load(BuildConfig.apiEndpoint + imageListModels.get(position).getImagePath()).into(mBinding.ivItemImageD);
+                } else {
+                    Picasso.get().load(imageListModels.get(position).getImagePath()).into(mBinding.ivItemImageD);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        view.addView(imageLayout, 0);
-
-        return imageLayout;
+        view.addView(itemView);
+        return itemView;
     }
 
     @Override

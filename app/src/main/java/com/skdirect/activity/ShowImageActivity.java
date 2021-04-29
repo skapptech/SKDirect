@@ -1,17 +1,11 @@
 package com.skdirect.activity;
-
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
-
-
 import com.skdirect.R;
 import com.skdirect.adapter.ProductImagesAdapter;
-import com.skdirect.adapter.ShowImagesAdapter;
 import com.skdirect.databinding.FragmentImageShoBinding;
 import com.skdirect.model.ImageListModel;
 import com.skdirect.utils.MyApplication;

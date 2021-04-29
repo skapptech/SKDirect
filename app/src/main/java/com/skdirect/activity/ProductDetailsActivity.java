@@ -503,13 +503,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                             mBinding.llDiscr.addView(linearLayout);
                         }
                     }
+
+
                     if (productDataModel.getResultItem().getImageList() != null && productDataModel.getResultItem().getImageList().size() > 0) {
                         imageListModels = productDataModel.getResultItem().getImageList();
+                        mBinding.pager.setAdapter(new ShowImagesAdapter(ProductDetailsActivity.this, imageListModels));
+                        mBinding.indicator.setViewPager(mBinding.pager);
                     }
                     mBinding.tvItemName.setText(productDataModel.getResultItem().getProductName());
                     productName = productDataModel.getResultItem().getProductName();
-                    mBinding.pager.setAdapter(new ShowImagesAdapter(ProductDetailsActivity.this, imageListModels));
-                    mBinding.indicator.setViewPager(mBinding.pager);
+
                     checkAddButtonValidaction();
 
                     if (productDataModel.getResultItem().getVariationModelList() != null && productDataModel.getResultItem().getVariationModelList().size() > 0) {
