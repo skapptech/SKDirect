@@ -12,6 +12,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
+import com.skdirect.activity.MainActivity;
 import com.skdirect.activity.ProductDetailsActivity;
 import com.skdirect.activity.SellerProfileActivity;
 import com.skdirect.model.BannerItemListModel;
@@ -22,14 +23,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class HomeBannerAdapter extends PagerAdapter {
-    private final Context context;
-    private final ArrayList<BannerItemListModel> bannerItemListModel;
-    private final LayoutInflater inflater;
+    private MainActivity mContext;
+    private  ArrayList<BannerItemListModel> bannerItemListModel;
+    private  LayoutInflater inflater;
 
-    public HomeBannerAdapter(Context context, ArrayList<BannerItemListModel> bannerListModel) {
-        this.context = context;
+    public HomeBannerAdapter(MainActivity context, ArrayList<BannerItemListModel> bannerListModel) {
+        this.mContext = context;
         this.bannerItemListModel = bannerListModel;
         inflater = LayoutInflater.from(context);
+
     }
 
     @Override
@@ -55,9 +57,9 @@ public class HomeBannerAdapter extends PagerAdapter {
             public void onClick(View v) {
                 if (bannerItemListModel.get(position).getType() != null) {
                     if (bannerItemListModel.get(position).getType().equals("SELLER")) {
-                        context.startActivity(new Intent(context, SellerProfileActivity.class).putExtra("ID", bannerItemListModel.get(position).getGivenId()));
+                        mContext.startActivity(new Intent(mContext, SellerProfileActivity.class).putExtra("ID", bannerItemListModel.get(position).getGivenId()));
                     } else {
-                        context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID", bannerItemListModel.get(position).getGivenId()));
+                        mContext.startActivity(new Intent(mContext, ProductDetailsActivity.class).putExtra("ID", bannerItemListModel.get(position).getGivenId()));
                     }
                 }
             }

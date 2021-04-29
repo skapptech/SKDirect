@@ -51,7 +51,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         initViews();
-        getMall();
         return mBinding.getRoot();
     }
 
@@ -59,6 +58,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onResume() {
         super.onResume();
+        getMall();
         mBinding.etSearchSeller.setText("");
     }
 
@@ -153,7 +153,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void bannerList(BannerModel bannerModel) {
-        HomeBannerAdapter homeBannerAdapter = new HomeBannerAdapter(getActivity(), bannerModel.getBannerItemListModel());
+        HomeBannerAdapter homeBannerAdapter = new HomeBannerAdapter(activity, bannerModel.getBannerItemListModel());
         mBinding.pager.setAdapter(homeBannerAdapter);
 
         AutoScroller autoScroller = new AutoScroller(mBinding.pager, activity.getLifecycle(), 5000);
