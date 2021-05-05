@@ -353,54 +353,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-   /* private void callLocationAPI(double latitude, double longitude) {
-        mainActivityViewMode.getMapViewModelRequest(latitude, longitude);
-        mainActivityViewMode.getMapViewModel().observe(this, new Observer<JsonObject>() {
-            @Override
-            public void onChanged(JsonObject data) {
-                Utils.hideProgressDialog();
-                JSONObject jsonResponse = null;
-                try {
-                    jsonResponse = new JSONObject(data.toString());
-                    JSONObject components = jsonResponse.getJSONObject("geometry");
-                    JSONObject location = components.getJSONObject("location");
-                    double lat = location.getDouble("lat");
-                    double lng = location.getDouble("lng");
-                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-                    List<Address> addresses = null;
-                    try {
-                        addresses = geocoder.getFromLocation(lat, lng, 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    String cityName = addresses.get(0).getLocality();
-                    Log.e("cityName", "cityName  " + cityName);
-                    setLocationTV.setText(cityName);
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    public void callRunTimePermissions() {
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
-        Permissions.check(this*//*context*//*, permissions, null*//*rationale*//*, null*//*options*//*, new PermissionHandler() {
-            @Override
-            public void onGranted() {
-                Log.e("onDenied", "onGranted");
-                GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
-                if (gpsTracker != null) {
-                    callLocationAPI(gpsTracker.getLatitude(), gpsTracker.getLongitude());
-                }
-            }
-            @Override
-            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
-                super.onDenied(context, deniedPermissions);
-                Log.e("onDenied", "onDenied" + deniedPermissions);
-
-            }
-        });
-    }*/
 }

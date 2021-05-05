@@ -244,5 +244,7 @@
     <string name="onesignal_app_id" translatable="false">eda68699-028d-403f-8ef8-cd7306db0a09</string>
 
     <string name="close">Close</string>
+    <string name="soial_mall_hindi">सोशल मॉल अब हिंदी में भी !</string>
+    <string name="change_to_hindi">Change to हिंदी </string>
 
 </resources>

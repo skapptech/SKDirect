@@ -14,7 +14,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 12
-        versionName "2.0"
+        versionName "1.10"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -58,10 +58,10 @@ android {
             shrinkResources false
             proguardFiles 'proguard-rules.pro'
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "Social Mall"
+            resValue "string", "app_name", "Social Mall UAT"
             buildConfigField("String", "buildVariant", "\"DEBUG_STORE_FILE\"")
-            //buildConfigField("String", "apiEndpoint", "\"https://virtualstockuat.shopkirana.in\"")
-            buildConfigField("String", "apiEndpoint", "\"https://directb2capi.er15.xyz\"")
+            buildConfigField("String", "apiEndpoint", "\"https://virtualstockuat.shopkirana.in\"")
+           // buildConfigField("String", "apiEndpoint", "\"https://directb2capi.er15.xyz\"")
             buildConfigField("String", "playStoreURL", "\"https://play.google.com/store/apps/details?id=com.skdirect\"")
         }
     }

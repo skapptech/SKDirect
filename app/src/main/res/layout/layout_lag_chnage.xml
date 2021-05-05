@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_all_cet">
+
+        <ImageView
+            android:id="@+id/iv_chnage_lag"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_language" />
+
+        <TextView
+            android:id="@+id/tv_my_order"
+            style="@style/font_normal_sami_lite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/iv_chnage_lag"
+            android:padding="5dp"
+            android:text="@string/soial_mall_hindi"
+            android:textColor="@color/black"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_change_to_hindi"
+            style="@style/font_Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_my_order"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toRightOf="@+id/iv_chnage_lag"
+            android:padding="5dp"
+            android:text="@string/change_to_hindi"
+            android:textColor="@color/seller_button_color"
+            android:textSize="14dp"
+            android:textStyle="bold" />
+
+
+        <ImageView
+            android:id="@+id/iv_cancle"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="top"
+            android:padding="10dp"
+            android:src="@drawable/ic_baseline_cancel_24" />
+
+
+    </RelativeLayout>
+
+</layout>

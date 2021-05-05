@@ -240,4 +240,6 @@
     <string name="hello_check_product">हेलो! चेक करे</string>
     <string name="social_mall_home">सिर्फ सोशल मॉल पर। अभी आर्डर करे और पाए होम डिलीवरी</string>
     <string name="close">बंद करे</string>
+    <string name="soial_mall_hindi">सोशल मॉल अब हिंदी में भी !</string>
+    <string name="change_to_hindi">Change to हिंदी </string>
 </resources>

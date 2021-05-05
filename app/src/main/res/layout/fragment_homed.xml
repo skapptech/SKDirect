@@ -48,32 +48,51 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/rl_home_banner"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:visibility="gone">
+                    android:layout_height="wrap_content">
 
-                    <com.kenilt.loopingviewpager.widget.LoopingViewPager
-                        android:id="@+id/pager"
+                    <RelativeLayout
+                        android:id="@+id/rl_home_banner"
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"
-                        android:overScrollMode="never"
-                        app:layout_constraintDimensionRatio="3:2"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:visibility="gone">
 
-                    <com.kenilt.circleindicator.CirclePageIndicator
-                        android:id="@+id/indicator"
+                        <com.kenilt.loopingviewpager.widget.LoopingViewPager
+                            android:id="@+id/pager"
+                            android:layout_width="match_parent"
+                            android:layout_height="180dp"
+                            android:overScrollMode="never"
+                            app:layout_constraintDimensionRatio="3:2"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.kenilt.circleindicator.CirclePageIndicator
+                            android:id="@+id/indicator"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_alignBottom="@+id/pager"
+                            android:layout_marginBottom="3dp"
+                            android:padding="5dp"
+                            android:scrollbarSize="20dp"
+                            app:fillColor="@color/colorAccentDir"
+                            app:radius="20dp" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_chnage_to_hindi"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_alignBottom="@+id/pager"
-                        android:layout_marginBottom="3dp"
-                        android:padding="5dp"
-                        android:scrollbarSize="20dp"
-                        app:fillColor="@color/colorAccentDir"
-                        app:radius="20dp" />
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
+                        <include
+                            android:id="@+id/layout_chnage_lag"
+                            layout="@layout/layout_lag_chnage"
+                            />
+
+                    </RelativeLayout>
+
                 </RelativeLayout>
 
                 <LinearLayout
