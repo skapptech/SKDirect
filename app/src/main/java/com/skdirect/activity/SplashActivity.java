@@ -85,6 +85,7 @@ public class SplashActivity extends AppCompatActivity {
                         SharePrefs.getInstance(activity).putString(SharePrefs.PRIVACY_POLICY, appVersionModels.getResultItem().getPrivacyPolicy());
                         SharePrefs.getInstance(activity).putString(SharePrefs.TERMS_CONDITION, appVersionModels.getResultItem().getTermsCondition());
                         SharePrefs.getInstance(activity).putString(SharePrefs.ABOUT_APP, appVersionModels.getResultItem().getAboutApp());
+                        SharePrefs.getInstance(activity).putString(SharePrefs.RAZORPAY_API_KEY, appVersionModels.getResultItem().getRazorpayAPIKey());
                         launchHomeScreen();
                         finish();
                     } else {

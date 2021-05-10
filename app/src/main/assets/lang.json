@@ -237,7 +237,8 @@
       "seller_catelogue": "का कैटेलॉग सोशल मॉल पर अभी आर्डर करे और पाए होम डिलीवरी",
       "hello_check_product": "हेलो! चेक करे",
       "social_mall_home": "सिर्फ सोशल मॉल पर। अभी आर्डर करे और पाए होम डिलीवरी",
-      "no_mall_availble": "We don't deliver to your address. Please change your address"
+      "no_mall_availble": "We don't deliver to your address. Please change your address",
+      "pay_online": "Pay Online"
     },
     "English": {
       "language_code": "en",
@@ -476,7 +477,8 @@
       "seller_catelogue": "का कैटेलॉग सोशल मॉल पर अभी आर्डर करे और पाए होम डिलीवरी",
       "hello_check_product": "हेलो! चेक",
       "social_mall_home": "only on social mall. Order now and get home delivery",
-      "no_mall_availble": "We don't deliver to your address. Please change your address"
+      "no_mall_availble": "We don't deliver to your address. Please change your address",
+      "pay_online": "Pay Online"
     }
   }
 }

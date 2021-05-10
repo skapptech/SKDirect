@@ -33,6 +33,7 @@ import com.skdirect.model.SellerProfileDataModel;
 import com.skdirect.model.ShopMainModel;
 import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateProfilePostModel;
+import com.skdirect.model.VerifyPaymentModel;
 import com.skdirect.model.response.ApplyOfferResponse;
 import com.skdirect.model.response.OfferResponse;
 import com.skdirect.utils.MyApplication;
@@ -866,6 +867,33 @@ public class CommonClassForAPI {
 
                     @Override
                     public void onNext(@NotNull MallMainModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+    public void callVerifyPayment(final DisposableObserver<JsonObject> observer, VerifyPaymentModel verifyPaymentModel) {
+        RestClient.getInstance().getService().verifyPaymentApi(verifyPaymentModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JsonObject>() {
+
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    public void onNext(@NotNull JsonObject o) {
                         observer.onNext(o);
                     }
 
