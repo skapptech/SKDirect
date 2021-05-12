@@ -270,7 +270,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     jsonObject.put("order_id", orderPlaceMainModel.getResultItem().getRazorpayOrderId());
                     JSONObject retryObj = new JSONObject();
                     retryObj.put("enabled", true);
-                    retryObj.put("max_count", 2);
+                    retryObj.put("max_count", 1);
                     jsonObject.put("retry", retryObj);
                     checkout.open(this, jsonObject);
                 } catch (Exception e) {
