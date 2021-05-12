@@ -280,15 +280,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }
         } else {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setTitle(MyApplication.getInstance().dbHelper.getString(R.string.congratulation));
-            dialog.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.order_place__popoup));
-            dialog.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.ok),
-                    (dialog1, which) -> {
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                        finish();
-                    });
-            dialog.show();
+            showOrderCompleteDialog(true,
+                    MyApplication.getInstance().dbHelper.getString(R.string.congratulation),
+                    MyApplication.getInstance().dbHelper.getString(R.string.order_place__popoup));
         }
     }
 
@@ -398,36 +392,44 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onNext(@NotNull Boolean response) {
             Utils.hideProgressDialog();
-            AlertDialog.Builder dialog = new AlertDialog.Builder(PaymentActivity.this);
             if (paymentStatus.equals("SUCCESS")) {
-                dialog.setTitle(MyApplication.getInstance().dbHelper.getString(R.string.congratulation));
-                dialog.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.order_place__popoup));
-                dialog.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.ok),
-                        (dialog1, which) -> {
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                            finish();
-                        });
+                showOrderCompleteDialog(true,
+                        MyApplication.getInstance().dbHelper.getString(R.string.congratulation),
+                        MyApplication.getInstance().dbHelper.getString(R.string.order_place__popoup));
             } else {
-                dialog.setTitle(MyApplication.getInstance().dbHelper.getString(R.string.payment_failed_title));
-                dialog.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.payment_failed_msg));
-                dialog.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.ok),
-                        (dialog1, which) -> {
-                            dialog1.dismiss();
-                        });
+                showOrderCompleteDialog(false,
+                        MyApplication.getInstance().dbHelper.getString(R.string.payment_failed_title),
+                        MyApplication.getInstance().dbHelper.getString(R.string.payment_failed_msg));
             }
-            dialog.setCancelable(false);
-            dialog.show();
-
         }
 
         @Override
         public void onError(Throwable e) {
             Utils.hideProgressDialog();
             e.printStackTrace();
+            showOrderCompleteDialog(true,
+                    MyApplication.getInstance().dbHelper.getString(R.string.order_in_review),
+                    MyApplication.getInstance().dbHelper.getString(R.string.order_review_msg));
         }
 
         @Override
         public void onComplete() {
         }
     };
+
+    public void showOrderCompleteDialog(boolean redirect, String title, String message) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle(title);
+        dialog.setMessage(message);
+        dialog.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.ok),
+                (dialog1, which) -> {
+                    if (redirect) {
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    } else {
+                        dialog1.dismiss();
+                    }
+                });
+        dialog.show();
+    }
 }

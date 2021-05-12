@@ -240,7 +240,9 @@
       "no_mall_availble": "We don't deliver to your address. Please change your address",
       "pay_online": "Pay Online",
       "payment_failed_title": "Failed",
-      "payment_failed_msg": "Payment Failed."
+      "payment_failed_msg": "Payment Failed.",
+      "order_in_review": "Order in Review",
+      "order_review_msg": "Your order is in review. We will update you shortly."
     },
     "English": {
       "language_code": "en",
@@ -482,7 +484,9 @@
       "no_mall_availble": "We don't deliver to your address. Please change your address",
       "pay_online": "Pay Online",
       "payment_failed_title": "Failed",
-      "payment_failed_msg": "Payment Failed."
+      "payment_failed_msg": "Payment Failed.",
+      "order_in_review": "Order in Review",
+      "order_review_msg": "Your order is in review. We will update you shortly."
     }
   }
 }
