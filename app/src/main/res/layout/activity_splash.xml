@@ -10,7 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:id="@+id/imSplash" />
+            android:id="@+id/imSplash" />z
         <ProgressBar
             android:id="@+id/pBar"
             android:indeterminateTint="@color/colorPrimaryDark"

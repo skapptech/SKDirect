@@ -32,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
     private SplashActivity activity;
     private VersionViewModel versionViewModel;
 
-    private String cancelString, skipString;
+    private String cancelString;
     
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
