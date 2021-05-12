@@ -254,10 +254,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         if (paymentMode.equals("ONLINE")) {
             if (orderPlaceMainModel.getResultItem() != null) {
                 checkout = new Checkout();
-                if (BuildConfig.DEBUG)
-                    checkout.setKeyID(SharePrefs.getInstance(this).getString(SharePrefs.RAZORPAY_API_KEY));
-                else
-                    checkout.setKeyID("");
+                checkout.setKeyID(SharePrefs.getInstance(this).getString(SharePrefs.RAZORPAY_API_KEY));
+
                 checkout.setImage(R.mipmap.ic_launcher_round);
                 JSONObject jsonObject = new JSONObject();
                 razorOrderId = orderPlaceMainModel.getResultItem().getRazorpayOrderId();
@@ -268,6 +266,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     jsonObject.put("amount", "" + orderPlaceMainModel.getResultItem().getAmountInPaisa());
                     jsonObject.put("currency", "INR");
                     jsonObject.put("order_id", orderPlaceMainModel.getResultItem().getRazorpayOrderId());
+                    JSONObject readOnly = new JSONObject();
+                    readOnly.put("email", "true");
+                    readOnly.put("contact", "true");
+                    jsonObject.put("readonly", readOnly);
                     JSONObject retryObj = new JSONObject();
                     retryObj.put("enabled", true);
                     retryObj.put("max_count", 1);
