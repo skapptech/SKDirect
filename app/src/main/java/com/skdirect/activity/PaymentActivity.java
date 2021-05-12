@@ -16,25 +16,39 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.gson.JsonObject;
+import com.razorpay.Checkout;
+import com.razorpay.PaymentData;
+import com.razorpay.PaymentResultListener;
+import com.razorpay.PaymentResultWithDataListener;
+import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.adapter.DeliveryOptionAdapter;
+import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityPaymentdBinding;
 import com.skdirect.interfacee.DeliveryOptionInterface;
+import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.DeliveryMainModel;
 import com.skdirect.model.DeliveryOptionModel;
+import com.skdirect.model.OrderPlaceMainModel;
 import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.UserLocationModel;
+import com.skdirect.model.VerifyPaymentModel;
 import com.skdirect.model.response.OfferResponse;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
 import com.skdirect.viewmodel.PaymentViewMode;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, DeliveryOptionInterface {
+import io.reactivex.observers.DisposableObserver;
+
+public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, DeliveryOptionInterface, PaymentResultWithDataListener {
     private ActivityPaymentdBinding mBinding;
     private PaymentViewMode paymentViewMode;
     private CartItemModel cartItemModel;
@@ -45,7 +59,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private Integer userLocationId = null;
     private double cartTotal, totalAmount, discount = 0;
     private boolean isSelfPickup = false;
-
+    private Checkout checkout = null;
+    private String paymentMode = "CASH";
+    private CommonClassForAPI commonClassForAPI;
+    private String razorOrderId = "";
+    private String paymentStatus = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +71,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_paymentd);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(MyApplication.getInstance().dbHelper.getString(R.string.title_activity_payment));
-
+        commonClassForAPI = CommonClassForAPI.getInstance(this);
         paymentViewMode = ViewModelProviders.of(this).get(PaymentViewMode.class);
         getSharedData();
         initView();
         callUserLocation();
+        Checkout.preload(getApplicationContext());
     }
 
     @Override
@@ -128,10 +147,29 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mBinding.tvPaymentTitle.setText(MyApplication.getInstance().dbHelper.getString(R.string.title_activity_payment));
         mBinding.btnAdd.setText(MyApplication.getInstance().dbHelper.getString(R.string.change));
         mBinding.tvDeleveryCharge.setText(MyApplication.getInstance().dbHelper.getString(R.string.delivery_charge));
+        mBinding.tvPayOnlineTitle.setText(MyApplication.getInstance().dbHelper.getString(R.string.pay_online));
         mBinding.btnOffer.setOnClickListener(this);
         mBinding.btnRemove.setOnClickListener(this);
         mBinding.btnPlaceOrder.setOnClickListener(this);
         mBinding.btnAdd.setOnClickListener(this);
+
+        mBinding.RLCashonDelivery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                paymentMode = "CASH";
+                mBinding.imCodSelected.setVisibility(View.VISIBLE);
+                mBinding.imPayOnlineSelect.setVisibility(View.GONE);
+            }
+        });
+        mBinding.RLPayOnline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                paymentMode = "ONLINE";
+                mBinding.imCodSelected.setVisibility(View.GONE);
+                mBinding.imPayOnlineSelect.setVisibility(View.VISIBLE);
+            }
+        });
+
     }
 
     private void getSharedData() {
@@ -192,14 +230,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         if (isSelfPickup) {
             userLocationId = null;
         }
-        OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel("CASH", deliveryOption, cartItemModel.getId(), userLocationId, SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
+        OrderPlaceRequestModel orderPlaceRequestModel = new OrderPlaceRequestModel(paymentMode, deliveryOption, cartItemModel.getId(), userLocationId, SharePrefs.getInstance(this).getString(SharePrefs.MALL_ID));
         paymentViewMode.getOrderPlaceVMRequest(orderPlaceRequestModel);
         paymentViewMode.getOrderPlaceVM().observe(this, response -> {
             Utils.hideProgressDialog();
             if (response.isSuccess()) {
                 // clear cart
                 MyApplication.getInstance().cartRepository.truncateCart();
-                orderPlaceDialog();
+                orderPlaceDialog(response);
             } else {
                 Utils.setToast(getApplicationContext(), response.getErrorMessage());
                 if (response.getErrorMessage().equalsIgnoreCase("Currently we are not serving your Area") || response.getErrorMessage().equalsIgnoreCase("We don't deliver to your address. Please change your address")) {
@@ -209,19 +247,47 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }
         });
-        Utils.logAppsFlayerEventApp(this,"PlaceOrderScreen","CartId - "+ cartItemModel.getId());
+        Utils.logAppsFlayerEventApp(this, "PlaceOrderScreen", "CartId - " + cartItemModel.getId());
     }
 
-    private void orderPlaceDialog() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle(MyApplication.getInstance().dbHelper.getString(R.string.congratulation));
-        dialog.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.order_place__popoup));
-        dialog.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.ok),
-                (dialog1, which) -> {
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    finish();
-                });
-        dialog.show();
+    private void orderPlaceDialog(OrderPlaceMainModel orderPlaceMainModel) {
+        if (paymentMode.equals("ONLINE")) {
+            if (orderPlaceMainModel.getResultItem() != null) {
+                checkout = new Checkout();
+                if (BuildConfig.DEBUG)
+                    checkout.setKeyID(SharePrefs.getInstance(this).getString(SharePrefs.RAZORPAY_API_KEY));
+                else
+                    checkout.setKeyID("");
+                checkout.setImage(R.mipmap.ic_launcher_round);
+                JSONObject jsonObject = new JSONObject();
+                razorOrderId = orderPlaceMainModel.getResultItem().getRazorpayOrderId();
+                try {
+                    jsonObject.put("name", getString(R.string.app_name));
+                    jsonObject.put("prefill.contact", orderPlaceMainModel.getResultItem().getGivenMobile());
+                    jsonObject.put("prefill.email", orderPlaceMainModel.getResultItem().getGivenEmail());
+                    jsonObject.put("amount", "" + orderPlaceMainModel.getResultItem().getAmountInPaisa());
+                    jsonObject.put("currency", "INR");
+                    jsonObject.put("order_id", orderPlaceMainModel.getResultItem().getRazorpayOrderId());
+                    JSONObject retryObj = new JSONObject();
+                    retryObj.put("enabled", true);
+                    retryObj.put("max_count", 2);
+                    jsonObject.put("retry", retryObj);
+                    checkout.open(this, jsonObject);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle(MyApplication.getInstance().dbHelper.getString(R.string.congratulation));
+            dialog.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.order_place__popoup));
+            dialog.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.ok),
+                    (dialog1, which) -> {
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    });
+            dialog.show();
+        }
     }
 
     private void updateViews(boolean isApplied, OfferResponse.Coupon coupon) {
@@ -308,4 +374,58 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             isSelfPickup = false;
         }
     }
+
+    @Override
+    public void onPaymentSuccess(String s, PaymentData paymentData) {
+        paymentStatus = "SUCCESS";
+        callVerifyPaymentApi(new VerifyPaymentModel(paymentData.getPaymentId(), paymentData.getOrderId(), paymentData.getSignature(), paymentStatus));
+    }
+
+    @Override
+    public void onPaymentError(int i, String s, PaymentData paymentData) {
+        paymentStatus = "FAIL";
+        callVerifyPaymentApi(new VerifyPaymentModel("", razorOrderId, "", "FAIL"));
+    }
+
+    private void callVerifyPaymentApi(VerifyPaymentModel verifyPaymentModel) {
+        Utils.showProgressDialog(this);
+        commonClassForAPI.callVerifyPayment(verifyPaymentObserver, verifyPaymentModel);
+    }
+
+    private final DisposableObserver<Boolean> verifyPaymentObserver = new DisposableObserver<Boolean>() {
+        @Override
+        public void onNext(@NotNull Boolean response) {
+            Utils.hideProgressDialog();
+            AlertDialog.Builder dialog = new AlertDialog.Builder(PaymentActivity.this);
+            if (paymentStatus.equals("SUCCESS")) {
+                dialog.setTitle(MyApplication.getInstance().dbHelper.getString(R.string.congratulation));
+                dialog.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.order_place__popoup));
+                dialog.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.ok),
+                        (dialog1, which) -> {
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            finish();
+                        });
+            } else {
+                dialog.setTitle(MyApplication.getInstance().dbHelper.getString(R.string.payment_failed_title));
+                dialog.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.payment_failed_msg));
+                dialog.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.ok),
+                        (dialog1, which) -> {
+                            dialog1.dismiss();
+                        });
+            }
+            dialog.setCancelable(false);
+            dialog.show();
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    };
 }

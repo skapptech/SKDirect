@@ -63,6 +63,7 @@ public class SharePrefs {
     public static final String TERMS_CONDITION = "terms_condition";
     public static final String ABOUT_APP = "about_app";
     public static final String IS_DIALOG_SHOW ="is_dialog_show";
+    public static final String RAZORPAY_API_KEY = "razorpayapi_key";
 
 
     private Context ctx;

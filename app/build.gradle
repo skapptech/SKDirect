@@ -14,7 +14,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 12
-        versionName "1.10"
+        versionName "2.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -61,7 +61,7 @@ android {
             resValue "string", "app_name", "Social Mall UAT"
             buildConfigField("String", "buildVariant", "\"DEBUG_STORE_FILE\"")
             buildConfigField("String", "apiEndpoint", "\"https://virtualstockuat.shopkirana.in\"")
-           // buildConfigField("String", "apiEndpoint", "\"https://directb2capi.er15.xyz\"")
+            //buildConfigField("String", "apiEndpoint", "\"https://directb2capi.er15.xyz\"")
             buildConfigField("String", "playStoreURL", "\"https://play.google.com/store/apps/details?id=com.skdirect\"")
         }
     }
@@ -131,4 +131,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     implementation 'com.kenilt.loopingviewpager:loopingviewpager:0.2.0'
     implementation 'com.kenilt.circleindicator:circleindicator:1.0.1'
+
+    implementation 'com.razorpay:checkout:1.6.6'
+
 }
