@@ -39,10 +39,8 @@ import io.reactivex.observers.DisposableObserver;
 public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private FragmentHomedBinding mBinding;
     private MainActivity activity;
-    //private HomeViewModel homeViewModel;
     public DBHelper dbHelper;
     private CommonClassForAPI commonClassForAPI;
-    int noOfSecond = 1;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -65,36 +63,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mBinding.etSearchSeller.setText("");
     }
 
-    private void changeToHindiDialog() {
-        if (!SharePrefs.getInstance(getActivity()).getBoolean(SharePrefs.IS_DIALOG_SHOW)) {
-            mBinding.rlChnageToHindi.setVisibility(View.VISIBLE);
-            mBinding.rlChnageToHindi.postDelayed(new Runnable() {
-                public void run() {
-                    SharePrefs.getInstance(getActivity()).putBoolean(SharePrefs.IS_DIALOG_SHOW, true);
-                    mBinding.rlChnageToHindi.setVisibility(View.GONE);
-
-                }
-            }, 6000);
-        }else
-        {
-            mBinding.rlChnageToHindi.setVisibility(View.GONE);
-        }
-
-
-        mBinding.layoutChnageLag.tvChangeToHindi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), ChangeLanguageActivity.class));
-            }
-        });
-
-        mBinding.layoutChnageLag.ivCancle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBinding.rlChnageToHindi.setVisibility(View.GONE);
-            }
-        });
-    }
 
     @Override
     public void onRefresh() {
@@ -129,7 +97,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 } else {
                     mBinding.rlHomeBanner.setVisibility(View.GONE);
                 }
-                changeToHindiDialog();
+              ///  changeToHindiDialog();
 
 
                 SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_Mall, true);
@@ -194,6 +162,38 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         AutoScroller autoScroller = new AutoScroller(mBinding.pager, activity.getLifecycle(), 5000);
         autoScroller.setAutoScroll(true);
+    }
+
+
+    private void changeToHindiDialog() {
+        if (!SharePrefs.getInstance(getActivity()).getBoolean(SharePrefs.IS_DIALOG_SHOW)) {
+            mBinding.rlChnageToHindi.setVisibility(View.VISIBLE);
+            mBinding.rlChnageToHindi.postDelayed(new Runnable() {
+                public void run() {
+                    SharePrefs.getInstance(getActivity()).putBoolean(SharePrefs.IS_DIALOG_SHOW, true);
+                    mBinding.rlChnageToHindi.setVisibility(View.GONE);
+
+                }
+            }, 6000);
+        }else
+        {
+            mBinding.rlChnageToHindi.setVisibility(View.GONE);
+        }
+
+
+        mBinding.layoutChnageLag.tvChangeToHindi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ChangeLanguageActivity.class));
+            }
+        });
+
+        mBinding.layoutChnageLag.ivCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBinding.rlChnageToHindi.setVisibility(View.GONE);
+            }
+        });
     }
 
 }

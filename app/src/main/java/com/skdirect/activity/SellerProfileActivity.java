@@ -2,7 +2,6 @@ package com.skdirect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
@@ -95,9 +94,9 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
     public void onClick(View view) {
         if (view.getId() == R.id.iv_back_press) {
             onBackPressed();
-        }else if( view.getId() == R.id.notifiction_count){
+        } else if (view.getId() == R.id.notifiction_count) {
             startActivity(new Intent(getApplicationContext(), CartActivity.class));
-        }else if (view.getId() == R.id.RLShare){
+        } else if (view.getId() == R.id.RLShare) {
             Utils.showShareWhatsappDialog(this,
                     dbHelper.getString(R.string.hello_check_seller)
                             + " " +
@@ -106,22 +105,20 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                             dbHelper.getString(R.string.seller_catelogue) +
                             "\n" + SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/seller/" + sellerID, "");
             Utils.logAppsFlayerEventApp(this, "CatalogueShare", "SellerName - " + sellerShopName + ", SellerId - " + sellerID);
-        }else if (view.getId()==R.id.iv_s_shop_image){
+        } else if (view.getId() == R.id.iv_s_shop_image) {
             startActivity(new Intent(getApplicationContext(), SellerImageGalleryActivity.class).putExtra("ImageData", sellerImagePath).putExtra("ShopName", sellerShopName));
         }
     }
 
 
-
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent.getExtras() != null&&intent.hasExtra("ID")) {
+        if (intent.getExtras() != null && intent.hasExtra("ID")) {
             sellerID = intent.getIntExtra("ID", 0);
             sellerProductModels.clear();
             callSellerDetails();
-        }else  if (intent.getData() != null) {
+        } else if (intent.getData() != null) {
             String sharedUrl = intent.getData().toString();
             sharedUrl = sharedUrl.substring(sharedUrl.lastIndexOf("/") + 1);
             sellerID = Integer.parseInt(sharedUrl);
@@ -408,7 +405,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
                     mBinding.ratingbarSeller.setVisibility(View.GONE);
                 }
 
-                if (sellerDetailsModel.getSellerInfoModel().getImagePath()!=null){
+                if (sellerDetailsModel.getSellerInfoModel().getImagePath() != null) {
                     sellerImagePath = sellerDetailsModel.getSellerInfoModel().getImagePath();
                 }
 
