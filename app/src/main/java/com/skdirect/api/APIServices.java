@@ -48,6 +48,7 @@ import com.skdirect.model.TopSellerMainModel;
 import com.skdirect.model.UpdateEditeAddreshMainModel;
 import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.UserLocationModel;
+import com.skdirect.model.VerifyPaymentModel;
 import com.skdirect.model.response.ApplyOfferResponse;
 import com.skdirect.model.response.OfferResponse;
 
@@ -284,6 +285,10 @@ public interface APIServices {
 
     @GET("/api/NativeBuyer/Location/GetStateCity/{pincode}")
     Observable<JsonObject> getCityState(@Path("pincode") String pincode);
+
+    @POST("api/NativeBuyer/Order/VerifyPayment")
+    Observable<Boolean> verifyPaymentApi(@Body VerifyPaymentModel verifyPaymentModel);
+
 
 
 }

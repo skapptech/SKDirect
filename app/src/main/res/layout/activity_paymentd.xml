@@ -388,6 +388,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
+                    android:id="@+id/RLCashonDelivery"
                     android:padding="10dp">
 
                     <TextView
@@ -407,9 +408,40 @@
                         android:layout_height="20dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerInParent="true"
+                        android:id="@+id/imCodSelected"
                         android:contentDescription="@string/app_name"
                         android:src="@drawable/correct" />
                 </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:id="@+id/RLPayOnline"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/tvPayOnlineTitle"
+                        style="@style/font_normal_sami_bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_basket_un"
+                        android:drawablePadding="10dp"
+                        android:gravity="center"
+                        android:text="@string/pay_online"
+                        android:textColor="@color/grid_divder"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:id="@+id/imPayOnlineSelect"
+                        android:visibility="gone"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/correct" />
+                </RelativeLayout>
+
 
                 <TextView
                     android:id="@+id/tvDOption"

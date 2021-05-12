@@ -242,4 +242,7 @@
     <string name="close">बंद करे</string>
     <string name="soial_mall_hindi">सोशल मॉल अब हिंदी में भी !</string>
     <string name="change_to_hindi">Change to हिंदी </string>
+    <string name="pay_online">Pay Online</string>
+    <string name="payment_failed_title">Failed</string>
+    <string name="payment_failed_msg">Payment Failed.</string>
 </resources>

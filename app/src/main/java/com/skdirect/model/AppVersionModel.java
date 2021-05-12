@@ -58,6 +58,17 @@ public  class AppVersionModel implements Serializable {
         @Expose
         @SerializedName("PrivacyPolicy")
         private String PrivacyPolicy;
+        @Expose
+        @SerializedName("RazorpayAPIKey")
+        private String RazorpayAPIKey;
+
+        public String getRazorpayAPIKey() {
+            return RazorpayAPIKey;
+        }
+
+        public void setRazorpayAPIKey(String razorpayAPIKey) {
+            RazorpayAPIKey = razorpayAPIKey;
+        }
 
         public boolean isCompulsory() {
             return IsCompulsory;
