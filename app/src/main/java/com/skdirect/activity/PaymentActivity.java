@@ -76,6 +76,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         getSharedData();
         initView();
         callUserLocation();
+        Checkout.clearUserData(getApplicationContext());
         Checkout.preload(getApplicationContext());
     }
 
@@ -260,9 +261,19 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 JSONObject jsonObject = new JSONObject();
                 razorOrderId = orderPlaceMainModel.getResultItem().getRazorpayOrderId();
                 try {
+                    String mobile = "";
+                    if (orderPlaceMainModel.getResultItem().getGivenMobile()!=null){
+                        mobile = "+91"+orderPlaceMainModel.getResultItem().getGivenMobile();
+                    }
+                    String email = "";
+                    if (orderPlaceMainModel.getResultItem().getGivenEmail()!=null){
+                        email = orderPlaceMainModel.getResultItem().getGivenEmail();
+                    }
+
+
                     jsonObject.put("name", getString(R.string.app_name));
-                    jsonObject.put("prefill.contact", orderPlaceMainModel.getResultItem().getGivenMobile());
-                    jsonObject.put("prefill.email", orderPlaceMainModel.getResultItem().getGivenEmail());
+                    jsonObject.put("prefill.contact", mobile);
+                    jsonObject.put("prefill.email", email);
                     jsonObject.put("amount", "" + orderPlaceMainModel.getResultItem().getAmountInPaisa());
                     jsonObject.put("currency", "INR");
                     jsonObject.put("order_id", orderPlaceMainModel.getResultItem().getRazorpayOrderId());
