@@ -81,17 +81,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBinding.llLogout.setVisibility(View.VISIBLE);
                 mBinding.llSignIn.setVisibility(View.GONE);
                 mobileNumberTV.setText(SharePrefs.getInstance(getApplicationContext()).getString(SharePrefs.MOBILE_NUMBER));
-                Log.e("BhagwaN", "GastUsers1");
+
             } else {
                 mBinding.llSignIn.setVisibility(View.VISIBLE);
                 mBinding.llLogout.setVisibility(View.GONE);
                 mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.log_in));
                 mobileNumberTV.setText("");
                 userNameTV.setText(R.string.guest_user);
-                Log.e("BhagwaN", "GastUsers2");
             }
         } else {
-            Log.e("BhagwaN", "GastUsers3");
             userNameTV.setText(R.string.guest_user);
             mBinding.llSignIn.setVisibility(View.VISIBLE);
             mBinding.tvSigninTitle.setText(dbHelper.getString(R.string.sign_in));
@@ -136,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (requestCode == 2 && resultCode == RESULT_OK) {
                 String LOCATION = data.getStringExtra("LOCATION");
                 if (!TextUtils.isNullOrEmpty(LOCATION)) {
+                    Log.e("Bhagwan","Location"+LOCATION);
                     setLocationTV.setText(LOCATION);
                 }
             }
@@ -319,6 +318,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void clearSharePrefs() {
+
         MyApplication.getInstance().cartRepository.truncateCart();
         sharedPreferences.edit().clear().apply();
         SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_FETCH_LANGUAGE, true);
