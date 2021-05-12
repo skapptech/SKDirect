@@ -80,11 +80,14 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
         } else if (myOrderModel.getOrderStatus().equals("Delivered")) {
             if (myOrderModel.getRating() == 0) {
                 holder.mBinding.tvAddReview.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 holder.mBinding.ratingbar.setVisibility(View.VISIBLE);
                 holder.mBinding.ratingbar.setRating(myOrderModel.getRating());
                 holder.mBinding.tvAddReview.setVisibility(View.GONE);
             }
+        } else if (myOrderModel.getOrderStatus().equals("Failed")) {
+            holder.mBinding.ratingbar.setVisibility(View.GONE);
+            holder.mBinding.tvAddReview.setVisibility(View.GONE);
         } else {
             holder.mBinding.ratingbar.setVisibility(View.VISIBLE);
             holder.mBinding.ratingbar.setRating(myOrderModel.getRating());
@@ -94,13 +97,13 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
         holder.mBinding.tvAddReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, ReviewActivity.class).putExtra("OrderID",myOrderModel.getId()));
+                context.startActivity(new Intent(context, ReviewActivity.class).putExtra("OrderID", myOrderModel.getId()));
             }
         });
         holder.mBinding.LLMainCat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, OrderDetailActivity.class).putExtra("myOrderModel",myOrderModel));
+                context.startActivity(new Intent(context, OrderDetailActivity.class).putExtra("myOrderModel", myOrderModel));
             }
         });
 
