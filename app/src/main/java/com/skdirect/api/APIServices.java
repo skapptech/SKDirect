@@ -287,7 +287,7 @@ public interface APIServices {
     Observable<JsonObject> getCityState(@Path("pincode") String pincode);
 
     @POST("api/NativeBuyer/Order/VerifyPayment")
-    Observable<JsonObject> verifyPaymentApi(@Body VerifyPaymentModel verifyPaymentModel);
+    Observable<Boolean> verifyPaymentApi(@Body VerifyPaymentModel verifyPaymentModel);
 
 
 

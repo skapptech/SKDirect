@@ -882,18 +882,18 @@ public class CommonClassForAPI {
                 });
     }
 
-    public void callVerifyPayment(final DisposableObserver<JsonObject> observer, VerifyPaymentModel verifyPaymentModel) {
+    public void callVerifyPayment(final DisposableObserver<Boolean> observer, VerifyPaymentModel verifyPaymentModel) {
         RestClient.getInstance().getService().verifyPaymentApi(verifyPaymentModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<JsonObject>() {
+                .subscribe(new Observer<Boolean>() {
 
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
-                    public void onNext(@NotNull JsonObject o) {
+                    public void onNext(@NotNull Boolean o) {
                         observer.onNext(o);
                     }
 

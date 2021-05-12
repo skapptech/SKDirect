@@ -62,6 +62,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private Checkout checkout = null;
     private String paymentMode = "CASH";
     private CommonClassForAPI commonClassForAPI;
+    private String razorOrderId = "";
+    private String paymentStatus = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -249,7 +252,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     private void orderPlaceDialog(OrderPlaceMainModel orderPlaceMainModel) {
         if (paymentMode.equals("ONLINE")) {
-            if (orderPlaceMainModel.getResultItem()!=null) {
+            if (orderPlaceMainModel.getResultItem() != null) {
                 checkout = new Checkout();
                 if (BuildConfig.DEBUG)
                     checkout.setKeyID(SharePrefs.getInstance(this).getString(SharePrefs.RAZORPAY_API_KEY));
@@ -257,6 +260,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     checkout.setKeyID("");
                 checkout.setImage(R.mipmap.ic_launcher_round);
                 JSONObject jsonObject = new JSONObject();
+                razorOrderId = orderPlaceMainModel.getResultItem().getRazorpayOrderId();
                 try {
                     jsonObject.put("name", getString(R.string.app_name));
                     jsonObject.put("prefill.contact", orderPlaceMainModel.getResultItem().getGivenMobile());
@@ -373,30 +377,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onPaymentSuccess(String s, PaymentData paymentData) {
-        System.out.println("Payment Done - " + s);
-        System.out.println("Payment Done Data - "  + paymentData.getData().toString());
-        System.out.println("Payment Done UserContact- "  + paymentData.getUserContact());
-        System.out.println("Payment Done User Email- "  + paymentData.getUserEmail());
-        System.out.println("Payment Done Payment id- "  + paymentData.getPaymentId());
-        System.out.println("Payment Done Order Id- "  + paymentData.getOrderId());
-        System.out.println("Payment Done Signature- "  + paymentData.getSignature());
-        System.out.println("Payment Done ExtrenalWallet- "  + paymentData.getExternalWallet());
-        callVerifyPaymentApi(new VerifyPaymentModel(paymentData.getPaymentId(),paymentData.getOrderId(),paymentData.getSignature(),"SUCCCESS"));
+        paymentStatus = "SUCCESS";
+        callVerifyPaymentApi(new VerifyPaymentModel(paymentData.getPaymentId(), paymentData.getOrderId(), paymentData.getSignature(), paymentStatus));
     }
 
     @Override
     public void onPaymentError(int i, String s, PaymentData paymentData) {
-        System.out.println("Payment Failed - " + s + " - ");
-        if (paymentData!=null){
-            System.out.println("Payment Failed Data - "  + paymentData.getData().toString());
-            System.out.println("Payment Failed UserContact- "  + paymentData.getUserContact());
-            System.out.println("Payment Failed User Email- "  + paymentData.getUserEmail());
-            System.out.println("Payment Failed Payment id- "  + paymentData.getPaymentId());
-            System.out.println("Payment Failed Order Id- "  + paymentData.getOrderId());
-            System.out.println("Payment Failed Signature- "  + paymentData.getSignature());
-            System.out.println("Payment Failed ExtrenalWallet- "  + paymentData.getExternalWallet());
-            callVerifyPaymentApi(new VerifyPaymentModel(paymentData.getPaymentId(),paymentData.getOrderId(),paymentData.getSignature(),"FAIL"));
-        }
+        paymentStatus = "FAIL";
+        callVerifyPaymentApi(new VerifyPaymentModel("", razorOrderId, "", "FAIL"));
     }
 
     private void callVerifyPaymentApi(VerifyPaymentModel verifyPaymentModel) {
@@ -404,20 +392,32 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         commonClassForAPI.callVerifyPayment(verifyPaymentObserver, verifyPaymentModel);
     }
 
-    private final DisposableObserver<JsonObject> verifyPaymentObserver = new DisposableObserver<JsonObject>() {
+    private final DisposableObserver<Boolean> verifyPaymentObserver = new DisposableObserver<Boolean>() {
         @Override
-        public void onNext(@NotNull JsonObject jsonObject) {
+        public void onNext(@NotNull Boolean response) {
             Utils.hideProgressDialog();
             AlertDialog.Builder dialog = new AlertDialog.Builder(PaymentActivity.this);
-            dialog.setTitle(MyApplication.getInstance().dbHelper.getString(R.string.congratulation));
-            dialog.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.order_place__popoup));
-            dialog.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.ok),
-                    (dialog1, which) -> {
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                        finish();
-                    });
+            if (paymentStatus.equals("SUCCESS")) {
+                dialog.setTitle(MyApplication.getInstance().dbHelper.getString(R.string.congratulation));
+                dialog.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.order_place__popoup));
+                dialog.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.ok),
+                        (dialog1, which) -> {
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            finish();
+                        });
+            } else {
+                dialog.setTitle(MyApplication.getInstance().dbHelper.getString(R.string.payment_failed_title));
+                dialog.setMessage(MyApplication.getInstance().dbHelper.getString(R.string.payment_failed_msg));
+                dialog.setPositiveButton(MyApplication.getInstance().dbHelper.getString(R.string.ok),
+                        (dialog1, which) -> {
+                            dialog1.dismiss();
+                        });
+            }
+            dialog.setCancelable(false);
             dialog.show();
+
         }
+
         @Override
         public void onError(Throwable e) {
             Utils.hideProgressDialog();

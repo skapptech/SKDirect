@@ -241,4 +241,6 @@
     <string name="social_mall_home">सिर्फ सोशल मॉल पर। अभी आर्डर करे और पाए होम डिलीवरी</string>
     <string name="close">बंद करे</string>
     <string name="pay_online">Pay Online</string>
+    <string name="payment_failed_title">Failed</string>
+    <string name="payment_failed_msg">Payment Failed.</string>
 </resources>

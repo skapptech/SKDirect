@@ -245,5 +245,7 @@
 
     <string name="close">Close</string>
     <string name="pay_online">Pay Online</string>
+    <string name="payment_failed_title">Failed</string>
+    <string name="payment_failed_msg">Payment Failed.</string>
 
 </resources>
