@@ -161,6 +161,9 @@ public class OrderDetailActivity extends AppCompatActivity implements View.OnCli
                     mBinding.rvOrderSteps.setAdapter(orderStatusStepperAdapter);
                     //setFullHeight();
                 }
+                if (orderDetailsModel.getPaymentMode().equalsIgnoreCase("ONLINE")){
+                    mBinding.tvCancleOrder.setVisibility(View.GONE);
+                }
             }
         });
     }

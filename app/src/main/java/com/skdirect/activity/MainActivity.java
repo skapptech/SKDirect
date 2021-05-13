@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (requestCode == 2 && resultCode == RESULT_OK) {
                 String LOCATION = data.getStringExtra("LOCATION");
                 if (!TextUtils.isNullOrEmpty(LOCATION)) {
-                    Log.e("Bhagwan","Location"+LOCATION);
+                    Log.e("Bhagwan", "Location" + LOCATION);
                     setLocationTV.setText(LOCATION);
                 }
             }
@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String key = SharePrefs.getInstance(this).getString(SharePrefs.RAZORPAY_API_KEY);
         MyApplication.getInstance().cartRepository.truncateCart();
         sharedPreferences.edit().clear().apply();
-        SharePrefs.getInstance(this).putString(SharePrefs.RAZORPAY_API_KEY,key);
+        SharePrefs.getInstance(this).putString(SharePrefs.RAZORPAY_API_KEY, key);
         SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_FETCH_LANGUAGE, true);
         MyApplication.getInstance().dbHelper.deleteDataFromTable();
     }
@@ -350,7 +350,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 MyApplication.getInstance().cartRepository.truncateCart();
             }
-            setupBadge();
+            try {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setupBadge();
+                    }
+                }, 1000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 

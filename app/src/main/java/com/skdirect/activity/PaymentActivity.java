@@ -425,9 +425,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onError(Throwable e) {
             Utils.hideProgressDialog();
             e.printStackTrace();
-            showOrderCompleteDialog(true,
-                    MyApplication.getInstance().dbHelper.getString(R.string.order_in_review),
-                    MyApplication.getInstance().dbHelper.getString(R.string.order_review_msg));
+            if (paymentStatus.equals("SUCCESS")) {
+                // clear cart
+                MyApplication.getInstance().cartRepository.truncateCart();
+                showOrderCompleteDialog(true,
+                        MyApplication.getInstance().dbHelper.getString(R.string.order_in_review),
+                        MyApplication.getInstance().dbHelper.getString(R.string.order_review_msg));
+            } else {
+                showOrderCompleteDialog(false,
+                        MyApplication.getInstance().dbHelper.getString(R.string.payment_failed_title),
+                        MyApplication.getInstance().dbHelper.getString(R.string.payment_failed_msg));
+            }
+
         }
 
         @Override
