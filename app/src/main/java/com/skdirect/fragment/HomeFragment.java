@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +24,11 @@ import com.skdirect.activity.MainActivity;
 import com.skdirect.activity.SearchActivity;
 import com.skdirect.adapter.HomeBannerAdapter;
 import com.skdirect.adapter.MallCategorieBannerAdapter;
+import com.skdirect.adapter.ShowCartInHomeAdapter;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.FragmentHomedBinding;
 import com.skdirect.model.BannerModel;
+import com.skdirect.model.CartModel;
 import com.skdirect.model.MallMainModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
@@ -34,6 +37,9 @@ import com.skdirect.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.observers.DisposableObserver;
 
 public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -41,6 +47,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private MainActivity activity;
     public DBHelper dbHelper;
     private CommonClassForAPI commonClassForAPI;
+    private List<CartModel> homePageItemShow = new ArrayList<>();
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -60,13 +67,18 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onResume() {
         super.onResume();
         getMall();
+        showCartItemInHomePage();
         mBinding.etSearchSeller.setText("");
+
     }
+
+
 
 
     @Override
     public void onRefresh() {
         getMall();
+        showCartItemInHomePage();
 
     }
 
@@ -124,8 +136,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         public void onComplete() {
         }
     };
-
-
     private void initViews() {
         commonClassForAPI = CommonClassForAPI.getInstance(getActivity());
         mBinding.swiperefresh.setOnRefreshListener(this);
@@ -150,12 +160,10 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         });
     }
-
     private void searchData() {
         String searchSellerName = mBinding.etSearchSeller.getText().toString().trim();
         startActivity(new Intent(getActivity(), SearchActivity.class).putExtra("searchSellerName", searchSellerName));
     }
-
     private void bannerList(BannerModel bannerModel) {
         HomeBannerAdapter homeBannerAdapter = new HomeBannerAdapter(activity, bannerModel.getBannerItemListModel());
         mBinding.pager.setAdapter(homeBannerAdapter);
@@ -163,8 +171,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         AutoScroller autoScroller = new AutoScroller(mBinding.pager, activity.getLifecycle(), 5000);
         autoScroller.setAutoScroll(true);
     }
-
-
     private void changeToHindiDialog() {
         if (!SharePrefs.getInstance(getActivity()).getBoolean(SharePrefs.IS_DIALOG_SHOW)) {
             mBinding.rlChnageToHindi.setVisibility(View.VISIBLE);
@@ -192,6 +198,18 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             public void onClick(View v) {
                 mBinding.rlChnageToHindi.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void showCartItemInHomePage() {
+        MyApplication.getInstance().cartRepository.getCart().observe(getActivity(),cartModels -> {
+            if (cartModels.size()>0){
+                mBinding.llShowingCartInHome.setVisibility(View.VISIBLE);
+                ShowCartInHomeAdapter showCartInHomeAdapter = new ShowCartInHomeAdapter(getActivity(),cartModels);
+                mBinding.layoutShowingCartInHome.rvCartHomePage.setAdapter(showCartInHomeAdapter);
+            }else {
+                mBinding.llShowingCartInHome.setVisibility(View.GONE);
             }
         });
     }

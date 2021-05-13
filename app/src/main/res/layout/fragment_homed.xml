@@ -96,6 +96,18 @@
                 </RelativeLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_showing_Cart_in_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <include
+                        android:id="@+id/layout_showing_Cart_in_home"
+                        layout="@layout/layout_cart_home" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/ll_mall_home"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
