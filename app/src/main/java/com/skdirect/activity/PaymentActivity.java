@@ -256,7 +256,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             if (orderPlaceMainModel.getResultItem() != null) {
                 checkout = new Checkout();
                 checkout.setKeyID(SharePrefs.getInstance(this).getString(SharePrefs.RAZORPAY_API_KEY));
-
+                System.out.println("Key - "+SharePrefs.getInstance(this).getString(SharePrefs.RAZORPAY_API_KEY));
                 checkout.setImage(R.mipmap.ic_launcher_round);
                 JSONObject jsonObject = new JSONObject();
                 razorOrderId = orderPlaceMainModel.getResultItem().getRazorpayOrderId();
@@ -269,8 +269,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     if (orderPlaceMainModel.getResultItem().getGivenEmail()!=null){
                         email = orderPlaceMainModel.getResultItem().getGivenEmail();
                     }
-
-
                     jsonObject.put("name", getString(R.string.app_name));
                     jsonObject.put("prefill.contact", mobile);
                     jsonObject.put("prefill.email", email);
@@ -441,6 +439,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         dialog1.dismiss();
                     }
                 });
+        dialog.setCancelable(false);
         dialog.show();
     }
 }

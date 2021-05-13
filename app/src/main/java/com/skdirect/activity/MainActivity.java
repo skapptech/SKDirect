@@ -318,9 +318,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void clearSharePrefs() {
-
+        String key = SharePrefs.getInstance(this).getString(SharePrefs.RAZORPAY_API_KEY);
         MyApplication.getInstance().cartRepository.truncateCart();
         sharedPreferences.edit().clear().apply();
+        SharePrefs.getInstance(this).putString(SharePrefs.RAZORPAY_API_KEY,key);
         SharePrefs.getInstance(getApplicationContext()).putBoolean(SharePrefs.IS_FETCH_LANGUAGE, true);
         MyApplication.getInstance().dbHelper.deleteDataFromTable();
     }
