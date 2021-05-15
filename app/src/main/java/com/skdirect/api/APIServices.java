@@ -183,7 +183,7 @@ public interface APIServices {
     Observable<Object> ClearCart(@Query("Id") String id);
 
     @GET("api/NativeBuyer/CartOverview/GetCartItems")
-    Call<CartMainModel> CartItems();
+    Observable<CartMainModel> CartItems();
 
     @GET("api/NativeBuyer/SellerProfile/DeleteCartItems")
     Observable<CartMainModel> deleteCartItems(@Query("id") int id);

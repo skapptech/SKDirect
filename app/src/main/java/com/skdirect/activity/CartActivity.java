@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,7 +29,6 @@ import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
-import com.skdirect.viewmodel.CartItemViewMode;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +38,6 @@ import io.reactivex.observers.DisposableObserver;
 
 public class CartActivity extends AppCompatActivity implements View.OnClickListener, CartItemInterface {
     private ActivityCartdBinding mBinding;
-    private CartItemViewMode cartItemViewMode;
     private final ArrayList<CartModel> cartItemList = new ArrayList<>();
     private CartListAdapter cartListAdapter;
     private CartItemModel cartItemDataModel;
@@ -60,8 +57,6 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_cartd);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(MyApplication.getInstance().dbHelper.getString(R.string.shopping_bag));
-
-        cartItemViewMode = ViewModelProviders.of(this).get(CartItemViewMode.class);
         dbHelper = MyApplication.getInstance().dbHelper;
         initView();
     }
@@ -69,7 +64,6 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        commonClassForAPI = CommonClassForAPI.getInstance(this);
         MyApplication.getInstance().cartRepository.getCartValue().observe(this, aDouble -> {
             if (aDouble != null) {
                 totalAmount = aDouble;
@@ -169,6 +163,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void initView() {
+        commonClassForAPI = CommonClassForAPI.getInstance(this);
         mBinding.tvNotingInBasket.setText(dbHelper.getString(R.string.nothing_in_basket));
         mBinding.tvKeepShopping.setText(dbHelper.getString(R.string.keep_shopping));
         mBinding.btnCheckout.setText(dbHelper.getString(R.string.checkout));
@@ -221,8 +216,14 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void cartItemsAPI() {
-        cartItemViewMode.getCartItemModelVMRequest(mBinding.rvCartItem, mBinding.blankBasket);
-        cartItemViewMode.getCartItemModelVM().observe(this, (CartMainModel cartMainModel) -> {
+        commonClassForAPI.getCartItemModelVMRequest(getCartItem);
+
+
+    }
+
+    private final DisposableObserver<CartMainModel> getCartItem = new DisposableObserver<CartMainModel>() {
+        @Override
+        public void onNext(@NotNull CartMainModel cartMainModel) {
             Utils.hideProgressDialog();
             if (cartMainModel.isSuccess()) {
                 if (cartMainModel.getResultItem() != null) {
@@ -248,14 +249,29 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
             } else {
-                Utils.setToast(this, cartMainModel.getErrorMessage());
+                Utils.setToast(CartActivity.this, cartMainModel.getErrorMessage());
                 mBinding.rvCartItem.setVisibility(View.GONE);
                 mBinding.blankBasket.setVisibility(View.VISIBLE);
                 mBinding.rlCheckOut.setVisibility(View.GONE);
                 MyApplication.getInstance().cartRepository.truncateCart();
             }
-        });
-    }
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            mBinding.rvCartItem.setVisibility(View.GONE);
+            mBinding.blankBasket.setVisibility(View.VISIBLE);
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    };
+
+
 
     private void showClearCartDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

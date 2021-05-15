@@ -909,4 +909,31 @@ public class CommonClassForAPI {
                 });
     }
 
+    public void getCartItemModelVMRequest(final DisposableObserver<CartMainModel> observer) {
+        RestClient.getInstance().getService().CartItems()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CartMainModel>() {
+
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    public void onNext(@NotNull CartMainModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
 }

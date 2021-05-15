@@ -3,6 +3,8 @@ package com.skdirect.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,18 +15,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.kenilt.loopingviewpager.scroller.AutoScroller;
 import com.skdirect.R;
+import com.skdirect.activity.CartActivity;
 import com.skdirect.activity.ChangeLanguageActivity;
+import com.skdirect.activity.LoginActivity;
 import com.skdirect.activity.MainActivity;
+import com.skdirect.activity.PaymentActivity;
 import com.skdirect.activity.SearchActivity;
 import com.skdirect.adapter.HomeBannerAdapter;
 import com.skdirect.adapter.MallCategorieBannerAdapter;
+import com.skdirect.adapter.ShowCartInHomeAdapter;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.FragmentHomedBinding;
 import com.skdirect.model.BannerModel;
+import com.skdirect.model.CartItemModel;
+import com.skdirect.model.CartMainModel;
+import com.skdirect.model.CartModel;
 import com.skdirect.model.MallMainModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
@@ -40,6 +50,8 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private MainActivity activity;
     public DBHelper dbHelper;
     private CommonClassForAPI commonClassForAPI;
+    private CartItemModel cartItemDataModel;
+    private double totalAmount;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -54,18 +66,19 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         return mBinding.getRoot();
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
         getMall();
+        showCartItemInHomePage();
         mBinding.etSearchSeller.setText("");
-    }
 
+    }
 
     @Override
     public void onRefresh() {
         getMall();
+        showCartItemInHomePage();
 
     }
 
@@ -120,8 +133,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         public void onComplete() {
         }
     };
-
-
     private void initViews() {
         commonClassForAPI = CommonClassForAPI.getInstance(getActivity());
         mBinding.swiperefresh.setOnRefreshListener(this);
@@ -145,12 +156,10 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         });
     }
-
     private void searchData() {
         String searchSellerName = mBinding.etSearchSeller.getText().toString().trim();
         startActivity(new Intent(getActivity(), SearchActivity.class).putExtra("searchSellerName", searchSellerName));
     }
-
     private void bannerList(BannerModel bannerModel) {
         HomeBannerAdapter homeBannerAdapter = new HomeBannerAdapter(activity, bannerModel.getBannerItemListModel());
         mBinding.pager.setAdapter(homeBannerAdapter);
@@ -158,8 +167,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         AutoScroller autoScroller = new AutoScroller(mBinding.pager, activity.getLifecycle(), 5000);
         autoScroller.setAutoScroll(true);
     }
-
-
     private void changeToHindiDialog() {
         if (!SharePrefs.getInstance(getActivity()).getBoolean(SharePrefs.IS_DIALOG_SHOW)) {
             mBinding.rlChnageToHindi.setVisibility(View.VISIBLE);
@@ -189,5 +196,73 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         });
     }
+
+    private void showCartItemInHomePage() {
+        MyApplication.getInstance().cartRepository.getCartValue().observe(this, aDouble -> {
+            if (aDouble != null) {
+                totalAmount = aDouble;
+                mBinding.layoutShowingCartInHome.tvTotalAmount.setText("₹ " + totalAmount);
+            }
+        });
+
+        cartItemsAPI();
+        MyApplication.getInstance().cartRepository.getCart().observe(getActivity(),cartModels -> {
+            if (cartModels.size()>0){
+                mBinding.llShowingCartInHome.setVisibility(View.VISIBLE);
+                mBinding.layoutShowingCartInHome.tvItemInCart.setText(cartModels.size()+" Item In Your Cart");
+                ShowCartInHomeAdapter showCartInHomeAdapter = new ShowCartInHomeAdapter(getActivity(),cartModels);
+                mBinding.layoutShowingCartInHome.rvCartHomePage.setAdapter(showCartInHomeAdapter);
+
+            }else {
+                mBinding.llShowingCartInHome.setVisibility(View.GONE);
+            }
+        });
+        mBinding.layoutShowingCartInHome.btnCheckout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharePrefs.setSharedPreference(getActivity(), SharePrefs.CAME_FROM_CART, false);
+                if (SharePrefs.getSharedPreferences(getActivity(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getActivity()).getBoolean(SharePrefs.IS_LOGIN)) {
+                    startActivity(new Intent(getActivity(), PaymentActivity.class)
+                            .putExtra("cartItemSize", cartItemDataModel)
+                            .putExtra("totalAmount", totalAmount));
+                } else {
+                    SharePrefs.setSharedPreference(getActivity(), SharePrefs.CAME_FROM_CART, true);
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
+            }
+        });
+
+    }
+
+    private void cartItemsAPI() {
+        commonClassForAPI.getCartItemModelVMRequest(getCartItem);
+    }
+
+    private final DisposableObserver<CartMainModel> getCartItem = new DisposableObserver<CartMainModel>() {
+        @Override
+        public void onNext(@NotNull CartMainModel cartMainModel) {
+            Utils.hideProgressDialog();
+            if (cartMainModel.isSuccess()) {
+                if (cartMainModel.getResultItem() != null) {
+                    cartItemDataModel = cartMainModel.getResultItem();
+
+                }
+            } else {
+
+            }
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    };
+
 
 }

@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainActivityViewMode = ViewModelProviders.of(this).get(MainActivityViewMode.class);
-        openFragment(new HomeFragment());
         Log.e("key: ", new AppSignatureHelper(getApplicationContext()).getAppSignatures() + "");
         initView();
         setVarible();
@@ -139,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
-        openFragment(new HomeFragment());
+       /// openFragment(new HomeFragment());
     }
 
     private void initView() {
