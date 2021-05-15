@@ -378,7 +378,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 cartListAdapter.notifyDataSetChanged();
                 mBinding.rlCheckOut.setVisibility(View.GONE);
                 mBinding.blankBasket.setVisibility(View.VISIBLE);
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
             }
 

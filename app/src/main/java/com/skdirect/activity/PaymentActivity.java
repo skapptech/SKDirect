@@ -11,6 +11,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -158,16 +159,20 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 paymentMode = "CASH";
-                mBinding.imCodSelected.setVisibility(View.VISIBLE);
-                mBinding.imPayOnlineSelect.setVisibility(View.GONE);
+                /*mBinding.imCodSelected.setVisibility(View.VISIBLE);
+                mBinding.imPayOnlineSelect.setVisibility(View.GONE);*/
+                mBinding.imCodSelected.setImageResource(R.drawable.ic_radio_selected);
+                mBinding.imPayOnlineSelect.setImageResource(R.drawable.ic_radio_unselected);
             }
         });
         mBinding.RLPayOnline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 paymentMode = "ONLINE";
-                mBinding.imCodSelected.setVisibility(View.GONE);
-                mBinding.imPayOnlineSelect.setVisibility(View.VISIBLE);
+                /*mBinding.imCodSelected.setVisibility(View.GONE);
+                mBinding.imPayOnlineSelect.setVisibility(View.VISIBLE);*/
+                mBinding.imCodSelected.setImageResource(R.drawable.ic_radio_unselected);
+                mBinding.imPayOnlineSelect.setImageResource(R.drawable.ic_radio_selected);
             }
         });
 
@@ -236,8 +241,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         paymentViewMode.getOrderPlaceVM().observe(this, response -> {
             Utils.hideProgressDialog();
             if (response.isSuccess()) {
-                // clear cart
-                MyApplication.getInstance().cartRepository.truncateCart();
+                /*// clear cart
+                MyApplication.getInstance().cartRepository.truncateCart();*/
                 orderPlaceDialog(response);
             } else {
                 Utils.setToast(getApplicationContext(), response.getErrorMessage());
@@ -289,6 +294,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }
         } else {
+            // clear cart
+            MyApplication.getInstance().cartRepository.truncateCart();
             showOrderCompleteDialog(true,
                     MyApplication.getInstance().dbHelper.getString(R.string.congratulation),
                     MyApplication.getInstance().dbHelper.getString(R.string.order_place__popoup));
@@ -402,6 +409,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onNext(@NotNull Boolean response) {
             Utils.hideProgressDialog();
             if (paymentStatus.equals("SUCCESS")) {
+                // clear cart
+                MyApplication.getInstance().cartRepository.truncateCart();
                 showOrderCompleteDialog(true,
                         MyApplication.getInstance().dbHelper.getString(R.string.congratulation),
                         MyApplication.getInstance().dbHelper.getString(R.string.order_place__popoup));
@@ -416,9 +425,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onError(Throwable e) {
             Utils.hideProgressDialog();
             e.printStackTrace();
-            showOrderCompleteDialog(true,
-                    MyApplication.getInstance().dbHelper.getString(R.string.order_in_review),
-                    MyApplication.getInstance().dbHelper.getString(R.string.order_review_msg));
+            if (paymentStatus.equals("SUCCESS")) {
+                // clear cart
+                MyApplication.getInstance().cartRepository.truncateCart();
+                showOrderCompleteDialog(true,
+                        MyApplication.getInstance().dbHelper.getString(R.string.order_in_review),
+                        MyApplication.getInstance().dbHelper.getString(R.string.order_review_msg));
+            } else {
+                showOrderCompleteDialog(false,
+                        MyApplication.getInstance().dbHelper.getString(R.string.payment_failed_title),
+                        MyApplication.getInstance().dbHelper.getString(R.string.payment_failed_msg));
+            }
+
         }
 
         @Override

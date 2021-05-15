@@ -58,7 +58,7 @@ public class HomeBannerAdapter extends PagerAdapter {
                 if (bannerItemListModel.get(position).getType() != null) {
                     if (bannerItemListModel.get(position).getType().equals("SELLER")) {
                         mContext.startActivity(new Intent(mContext, SellerProfileActivity.class).putExtra("ID", bannerItemListModel.get(position).getGivenId()));
-                    } else {
+                    }else if (bannerItemListModel.get(position).getType().equals("PRODUCT")) {
                         mContext.startActivity(new Intent(mContext, ProductDetailsActivity.class).putExtra("ID", bannerItemListModel.get(position).getGivenId()));
                     }
                 }

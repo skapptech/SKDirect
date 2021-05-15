@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,7 +66,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         return mBinding.getRoot();
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -74,9 +74,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mBinding.etSearchSeller.setText("");
 
     }
-
-
-
 
     @Override
     public void onRefresh() {
@@ -112,9 +109,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 } else {
                     mBinding.rlHomeBanner.setVisibility(View.GONE);
                 }
-              ///  changeToHindiDialog();
-
-
+                ///  changeToHindiDialog();
                 SharePrefs.getInstance(activity).putBoolean(SharePrefs.IS_Mall, true);
                 SharePrefs.getInstance(getActivity()).putString(SharePrefs.MALL_ID, mallMainModel.getResultItem().getId());
                 MallCategorieBannerAdapter mallCategorieBannerAdapter = new MallCategorieBannerAdapter(getActivity(), mallMainModel.getResultItem().getStoreCategoryList());
@@ -126,7 +121,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 mBinding.llMainAppHome.setVisibility(View.VISIBLE);
                 mBinding.rlHomeBanner.setVisibility(View.GONE);
             }
-
         }
 
         @Override
@@ -147,7 +141,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         } else {
             mBinding.rlHomeSearch.setVisibility(View.GONE);
         }
-
         dbHelper = MyApplication.getInstance().dbHelper;
         mBinding.etSearchSeller.setHint(dbHelper.getString(R.string.search_seller));
         activity.appBarLayout.setVisibility(View.VISIBLE);
@@ -184,8 +177,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
                 }
             }, 6000);
-        }else
-        {
+        } else {
             mBinding.rlChnageToHindi.setVisibility(View.GONE);
         }
 
