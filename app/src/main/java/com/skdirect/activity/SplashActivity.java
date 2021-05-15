@@ -80,8 +80,9 @@ public class SplashActivity extends AppCompatActivity {
             if (appVersionModels != null) {
                 if (appVersionModels.isSuccess()) {
                     if (BuildConfig.VERSION_NAME.equals(appVersionModels.getResultItem().getVersion())) {
-                        SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL, appVersionModels.getResultItem().getSellerUrl());
-                        SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL, appVersionModels.getResultItem().getBuyerUrl());
+
+                        SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.SELLER_URL, appVersionModels.getResultItem().getSellerUrl());
+                        SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.BUYER_URL, appVersionModels.getResultItem().getBuyerUrl());
                         SharePrefs.getInstance(activity).putString(SharePrefs.PRIVACY_POLICY, appVersionModels.getResultItem().getPrivacyPolicy());
                         SharePrefs.getInstance(activity).putString(SharePrefs.TERMS_CONDITION, appVersionModels.getResultItem().getTermsCondition());
                         SharePrefs.getInstance(activity).putString(SharePrefs.ABOUT_APP, appVersionModels.getResultItem().getAboutApp());
@@ -133,9 +134,8 @@ public class SplashActivity extends AppCompatActivity {
 
     private void checkVersionData(AppVersionModel appVersionModels) {
         try {
-            SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL, appVersionModels.getResultItem().getSellerUrl());
-            SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL, appVersionModels.getResultItem().getBuyerUrl());
-
+            SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.SELLER_URL, appVersionModels.getResultItem().getSellerUrl());
+            SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.BUYER_URL, appVersionModels.getResultItem().getBuyerUrl());
             if (appVersionModels.getResultItem().isCompulsory()) {
                 cancelString = MyApplication.getInstance().dbHelper.getString(R.string.close);
             } else {
@@ -153,8 +153,8 @@ public class SplashActivity extends AppCompatActivity {
             });
             alertDialogBuilder.setNegativeButton(cancelString, (dialog, i) -> {
                 if (cancelString.equals(MyApplication.getInstance().dbHelper.getString(R.string.skip))) {
-                    SharePrefs.getInstance(activity).putString(SharePrefs.SELLER_URL, appVersionModels.getResultItem().getSellerUrl());
-                    SharePrefs.getInstance(activity).putString(SharePrefs.BUYER_URL, appVersionModels.getResultItem().getBuyerUrl());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.SELLER_URL, appVersionModels.getResultItem().getSellerUrl());
+                    SharePrefs.setStringSharedPreference(getApplicationContext(), SharePrefs.BUYER_URL, appVersionModels.getResultItem().getBuyerUrl());
                     SharePrefs.getInstance(activity).putString(SharePrefs.PRIVACY_POLICY, appVersionModels.getResultItem().getPrivacyPolicy());
                     SharePrefs.getInstance(activity).putString(SharePrefs.TERMS_CONDITION, appVersionModels.getResultItem().getTermsCondition());
                     SharePrefs.getInstance(activity).putString(SharePrefs.ABOUT_APP, appVersionModels.getResultItem().getAboutApp());

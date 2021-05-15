@@ -49,6 +49,7 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
         holder.mBinding.tvSellingPrice.setText("₹ " + model.getSellingPrice());
         holder.mBinding.tvQuantity.setText(MyApplication.getInstance().dbHelper.getString(R.string.qty) + " " + model.getMeasurement() + model.getUom());
 
+
         if (model.getMrp() == model.getSellingPrice()) {
             holder.mBinding.llSellingPrice.setVisibility(View.GONE);
             holder.mBinding.tvMrp.setText("₹ " + model.getMrp());

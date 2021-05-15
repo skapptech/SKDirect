@@ -146,7 +146,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 dbHelper.getString(R.string.hello_check_product) +
                         " " + productName + " " +
                         dbHelper.getString(R.string.social_mall_home) + "\n" +
-                        SharePrefs.getInstance(this).getString(SharePrefs.BUYER_URL) + "/product/" + productID, bitmapx);
+                        SharePrefs.getStringSharedPreferences(this, SharePrefs.BUYER_URL) + "/product/" + productID, bitmapx);
 
     }
 
