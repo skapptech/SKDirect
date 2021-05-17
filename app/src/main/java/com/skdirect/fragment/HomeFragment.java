@@ -53,6 +53,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private CartItemModel cartItemDataModel;
     private double totalAmount;
 
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -198,25 +199,8 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void showCartItemInHomePage() {
-        MyApplication.getInstance().cartRepository.getCartValue().observe(this, aDouble -> {
-            if (aDouble != null) {
-                totalAmount = aDouble;
-                mBinding.layoutShowingCartInHome.tvTotalAmount.setText("₹ " + totalAmount);
-            }
-        });
 
         cartItemsAPI();
-        MyApplication.getInstance().cartRepository.getCart().observe(getActivity(),cartModels -> {
-            if (cartModels.size()>0){
-                mBinding.llShowingCartInHome.setVisibility(View.VISIBLE);
-                mBinding.layoutShowingCartInHome.tvItemInCart.setText(cartModels.size()+" Item In Your Cart");
-                ShowCartInHomeAdapter showCartInHomeAdapter = new ShowCartInHomeAdapter(getActivity(),cartModels);
-                mBinding.layoutShowingCartInHome.rvCartHomePage.setAdapter(showCartInHomeAdapter);
-
-            }else {
-                mBinding.llShowingCartInHome.setVisibility(View.GONE);
-            }
-        });
         mBinding.layoutShowingCartInHome.btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -245,6 +229,23 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             if (cartMainModel.isSuccess()) {
                 if (cartMainModel.getResultItem() != null) {
                     cartItemDataModel = cartMainModel.getResultItem();
+                    if (cartMainModel.getResultItem().getCart().size()>0){
+                        mBinding.llShowingCartInHome.setVisibility(View.VISIBLE);
+                        totalAmount =0;
+                        for (int i = 0; i < cartMainModel.getResultItem().getCart().size(); i++) {
+                            totalAmount = totalAmount + cartMainModel.getResultItem().getCart().get(i).getQuantity() * cartMainModel.getResultItem().getCart().get(i).getPrice();
+
+                        }
+
+                        mBinding.layoutShowingCartInHome.tvTotalAmount.setText("₹ " + totalAmount);
+
+                        mBinding.layoutShowingCartInHome.tvItemInCart.setText(cartMainModel.getResultItem().getCart().size()+" Item In Your Cart");
+                        ShowCartInHomeAdapter showCartInHomeAdapter = new ShowCartInHomeAdapter(getActivity(),cartMainModel.getResultItem().getCart());
+                        mBinding.layoutShowingCartInHome.rvCartHomePage.setAdapter(showCartInHomeAdapter);
+
+                    }else {
+                        mBinding.llShowingCartInHome.setVisibility(View.GONE);
+                    }
 
                 }
             } else {

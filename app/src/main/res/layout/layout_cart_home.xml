@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_cardview"
+        android:background="@drawable/bg_cart_bg"
         android:layout_margin="5dp"
         android:orientation="vertical">
 
@@ -19,7 +19,7 @@
             android:layout_marginTop="10dp"
             android:padding="10dp"
             android:text="item in your Cart"
-            android:textColor="@color/colorAccentDir"
+            android:textColor="@color/white"
             android:textSize="20dp" />
 
         <View
@@ -66,13 +66,13 @@
                 android:layout_centerInParent="true"
                 android:layout_marginStart="10dp"
                 android:padding="15dp"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnCheckout"
-                android:layout_width="130dp"
-                android:layout_height="40dp"
+                android:layout_width="120dp"
+                android:layout_height="35dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerInParent="true"
                 android:layout_gravity="end"
@@ -83,7 +83,7 @@
                 android:paddingEnd="8dp"
                 android:text="Buy Now"
                 android:textAllCaps="false"
-                android:textColor="@color/seller_button_color"
+                android:textColor="@color/white"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </RelativeLayout>

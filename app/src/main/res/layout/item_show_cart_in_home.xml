@@ -29,7 +29,7 @@
 
         <TextView
             android:id="@+id/tv_seller_name"
-            style="@style/font_normal_sami_bold"
+            style="@style/font_Bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -38,7 +38,7 @@
             android:maxLines="1"
             android:padding="2dp"
             android:text=""
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="11sp" />
 
         <LinearLayout
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="12dp" />
 
 
