@@ -11,7 +11,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -19,15 +18,12 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.gson.JsonObject;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentData;
-import com.razorpay.PaymentResultListener;
 import com.razorpay.PaymentResultWithDataListener;
-import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.adapter.DeliveryOptionAdapter;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityPaymentdBinding;
 import com.skdirect.interfacee.DeliveryOptionInterface;
-import com.skdirect.model.AddViewMainModel;
 import com.skdirect.model.CartItemModel;
 import com.skdirect.model.DeliveryMainModel;
 import com.skdirect.model.DeliveryOptionModel;
@@ -134,8 +130,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             }
         }
     }
-
-
     private void initView() {
         mBinding.tvOrderValueH.setText(MyApplication.getInstance().dbHelper.getString(R.string.total_order_value));
         mBinding.tvAmountH.setText(MyApplication.getInstance().dbHelper.getString(R.string.total_amount));
@@ -261,17 +255,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             if (orderPlaceMainModel.getResultItem() != null) {
                 checkout = new Checkout();
                 checkout.setKeyID(SharePrefs.getInstance(this).getString(SharePrefs.RAZORPAY_API_KEY));
-                System.out.println("Key - "+SharePrefs.getInstance(this).getString(SharePrefs.RAZORPAY_API_KEY));
+                System.out.println("Key - " + SharePrefs.getInstance(this).getString(SharePrefs.RAZORPAY_API_KEY));
                 checkout.setImage(R.mipmap.ic_launcher_round);
                 JSONObject jsonObject = new JSONObject();
                 razorOrderId = orderPlaceMainModel.getResultItem().getRazorpayOrderId();
                 try {
                     String mobile = "";
-                    if (orderPlaceMainModel.getResultItem().getGivenMobile()!=null){
-                        mobile = "+91"+orderPlaceMainModel.getResultItem().getGivenMobile();
+                    if (orderPlaceMainModel.getResultItem().getGivenMobile() != null) {
+                        mobile = "+91" + orderPlaceMainModel.getResultItem().getGivenMobile();
                     }
                     String email = "";
-                    if (orderPlaceMainModel.getResultItem().getGivenEmail()!=null){
+                    if (orderPlaceMainModel.getResultItem().getGivenEmail() != null) {
                         email = orderPlaceMainModel.getResultItem().getGivenEmail();
                     }
                     jsonObject.put("name", getString(R.string.app_name));
@@ -373,7 +367,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
-
 
     @Override
     public void onOnClick(DeliveryOptionModel deliveryOptionModel, int position) {

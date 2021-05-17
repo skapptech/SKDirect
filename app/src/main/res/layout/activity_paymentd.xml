@@ -29,7 +29,7 @@
                     android:paddingTop="10dp"
                     android:paddingEnd="10dp"
                     android:paddingBottom="10dp"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <ImageView
                         android:id="@+id/ivOffer"
@@ -38,7 +38,7 @@
                         android:layout_centerVertical="true"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/app_name"
-                        android:src="@drawable/ic_offer_blank" />
+                        app:srcCompat="@drawable/ic_offer_blank" />
 
                     <TextView
                         android:id="@+id/tvSelectPromoTitle"
@@ -83,7 +83,7 @@
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/app_name"
-                        android:src="@drawable/ic_offer_selected" />
+                        app:srcCompat="@drawable/ic_offer_selected" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

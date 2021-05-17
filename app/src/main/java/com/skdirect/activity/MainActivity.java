@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         home.setTitle(dbHelper.getString(R.string.home));
         profile.setTitle(dbHelper.getString(R.string.profile));
         myOrder.setTitle(dbHelper.getString(R.string.my_order));
-        chat.setTitle(dbHelper.getString(R.string.chat));
+        chat.setTitle(dbHelper.getString(R.string.invoice));
 
         mBinding.toolbarId.bottomNavigation.setOnNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
