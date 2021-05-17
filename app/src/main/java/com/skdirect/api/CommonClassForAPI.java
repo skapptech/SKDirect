@@ -23,6 +23,7 @@ import com.skdirect.model.OrderModel;
 import com.skdirect.model.OrderStatusMainModel;
 import com.skdirect.model.OtpResponceModel;
 import com.skdirect.model.OtpVerificationModel;
+import com.skdirect.model.PaginationModel;
 import com.skdirect.model.PostBrandModel;
 import com.skdirect.model.ProductDataModel;
 import com.skdirect.model.SearchMainModel;
@@ -35,6 +36,7 @@ import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.VerifyPaymentModel;
 import com.skdirect.model.response.ApplyOfferResponse;
+import com.skdirect.model.response.InvoiceMainModel;
 import com.skdirect.model.response.OfferResponse;
 import com.skdirect.utils.MyApplication;
 
@@ -921,6 +923,33 @@ public class CommonClassForAPI {
                     }
 
                     public void onNext(@NotNull CartMainModel o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
+
+    public void getInvoice(final DisposableObserver<InvoiceMainModel> observer, PaginationModel model) {
+        RestClient.getInstance().getService().GetInvoiceDetail(model)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<InvoiceMainModel>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull InvoiceMainModel o) {
                         observer.onNext(o);
                     }
 

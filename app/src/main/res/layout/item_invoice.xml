@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/LLMainCat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/white_rectangle_box"
+        android:elevation="3dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+
+            <TextView
+                style="@style/font_normal_sami_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:maxLines="2"
+                android:padding="5dp"
+                android:text="@string/shop_name"
+                android:textColor="@color/black"
+                android:textSize="18dp" />
+
+
+            <TextView
+                android:id="@+id/tv_shop_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                style="@style/font_normal_sami_bold"
+                android:textColor="@color/black"
+                android:textSize="18dp"
+                />
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="@string/invoice_no"
+                android:layout_alignParentLeft="true"
+                style="@style/font_normal_sami_bold"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_invoice_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                style="@style/font_normal_sami_bold"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                />
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+
+            <TextView
+                android:id="@+id/tv_net_payble_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_alignParentLeft="true"
+                style="@style/font_normal_sami_bold"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                />
+
+
+            <ImageView
+                android:id="@+id/iv_forword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                style="@style/font_normal_lite"
+                android:layout_alignParentRight="true"
+                android:maxLines="2"
+                app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24"
+                android:textStyle="normal" />
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_payment_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentLeft="true"
+            style="@style/font_normal_sami_bold"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            />
+
+    </LinearLayout>
+
+</layout>

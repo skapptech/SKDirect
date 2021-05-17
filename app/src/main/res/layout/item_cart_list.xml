@@ -139,6 +139,19 @@
                             android:textSize="15dp"
                             android:textStyle="bold" />
                     </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvOutOfStock"
+                        android:visibility="gone"
+                        style="@style/font_normal_sami_bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_gravity="end"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/out_of_stock"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                 </RelativeLayout>
             </LinearLayout>
 

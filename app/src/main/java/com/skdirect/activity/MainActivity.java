@@ -24,7 +24,6 @@ import androidx.lifecycle.ViewModelProviders;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.skdirect.BuildConfig;
 import com.skdirect.R;
 import com.skdirect.databinding.ActivityMainBinding;
 import com.skdirect.firebase.FirebaseLanguageFetch;
@@ -184,7 +183,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             } else if (itemId == R.id.nav_chat) {
                 positionChanged = true;
-                startActivity(new Intent(MainActivity.this, ChatActivity.class));
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                    startActivity(new Intent(MainActivity.this, InvoiceActivity.class));
+                } else {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
+
             }
             return true;
         });
@@ -285,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mBinding.drawer.closeDrawers();
         } else if (id == R.id.ll_chet) {
             mBinding.drawer.closeDrawers();
-            startActivity(new Intent(getApplicationContext(), ChatActivity.class));
+            startActivity(new Intent(getApplicationContext(), InvoiceActivity.class));
         } else if (id == R.id.ll_rate_this_app) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
             mBinding.drawer.closeDrawers();

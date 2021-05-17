@@ -15,6 +15,7 @@ public class PaginationModel {
     @SerializedName("Take")
     private int Take;
 
+
     @SerializedName("IsParentCategory")
     private boolean  IsParentCategory;
 
@@ -56,5 +57,10 @@ public class PaginationModel {
         Skip = skip;
         Take = take;
         IsParentCategory = isParentCategory;
+    }
+
+    public PaginationModel(int skip, int take) {
+        Skip = skip;
+        Take = take;
     }
 }

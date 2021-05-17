@@ -50,6 +50,7 @@ import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.UserLocationModel;
 import com.skdirect.model.VerifyPaymentModel;
 import com.skdirect.model.response.ApplyOfferResponse;
+import com.skdirect.model.response.InvoiceMainModel;
 import com.skdirect.model.response.OfferResponse;
 
 import java.util.ArrayList;
@@ -288,6 +289,10 @@ public interface APIServices {
 
     @POST("api/NativeBuyer/Order/VerifyPayment")
     Observable<Boolean> verifyPaymentApi(@Body VerifyPaymentModel verifyPaymentModel);
+
+    @POST("api/NativeBuyer/OrderInvoice/GetInvoiceDetail")
+    Observable<InvoiceMainModel> GetInvoiceDetail(@Body PaginationModel paginationModel);
+
 
 
 

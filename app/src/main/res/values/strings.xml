@@ -251,6 +251,7 @@
     <string name="order_in_review">Order in Review</string>
     <string name="order_review_msg">Your order is in review. We will update you shortly.</string>
     <string name="invoice">Invoice</string>
-
-
+    <string name="invoice_no">Invoice No</string>
+    <string name="out_of_stock">Out of Stock</string>
+    <string name="no_invoic_found">No Invoice Found</string>
 </resources>
