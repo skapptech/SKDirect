@@ -250,5 +250,6 @@
     <string name="payment_failed_msg">Payment Failed.</string>
     <string name="order_in_review">Order in Review</string>
     <string name="order_review_msg">Your order is in review. We will update you shortly.</string>
+    <string name="out_of_stock">Out of Stock</string>
 
 </resources>

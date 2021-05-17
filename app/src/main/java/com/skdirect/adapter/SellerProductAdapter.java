@@ -45,7 +45,7 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SellerProductList model = sellerProductModels.get(position);
         holder.mBinding.tvSallerName.setText(model.getProductName());
-       // holder.mBinding.tvMrp.setText("₹ " + model.getMrp());
+        // holder.mBinding.tvMrp.setText("₹ " + model.getMrp());
         holder.mBinding.tvSellingPrice.setText("₹ " + model.getSellingPrice());
         holder.mBinding.tvQuantity.setText(MyApplication.getInstance().dbHelper.getString(R.string.qty) + " " + model.getMeasurement() + model.getUom());
 
@@ -117,6 +117,27 @@ public class SellerProductAdapter extends RecyclerView.Adapter<SellerProductAdap
         } else {
             holder.mBinding.LLMainCat.setOnClickListener(view -> context.startActivity(new Intent(context, ProductDetailsActivity.class).putExtra("ID", model.getSellerProductId())));
         }
+
+        if (model.isStockRequired() && model.getStock() == 0) {
+            holder.mBinding.LLPlusMinus.setVisibility(View.GONE);
+            holder.mBinding.tvAdd.setVisibility(View.GONE);
+            holder.mBinding.tvOutOfStock.setVisibility(View.VISIBLE);
+        } else {
+            if (MyApplication.getInstance().cartRepository.isItemInCart(model.getId())) {
+                model.setQty(MyApplication.getInstance().cartRepository.getItemQty(model.getId()));
+                holder.mBinding.LLPlusMinus.setVisibility(View.VISIBLE);
+                holder.mBinding.tvAdd.setVisibility(View.GONE);
+                holder.mBinding.tvOutOfStock.setVisibility(View.GONE);
+                holder.mBinding.tvSelectedQty.setText("" + model.getQty());
+            } else {
+                model.setQty(0);
+                holder.mBinding.LLPlusMinus.setVisibility(View.GONE);
+                holder.mBinding.tvAdd.setVisibility(View.VISIBLE);
+                holder.mBinding.tvOutOfStock.setVisibility(View.GONE);
+                holder.mBinding.tvSelectedQty.setText("0");
+            }
+        }
+
     }
 
     @Override

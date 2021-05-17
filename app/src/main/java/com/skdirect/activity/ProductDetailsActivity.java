@@ -97,6 +97,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         } else if (id == R.id.tvQtyPlus) {
             if (resultModel.getMaxOrderQuantity() != null && Integer.parseInt(resultModel.getMaxOrderQuantity()) > 0 && resultModel.getQty() >= Integer.parseInt(resultModel.getMaxOrderQuantity())) {
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.order_quantity));
+            }else if (resultModel.isStockRequired()&&resultModel.getStock()<=resultModel.getQty()){
+                Utils.setToast(getApplicationContext(), "No Stock Available.");
             } else {
                 resultModel.setQty(resultModel.getQty() + 1);
                 mBinding.tvSelectedQty.setText("" + resultModel.getQty());
@@ -105,9 +107,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         } else if (id == R.id.tvQtyMinus) {
             resultModel.setQty(resultModel.getQty() - 1);
             mBinding.tvSelectedQty.setText("" + resultModel.getQty());
-            updateCart(); resultModel.setQty(resultModel.getQty() - 1);
-            mBinding.tvSelectedQty.setText("" + resultModel.getQty());
             updateCart();
+            /*resultModel.setQty(resultModel.getQty() - 1);
+            mBinding.tvSelectedQty.setText("" + resultModel.getQty());
+            updateCart();*/
         } else if (id == R.id.tv_varient_button) {
             openBottomSheetDialog();
         } else if (id == R.id.notifiction_count) {
@@ -513,6 +516,14 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         setVariation(productDataModel.getResultItem().getVariationModelList(), 0);
                     } else {
                         mBinding.tvVarientButton.setVisibility(View.GONE);
+                    }
+
+                    if (productDataModel.getResultItem().isStockRequired() && productDataModel.getResultItem().getStock()==0) {
+                        mBinding.btAddToCart.setVisibility(View.GONE);
+                        mBinding.LLPlusMinus.setVisibility(View.GONE);
+                        mBinding.tvOutOfStock.setVisibility(View.VISIBLE);
+                    }else {
+                        checkAddButtonValidaction();
                     }
                 }
             }
