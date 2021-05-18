@@ -102,7 +102,7 @@
                     android:layout_marginTop="10dp"
                     style="@style/font_normal"
                     android:layout_toRightOf="@+id/iv_my_order"
-                    android:text="@string/my_order"
+                    android:text="@string/invoice"
                     android:textColor="@color/black"
                     android:textSize="14dp"
                     android:textStyle="bold" />

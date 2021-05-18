@@ -14,6 +14,8 @@ import com.skdirect.R;
 import com.skdirect.adapter.OfferListAdapter;
 import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityOfferdBinding;
+import com.skdirect.model.CartMainModel;
+import com.skdirect.model.CartModel;
 import com.skdirect.model.response.ApplyOfferResponse;
 import com.skdirect.model.response.OfferResponse;
 import com.skdirect.utils.MyApplication;
@@ -33,6 +35,7 @@ public class OfferActivity extends AppCompatActivity implements View.OnClickList
     private OfferListAdapter adapter;
     private CommonClassForAPI commonClassForAPI;
     private int position = 0;
+    private double finalAmount;
 
 
     @Override
@@ -82,7 +85,6 @@ public class OfferActivity extends AppCompatActivity implements View.OnClickList
         commonClassForAPI.applyCoupon(applyCouponObserver, id);
     }
 
-
     private final DisposableObserver<OfferResponse> couponObserver = new DisposableObserver<OfferResponse>() {
         @Override
         public void onNext(@NotNull OfferResponse model) {
@@ -120,11 +122,8 @@ public class OfferActivity extends AppCompatActivity implements View.OnClickList
             try {
                 if (model != null && model.isSuccess()) {
                     Utils.setToast(getApplicationContext(), model.getSuccessMessage());
+                    commonClassForAPI.getCartItemModelVMRequest(getCartItem);
 
-                    Intent intent = new Intent();
-                    intent.putExtra("list", list.get(position));
-                    setResult(Activity.RESULT_OK, intent);
-                    onBackPressed();
                 } else {
                     Utils.setToast(getApplicationContext(), model.getErrorMessage());
                 }
@@ -144,4 +143,37 @@ public class OfferActivity extends AppCompatActivity implements View.OnClickList
             Utils.hideProgressDialog();
         }
     };
+
+    private final DisposableObserver<CartMainModel> getCartItem = new DisposableObserver<CartMainModel>() {
+        @Override
+        public void onNext(@NotNull CartMainModel cartMainModel) {
+            Utils.hideProgressDialog();
+            if (cartMainModel.isSuccess()) {
+                if (cartMainModel.getResultItem() != null) {
+                    finalAmount=  cartMainModel.getResultItem().getFinalAmount();
+                    Intent intent = new Intent();
+                    intent.putExtra("list", list.get(position));
+                    intent.putExtra("finalAmount", finalAmount);
+                    setResult(Activity.RESULT_OK, intent);
+                    onBackPressed();
+
+                }
+            } else {
+                Utils.setToast(OfferActivity.this, cartMainModel.getErrorMessage());
+
+            }
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    };
+
 }

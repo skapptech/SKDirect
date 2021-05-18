@@ -53,11 +53,11 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     private MyOrderAdapter myOrderAdapter;
     boolean handled = false;
     public DBHelper dbHelper;
-    private String statusId;
+    private String invoiceNumber;
     private String orderstatus;
     private CommonClassForAPI commonClassForAPI;
-    public AllOrderFragment(String id) {
-        this.statusId = id;
+    public AllOrderFragment(String invoice) {
+        this.invoiceNumber = invoice;
         handled = false;
     }
 
@@ -71,7 +71,6 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_all_orderd, container, false);
-        orderstatus = statusId;
         return mBinding.getRoot();
     }
 
@@ -97,7 +96,6 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
                     orderId = 0;
                     orderModelArrayList.clear();
                     skipCount = 0;
-                    orderstatus = statusId;
                     callMyOrder();
 
                 }
@@ -191,7 +189,7 @@ public class AllOrderFragment extends Fragment implements SwipeRefreshLayout.OnR
     private void myOrderAPI() {
         commonClassForAPI = CommonClassForAPI.getInstance(getActivity());
         if (commonClassForAPI!=null) {
-            MyOrderRequestModel myOrderRequestModel = new MyOrderRequestModel("",0,takeCount,skipCount,orderstatus, orderId, SharePrefs.getInstance(getActivity()).getString(SharePrefs.ASP_NET_USER_ID));
+            MyOrderRequestModel myOrderRequestModel = new MyOrderRequestModel("",0,takeCount,skipCount,orderstatus, orderId, SharePrefs.getInstance(getActivity()).getString(SharePrefs.ASP_NET_USER_ID),invoiceNumber);
            // Utils.showProgressDialog(getActivity());
             commonClassForAPI.GetOrderMaster(observer,myOrderRequestModel);
         }

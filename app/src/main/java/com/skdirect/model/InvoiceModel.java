@@ -47,6 +47,30 @@ public class InvoiceModel implements Serializable {
     @SerializedName("InvoiceId")
     private int invoiceid;
 
+    @Expose
+    @SerializedName("TotalPayableAmount")
+    private double TotalPayableAmount;
+
+    @Expose
+    @SerializedName("InvoiceDate")
+    private String InvoiceDate;
+
+    public double getTotalPayableAmount() {
+        return TotalPayableAmount;
+    }
+
+    public void setTotalPayableAmount(double totalPayableAmount) {
+        TotalPayableAmount = totalPayableAmount;
+    }
+
+    public String getInvoiceDate() {
+        return InvoiceDate;
+    }
+
+    public void setInvoiceDate(String invoiceDate) {
+        InvoiceDate = invoiceDate;
+    }
+
     public String getDeliveryoption() {
         return deliveryoption;
     }

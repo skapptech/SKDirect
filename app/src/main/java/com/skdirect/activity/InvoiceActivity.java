@@ -12,11 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.skdirect.R;
 import com.skdirect.adapter.InvoiceAdapter;
 import com.skdirect.api.CommonClassForAPI;
-import com.skdirect.databinding.FragmentChatdBinding;
-import com.skdirect.model.AddCartItemModel;
+import com.skdirect.databinding.ActvityInvoiceBinding;
 import com.skdirect.model.InvoiceModel;
 import com.skdirect.model.PaginationModel;
-import com.skdirect.model.SellerProductList;
 import com.skdirect.model.response.InvoiceMainModel;
 import com.skdirect.utils.DBHelper;
 import com.skdirect.utils.MyApplication;
@@ -29,7 +27,7 @@ import java.util.ArrayList;
 import io.reactivex.observers.DisposableObserver;
 
 public class InvoiceActivity extends AppCompatActivity {
-    private FragmentChatdBinding mBinding;
+    private ActvityInvoiceBinding mBinding;
     public DBHelper dbHelper;
     private CommonClassForAPI commonClassForAPI;
     private int skipCount = 0, takeCount = 15;
@@ -44,7 +42,7 @@ public class InvoiceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.fragment_chatd);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.actvity_invoice);
         dbHelper = MyApplication.getInstance().dbHelper;
         initViews();
         getInvoice();
@@ -123,8 +121,10 @@ public class InvoiceActivity extends AppCompatActivity {
 
             } else {
                 loading = false;
-                mBinding.tvNoInvoiceFound.setVisibility(View.VISIBLE);
-                mBinding.rvInvoice.setVisibility(View.GONE);
+                if (invoiceList.size() == 0) {
+                    mBinding.tvNoInvoiceFound.setVisibility(View.VISIBLE);
+                    mBinding.rvInvoice.setVisibility(View.GONE);
+                }
             }
 
         }

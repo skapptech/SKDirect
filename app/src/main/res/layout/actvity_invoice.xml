@@ -11,6 +11,7 @@
             android:id="@+id/toolbar_tittle"
             layout="@layout/toolbar_arrow" />
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_invoice"
             android:layout_width="match_parent"

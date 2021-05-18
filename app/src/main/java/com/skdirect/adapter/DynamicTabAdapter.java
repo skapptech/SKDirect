@@ -10,14 +10,16 @@ import java.util.ArrayList;
 
 public class DynamicTabAdapter extends FragmentPagerAdapter {
     private ArrayList<String> statusList;
-    public DynamicTabAdapter(FragmentManager fm, int behavior, ArrayList<String> statusList) {
+    private String invoiceNumber;
+    public DynamicTabAdapter(FragmentManager fm, int behavior, ArrayList<String> statusList,String invoice) {
         super(fm, behavior);
         this.statusList = statusList;
+        this.invoiceNumber = invoice;
     }
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        return new AllOrderFragment(statusList.get(position));
+        return new AllOrderFragment(/*statusList.get(position),*/invoiceNumber);
     }
     @Override
     public int getCount() {

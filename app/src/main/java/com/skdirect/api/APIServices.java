@@ -52,6 +52,7 @@ import com.skdirect.model.VerifyPaymentModel;
 import com.skdirect.model.response.ApplyOfferResponse;
 import com.skdirect.model.response.InvoiceMainModel;
 import com.skdirect.model.response.OfferResponse;
+import com.skdirect.model.response.RemoveOfferResponse;
 
 import java.util.ArrayList;
 
@@ -293,6 +294,8 @@ public interface APIServices {
     @POST("api/NativeBuyer/OrderInvoice/GetInvoiceDetail")
     Observable<InvoiceMainModel> GetInvoiceDetail(@Body PaginationModel paginationModel);
 
+    @GET("api/NativeBuyer/SellerCoupon/RemoveCoupon")
+    Observable<RemoveOfferResponse> RemoveCoupon();
 
 
 

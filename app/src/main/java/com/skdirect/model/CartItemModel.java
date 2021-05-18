@@ -35,6 +35,17 @@ public class CartItemModel implements Serializable {
     @SerializedName("Id")
     private String Id;
 
+    @SerializedName("FinalAmount")
+    private double FinalAmount;
+
+    public double getFinalAmount() {
+        return FinalAmount;
+    }
+
+    public void setFinalAmount(double finalAmount) {
+        FinalAmount = finalAmount;
+    }
+
     public CartItemModel() {
     }
 

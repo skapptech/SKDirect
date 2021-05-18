@@ -71,7 +71,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onResume() {
         super.onResume();
         getMall();
-        showCartItemInHomePage();
+
         mBinding.etSearchSeller.setText("");
 
     }
@@ -79,7 +79,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onRefresh() {
         getMall();
-        showCartItemInHomePage();
 
     }
 
@@ -198,8 +197,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         });
     }
 
-    private void showCartItemInHomePage() {
-
+    /*private void showCartItemInHomePage() {
         cartItemsAPI();
         mBinding.layoutShowingCartInHome.btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -265,5 +263,5 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     };
 
-
+*/
 }

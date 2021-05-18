@@ -17,8 +17,12 @@ public class MyOrderRequestModel {
     private String OrderStatus;
     @SerializedName("Id")
     private int Id;
+  @SerializedName("InvoiceNumber")
+    private String InvoiceNumber;
 
-    public MyOrderRequestModel(String filter, int sellerId, int take, int skip, String OrderStatus, int id,String Buyerid) {
+
+
+    public MyOrderRequestModel(String filter, int sellerId, int take, int skip, String OrderStatus, int id,String Buyerid,String invoice) {
 
         Filter = filter;
         SellerId = sellerId;
@@ -27,5 +31,6 @@ public class MyOrderRequestModel {
         Skip = skip;
         this.OrderStatus = OrderStatus;
         Id = id;
+        InvoiceNumber = invoice;
     }
 }

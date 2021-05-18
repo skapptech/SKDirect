@@ -25,6 +25,7 @@ import com.skdirect.api.CommonClassForAPI;
 import com.skdirect.databinding.ActivityPaymentdBinding;
 import com.skdirect.interfacee.DeliveryOptionInterface;
 import com.skdirect.model.CartItemModel;
+import com.skdirect.model.CartMainModel;
 import com.skdirect.model.DeliveryMainModel;
 import com.skdirect.model.DeliveryOptionModel;
 import com.skdirect.model.OrderPlaceMainModel;
@@ -32,6 +33,7 @@ import com.skdirect.model.OrderPlaceRequestModel;
 import com.skdirect.model.UserLocationModel;
 import com.skdirect.model.VerifyPaymentModel;
 import com.skdirect.model.response.OfferResponse;
+import com.skdirect.model.response.RemoveOfferResponse;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.SharePrefs;
 import com.skdirect.utils.Utils;
@@ -61,6 +63,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private CommonClassForAPI commonClassForAPI;
     private String razorOrderId = "";
     private String paymentStatus = "";
+    private double finalAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,9 +126,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         } else if (requestCode == 9 && resultCode == Activity.RESULT_OK) {
             mBinding.liCoupon.setVisibility(View.VISIBLE);
             coupon = data.getParcelableExtra("list");
+            finalAmount = data.getDoubleExtra("finalAmount",0);
             if (cartTotal > coupon.getMinOrderValue()) {
                 discount = coupon.getAmount();
-                totalAmount = cartTotal - discount;
+                //totalAmount = cartTotal - discount;
+                totalAmount = finalAmount;
                 updateViews(true, coupon);
             }
         }
@@ -306,7 +311,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mBinding.tvOfferAmount.setText("-₹ " + discount);
             mBinding.tvOfferTotal.setText("-₹ " + discount);
         } else {
-            cartTotal = totalAmount;
+            commonClassForAPI.removeCupan(removeCoupanObserver);
+            //cartTotal = totalAmount;
             // mBinding.rlApplyOffer.setVisibility(View.VISIBLE);
             mBinding.liOffer.setVisibility(View.GONE);
             mBinding.liCoupon.setVisibility(View.GONE);
@@ -314,6 +320,56 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mBinding.tvTotalAmount.setText("₹ " + totalAmount);
         mBinding.tvTotal.setText("₹ " + totalAmount);
     }
+
+
+    private final DisposableObserver<RemoveOfferResponse> removeCoupanObserver = new DisposableObserver<RemoveOfferResponse>() {
+        @Override
+        public void onNext(@NotNull RemoveOfferResponse response) {
+            Utils.hideProgressDialog();
+            if (response.isSuccess()){
+                if (response.getResultItem()){
+                    commonClassForAPI.getCartItemModelVMRequest(getCartItem);
+                }
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+        @Override
+        public void onComplete() {
+        }
+    };
+
+
+
+    private final DisposableObserver<CartMainModel> getCartItem = new DisposableObserver<CartMainModel>() {
+        @Override
+        public void onNext(@NotNull CartMainModel cartMainModel) {
+            Utils.hideProgressDialog();
+            if (cartMainModel.isSuccess()) {
+                if (cartMainModel.getResultItem() != null) {
+                    mBinding.tvTotalAmount.setText("₹ " +cartMainModel.getResultItem().getFinalAmount());
+                    mBinding.tvTotal.setText("₹ "+cartMainModel.getResultItem().getFinalAmount());
+                }
+            } else {
+                Utils.setToast(PaymentActivity.this, cartMainModel.getErrorMessage());
+
+            } }
+
+        @Override
+        public void onError(Throwable e) {
+            Utils.hideProgressDialog();
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    };
+
 
     private void userLocationAPI() {
         paymentViewMode.getUserLocationVMRequest();

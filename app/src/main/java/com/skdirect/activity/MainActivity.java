@@ -160,8 +160,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MenuItem chat = menu.findItem(R.id.nav_chat);
         home.setTitle(dbHelper.getString(R.string.home));
         profile.setTitle(dbHelper.getString(R.string.profile));
-        myOrder.setTitle(dbHelper.getString(R.string.my_order));
-        chat.setTitle(dbHelper.getString(R.string.invoice));
+        myOrder.setTitle(dbHelper.getString(R.string.invoice));
+        chat.setTitle(dbHelper.getString(R.string.chat));
 
         mBinding.toolbarId.bottomNavigation.setOnNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -177,14 +177,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else if (itemId == R.id.nav_my_order) {
                 positionChanged = true;
                 if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                    startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
+                    startActivity(new Intent(MainActivity.this, InvoiceActivity.class));
                 } else {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
             } else if (itemId == R.id.nav_chat) {
                 positionChanged = true;
                 if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                    startActivity(new Intent(MainActivity.this, InvoiceActivity.class));
+                    startActivity(new Intent(MainActivity.this, ChatActivity.class));
                 } else {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }

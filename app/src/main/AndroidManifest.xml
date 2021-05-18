@@ -167,6 +167,10 @@
         <activity
             android:name=".activity.ReviewActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ChatActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.OrderDetailActivity"
             android:screenOrientation="portrait" />

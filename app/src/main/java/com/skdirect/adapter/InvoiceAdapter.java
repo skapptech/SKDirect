@@ -1,7 +1,9 @@
 package com.skdirect.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -10,10 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.skdirect.BuildConfig;
 import com.skdirect.R;
+import com.skdirect.activity.MyOrderActivity;
+import com.skdirect.activity.SellerProfileActivity;
 import com.skdirect.databinding.ItemInvoiceBinding;
 import com.skdirect.databinding.ItemShowCartInHomeBinding;
 import com.skdirect.model.CartModel;
 import com.skdirect.model.InvoiceModel;
+import com.skdirect.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -41,9 +46,32 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.ViewHold
         InvoiceModel invoiceModel = invoiceList.get(position);
         holder.mBinding.tvShopName.setText(invoiceModel.getShopname());;
         holder.mBinding.tvInvoiceNumber.setText(invoiceModel.getInvoicenumber());;
-        holder.mBinding.tvNetPaybleAmount.setText("Net payable Amount   "+String.format("%.2f", invoiceModel.getTotalprice()));;
-        holder.mBinding.tvPaymentMode.setText("Payment Mode "+invoiceModel.getPaymentmode());
+        holder.mBinding.tvNetPaybleAmount.setText(String.format("%.2f", invoiceModel.getTotalPayableAmount()));
+        holder.mBinding.tvPaymentMode.setText(invoiceModel.getPaymentmode());
+        holder.mBinding.tvOrderDate.setText(Utils.getDateFormate(invoiceModel.getInvoiceDate()));
+        holder.mBinding.tvTotalAmount.setText(String.format("%.2f", invoiceModel.getTotalitemamount()));
+
+        if (invoiceModel.getTotaldeliverycharges()>0.0){
+            holder.mBinding.rlDeliveryCharge.setVisibility(View.VISIBLE);
+            holder.mBinding.tvTotalDeliveryCharge.setText(String.format("%.2f", invoiceModel.getTotaldeliverycharges()));
+        }
+
+        if (invoiceModel.getTotaldiscountamount()>0){
+            holder.mBinding.rlDicount.setVisibility(View.VISIBLE);
+            holder.mBinding.tvTotalDiscount.setText(String.format("%.2f", invoiceModel.getTotaldiscountamount()));
+        }
+
+
+        holder.mBinding.LLMainCat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent menuIntent = new Intent(context, MyOrderActivity.class);
+                menuIntent.putExtra("InvoiceNumber",invoiceModel.getInvoicenumber());
+                context.startActivity(menuIntent);
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {

@@ -2,7 +2,7 @@ package com.skdirect.model.response;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ApplyOfferResponse {
+public class RemoveOfferResponse {
 
     @SerializedName("ErrorMessage")
     private String ErrorMessage;

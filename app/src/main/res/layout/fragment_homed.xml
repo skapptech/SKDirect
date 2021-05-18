@@ -95,7 +95,7 @@
 
                 </RelativeLayout>
 
-                <LinearLayout
+                <!--<LinearLayout
                     android:id="@+id/ll_showing_Cart_in_home"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -104,8 +104,9 @@
 
                     <include
                         android:id="@+id/layout_showing_Cart_in_home"
-                        layout="@layout/layout_cart_home" />
-                </LinearLayout>
+                        layout="@layout/layout_cart_home"
+                        />
+                </LinearLayout>-->
 
                 <LinearLayout
                     android:id="@+id/ll_mall_home"

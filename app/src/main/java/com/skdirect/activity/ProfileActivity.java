@@ -54,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         } else if (id == R.id.rl_seller_info) {
             startActivity(new Intent(ProfileActivity.this, UpdateProfileActivity.class));
         } else if (id == R.id.rl_my_order) {
-            startActivity(new Intent(ProfileActivity.this, MyOrderActivity.class));
+            startActivity(new Intent(ProfileActivity.this, InvoiceActivity.class));
         } else if (id == R.id.rl_my_address) {
             startActivity(new Intent(ProfileActivity.this, ProfilePrimaryAddressActivity.class));
         } else if (id == R.id.rl_chnage_password) {
@@ -65,7 +65,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initView() {
         mBinding.tvSellerName.setText(dbHelper.getString(R.string.user_name));
-        mBinding.tvMyOrder.setText(dbHelper.getString(R.string.my_order));
+        mBinding.tvMyOrder.setText(dbHelper.getString(R.string.invoice));
         mBinding.tvCheckOrderStatus.setText(dbHelper.getString(R.string.check_your_order_status));
         mBinding.tvMyAddress.setText(dbHelper.getString(R.string.my_address));
         mBinding.tvSavedAddress.setText(dbHelper.getString(R.string.save_address_for_a_hassle_free_checkout));

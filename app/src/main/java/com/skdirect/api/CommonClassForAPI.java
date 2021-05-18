@@ -38,6 +38,7 @@ import com.skdirect.model.VerifyPaymentModel;
 import com.skdirect.model.response.ApplyOfferResponse;
 import com.skdirect.model.response.InvoiceMainModel;
 import com.skdirect.model.response.OfferResponse;
+import com.skdirect.model.response.RemoveOfferResponse;
 import com.skdirect.utils.MyApplication;
 
 import org.jetbrains.annotations.NotNull;
@@ -964,5 +965,33 @@ public class CommonClassForAPI {
                     }
                 });
     }
+
+    public void removeCupan(final DisposableObserver<RemoveOfferResponse> observer) {
+        RestClient.getInstance().getService().RemoveCoupon()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<RemoveOfferResponse>() {
+
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    public void onNext(@NotNull RemoveOfferResponse o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
 
 }
