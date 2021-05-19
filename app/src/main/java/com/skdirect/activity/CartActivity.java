@@ -111,15 +111,26 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.iv_back_press) {
             onBackPressed();
         } else if (id == R.id.btnCheckout) {
-            SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.CAME_FROM_CART, false);
-            if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
-                startActivity(new Intent(getApplicationContext(), PaymentActivity.class)
-                        .putExtra("cartItemSize", cartItemDataModel)
-                        .putExtra("totalAmount", totalAmount));
-            } else {
-                SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.CAME_FROM_CART, true);
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            boolean isOutofStock = false;
+            for (int i = 0; i < cartItemList.size(); i++) {
+                if (cartItemList.get(i).isStockRequired() && cartItemList.get(i).getStock() == 0) {
+                    isOutofStock = true;
+                }
             }
+            if (!isOutofStock) {
+                SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.CAME_FROM_CART, false);
+                if (SharePrefs.getSharedPreferences(getApplicationContext(), SharePrefs.IS_REGISTRATIONCOMPLETE) && SharePrefs.getInstance(getApplicationContext()).getBoolean(SharePrefs.IS_LOGIN)) {
+                    startActivity(new Intent(getApplicationContext(), PaymentActivity.class)
+                            .putExtra("cartItemSize", cartItemDataModel)
+                            .putExtra("totalAmount", totalAmount));
+                } else {
+                    SharePrefs.setSharedPreference(getApplicationContext(), SharePrefs.CAME_FROM_CART, true);
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                }
+            }else {
+                Utils.setToast(this, dbHelper.getString(R.string.some_item_is_out_of_stock_in_your_cart));
+            }
+
         } else if (id == R.id.tv_keep_shopping) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
@@ -270,7 +281,6 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         public void onComplete() {
         }
     };
-
 
 
     private void showClearCartDialog() {

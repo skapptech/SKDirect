@@ -64,9 +64,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         }
         holder.mBinding.tvQtyPlus.setOnClickListener(view -> {
             if (cartModel.getMaxOrderQuantity() != null && Integer.parseInt(cartModel.getMaxOrderQuantity()) > 0 && cartModel.getQuantity() >= Integer.parseInt(cartModel.getMaxOrderQuantity())) {
-                Utils.setToast(context, context.getString(R.string.order_quantity));
+                Utils.setToast(context, context.getResources().getString(R.string.order_quantity));
             }else if (cartModel.isStockRequired() && cartModel.getStock() <= cartModel.getQuantity()) {
-                Utils.setToast(context, "No Stock Available.");
+                Utils.setToast(context, context.getResources().getString(R.string.quantity_cannot_be_greater_than_stock));
             } else {
                 cartModel.setQuantity(cartModel.getQuantity() + 1);
                 holder.mBinding.tvSelectedQty.setText("" + cartModel.getQuantity());

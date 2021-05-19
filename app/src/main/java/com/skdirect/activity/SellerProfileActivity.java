@@ -134,7 +134,7 @@ public class SellerProfileActivity extends AppCompatActivity implements View.OnC
         if (model.getMaxOrderQuantity() != null && Integer.parseInt(model.getMaxOrderQuantity()) > 0 && model.getQty() >= Integer.parseInt(model.getMaxOrderQuantity())) {
             Utils.setToast(getApplicationContext(), getString(R.string.order_quantity));
         } else if (model.isStockRequired()&&model.getStock()<=model.getQty()){
-            Utils.setToast(getApplicationContext(), "No Stock Available.");
+            Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.quantity_cannot_be_greater_than_stock));
         }else {
             model.setQty(model.getQty() + 1);
             tvSelectedQty.setText("" + model.getQty());

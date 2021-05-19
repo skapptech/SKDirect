@@ -98,7 +98,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             if (resultModel.getMaxOrderQuantity() != null && Integer.parseInt(resultModel.getMaxOrderQuantity()) > 0 && resultModel.getQty() >= Integer.parseInt(resultModel.getMaxOrderQuantity())) {
                 Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.order_quantity));
             }else if (resultModel.isStockRequired()&&resultModel.getStock()<=resultModel.getQty()){
-                Utils.setToast(getApplicationContext(), "No Stock Available.");
+                Utils.setToast(getApplicationContext(), dbHelper.getString(R.string.quantity_cannot_be_greater_than_stock));
             } else {
                 resultModel.setQty(resultModel.getQty() + 1);
                 mBinding.tvSelectedQty.setText("" + resultModel.getQty());

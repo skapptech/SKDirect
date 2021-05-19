@@ -254,4 +254,6 @@
     <string name="invoice_no">Invoice No :</string>
     <string name="out_of_stock">Out of Stock</string>
     <string name="no_invoic_found">No Invoice Found</string>
+    <string name="quantity_cannot_be_greater_than_stock">Quantity cannot be greater than available stock.</string>
+    <string name="some_item_is_out_of_stock_in_your_cart">Some item in your cart is out of stock. Please remove from your cart.</string>
 </resources>
