@@ -17,6 +17,7 @@ import com.skdirect.databinding.ActivityOfferdBinding;
 import com.skdirect.model.CartMainModel;
 import com.skdirect.model.CartModel;
 import com.skdirect.model.response.ApplyOfferResponse;
+import com.skdirect.model.response.CouponResponse;
 import com.skdirect.model.response.OfferResponse;
 import com.skdirect.utils.MyApplication;
 import com.skdirect.utils.TextUtils;
@@ -60,12 +61,32 @@ public class OfferActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (TextUtils.isNullOrEmpty(mBinding.etOffer.getText().toString())) {
+        if (TextUtils.isNullOrEmpty(mBinding.etOffer.getText().toString().trim())) {
             Utils.setToast(getApplicationContext(), MyApplication.getInstance().dbHelper.getString(R.string.enter_coupon_code));
         } else {
-            callApplyCoupon(0, 0);
+            commonClassForAPI.getCouponValue(couponValueObserver,mBinding.etOffer.getText().toString().trim() );
         }
     }
+
+    private final DisposableObserver<CouponResponse> couponValueObserver = new DisposableObserver<CouponResponse>() {
+        @Override
+        public void onNext(@NotNull CouponResponse model) {
+            mBinding.progressOffer.setVisibility(View.GONE);
+            if (model.isSuccess()){
+                callApplyCoupon(0,model.getResultItem().getId());
+            }
+        }
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
+
 
 
     private void initViews() {

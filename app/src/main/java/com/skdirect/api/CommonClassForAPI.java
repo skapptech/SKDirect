@@ -36,6 +36,7 @@ import com.skdirect.model.TokenModel;
 import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.VerifyPaymentModel;
 import com.skdirect.model.response.ApplyOfferResponse;
+import com.skdirect.model.response.CouponResponse;
 import com.skdirect.model.response.InvoiceMainModel;
 import com.skdirect.model.response.OfferResponse;
 import com.skdirect.model.response.RemoveOfferResponse;
@@ -229,6 +230,33 @@ public class CommonClassForAPI {
                     }
                 });
     }
+
+    public void getCouponValue(final DisposableObserver<CouponResponse> observer, String sellerId) {
+        RestClient.getInstance().getService().getCouponValue(sellerId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CouponResponse>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NotNull CouponResponse o) {
+                        observer.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        observer.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        observer.onComplete();
+                    }
+                });
+    }
+
 
 
     public void applyCoupon(final DisposableObserver<ApplyOfferResponse> observer, int couponId) {

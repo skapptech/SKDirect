@@ -50,6 +50,7 @@ import com.skdirect.model.UpdateProfilePostModel;
 import com.skdirect.model.UserLocationModel;
 import com.skdirect.model.VerifyPaymentModel;
 import com.skdirect.model.response.ApplyOfferResponse;
+import com.skdirect.model.response.CouponResponse;
 import com.skdirect.model.response.InvoiceMainModel;
 import com.skdirect.model.response.OfferResponse;
 import com.skdirect.model.response.RemoveOfferResponse;
@@ -257,6 +258,9 @@ public interface APIServices {
 
     @GET("api/NativeBuyer/SellerCoupon/GetCouponList")
     Observable<OfferResponse> getCouponList(@Query("sellerid") int sellerId);
+
+    @GET("api/NativeBuyer/SellerCoupon/GetCouponbyCouponCode/{GetCouponbyCouponCode}")
+    Observable<CouponResponse> getCouponValue(@Path("GetCouponbyCouponCode") String sellerId);
 
     @GET("/api/NativeBuyer/SellerCoupon/ApplyCoupon/{couponId}")
     Observable<ApplyOfferResponse> applyCoupon(@Path("couponId") int couponId);
