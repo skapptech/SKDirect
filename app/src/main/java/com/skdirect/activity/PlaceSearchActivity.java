@@ -121,7 +121,7 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
             try {
                 latLng = place.getLatLng();
                 List<Address> addresses = mGeocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-                if (addresses.get(0).getLocality() != null) {
+                if (addresses.get(0)!= null) {
                     pinCode = addresses.get(0).getPostalCode();
                     city = addresses.get(0).getLocality();
                     state = addresses.get(0).getAdminArea();
@@ -142,7 +142,7 @@ public class PlaceSearchActivity extends AppCompatActivity implements View.OnCli
                 latLng = data.getParcelableExtra("PlaceResult");
                 List<Address> addresses = mGeocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
                 mBinding.etLocation.setText(addresses.get(0).getAddressLine(0));
-                if (addresses.get(0).getLocality() != null) {
+                if (addresses.get(0) != null) {
                     pinCode = addresses.get(0).getPostalCode();
                     String tempCity = addresses.get(0).getLocality();
                     mBinding.etPinCode.setText(pinCode);
