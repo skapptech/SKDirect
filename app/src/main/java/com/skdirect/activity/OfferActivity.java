@@ -101,7 +101,6 @@ public class OfferActivity extends AppCompatActivity implements View.OnClickList
                 e.printStackTrace();
             }
         }
-
         @Override
         public void onError(Throwable e) {
             e.printStackTrace();

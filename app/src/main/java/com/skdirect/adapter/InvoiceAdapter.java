@@ -53,12 +53,12 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.ViewHold
 
         if (invoiceModel.getTotaldeliverycharges()>0.0){
             holder.mBinding.rlDeliveryCharge.setVisibility(View.VISIBLE);
-            holder.mBinding.tvTotalDeliveryCharge.setText(String.format("%.2f", invoiceModel.getTotaldeliverycharges()));
+            holder.mBinding.tvTotalDeliveryCharge.setText("+ "+String.format("%.2f", invoiceModel.getTotaldeliverycharges()));
         }
 
         if (invoiceModel.getTotaldiscountamount()>0){
             holder.mBinding.rlDicount.setVisibility(View.VISIBLE);
-            holder.mBinding.tvTotalDiscount.setText(String.format("%.2f", invoiceModel.getTotaldiscountamount()));
+            holder.mBinding.tvTotalDiscount.setText("- "+String.format("%.2f", invoiceModel.getTotaldiscountamount()));
         }
 
 
