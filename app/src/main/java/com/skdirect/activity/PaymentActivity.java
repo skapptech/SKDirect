@@ -129,6 +129,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             finalAmount = data.getDoubleExtra("finalAmount",0);
             if (cartTotal > coupon.getMinOrderValue()) {
                 discount = coupon.getAmount();
+                Log.e("discount",""+discount);
                 //totalAmount = cartTotal - discount;
                 totalAmount = finalAmount;
                 updateViews(true, coupon);

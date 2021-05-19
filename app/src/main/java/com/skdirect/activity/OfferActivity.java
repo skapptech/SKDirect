@@ -73,7 +73,12 @@ public class OfferActivity extends AppCompatActivity implements View.OnClickList
         public void onNext(@NotNull CouponResponse model) {
             mBinding.progressOffer.setVisibility(View.GONE);
             if (model.isSuccess()){
-                callApplyCoupon(0,model.getResultItem().getId());
+
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).getCouponCode().equalsIgnoreCase(mBinding.etOffer.getText().toString().trim())){
+                        callApplyCoupon(i,model.getResultItem().getId());
+                    }
+                }
             }
         }
         @Override
